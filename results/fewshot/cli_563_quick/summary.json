@@ -1,0 +1,60 @@
+{
+  "n_samples": 142,
+  "spectrum_length": 131072,
+  "label_column": "Factor Value[Diagnosis]",
+  "class_counts": {
+    "surgery (control)": 56,
+    "primary bacterial infectious disease": 26,
+    "viral infectious disease": 31,
+    "unknown": 29
+  },
+  "support_per_class": 1,
+  "episodes": 2,
+  "distance": "cosine",
+  "covariance_mode": "global",
+  "cov_reg": 0.001,
+  "accuracy_mean": 0.2572463768115942,
+  "accuracy_std": 0.10760320583273547,
+  "macro_f1_mean": 0.23748506492665838,
+  "macro_f1_std": 0.08261170595306015,
+  "macro_precision_mean": 0.32238830358437776,
+  "macro_recall_mean": 0.26754329004329,
+  "confusion_matrix_query_total": [
+    [
+      26,
+      57,
+      25,
+      2
+    ],
+    [
+      4,
+      23,
+      19,
+      4
+    ],
+    [
+      8,
+      32,
+      16,
+      4
+    ],
+    [
+      5,
+      25,
+      20,
+      6
+    ]
+  ],
+  "class_order": [
+    "surgery (control)",
+    "primary bacterial infectious disease",
+    "viral infectious disease",
+    "unknown"
+  ],
+  "model_dims": {
+    "patch_size": 1024,
+    "d_model": 128,
+    "num_layers": 3,
+    "dim_feedforward": 256
+  }
+}

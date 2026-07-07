@@ -1,0 +1,11 @@
+method_id,method_label,feature_group,feature_name,classifier,accuracy_mean_across_masks,macro_f1_mean_across_masks,accuracy_std_across_masks,macro_f1_std_across_masks,overall_rank_accuracy
+direct_binned|bins2048_auc|svm,Direct 2048 AUC + SVM,direct_binned,bins2048_auc,svm,0.6516666666666667,0.540855892479267,0.0,0.0,1
+direct_binned|bins1024_auc|svm,Direct 1024 AUC + SVM,direct_binned,bins1024_auc,svm,0.64125,0.5317799522822884,0.0,0.0,2
+foundation_backbone|mae_flatten|logreg,MAE embeddings + LOGREG,foundation_backbone,mae_flatten,logreg,0.64125,0.5318379953188934,0.027476842101155842,0.027272716562161178,3
+prototype_head|mae_embeddings|prototype_mahalanobis_support_anova,MAE prototype head,prototype_head,mae_embeddings,prototype_mahalanobis_support_anova,0.635,0.5319748343356594,0.010854679823655468,0.008624590520510499,4
+foundation_backbone|mae_flatten|svm,MAE embeddings + SVM,foundation_backbone,mae_flatten,svm,0.6297916666666667,0.5264390895447735,0.032160801134760816,0.028629809063312518,5
+direct_binned|bins2048_auc|logreg,Direct 2048 AUC + LOGREG,direct_binned,bins2048_auc,logreg,0.6154166666666666,0.5178695964818997,0.0,0.0,6
+foundation_backbone|mae_flatten|xgboost,MAE embeddings + XGBOOST,foundation_backbone,mae_flatten,xgboost,0.6095833333333334,0.506513315330812,0.032093252434925494,0.024678155858298648,7
+direct_binned|bins1024_auc|logreg,Direct 1024 AUC + LOGREG,direct_binned,bins1024_auc,logreg,0.6070833333333333,0.5125429856528658,0.0,0.0,8
+direct_binned|bins2048_auc|xgboost,Direct 2048 AUC + XGBOOST,direct_binned,bins2048_auc,xgboost,0.5870833333333334,0.4916963305570654,0.0,0.0,9
+direct_binned|bins1024_auc|xgboost,Direct 1024 AUC + XGBOOST,direct_binned,bins1024_auc,xgboost,0.5720833333333334,0.4800296617114358,0.0,0.0,10

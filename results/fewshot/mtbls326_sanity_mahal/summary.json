@@ -1,0 +1,49 @@
+{
+  "n_samples": 42,
+  "spectrum_length": 131072,
+  "label_column": "Factor Value[IP3R expression]",
+  "class_counts": {
+    "low": 7,
+    "high": 20,
+    "control": 15
+  },
+  "support_per_class": 2,
+  "episodes": 3,
+  "distance": "mahalanobis",
+  "covariance_mode": "global",
+  "cov_reg": 0.001,
+  "accuracy_mean": 0.3796296296296296,
+  "accuracy_std": 0.03207501495497923,
+  "macro_f1_mean": 0.23068785756755683,
+  "macro_f1_std": 0.09004168218253149,
+  "macro_precision_mean": 0.2682619849286516,
+  "macro_recall_mean": 0.37540360873694206,
+  "confusion_matrix_query_total": [
+    [
+      2,
+      0,
+      13
+    ],
+    [
+      9,
+      1,
+      44
+    ],
+    [
+      1,
+      0,
+      38
+    ]
+  ],
+  "class_order": [
+    "low",
+    "high",
+    "control"
+  ],
+  "model_dims": {
+    "patch_size": 1024,
+    "d_model": 128,
+    "num_layers": 3,
+    "dim_feedforward": 256
+  }
+}

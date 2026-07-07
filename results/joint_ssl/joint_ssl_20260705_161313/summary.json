@@ -1,0 +1,19 @@
+{
+  "run_name": "joint_ssl_20260705_161313",
+  "best_val_loss": 3.6592352432864055,
+  "monitor_metric": "raw_loss",
+  "best_checkpoint": "models/joint_ssl/joint_ssl_20260705_161313/joint_ssl_20260705_161313_best.pth",
+  "epochs_completed": 374,
+  "mask_bin_size": 1024,
+  "jigsaw_bin_sizes": [
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "mask_ratio_range": [
+    0.2,
+    0.6
+  ],
+  "results_dir": "results/joint_ssl/joint_ssl_20260705_161313"
+}

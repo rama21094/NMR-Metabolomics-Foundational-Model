@@ -1,0 +1,1 @@
+sample_idx,mask_idx,mse_overall,mae_overall,rmse_overall,r2_overall,pearson_overall,spearman_overall,mse_masked,mae_masked,pearson_masked,peak_recovery_masked,mse_unmasked,mae_unmasked,pearson_unmasked,n_peaks_original,n_peaks_reconstructed,peak_position_error,peak_intensity_error,peak_f1,local_corr_mean,local_corr_std

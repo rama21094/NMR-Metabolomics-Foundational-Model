@@ -1,0 +1,78 @@
+{
+  "n_samples": 142,
+  "spectrum_length": 131072,
+  "label_column": "Factor Value[Diagnosis]",
+  "class_counts": {
+    "surgery (control)": 56,
+    "primary bacterial infectious disease": 26,
+    "viral infectious disease": 31,
+    "unknown": 29
+  },
+  "support_per_class": 25,
+  "episodes": 200,
+  "distance": "mahalanobis",
+  "covariance_mode": "pretrain",
+  "cov_reg": 0.001,
+  "embedding_strategy": "flatten",
+  "feature_projection": "pca",
+  "embedding_dim_raw": 16384,
+  "embedding_dim_final": 512,
+  "select_k_best": null,
+  "pca_components_requested": 512,
+  "pca_fit_source": "pretrain_corpus",
+  "pca_source_used": "pretrain_corpus",
+  "pca_explained_variance_ratio_sum": 0.9973926448965488,
+  "pretrain_stats_path": "fewshot_results/pretrain_precision_pca512.npz",
+  "pretrain_meta": {
+    "source_paths": [
+      "combined_unique.npy"
+    ],
+    "n_source_samples": 8892,
+    "embedding_strategy": "flatten",
+    "cov_reg": 0.001
+  },
+  "accuracy_mean": 0.5548809523809524,
+  "accuracy_std": 0.05862312097642303,
+  "macro_f1_mean": 0.3335920878318906,
+  "macro_f1_std": 0.0714425529315793,
+  "macro_precision_mean": 0.39414849274130875,
+  "macro_recall_mean": 0.39636760752688177,
+  "confusion_matrix_query_total": [
+    [
+      4082,
+      1662,
+      345,
+      111
+    ],
+    [
+      13,
+      92,
+      54,
+      41
+    ],
+    [
+      316,
+      265,
+      340,
+      279
+    ],
+    [
+      106,
+      304,
+      243,
+      147
+    ]
+  ],
+  "class_order": [
+    "surgery (control)",
+    "primary bacterial infectious disease",
+    "viral infectious disease",
+    "unknown"
+  ],
+  "model_dims": {
+    "patch_size": 1024,
+    "d_model": 128,
+    "num_layers": 3,
+    "dim_feedforward": 256
+  }
+}

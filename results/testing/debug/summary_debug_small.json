@@ -1,0 +1,152 @@
+{
+  "Overall": {
+    "mse_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "mae_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "rmse_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "r2_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "pearson_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "spearman_overall": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    }
+  },
+  "Masked": {
+    "mse_masked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "mae_masked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "pearson_masked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "peak_recovery_masked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    }
+  },
+  "Unmasked": {
+    "mse_unmasked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "mae_unmasked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "pearson_unmasked": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    }
+  },
+  "Peaks": {
+    "n_peaks_original": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "n_peaks_reconstructed": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "peak_position_error": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "peak_intensity_error": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "peak_f1": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    }
+  },
+  "Spatial": {
+    "local_corr_mean": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    },
+    "local_corr_std": {
+      "mean": NaN,
+      "std": NaN,
+      "median": NaN,
+      "min": NaN,
+      "max": NaN
+    }
+  }
+}

@@ -1,0 +1,11 @@
+method_id,method_label,feature_group,feature_name,classifier,accuracy_mean_across_sweep,macro_f1_mean_across_sweep,accuracy_std_across_sweep,macro_f1_std_across_sweep,overall_rank_accuracy
+prototype_head|mae_embeddings|prototype_mahalanobis_support_anova,MAE prototype head,prototype_head,mae_embeddings,prototype_mahalanobis_support_anova,0.3839633468143304,0.3288491441816187,0.05396946961802884,0.04571240823459959,1
+direct_binned|bins1024_auc|logreg_C0p1,Direct 1024 AUC + LOGREG_C0P1,direct_binned,bins1024_auc,logreg_C0p1,0.380346813705087,0.3318942465028886,0.06166384117843874,0.05129109624933163,2
+direct_binned|bins2048_auc|logreg_C0p1,Direct 2048 AUC + LOGREG_C0P1,direct_binned,bins2048_auc,logreg_C0p1,0.38030686049867307,0.33158411976380814,0.06124630964179049,0.05073565881242218,3
+foundation_backbone|mae_flatten|logreg_C0p1,MAE embeddings + LOGREG_C0P1,foundation_backbone,mae_flatten,logreg_C0p1,0.3747008771541878,0.3234044418534206,0.05043206308397434,0.039003634410766444,4
+foundation_backbone|mae_flatten|svm_C1p0,MAE embeddings + SVM_C1P0,foundation_backbone,mae_flatten,svm_C1p0,0.37245076303065633,0.3186366459172192,0.049548901468172785,0.03702876695349149,5
+foundation_backbone|mae_flatten|xgboost_depth2,MAE embeddings + XGBOOST_DEPTH2,foundation_backbone,mae_flatten,xgboost_depth2,0.3657176006000453,0.2922325978076592,0.0633014560588378,0.09249562583907629,6
+direct_binned|bins2048_auc|svm_C1p0,Direct 2048 AUC + SVM_C1P0,direct_binned,bins2048_auc,svm_C1p0,0.36553890242832493,0.3154569567641598,0.054497823355866046,0.0445434488757819,7
+direct_binned|bins1024_auc|svm_C1p0,Direct 1024 AUC + SVM_C1P0,direct_binned,bins1024_auc,svm_C1p0,0.3646800000174086,0.3148054012803479,0.05508800157815915,0.045248231694749445,8
+direct_binned|bins2048_auc|xgboost_depth2,Direct 2048 AUC + XGBOOST_DEPTH2,direct_binned,bins2048_auc,xgboost_depth2,0.3424764014689097,0.277846609009116,0.04345663929287809,0.08220775134456718,9
+direct_binned|bins1024_auc|xgboost_depth2,Direct 1024 AUC + XGBOOST_DEPTH2,direct_binned,bins1024_auc,xgboost_depth2,0.3403624240921013,0.2759718239231009,0.04127597893813172,0.08086346914788087,10

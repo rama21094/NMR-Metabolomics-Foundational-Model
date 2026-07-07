@@ -1,0 +1,7 @@
+metric,comparison,left_approach,left_model,left_score,right_approach,right_model,right_score,delta_left_minus_right
+balanced_accuracy,jigsaw_vs_classical,jigsaw,bin_2048_unfreeze_last_2,0.9444444444444444,classical,logistic_regression,1.0,-0.05555555555555558
+balanced_accuracy,masking_vs_classical,masking,unfreeze_last_3,0.8629629629629629,classical,logistic_regression,1.0,-0.13703703703703707
+balanced_accuracy,jigsaw_vs_masking,jigsaw,bin_2048_unfreeze_last_2,0.9444444444444444,masking,unfreeze_last_3,0.8629629629629629,0.08148148148148149
+weighted_f1,jigsaw_vs_classical,jigsaw,bin_2048_unfreeze_last_2,0.9297173414820473,classical,logistic_regression,1.0,-0.07028265851795268
+weighted_f1,masking_vs_classical,masking,unfreeze_last_3,0.8799820868786385,classical,logistic_regression,1.0,-0.12001791312136145
+weighted_f1,jigsaw_vs_masking,jigsaw,bin_2048_unfreeze_last_2,0.9297173414820473,masking,unfreeze_last_3,0.8799820868786385,0.049735254603408774

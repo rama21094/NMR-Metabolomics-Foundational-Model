@@ -1,0 +1,44 @@
+{
+  "runs": [
+    {
+      "run_name": "bin_256/20260624_033601",
+      "best_val_loss": 3.521864082132067,
+      "best_checkpoint": "models/jigsaw/bin_256/20260624_033601/bin_256_20260624_033601_best.pth",
+      "epochs_completed": 374,
+      "bin_sizes": [
+        256
+      ],
+      "results_dir": "results/jigsaw/bin_256/20260624_033601"
+    },
+    {
+      "run_name": "bin_512/20260624_033601",
+      "best_val_loss": 2.809081358569009,
+      "best_checkpoint": "models/jigsaw/bin_512/20260624_033601/bin_512_20260624_033601_best.pth",
+      "epochs_completed": 207,
+      "bin_sizes": [
+        512
+      ],
+      "results_dir": "results/jigsaw/bin_512/20260624_033601"
+    },
+    {
+      "run_name": "bin_1024/20260624_033601",
+      "best_val_loss": 2.127490554537092,
+      "best_checkpoint": "models/jigsaw/bin_1024/20260624_033601/bin_1024_20260624_033601_best.pth",
+      "epochs_completed": 312,
+      "bin_sizes": [
+        1024
+      ],
+      "results_dir": "results/jigsaw/bin_1024/20260624_033601"
+    },
+    {
+      "run_name": "bin_2048/20260624_033601",
+      "best_val_loss": 1.5272068828344345,
+      "best_checkpoint": "models/jigsaw/bin_2048/20260624_033601/bin_2048_20260624_033601_best.pth",
+      "epochs_completed": 400,
+      "bin_sizes": [
+        2048
+      ],
+      "results_dir": "results/jigsaw/bin_2048/20260624_033601"
+    }
+  ]
+}

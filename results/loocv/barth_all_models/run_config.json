@@ -1,0 +1,65 @@
+{
+  "data": "data/Barth/aligned_128K_Workbench_Barth_Syndrome.npy",
+  "metadata": "data/Barth/Workbench_Barth_Syndrome_metadata.csv",
+  "output_dir": "results/loocv/barth_all_models",
+  "label_column": "label",
+  "exclude_labels": [
+    "Pool"
+  ],
+  "families": [
+    "classical",
+    "masking",
+    "jigsaw",
+    "joint_ssl"
+  ],
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "masking_checkpoint": [
+    "mask_20=models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth",
+    "mask_30=models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_114013_bs32_mr0.30_ps1024_best.pth",
+    "mask_40=models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084724_bs32_mr0.40_ps1024_best.pth",
+    "mask_50=models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_090604_bs32_mr0.50_ps1024_best.pth"
+  ],
+  "jigsaw_checkpoint": [],
+  "jigsaw_checkpoint_glob": "models/jigsaw/*/*/*_best.pth",
+  "max_jigsaw_checkpoints": null,
+  "joint_checkpoint": [
+    "joint_ssl=models/joint_ssl/joint_ssl_20260705_161313/joint_ssl_20260705_161313_best.pth"
+  ],
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "backbone_dropout": 0.15,
+  "nhead": 8,
+  "normalize_input": "auto",
+  "joint_normalize_input": "checkpoint",
+  "xgb_jobs": 4,
+  "device": "auto",
+  "seed": 42,
+  "max_folds": null,
+  "masking_checkpoints": {
+    "mask_20": "models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth",
+    "mask_30": "models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_114013_bs32_mr0.30_ps1024_best.pth",
+    "mask_40": "models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084724_bs32_mr0.40_ps1024_best.pth",
+    "mask_50": "models/SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_090604_bs32_mr0.50_ps1024_best.pth"
+  },
+  "joint_checkpoints": {
+    "joint_ssl": "models/joint_ssl/joint_ssl_20260705_161313/joint_ssl_20260705_161313_best.pth"
+  },
+  "jigsaw_checkpoints": {},
+  "n_samples": 37,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "Control",
+    "1": "Case"
+  }
+}

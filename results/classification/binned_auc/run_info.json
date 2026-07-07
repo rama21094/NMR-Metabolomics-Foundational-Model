@@ -1,0 +1,19 @@
+{
+  "data_path": "aligned_128K_TBI_Tirupati_WS625to680Zero.npy",
+  "labels_csv": "title_labels.csv",
+  "output_dir": "classification_binned_auc_results",
+  "n_samples_used": 224,
+  "class_counts": {
+    "Day1": 113,
+    "Day4": 111
+  },
+  "bins": [
+    128,
+    256
+  ],
+  "folds": 5,
+  "baseline_center": true,
+  "seed": 42,
+  "xgboost_available": true,
+  "feature_definition": "Absolute AUC per equal-width bin (trapz over abs(signal), baseline=0)"
+}

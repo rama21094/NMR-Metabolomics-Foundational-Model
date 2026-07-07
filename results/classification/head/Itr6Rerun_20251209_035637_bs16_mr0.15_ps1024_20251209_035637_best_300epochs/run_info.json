@@ -1,0 +1,42 @@
+{
+  "model_path": "SSL_models/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs.pth",
+  "data_path": "aligned_128K_TBI_Tirupati_WS625to680Zero.npy",
+  "labels_csv": "title_labels.csv",
+  "output_dir": "classification_head_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs",
+  "device_used": "cuda:0",
+  "n_samples_used": 224,
+  "class_counts": {
+    "Day1": 113,
+    "Day4": 111
+  },
+  "folds": 5,
+  "epochs": 60,
+  "patience": 12,
+  "batch_size": 8,
+  "val_fraction": 0.15,
+  "lr_head": 0.001,
+  "lr_backbone": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "baseline_center": true,
+  "normalize_input_mode": "auto",
+  "normalize_input_effective": true,
+  "seed": 42,
+  "inferred_backbone_dims": {
+    "patch_size": 1024,
+    "d_model": 128,
+    "nhead": 4,
+    "num_layers": 3,
+    "dim_feedforward": 256,
+    "dropout": 0.2
+  },
+  "checkpoint_hyperparameters": {
+    "batch_size": 16,
+    "mask_ratio": 0.15,
+    "patch_size": 1024,
+    "learning_rate": 0.001,
+    "num_epochs": 300,
+    "warmup_epochs": 10,
+    "min_lr": 1e-06
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "data": "MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+  "metadata": "MTBLS326_metadata_mapping.csv",
+  "checkpoint_glob": "models/jigsaw/*/*/*_best.pth",
+  "checkpoint": [],
+  "output_dir": "results/loocv/mtbls326_jigsaw",
+  "classical_only": false,
+  "jigsaw_only": false,
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "normalize_input": "true",
+  "xgb_jobs": 4,
+  "device": "auto",
+  "seed": 42,
+  "max_checkpoints": null,
+  "n_samples": 42,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "No",
+    "1": "Yes"
+  },
+  "checkpoint_paths": [
+    "models/jigsaw/bin_1024/20260624_033601/bin_1024_20260624_033601_best.pth",
+    "models/jigsaw/bin_2048/20260624_033601/bin_2048_20260624_033601_best.pth",
+    "models/jigsaw/bin_256/20260624_033601/bin_256_20260624_033601_best.pth",
+    "models/jigsaw/bin_512/20260624_033601/bin_512_20260624_033601_best.pth",
+    "models/jigsaw/multibin/20260624_032837/multibin_20260624_032837_best.pth"
+  ]
+}

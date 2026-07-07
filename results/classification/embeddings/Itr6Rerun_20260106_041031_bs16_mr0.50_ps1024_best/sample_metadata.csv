@@ -1,0 +1,384 @@
+spectrum_index,spectrum_path,title,sample_code,sample_number,day_code,day_label,status,target,target_name
+0,TBI_Tirupati/TBI_Tirupati_CPMG_1D/307/pdata/1,"IISER Tirupati 260625 29BTBI serum
+cpmg short",29B,29.0,B,4th day,ok,1,Day4
+1,TBI_Tirupati/TBI_Tirupati_CPMG_1D/551/pdata/1,IISER Tirupati Sample 23122025- 53B cpmg,53B,53.0,B,4th day,ok,1,Day4
+2,TBI_Tirupati/TBI_Tirupati_CPMG_1D/61/pdata/1,"IISER Tirupati 200625 6BTBI serum
+cpmg short",6B,6.0,B,4th day,ok,1,Day4
+3,TBI_Tirupati/TBI_Tirupati_CPMG_1D/556/pdata/1,IISER Tirupati Sample 23122025- 54A cpmg,54A,54.0,A,1st day,ok,0,Day1
+4,TBI_Tirupati/TBI_Tirupati_CPMG_1D/569/pdata/1,IISER Tirupati Sample 23122025- 55B cpmg short,55B,55.0,B,4th day,ok,1,Day4
+5,TBI_Tirupati/TBI_Tirupati_CPMG_1D/66/pdata/1,"IISER Tirupati 210625 7ATBI serum
+cpmg short",7A,7.0,A,1st day,ok,0,Day1
+6,TBI_Tirupati/TBI_Tirupati_CPMG_1D/309/pdata/1,"IISER Tirupati 260625 29BTBI serum
+cpmg",29B,29.0,B,4th day,ok,1,Day4
+7,TBI_Tirupati/TBI_Tirupati_CPMG_1D/68/pdata/1,"IISER Tirupati 210625 7ATBI serum
+cpmg",7A,7.0,A,1st day,ok,0,Day1
+8,TBI_Tirupati/TBI_Tirupati_CPMG_1D/103/pdata/1,"IISER Tirupati 210625 10ATBI serum
+cpmg",10A,10.0,A,1st day,ok,0,Day1
+9,TBI_Tirupati/TBI_Tirupati_CPMG_1D/362/pdata/1,"IISER Tirupati 270625 35ATBI serum
+cpmg short",35A,35.0,A,1st day,ok,0,Day1
+10,TBI_Tirupati/TBI_Tirupati_CPMG_1D/534/pdata/1,IISER Tirupati Sample 23122025- 52A cpmg short,52A,52.0,A,1st day,ok,0,Day1
+11,TBI_Tirupati/TBI_Tirupati_CPMG_1D/354/pdata/1,"IISER Tirupati 260625 34ATBI serum
+cpmg",34A,34.0,A,1st day,ok,0,Day1
+12,TBI_Tirupati/TBI_Tirupati_CPMG_1D/161/pdata/1,"IISER Tirupati 230625 16BTBI serum
+cpmg short",16B,16.0,B,4th day,ok,1,Day4
+13,TBI_Tirupati/TBI_Tirupati_CPMG_1D/566/pdata/1,IISER Tirupati Sample 23122025- 55A cpmg,55A,55.0,A,1st day,ok,0,Day1
+14,TBI_Tirupati/TBI_Tirupati_CPMG_1D/559/pdata/1,IISER Tirupati Sample 23122025- 54B cpmg short,54B,54.0,B,4th day,ok,1,Day4
+15,TBI_Tirupati/TBI_Tirupati_CPMG_1D/56/pdata/1,"IISER Tirupati 200625 6ATBI serum
+cpmg short",6A,6.0,A,1st day,ok,0,Day1
+16,TBI_Tirupati/TBI_Tirupati_CPMG_1D/337/pdata/1,"IISER Tirupati 260625 32BTBI serum
+cpmg short",32B,32.0,B,4th day,ok,1,Day4
+17,TBI_Tirupati/TBI_Tirupati_CPMG_1D/561/pdata/1,IISER Tirupati Sample 23122025- 54B cpmg,54B,54.0,B,4th day,ok,1,Day4
+18,TBI_Tirupati/TBI_Tirupati_CPMG_1D/51/pdata/1,"IISER Tirupati 200625 5BTBI serum
+cpmg short",5B,5.0,B,4th day,ok,1,Day4
+19,TBI_Tirupati/TBI_Tirupati_CPMG_1D/58/pdata/1,"IISER Tirupati 200625 6ATBI serum
+cpmg",6A,6.0,A,1st day,ok,0,Day1
+20,TBI_Tirupati/TBI_Tirupati_CPMG_1D/133/pdata/1,"IISER Tirupati 220625 13ATBI serum
+cpmg",13A,13.0,A,1st day,ok,0,Day1
+21,TBI_Tirupati/TBI_Tirupati_CPMG_1D/93/pdata/1,"IISER Tirupati 210625 9ATBI serum
+cpmg",9A,9.0,A,1st day,ok,0,Day1
+22,TBI_Tirupati/TBI_Tirupati_CPMG_1D/339/pdata/1,"IISER Tirupati 260625 32ABTBI serum
+cpmg",32A,32.0,A,1st day,ok,0,Day1
+23,TBI_Tirupati/TBI_Tirupati_CPMG_1D/399/pdata/1,"IISER Tirupati 270625 15BTBI serum
+cpmg",15B,15.0,B,4th day,ok,1,Day4
+24,TBI_Tirupati/TBI_Tirupati_CPMG_1D/352/pdata/1,"IISER Tirupati 260625 34ATBI serum
+cpmg short",34A,34.0,A,1st day,ok,0,Day1
+25,TBI_Tirupati/TBI_Tirupati_CPMG_1D/504/pdata/1,IISER Tirupati Sample 23122025- 49A cpmg short,49A,49.0,A,1st day,ok,0,Day1
+26,TBI_Tirupati/TBI_Tirupati_CPMG_1D/33/pdata/1,"IISER Tirupati 200625 2BTBI serum
+cpmg",2B,2.0,B,4th day,ok,1,Day4
+27,TBI_Tirupati/TBI_Tirupati_CPMG_1D/158/pdata/1,"IISER Tirupati 230625 15BTBI serum
+cpmg",15B,15.0,B,4th day,ok,1,Day4
+28,TBI_Tirupati/TBI_Tirupati_CPMG_1D/193/pdata/1,"IISER Tirupati 240625 18BTBI serum
+cpmg",18B,18.0,B,4th day,ok,1,Day4
+29,TBI_Tirupati/TBI_Tirupati_CPMG_1D/397/pdata/1,"IISER Tirupati 270625 15BTBI serum
+cpmg short",15B,15.0,B,4th day,ok,1,Day4
+30,TBI_Tirupati/TBI_Tirupati_CPMG_1D/151/pdata/1,"IISER Tirupati 230625 15ATBI serum
+cpmg short",15A,15.0,A,1st day,ok,0,Day1
+31,TBI_Tirupati/TBI_Tirupati_CPMG_1D/156/pdata/1,"IISER Tirupati 230625 15BTBI serum
+cpmg short",15B,15.0,B,4th day,ok,1,Day4
+32,TBI_Tirupati/TBI_Tirupati_CPMG_1D/364/pdata/1,"IISER Tirupati 270625 35ATBI serum
+cpmg",35A,35.0,A,1st day,ok,0,Day1
+33,TBI_Tirupati/TBI_Tirupati_CPMG_1D/216/pdata/1,"IISER Tirupati 240625 21ATBI serum
+cpmg short",21A,21.0,A,1st day,ok,0,Day1
+34,TBI_Tirupati/TBI_Tirupati_CPMG_1D/211/pdata/1,"IISER Tirupati 240625 20BTBI serum
+cpmg short",20B,20.0,B,4th day,ok,1,Day4
+35,TBI_Tirupati/TBI_Tirupati_CPMG_1D/471/pdata/1,IISER Tirupati Sample 22122025- 43B cpmg,43B,43.0,B,4th day,ok,1,Day4
+36,TBI_Tirupati/TBI_Tirupati_CPMG_1D/218/pdata/1,"IISER Tirupati 240625 21ATBI serum
+cpmg",21A,21.0,A,1st day,ok,0,Day1
+37,TBI_Tirupati/TBI_Tirupati_CPMG_1D/476/pdata/1,IISER Tirupati Sample 23122025- 46A cpmg,46A,46.0,A,1st day,ok,0,Day1
+38,TBI_Tirupati/TBI_Tirupati_CPMG_1D/449/pdata/1,IISER Tirupati Sample 22122025- 41B cpmg short,41B,41.0,B,4th day,ok,1,Day4
+39,TBI_Tirupati/TBI_Tirupati_CPMG_1D/274/pdata/1,"IISER Tirupati 250625 26ATBI serum
+cpmg",26A,26.0,A,1st day,ok,0,Day1
+40,TBI_Tirupati/TBI_Tirupati_CPMG_1D/425/pdata/1,"IISER Tirupati 22122025 39A serum
+cpmg",39A,39.0,A,1st day,ok,0,Day1
+41,TBI_Tirupati/TBI_Tirupati_CPMG_1D/287/pdata/1,"IISER Tirupati 250625 27BTBI serum
+cpmg short",27B,27.0,B,4th day,ok,1,Day4
+42,TBI_Tirupati/TBI_Tirupati_CPMG_1D/289/pdata/1,"IISER Tirupati 250625 27BTBI serum
+cpmg",27B,27.0,B,4th day,ok,1,Day4
+43,TBI_Tirupati/TBI_Tirupati_CPMG_1D/242/pdata/1,"IISER Tirupati 250625 23BTBI serum
+cpmg short",23B,23.0,B,4th day,ok,1,Day4
+45,TBI_Tirupati/TBI_Tirupati_CPMG_1D/221/pdata/1,"IISER Tirupati 240625 21BTBI serum
+cpmg short",21B,21.0,B,4th day,ok,1,Day4
+46,TBI_Tirupati/TBI_Tirupati_CPMG_1D/484/pdata/1,IISER Tirupati Sample 23122025- 47A cpmg short,47A,47.0,A,1st day,ok,0,Day1
+47,TBI_Tirupati/TBI_Tirupati_CPMG_1D/226/pdata/1,"IISER Tirupati 240625 22ATBI serum
+cpmg short",22A,22.0,A,1st day,ok,0,Day1
+48,TBI_Tirupati/TBI_Tirupati_CPMG_1D/446/pdata/1,IISER Tirupati Sample 22122025- 41A cpmg,41A,41.0,A,1st day,ok,0,Day1
+49,TBI_Tirupati/TBI_Tirupati_CPMG_1D/479/pdata/1,IISER Tirupati Sample 23122025- 46B cpmg short,46B,46.0,B,4th day,ok,1,Day4
+50,TBI_Tirupati/TBI_Tirupati_CPMG_1D/441/pdata/1,IISER Tirupati Sample 22122025- 40B cpmg,40B,40.0,B,4th day,ok,1,Day4
+51,TBI_Tirupati/TBI_Tirupati_CPMG_1D/228/pdata/1,"IISER Tirupati 240625 22ATBI serum
+cpmg",22A,22.0,A,1st day,ok,0,Day1
+53,TBI_Tirupati/TBI_Tirupati_CPMG_1D/244/pdata/1,"IISER Tirupati 250625 23BTBI serum
+cpmg",23B,23.0,B,4th day,ok,1,Day4
+54,TBI_Tirupati/TBI_Tirupati_CPMG_1D/272/pdata/1,"IISER Tirupati 250625 26ATBI serum
+cpmg short",26A,26.0,A,1st day,ok,0,Day1
+55,TBI_Tirupati/TBI_Tirupati_CPMG_1D/423/pdata/1,"IISER Tirupati 22122025 39A serum
+cpmg short",39A,39.0,A,1st day,ok,0,Day1
+56,TBI_Tirupati/TBI_Tirupati_CPMG_1D/257/pdata/1,"IISER Tirupati 250625 22ATBI serum
+cpmg short",22A,22.0,A,1st day,ok,0,Day1
+57,TBI_Tirupati/TBI_Tirupati_CPMG_1D/439/pdata/1,IISER Tirupati Sample 22122025- 40B cpmg short,40B,40.0,B,4th day,ok,1,Day4
+58,TBI_Tirupati/TBI_Tirupati_CPMG_1D/292/pdata/1,"IISER Tirupati 250625 28ATBI serum
+cpmg short",28A,28.0,A,1st day,ok,0,Day1
+59,TBI_Tirupati/TBI_Tirupati_CPMG_1D/430/pdata/1,"IISER Tirupati 22122025 39B serum
+cpmg",39B,39.0,B,4th day,ok,1,Day4
+60,TBI_Tirupati/TBI_Tirupati_CPMG_1D/259/pdata/1,"IISER Tirupati 250625 22ATBI serum
+cpmg",22A,22.0,A,1st day,ok,0,Day1
+61,TBI_Tirupati/TBI_Tirupati_CPMG_1D/232/pdata/1,"IISER Tirupati 240625 22BTBI serum
+cpmg short",22B,22.0,B,4th day,ok,1,Day4
+62,TBI_Tirupati/TBI_Tirupati_CPMG_1D/464/pdata/1,IISER Tirupati Sample 22122025- 43A cpmg short,43A,43.0,A,1st day,ok,0,Day1
+63,TBI_Tirupati/TBI_Tirupati_CPMG_1D/499/pdata/1,IISER Tirupati Sample 23122025- 48B cpmg short,48B,48.0,B,4th day,ok,1,Day4
+64,TBI_Tirupati/TBI_Tirupati_CPMG_1D/203/pdata/1,"IISER Tirupati 240625 19BTBI serum
+cpmg",19B,19.0,B,4th day,ok,1,Day4
+65,TBI_Tirupati/TBI_Tirupati_CPMG_1D/294/pdata/1,"IISER Tirupati 250625 28ATBI serum
+cpmg",28A,28.0,A,1st day,ok,0,Day1
+66,TBI_Tirupati/TBI_Tirupati_CPMG_1D/436/pdata/1,IISER Tirupati Sample 22122025- 40A cpmg,40A,40.0,A,1st day,ok,0,Day1
+68,TBI_Tirupati/TBI_Tirupati_CPMG_1D/267/pdata/1,"IISER Tirupati 250625 25BTBI serum
+cpmg short",25B,25.0,B,4th day,ok,1,Day4
+71,TBI_Tirupati/TBI_Tirupati_CPMG_1D/269/pdata/1,"IISER Tirupati 250625 25BTBI serum
+cpmg",25B,25.0,B,4th day,ok,1,Day4
+72,TBI_Tirupati/TBI_Tirupati_CPMG_1D/454/pdata/1,IISER Tirupati Sample 22122025- 42A cpmg short,42A,42.0,A,1st day,ok,0,Day1
+73,TBI_Tirupati/TBI_Tirupati_CPMG_1D/491/pdata/1,IISER Tirupati Sample 23122025- 47B cpmg,47B,47.0,B,4th day,ok,1,Day4
+74,TBI_Tirupati/TBI_Tirupati_CPMG_1D/496/pdata/1,IISER Tirupati Sample 23122025- 48A cpmg,48A,48.0,A,1st day,ok,0,Day1
+75,TBI_Tirupati/TBI_Tirupati_CPMG_1D/234/pdata/1,"IISER Tirupati 240625 22BTBI serum
+cpmg",22B,22.0,B,4th day,ok,1,Day4
+76,TBI_Tirupati/TBI_Tirupati_CPMG_1D/379/pdata/1,"IISER Tirupati 270625 36BTBI serum
+cpmg",36B,36.0,B,4th day,ok,1,Day4
+77,TBI_Tirupati/TBI_Tirupati_CPMG_1D/18/pdata/1,"IISER Tirupati 190625 2ATBI serum
+cpmg",2A,2.0,A,1st day,ok,0,Day1
+78,TBI_Tirupati/TBI_Tirupati_CPMG_1D/173/pdata/1,"IISER Tirupati 230625 17ATBI serum
+cpmg short",17A,17.0,A,1st day,ok,0,Day1
+79,TBI_Tirupati/TBI_Tirupati_CPMG_1D/377/pdata/1,"IISER Tirupati 270625 36BTBI serum
+cpmg short",36B,36.0,B,4th day,ok,1,Day4
+80,TBI_Tirupati/TBI_Tirupati_CPMG_1D/521/pdata/1,IISER Tirupati Sample 23122025- 50B cpmg,50B,50.0,B,4th day,ok,1,Day4
+81,TBI_Tirupati/TBI_Tirupati_CPMG_1D/11/pdata/1,"IISER Tirupati 190625 1BTBI serum
+cpmg short",1B,1.0,B,4th day,ok,1,Day4
+82,TBI_Tirupati/TBI_Tirupati_CPMG_1D/526/pdata/1,IISER Tirupati Sample 23122025- 51A cpmg,51A,51.0,A,1st day,ok,0,Day1
+83,TBI_Tirupati/TBI_Tirupati_CPMG_1D/384/pdata/1,"IISER Tirupati 270625 37ATBI serum
+cpmg",37A,37.0,A,1st day,ok,0,Day1
+84,TBI_Tirupati/TBI_Tirupati_CPMG_1D/519/pdata/1,IISER Tirupati Sample 23122025- 50B cpmg short,50B,50.0,B,4th day,ok,1,Day4
+85,TBI_Tirupati/TBI_Tirupati_CPMG_1D/16/pdata/1,"IISER Tirupati 190625 2ATBI serum
+cpmg short",2A,2.0,A,1st day,ok,0,Day1
+86,TBI_Tirupati/TBI_Tirupati_CPMG_1D/116/pdata/1,"IISER Tirupati 210625 11BTBI serum
+cpmg short",11B,11.0,B,4th day,ok,1,Day4
+87,TBI_Tirupati/TBI_Tirupati_CPMG_1D/324/pdata/1,"IISER Tirupati 260625 31ATBI serum
+cpmg",31A,31.0,A,1st day,ok,0,Day1
+88,TBI_Tirupati/TBI_Tirupati_CPMG_1D/586/pdata/1,IISER Tirupati Sample 23122025- 57A cpmg,57A,57.0,A,1st day,ok,0,Day1
+89,TBI_Tirupati/TBI_Tirupati_CPMG_1D/581/pdata/1,IISER Tirupati Sample 23122025- 56B cpmg,56B,56.0,B,4th day,ok,1,Day4
+90,TBI_Tirupati/TBI_Tirupati_CPMG_1D/111/pdata/1,"IISER Tirupati 210625 11ATBI serum
+cpmg short",11A,11.0,A,1st day,ok,0,Day1
+91,TBI_Tirupati/TBI_Tirupati_CPMG_1D/73/pdata/1,"IISER Tirupati 210625 7BTBI serum
+cpmg",7B,7.0,B,4th day,ok,1,Day4
+92,TBI_Tirupati/TBI_Tirupati_CPMG_1D/118/pdata/1,"IISER Tirupati 210625 11BTBI serum
+cpmg",11B,11.0,B,4th day,ok,1,Day4
+93,TBI_Tirupati/TBI_Tirupati_CPMG_1D/312/pdata/1,"IISER Tirupati 260625 30ATBI serum
+cpmg short",30A,30.0,A,1st day,ok,0,Day1
+94,TBI_Tirupati/TBI_Tirupati_CPMG_1D/544/pdata/1,IISER Tirupati Sample 23122025- 53A cpmg short,53A,53.0,A,1st day,ok,0,Day1
+95,TBI_Tirupati/TBI_Tirupati_CPMG_1D/28/pdata/1,"IISER Tirupati 190625 3BTBI serum
+cpmg",3B,3.0,B,4th day,ok,1,Day4
+96,TBI_Tirupati/TBI_Tirupati_CPMG_1D/143/pdata/1,"IISER Tirupati 230625 14ATBI serum
+cpmg",14A,14.0,A,1st day,ok,0,Day1
+97,TBI_Tirupati/TBI_Tirupati_CPMG_1D/188/pdata/1,"IISER Tirupati 240625 18ATBI serum
+cpmg",18A,18.0,A,1st day,ok,0,Day1
+98,TBI_Tirupati/TBI_Tirupati_CPMG_1D/382/pdata/1,"IISER Tirupati 270625 37ATBI serum
+cpmg short",37A,37.0,A,1st day,ok,0,Day1
+99,TBI_Tirupati/TBI_Tirupati_CPMG_1D/349/pdata/1,"IISER Tirupati 260625 33BTBI serum
+cpmg",33B,33.0,B,4th day,ok,1,Day4
+100,TBI_Tirupati/TBI_Tirupati_CPMG_1D/516/pdata/1,IISER Tirupati Sample 23122025- 50A cpmg,50A,50.0,A,1st day,ok,0,Day1
+101,TBI_Tirupati/TBI_Tirupati_CPMG_1D/186/pdata/1,"IISER Tirupati 240625 18ATBI serum
+cpmg short",18A,18.0,A,1st day,ok,0,Day1
+102,TBI_Tirupati/TBI_Tirupati_CPMG_1D/529/pdata/1,IISER Tirupati Sample 23122025- 51B cpmg short,51B,51.0,B,4th day,ok,1,Day4
+103,TBI_Tirupati/TBI_Tirupati_CPMG_1D/26/pdata/1,"IISER Tirupati 190625 3BTBI serum
+cpmg short",3B,3.0,B,4th day,ok,1,Day4
+104,TBI_Tirupati/TBI_Tirupati_CPMG_1D/8/pdata/1,"IISER Tirupati 190625 1ATBI serum
+cpmg ns128",1A,1.0,A,1st day,ok,0,Day1
+105,TBI_Tirupati/TBI_Tirupati_CPMG_1D/181/pdata/1,"IISER Tirupati 240625 16ATBI serum
+cpmg short",16A,16.0,A,1st day,ok,0,Day1
+106,TBI_Tirupati/TBI_Tirupati_CPMG_1D/347/pdata/1,"IISER Tirupati 260625 33BTBI serum
+cpmg short",33B,33.0,B,4th day,ok,1,Day4
+107,TBI_Tirupati/TBI_Tirupati_CPMG_1D/511/pdata/1,IISER Tirupati Sample 23122025- 49B cpmg,49B,49.0,B,4th day,ok,1,Day4
+108,TBI_Tirupati/TBI_Tirupati_CPMG_1D/21/pdata/1,"IISER Tirupati 190625 3ATBI serum
+cpmg short",3A,3.0,A,1st day,ok,0,Day1
+109,TBI_Tirupati/TBI_Tirupati_CPMG_1D/121/pdata/1,"IISER Tirupati 210625 12ATBI serum
+cpmg short",12A,12.0,A,1st day,ok,0,Day1
+110,TBI_Tirupati/TBI_Tirupati_CPMG_1D/86/pdata/1,"IISER Tirupati 210625 8BTBI serum
+cpmg short",8B,8.0,B,4th day,ok,1,Day4
+111,TBI_Tirupati/TBI_Tirupati_CPMG_1D/589/pdata/1,IISER Tirupati Sample 23122025- 57B cpmg short,57B,57.0,B,4th day,ok,1,Day4
+112,TBI_Tirupati/TBI_Tirupati_CPMG_1D/126/pdata/1,"IISER Tirupati 210625 12BTBI serum
+cpmg short",12B,12.0,B,4th day,ok,1,Day4
+113,TBI_Tirupati/TBI_Tirupati_CPMG_1D/314/pdata/1,"IISER Tirupati 260625 30ATBI serum
+cpmg",30A,30.0,A,1st day,ok,0,Day1
+114,TBI_Tirupati/TBI_Tirupati_CPMG_1D/322/pdata/1,"IISER Tirupati 260625 31ATBI serum
+cpmg short",31A,31.0,A,1st day,ok,0,Day1
+115,TBI_Tirupati/TBI_Tirupati_CPMG_1D/574/pdata/1,IISER Tirupati Sample 23122025- 56A cpmg short,56A,56.0,A,1st day,ok,0,Day1
+116,TBI_Tirupati/TBI_Tirupati_CPMG_1D/43/pdata/1,"IISER Tirupati 200625 4BTBI serum
+cpmg",4B,4.0,B,4th day,ok,1,Day4
+117,TBI_Tirupati/TBI_Tirupati_CPMG_1D/128/pdata/1,"IISER Tirupati 210625 12BTBI serum
+cpmg",12B,12.0,B,4th day,ok,1,Day4
+118,TBI_Tirupati/TBI_Tirupati_CPMG_1D/88/pdata/1,"IISER Tirupati 210625 8BTBI serum
+cpmg",8B,8.0,B,4th day,ok,1,Day4
+119,TBI_Tirupati/TBI_Tirupati_CPMG_1D/198/pdata/1,"IISER Tirupati 240625 19ATBI serum
+cpmg",19A,19.0,A,1st day,ok,0,Day1
+120,TBI_Tirupati/TBI_Tirupati_CPMG_1D/153/pdata/1,"IISER Tirupati 230625 15ATBI serum
+cpmg",15A,15.0,A,1st day,ok,0,Day1
+121,TBI_Tirupati/TBI_Tirupati_CPMG_1D/38/pdata/1,"IISER Tirupati 200625 4ATBI serum
+cpmg",4A,4.0,A,1st day,ok,0,Day1
+122,TBI_Tirupati/TBI_Tirupati_CPMG_1D/359/pdata/1,"IISER Tirupati 260625 34BTBI serum
+cpmg",34B,34.0,B,4th day,ok,1,Day4
+123,TBI_Tirupati/TBI_Tirupati_CPMG_1D/392/pdata/1,"IISER Tirupati 270625 38ATBI serum
+cpmg short",38A,38.0,A,1st day,ok,0,Day1
+124,TBI_Tirupati/TBI_Tirupati_CPMG_1D/36/pdata/1,"IISER Tirupati 200625 4ATBI serum
+cpmg short",4A,4.0,A,1st day,ok,0,Day1
+125,TBI_Tirupati/TBI_Tirupati_CPMG_1D/539/pdata/1,IISER Tirupati Sample 23122025- 52B cpmg short,52B,52.0,B,4th day,ok,1,Day4
+126,TBI_Tirupati/TBI_Tirupati_CPMG_1D/196/pdata/1,"IISER Tirupati 240625 19ATBI serum
+cpmg short",19A,19.0,A,1st day,ok,0,Day1
+127,TBI_Tirupati/TBI_Tirupati_CPMG_1D/506/pdata/1,IISER Tirupati Sample 23122025- 49A cpmg,49A,49.0,A,1st day,ok,0,Day1
+128,TBI_Tirupati/TBI_Tirupati_CPMG_1D/31/pdata/1,"IISER Tirupati 200625 2BTBI serum
+cpmg short",2B,2.0,B,4th day,ok,1,Day4
+129,TBI_Tirupati/TBI_Tirupati_CPMG_1D/501/pdata/1,IISER Tirupati Sample 23122025- 48B cpmg,48B,48.0,B,4th day,ok,1,Day4
+130,TBI_Tirupati/TBI_Tirupati_CPMG_1D/357/pdata/1,"IISER Tirupati 260625 34BTBI serum
+cpmg short",34B,34.0,B,4th day,ok,1,Day4
+131,TBI_Tirupati/TBI_Tirupati_CPMG_1D/191/pdata/1,"IISER Tirupati 240625 18BTBI serum
+cpmg short",18B,18.0,B,4th day,ok,1,Day4
+132,TBI_Tirupati/TBI_Tirupati_CPMG_1D/131/pdata/1,"IISER Tirupati 220625 13ATBI serum
+cpmg short",13A,13.0,A,1st day,ok,0,Day1
+133,TBI_Tirupati/TBI_Tirupati_CPMG_1D/91/pdata/1,"IISER Tirupati 210625 9ATBI serum
+cpmg short",9A,9.0,A,1st day,ok,0,Day1
+134,TBI_Tirupati/TBI_Tirupati_CPMG_1D/304/pdata/1,"IISER Tirupati 260625 29ATBI serum
+cpmg",29A,29.0,A,1st day,ok,0,Day1
+135,TBI_Tirupati/TBI_Tirupati_CPMG_1D/136/pdata/1,"IISER Tirupati 230625 13BTBI serum
+cpmg short",13B,13.0,B,4th day,ok,1,Day4
+136,TBI_Tirupati/TBI_Tirupati_CPMG_1D/96/pdata/1,"IISER Tirupati 210625 9BTBI serum
+cpmg short",9B,9.0,B,4th day,ok,1,Day4
+137,TBI_Tirupati/TBI_Tirupati_CPMG_1D/564/pdata/1,IISER Tirupati Sample 23122025- 55A cpmg short,55A,55.0,A,1st day,ok,0,Day1
+138,TBI_Tirupati/TBI_Tirupati_CPMG_1D/332/pdata/1,"IISER Tirupati 260625 32ATBI serum
+cpmg short",32A,32.0,A,1st day,ok,0,Day1
+139,TBI_Tirupati/TBI_Tirupati_CPMG_1D/98/pdata/1,"IISER Tirupati 210625 9BTBI serum
+cpmg",9B,9.0,B,4th day,ok,1,Day4
+140,TBI_Tirupati/TBI_Tirupati_CPMG_1D/138/pdata/1,"IISER Tirupati 230625 13BTBI serum
+cpmg",13B,13.0,B,4th day,ok,1,Day4
+141,TBI_Tirupati/TBI_Tirupati_CPMG_1D/53/pdata/1,"IISER Tirupati 200625 5BTBI serum
+cpmg",5B,5.0,B,4th day,ok,1,Day4
+142,TBI_Tirupati/TBI_Tirupati_CPMG_1D/369/pdata/1,"IISER Tirupati 270625 35BTBI serum
+cpmg",35B,35.0,B,4th day,ok,1,Day4
+143,TBI_Tirupati/TBI_Tirupati_CPMG_1D/163/pdata/1,"IISER Tirupati 230625 16BTBI serum
+cpmg",16B,16.0,B,4th day,ok,1,Day4
+144,TBI_Tirupati/TBI_Tirupati_CPMG_1D/531/pdata/1,IISER Tirupati Sample 23122025- 51B cpmg,51B,51.0,B,4th day,ok,1,Day4
+145,TBI_Tirupati/TBI_Tirupati_CPMG_1D/367/pdata/1,"IISER Tirupati 270625 35BTBI serum
+cpmg short",35B,35.0,B,4th day,ok,1,Day4
+146,TBI_Tirupati/TBI_Tirupati_CPMG_1D/509/pdata/1,IISER Tirupati Sample 23122025- 49B cpmg short,49B,49.0,B,4th day,ok,1,Day4
+147,TBI_Tirupati/TBI_Tirupati_CPMG_1D/394/pdata/1,"IISER Tirupati 270625 38ATBI serum
+cpmg",38A,38.0,A,1st day,ok,0,Day1
+148,TBI_Tirupati/TBI_Tirupati_CPMG_1D/536/pdata/1,IISER Tirupati Sample 23122025- 52A cpmg,52A,52.0,A,1st day,ok,0,Day1
+149,TBI_Tirupati/TBI_Tirupati_CPMG_1D/334/pdata/1,"IISER Tirupati 260625 32ATBI serum
+cpmg",32A,32.0,A,1st day,ok,0,Day1
+150,TBI_Tirupati/TBI_Tirupati_CPMG_1D/106/pdata/1,"IISER Tirupati 210625 10BTBI serum
+cpmg short",10B,10.0,B,4th day,ok,1,Day4
+151,TBI_Tirupati/TBI_Tirupati_CPMG_1D/101/pdata/1,"IISER Tirupati 210625 10ATBI serum
+cpmg short",10A,10.0,A,1st day,ok,0,Day1
+152,TBI_Tirupati/TBI_Tirupati_CPMG_1D/591/pdata/1,IISER Tirupati Sample 23122025- 57B cpmg,57B,57.0,B,4th day,ok,1,Day4
+153,TBI_Tirupati/TBI_Tirupati_CPMG_1D/108/pdata/1,"IISER Tirupati 210625 10BTBI serum
+cpmg",10B,10.0,B,4th day,ok,1,Day4
+154,TBI_Tirupati/TBI_Tirupati_CPMG_1D/63/pdata/1,"IISER Tirupati 200625 6BTBI serum
+cpmg",6B,6.0,B,4th day,ok,1,Day4
+155,TBI_Tirupati/TBI_Tirupati_CPMG_1D/554/pdata/1,IISER Tirupati Sample 23122025- 54A cpmg short,54A,54.0,A,1st day,ok,0,Day1
+156,TBI_Tirupati/TBI_Tirupati_CPMG_1D/302/pdata/1,"IISER Tirupati 260625 29ATBI serum
+cpmg short",29A,29.0,A,1st day,ok,0,Day1
+158,TBI_Tirupati/TBI_Tirupati_CPMG_1D/284/pdata/1,"IISER Tirupati 250625 27ATBI serum
+cpmg",27A,27.0,A,1st day,ok,0,Day1
+159,TBI_Tirupati/TBI_Tirupati_CPMG_1D/277/pdata/1,"IISER Tirupati 250625 26BTBI serum
+cpmg short",26B,26.0,B,4th day,ok,1,Day4
+160,TBI_Tirupati/TBI_Tirupati_CPMG_1D/428/pdata/1,"IISER Tirupati 22122025 39B serum
+cpmg short",39B,39.0,B,4th day,ok,1,Day4
+162,TBI_Tirupati/TBI_Tirupati_CPMG_1D/279/pdata/1,"IISER Tirupati 250625 26BTBI serum
+cpmg",26B,26.0,B,4th day,ok,1,Day4
+163,TBI_Tirupati/TBI_Tirupati_CPMG_1D/444/pdata/1,IISER Tirupati Sample 22122025- 41A cpmg short,41A,41.0,A,1st day,ok,0,Day1
+164,TBI_Tirupati/TBI_Tirupati_CPMG_1D/481/pdata/1,IISER Tirupati Sample 23122025- 46B cpmg,46B,46.0,B,4th day,ok,1,Day4
+165,TBI_Tirupati/TBI_Tirupati_CPMG_1D/223/pdata/1,"IISER Tirupati 240625 21BTBI serum
+cpmg",21B,21.0,B,4th day,ok,1,Day4
+166,TBI_Tirupati/TBI_Tirupati_CPMG_1D/486/pdata/1,IISER Tirupati Sample 23122025- 47A cpmg,47A,47.0,A,1st day,ok,0,Day1
+167,TBI_Tirupati/TBI_Tirupati_CPMG_1D/247/pdata/1,"IISER Tirupati 250625 24ATBI serum
+cpmg short",24A,24.0,A,1st day,ok,0,Day1
+168,TBI_Tirupati/TBI_Tirupati_CPMG_1D/249/pdata/1,"IISER Tirupati 250625 24ATBI serum
+cpmg",24A,24.0,A,1st day,ok,0,Day1
+169,TBI_Tirupati/TBI_Tirupati_CPMG_1D/282/pdata/1,"IISER Tirupati 250625 27ATBI serum
+cpmg short",27A,27.0,A,1st day,ok,0,Day1
+170,TBI_Tirupati/TBI_Tirupati_CPMG_1D/474/pdata/1,IISER Tirupati Sample 23122025- 46A cpmg short,46A,46.0,A,1st day,ok,0,Day1
+171,TBI_Tirupati/TBI_Tirupati_CPMG_1D/489/pdata/1,IISER Tirupati Sample 23122025- 47B cpmg short,47B,47.0,B,4th day,ok,1,Day4
+172,TBI_Tirupati/TBI_Tirupati_CPMG_1D/213/pdata/1,"IISER Tirupati 240625 20BTBI serum
+cpmg",20B,20.0,B,4th day,ok,1,Day4
+173,TBI_Tirupati/TBI_Tirupati_CPMG_1D/494/pdata/1,IISER Tirupati Sample 23122025- 48A cpmg short,48A,48.0,A,1st day,ok,0,Day1
+174,TBI_Tirupati/TBI_Tirupati_CPMG_1D/469/pdata/1,IISER Tirupati Sample 22122025- 43B cpmg short,43B,43.0,B,4th day,ok,1,Day4
+175,TBI_Tirupati/TBI_Tirupati_CPMG_1D/456/pdata/1,IISER Tirupati Sample 22122025- 42A cpmg,42A,42.0,A,1st day,ok,0,Day1
+176,TBI_Tirupati/TBI_Tirupati_CPMG_1D/451/pdata/1,IISER Tirupati Sample 22122025- 41B cpmg,41B,41.0,B,4th day,ok,1,Day4
+177,TBI_Tirupati/TBI_Tirupati_CPMG_1D/254/pdata/1,"IISER Tirupati 250625 24BTBI serum
+cpmg",24B,24.0,B,4th day,ok,1,Day4
+178,TBI_Tirupati/TBI_Tirupati_CPMG_1D/402/pdata/1,"IISER Tirupati 270625 38BTBI serum
+cpmg short",38B,38.0,B,4th day,ok,1,Day4
+179,TBI_Tirupati/TBI_Tirupati_CPMG_1D/434/pdata/1,IISER Tirupati Sample 22122025- 40A cpmg short,40A,40.0,A,1st day,ok,0,Day1
+180,TBI_Tirupati/TBI_Tirupati_CPMG_1D/262/pdata/1,"IISER Tirupati 250625 25ATBI serum
+cpmg short",25A,25.0,A,1st day,ok,0,Day1
+181,TBI_Tirupati/TBI_Tirupati_CPMG_1D/239/pdata/1,"IISER Tirupati 250625 23ATBI serum
+cpmg",23A,23.0,A,1st day,ok,0,Day1
+182,TBI_Tirupati/TBI_Tirupati_CPMG_1D/206/pdata/1,"IISER Tirupati 240625 20ATBI serum
+cpmg short",20A,20.0,A,1st day,ok,0,Day1
+183,TBI_Tirupati/TBI_Tirupati_CPMG_1D/201/pdata/1,"IISER Tirupati 240625 19BTBI serum
+cpmg short",19B,19.0,B,4th day,ok,1,Day4
+184,TBI_Tirupati/TBI_Tirupati_CPMG_1D/208/pdata/1,"IISER Tirupati 240625 20ATBI serum
+cpmg",20A,20.0,A,1st day,ok,0,Day1
+185,TBI_Tirupati/TBI_Tirupati_CPMG_1D/461/pdata/1,IISER Tirupati Sample 22122025- 42B cpmg,42B,42.0,B,4th day,ok,1,Day4
+186,TBI_Tirupati/TBI_Tirupati_CPMG_1D/237/pdata/1,"IISER Tirupati 250625 23ATBI serum
+cpmg short",23A,23.0,A,1st day,ok,0,Day1
+187,TBI_Tirupati/TBI_Tirupati_CPMG_1D/459/pdata/1,IISER Tirupati Sample 22122025- 42B cpmg short,42B,42.0,B,4th day,ok,1,Day4
+188,TBI_Tirupati/TBI_Tirupati_CPMG_1D/466/pdata/1,IISER Tirupati Sample 22122025- 43A cpmg,43A,43.0,A,1st day,ok,0,Day1
+189,TBI_Tirupati/TBI_Tirupati_CPMG_1D/264/pdata/1,"IISER Tirupati 250625 25ATBI serum
+cpmg",25A,25.0,A,1st day,ok,0,Day1
+190,TBI_Tirupati/TBI_Tirupati_CPMG_1D/297/pdata/1,"IISER Tirupati 250625 28BTBI serum
+cpmg short",28B,28.0,B,4th day,ok,1,Day4
+191,TBI_Tirupati/TBI_Tirupati_CPMG_1D/404/pdata/1,"IISER Tirupati 270625 38BTBI serum
+cpmg",38B,38.0,B,4th day,ok,1,Day4
+192,TBI_Tirupati/TBI_Tirupati_CPMG_1D/252/pdata/1,"IISER Tirupati 250625 24BTBI serum
+cpmg short",24B,24.0,B,4th day,ok,1,Day4
+193,TBI_Tirupati/TBI_Tirupati_CPMG_1D/299/pdata/1,"IISER Tirupati 250625 28BTBI serum
+cpmg",28B,28.0,B,4th day,ok,1,Day4
+194,TBI_Tirupati/TBI_Tirupati_CPMG_1D/46/pdata/1,"IISER Tirupati 200625 5ATBI serum
+cpmg short",5A,5.0,A,1st day,ok,0,Day1
+195,TBI_Tirupati/TBI_Tirupati_CPMG_1D/549/pdata/1,IISER Tirupati Sample 23122025- 53B cpmg short,53B,53.0,B,4th day,ok,1,Day4
+196,TBI_Tirupati/TBI_Tirupati_CPMG_1D/576/pdata/1,IISER Tirupati Sample 23122025- 56A cpmg short,56A,56.0,A,1st day,ok,0,Day1
+197,TBI_Tirupati/TBI_Tirupati_CPMG_1D/41/pdata/1,"IISER Tirupati 200625 4BTBI serum
+cpmg short",4B,4.0,B,4th day,ok,1,Day4
+198,TBI_Tirupati/TBI_Tirupati_CPMG_1D/571/pdata/1,IISER Tirupati Sample 23122025- 55B cpmg,55B,55.0,B,4th day,ok,1,Day4
+199,TBI_Tirupati/TBI_Tirupati_CPMG_1D/327/pdata/1,"IISER Tirupati 260625 31BTBI serum
+cpmg short",31B,31.0,B,4th day,ok,1,Day4
+200,TBI_Tirupati/TBI_Tirupati_CPMG_1D/123/pdata/1,"IISER Tirupati 210625 12ATBI serum
+cpmg",12A,12.0,A,1st day,ok,0,Day1
+201,TBI_Tirupati/TBI_Tirupati_CPMG_1D/48/pdata/1,"IISER Tirupati 200625 5ATBI serum
+cpmg",5A,5.0,A,1st day,ok,0,Day1
+202,TBI_Tirupati/TBI_Tirupati_CPMG_1D/329/pdata/1,"IISER Tirupati 260625 31BTBI serum
+cpmg",31B,31.0,B,4th day,ok,1,Day4
+203,TBI_Tirupati/TBI_Tirupati_CPMG_1D/514/pdata/1,IISER Tirupati Sample 23122025- 50A cpmg short,50A,50.0,A,1st day,ok,0,Day1
+204,TBI_Tirupati/TBI_Tirupati_CPMG_1D/342/pdata/1,"IISER Tirupati 260625 33ATBI serum
+cpmg short",33A,33.0,A,1st day,ok,0,Day1
+205,TBI_Tirupati/TBI_Tirupati_CPMG_1D/389/pdata/1,"IISER Tirupati 270625 37BTBI serum
+cpmg",37B,37.0,B,4th day,ok,1,Day4
+206,TBI_Tirupati/TBI_Tirupati_CPMG_1D/183/pdata/1,"IISER Tirupati 240625 16ATBI serum
+cpmg",16A,16.0,A,1st day,ok,0,Day1
+207,TBI_Tirupati/TBI_Tirupati_CPMG_1D/148/pdata/1,"IISER Tirupati 230625 14BTBI serum
+cpmg",14B,14.0,B,4th day,ok,1,Day4
+208,TBI_Tirupati/TBI_Tirupati_CPMG_1D/23/pdata/1,"IISER Tirupati 190625 3ATBI serum
+cpmg",3A,3.0,A,1st day,ok,0,Day1
+209,TBI_Tirupati/TBI_Tirupati_CPMG_1D/141/pdata/1,"IISER Tirupati 230625 14ATBI serum
+cpmg short",14A,14.0,A,1st day,ok,0,Day1
+210,TBI_Tirupati/TBI_Tirupati_CPMG_1D/387/pdata/1,"IISER Tirupati 270625 37BTBI serum
+cpmg short",37B,37.0,B,4th day,ok,1,Day4
+211,TBI_Tirupati/TBI_Tirupati_CPMG_1D/374/pdata/1,"IISER Tirupati 270625 36ATBI serum
+cpmg",36A,36.0,A,1st day,ok,0,Day1
+212,TBI_Tirupati/TBI_Tirupati_CPMG_1D/146/pdata/1,"IISER Tirupati 230625 14BTBI serum
+cpmg short",14B,14.0,B,4th day,ok,1,Day4
+213,TBI_Tirupati/TBI_Tirupati_CPMG_1D/71/pdata/1,"IISER Tirupati 210625 7BTBI serum
+cpmg short",7B,7.0,B,4th day,ok,1,Day4
+214,TBI_Tirupati/TBI_Tirupati_CPMG_1D/541/pdata/1,IISER Tirupati Sample 23122025- 52B cpmg,52B,52.0,B,4th day,ok,1,Day4
+215,TBI_Tirupati/TBI_Tirupati_CPMG_1D/317/pdata/1,"IISER Tirupati 260625 30BTBI serum
+cpmg short",30B,30.0,B,4th day,ok,1,Day4
+216,TBI_Tirupati/TBI_Tirupati_CPMG_1D/76/pdata/1,"IISER Tirupati 210625 8ATBI serum
+cpmg short",8A,8.0,A,1st day,ok,0,Day1
+217,TBI_Tirupati/TBI_Tirupati_CPMG_1D/579/pdata/1,IISER Tirupati Sample 23122025- 56B cpmg short,56B,56.0,B,4th day,ok,1,Day4
+218,TBI_Tirupati/TBI_Tirupati_CPMG_1D/546/pdata/1,IISER Tirupati Sample 23122025- 53A cpmg,53A,53.0,A,1st day,ok,0,Day1
+219,TBI_Tirupati/TBI_Tirupati_CPMG_1D/319/pdata/1,"IISER Tirupati 260625 30BTBI serum
+cpmg",30B,30.0,B,4th day,ok,1,Day4
+220,TBI_Tirupati/TBI_Tirupati_CPMG_1D/584/pdata/1,IISER Tirupati Sample 23122025- 57A cpmg short,57A,57.0,A,1st day,ok,0,Day1
+221,TBI_Tirupati/TBI_Tirupati_CPMG_1D/113/pdata/1,"IISER Tirupati 210625 11ATBI serum
+cpmg",11A,11.0,A,1st day,ok,0,Day1
+222,TBI_Tirupati/TBI_Tirupati_CPMG_1D/78/pdata/1,"IISER Tirupati 210625 8ATBI serum
+cpmg",8A,8.0,A,1st day,ok,0,Day1
+223,TBI_Tirupati/TBI_Tirupati_CPMG_1D/178/pdata/1,"IISER Tirupati 230625 17BTBI serum
+cpmg short",17B,17.0,B,4th day,ok,1,Day4
+224,TBI_Tirupati/TBI_Tirupati_CPMG_1D/13/pdata/1,"IISER Tirupati 190625 1BTBI serum
+cpmg ns128",1B,1.0,B,4th day,ok,1,Day4
+225,TBI_Tirupati/TBI_Tirupati_CPMG_1D/5/pdata/1,IISER Tirupati 190625 1ATBI serum,1A,1.0,A,1st day,ok,0,Day1
+226,TBI_Tirupati/TBI_Tirupati_CPMG_1D/524/pdata/1,IISER Tirupati Sample 23122025- 51A cpmg short,51A,51.0,A,1st day,ok,0,Day1
+227,TBI_Tirupati/TBI_Tirupati_CPMG_1D/372/pdata/1,"IISER Tirupati 270625 36ATBI serum
+cpmg short",36A,36.0,A,1st day,ok,0,Day1
+228,TBI_Tirupati/TBI_Tirupati_CPMG_1D/344/pdata/1,"IISER Tirupati 260625 33ATBI serum
+cpmg",33A,33.0,A,1st day,ok,0,Day1
+229,TBI_Tirupati/TBI_Tirupati_CPMG_1D/176/pdata/1,"IISER Tirupati 230625 17BTBI serum
+cpmg short",17B,17.0,B,4th day,ok,1,Day4
+230,TBI_Tirupati/TBI_Tirupati_CPMG_1D/171/pdata/1,"IISER Tirupati 230625 17ATBI serum
+cpmg short",17A,17.0,A,1st day,ok,0,Day1

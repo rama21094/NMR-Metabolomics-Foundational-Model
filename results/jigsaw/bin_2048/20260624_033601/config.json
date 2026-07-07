@@ -1,0 +1,43 @@
+{
+  "mode": "sweep",
+  "data_path": [
+    "combine_unique_Water_EDTA_Suppressed.npy"
+  ],
+  "bin_size": 1024,
+  "bin_sizes": [
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "out_dir": "results/jigsaw",
+  "model_dir": "models/jigsaw",
+  "epochs": 400,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "weight_decay": 0.05,
+  "warmup_epochs": 10,
+  "patience": 50,
+  "d_model": 192,
+  "nhead": 6,
+  "num_layers": 4,
+  "dim_feedforward": 768,
+  "dropout": 0.15,
+  "label_smoothing": 0.05,
+  "coverage_weight": 0.0,
+  "train_split": 0.8,
+  "val_split": 0.2,
+  "test_split": 0.0,
+  "device": "auto",
+  "num_workers": "auto",
+  "seed": 42,
+  "max_samples": null,
+  "normalize_input": "auto",
+  "save_every": 100,
+  "min_lr": 1e-06,
+  "run_name": "bin_2048/20260624_033601",
+  "active_bin_sizes": [
+    2048
+  ],
+  "normalize_resolved": true
+}

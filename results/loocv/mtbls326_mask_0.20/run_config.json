@@ -1,0 +1,27 @@
+{
+  "data": "MTBLS326_aligned_spectra_WS625to680Zero.npy",
+  "metadata": "MTBLS326_metadata_mapping.csv",
+  "checkpoint": "./SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth",
+  "output_dir": "mtbls326_loocv_results",
+  "classical_only": false,
+  "foundation_only": false,
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "backbone_dropout": 0.15,
+  "nhead": 8,
+  "xgb_jobs": 4,
+  "device": "auto",
+  "seed": 42,
+  "n_samples": 42,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "No",
+    "1": "Yes"
+  }
+}

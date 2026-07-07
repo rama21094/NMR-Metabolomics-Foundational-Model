@@ -1,0 +1,255 @@
+{
+  "n_samples": 142,
+  "spectrum_length": 131072,
+  "class_counts": {
+    "surgery (control)": 56,
+    "primary bacterial infectious disease": 26,
+    "viral infectious disease": 31,
+    "unknown": 29
+  },
+  "class_order": [
+    "surgery (control)",
+    "primary bacterial infectious disease",
+    "viral infectious disease",
+    "unknown"
+  ],
+  "support_per_class": 8,
+  "episodes": 100,
+  "classifiers_requested": [
+    "svm",
+    "logreg",
+    "xgboost"
+  ],
+  "xgboost_available": true,
+  "run_foundation_backbone": true,
+  "run_direct_binned": true,
+  "run_prototype_baseline": true,
+  "bin_counts": [
+    1024,
+    2048
+  ],
+  "bin_reductions": [
+    "auc"
+  ],
+  "svm_params": {
+    "kernel": "linear",
+    "C": 1.0,
+    "class_weight": "balanced"
+  },
+  "logreg_params": {
+    "penalty": "l2",
+    "C": 0.1,
+    "solver": "lbfgs",
+    "max_iter": 5000,
+    "class_weight": "balanced"
+  },
+  "xgboost_params": {
+    "n_estimators": 300,
+    "max_depth": 2,
+    "learning_rate": 0.05,
+    "subsample": 0.9,
+    "colsample_bytree": 0.1,
+    "reg_lambda": 25.0,
+    "n_jobs": 8
+  },
+  "prototype_params": {
+    "distance": "mahalanobis",
+    "covariance_mode": "support",
+    "cov_reg": 0.001,
+    "feature_projection": "anova",
+    "select_k_best": 1000
+  },
+  "embedding_strategy": "flatten",
+  "model_dims": {
+    "patch_size": 1024,
+    "d_model": 128,
+    "num_layers": 3,
+    "dim_feedforward": 256
+  },
+  "results_csv": "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/fewshot_ml_comparison_episode_metrics.csv",
+  "summary_csv": "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/fewshot_ml_comparison_summary.csv",
+  "best_hyperparams_csv": "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/fewshot_ml_best_hyperparams.csv",
+  "best_hyperparams": [
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins1024_auc",
+      "classifier": "logreg_C0p1",
+      "n_episodes": 100,
+      "accuracy_mean": 0.4400909090909091,
+      "accuracy_std": 0.05216883915339283,
+      "macro_f1_mean": 0.38077295836746816,
+      "macro_f1_std": 0.04366369995507417,
+      "macro_precision_mean": 0.39525295765735896,
+      "macro_recall_mean": 0.38808628795721184
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins2048_auc",
+      "classifier": "logreg_C0p1",
+      "n_episodes": 100,
+      "accuracy_mean": 0.43772727272727274,
+      "accuracy_std": 0.055702077422370065,
+      "macro_f1_mean": 0.37833814455298737,
+      "macro_f1_std": 0.04866844246159449,
+      "macro_precision_mean": 0.3927917791571517,
+      "macro_recall_mean": 0.3849010093167702
+    },
+    {
+      "feature_group": "foundation_backbone",
+      "feature_name": "mae_flatten",
+      "classifier": "xgboost_depth2",
+      "n_episodes": 100,
+      "accuracy_mean": 0.41454545454545455,
+      "accuracy_std": 0.056366894659812955,
+      "macro_f1_mean": 0.3568845633712747,
+      "macro_f1_std": 0.046924678578256336,
+      "macro_precision_mean": 0.37199541326020397,
+      "macro_recall_mean": 0.36333193150448584
+    },
+    {
+      "feature_group": "prototype_head",
+      "feature_name": "mae_embeddings",
+      "classifier": "prototype_mahalanobis_support_anova",
+      "n_episodes": 100,
+      "accuracy_mean": 0.4120909090909091,
+      "accuracy_std": 0.06202276685202486,
+      "macro_f1_mean": 0.3567673395144961,
+      "macro_f1_std": 0.04963685185445996,
+      "macro_precision_mean": 0.3715404956344353,
+      "macro_recall_mean": 0.3610922403381642
+    }
+  ],
+  "plots": [
+    "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/comparison_accuracy_bar.png",
+    "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/comparison_macro_f1_bar.png",
+    "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/comparison_accuracy_boxplot.png",
+    "fewshot_support_sweep_MTBLS563/mask_0.50/support_8/comparison_episode_trend_by_group.png"
+  ],
+  "difference_note": {
+    "fewshot_ml_foundation_backbone": "MAE embeddings used as fixed features for classical ML heads (SVM/LR/XGBoost).",
+    "prototype_fewshot_style": "MAE embeddings classified by class prototypes with cosine/mahalanobis distance and optional ANOVA support-only feature selection."
+  },
+  "aggregate": [
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins1024_auc",
+      "classifier": "logreg_C0p1",
+      "n_episodes": 100,
+      "accuracy_mean": 0.4400909090909091,
+      "accuracy_std": 0.05216883915339283,
+      "macro_f1_mean": 0.38077295836746816,
+      "macro_f1_std": 0.04366369995507417,
+      "macro_precision_mean": 0.39525295765735896,
+      "macro_recall_mean": 0.38808628795721184
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins1024_auc",
+      "classifier": "svm_C1p0",
+      "n_episodes": 100,
+      "accuracy_mean": 0.4088181818181818,
+      "accuracy_std": 0.05500958032658329,
+      "macro_f1_mean": 0.3511602214064793,
+      "macro_f1_std": 0.04466445657704158,
+      "macro_precision_mean": 0.36299803437764533,
+      "macro_recall_mean": 0.3589540200138026
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins1024_auc",
+      "classifier": "xgboost_depth2",
+      "n_episodes": 100,
+      "accuracy_mean": 0.3745454545454545,
+      "accuracy_std": 0.05186238509004044,
+      "macro_f1_mean": 0.3252235904122486,
+      "macro_f1_std": 0.042307066046060514,
+      "macro_precision_mean": 0.34511443597800046,
+      "macro_recall_mean": 0.3346574145962733
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins2048_auc",
+      "classifier": "logreg_C0p1",
+      "n_episodes": 100,
+      "accuracy_mean": 0.43772727272727274,
+      "accuracy_std": 0.055702077422370065,
+      "macro_f1_mean": 0.37833814455298737,
+      "macro_f1_std": 0.04866844246159449,
+      "macro_precision_mean": 0.3927917791571517,
+      "macro_recall_mean": 0.3849010093167702
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins2048_auc",
+      "classifier": "svm_C1p0",
+      "n_episodes": 100,
+      "accuracy_mean": 0.40909090909090906,
+      "accuracy_std": 0.0552298659391855,
+      "macro_f1_mean": 0.35193148563298643,
+      "macro_f1_std": 0.04637429471895418,
+      "macro_precision_mean": 0.36360118628467597,
+      "macro_recall_mean": 0.3592503450655624
+    },
+    {
+      "feature_group": "direct_binned",
+      "feature_name": "bins2048_auc",
+      "classifier": "xgboost_depth2",
+      "n_episodes": 100,
+      "accuracy_mean": 0.3809090909090909,
+      "accuracy_std": 0.05026850021334408,
+      "macro_f1_mean": 0.32975727849680747,
+      "macro_f1_std": 0.04285729911898515,
+      "macro_precision_mean": 0.35024957150169406,
+      "macro_recall_mean": 0.33876854727398203
+    },
+    {
+      "feature_group": "foundation_backbone",
+      "feature_name": "mae_flatten",
+      "classifier": "logreg_C0p1",
+      "n_episodes": 100,
+      "accuracy_mean": 0.3957272727272727,
+      "accuracy_std": 0.057153080966780144,
+      "macro_f1_mean": 0.34309945179169643,
+      "macro_f1_std": 0.048102141375169216,
+      "macro_precision_mean": 0.35774135729282464,
+      "macro_recall_mean": 0.3481958462732919
+    },
+    {
+      "feature_group": "foundation_backbone",
+      "feature_name": "mae_flatten",
+      "classifier": "svm_C1p0",
+      "n_episodes": 100,
+      "accuracy_mean": 0.3920909090909091,
+      "accuracy_std": 0.04849612472178717,
+      "macro_f1_mean": 0.3357902496725948,
+      "macro_f1_std": 0.04126325543912123,
+      "macro_precision_mean": 0.3476676721708815,
+      "macro_recall_mean": 0.3409608997584541
+    },
+    {
+      "feature_group": "foundation_backbone",
+      "feature_name": "mae_flatten",
+      "classifier": "xgboost_depth2",
+      "n_episodes": 100,
+      "accuracy_mean": 0.41454545454545455,
+      "accuracy_std": 0.056366894659812955,
+      "macro_f1_mean": 0.3568845633712747,
+      "macro_f1_std": 0.046924678578256336,
+      "macro_precision_mean": 0.37199541326020397,
+      "macro_recall_mean": 0.36333193150448584
+    },
+    {
+      "feature_group": "prototype_head",
+      "feature_name": "mae_embeddings",
+      "classifier": "prototype_mahalanobis_support_anova",
+      "n_episodes": 100,
+      "accuracy_mean": 0.4120909090909091,
+      "accuracy_std": 0.06202276685202486,
+      "macro_f1_mean": 0.3567673395144961,
+      "macro_f1_std": 0.04963685185445996,
+      "macro_precision_mean": 0.3715404956344353,
+      "macro_recall_mean": 0.3610922403381642
+    }
+  ],
+  "non_ok_examples": []
+}

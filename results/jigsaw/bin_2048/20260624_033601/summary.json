@@ -1,0 +1,10 @@
+{
+  "run_name": "bin_2048/20260624_033601",
+  "best_val_loss": 1.5272068828344345,
+  "best_checkpoint": "models/jigsaw/bin_2048/20260624_033601/bin_2048_20260624_033601_best.pth",
+  "epochs_completed": 400,
+  "bin_sizes": [
+    2048
+  ],
+  "results_dir": "results/jigsaw/bin_2048/20260624_033601"
+}

@@ -1,0 +1,325 @@
+{
+  "gradient_results": {
+    "no_skip": {
+      "config": "no_skip",
+      "avg_loss": 0.01967164035886526,
+      "group_stats": {
+        "embedding": {
+          "mean": 0.138619446818484,
+          "std": 0.17704136927195302,
+          "min": 0.0023661590414121745,
+          "max": 0.43500722348690035,
+          "count": 4
+        },
+        "positional": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "transformer": {
+          "mean": 0.01699829772017741,
+          "std": 0.018857278842694697,
+          "min": 0.0012308966484852134,
+          "max": 0.05825029276311398,
+          "count": 12
+        },
+        "reconstruction": {
+          "mean": 0.024265799601562322,
+          "std": 0.021583159807575282,
+          "min": 0.004942776542156935,
+          "max": 0.05849419757723808,
+          "count": 4
+        },
+        "skip": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "mask_token": {
+          "mean": 0.0026935480535030367,
+          "std": 0.0,
+          "min": 0.0026935480535030367,
+          "max": 0.0026935480535030367,
+          "count": 1
+        }
+      },
+      "detailed_norms": {
+        "encoder.mask_token": 0.0026935480535030367,
+        "encoder.patch_embedding.0.weight": 0.11397054716944695,
+        "encoder.patch_embedding.0.bias": 0.43500722348690035,
+        "encoder.patch_embedding.1.weight": 0.0023661590414121745,
+        "encoder.patch_embedding.1.bias": 0.0031338575761765243,
+        "encoder.transformer_layers.0.self_attn.in_proj_weight": 0.04409548304975033,
+        "encoder.transformer_layers.0.self_attn.in_proj_bias": 0.005258180806413293,
+        "encoder.transformer_layers.0.self_attn.out_proj.weight": 0.05825029276311398,
+        "encoder.transformer_layers.0.self_attn.out_proj.bias": 0.009668214526027442,
+        "encoder.transformer_layers.0.linear1.weight": 0.026597849279642104,
+        "encoder.transformer_layers.0.linear1.bias": 0.0031447882298380136,
+        "encoder.transformer_layers.0.linear2.weight": 0.03800078108906746,
+        "encoder.transformer_layers.0.linear2.bias": 0.009232834447175264,
+        "encoder.transformer_layers.0.norm1.weight": 0.0029227073304355145,
+        "encoder.transformer_layers.0.norm1.bias": 0.004127861186861992,
+        "encoder.transformer_layers.0.norm2.weight": 0.0012308966484852134,
+        "encoder.transformer_layers.0.norm2.bias": 0.001449683285318315,
+        "encoder.reconstruction_head.0.weight": 0.05849419757723808,
+        "encoder.reconstruction_head.0.bias": 0.004942776542156935,
+        "encoder.reconstruction_head.3.weight": 0.02699357382953167,
+        "encoder.reconstruction_head.3.bias": 0.006632650457322598
+      }
+    },
+    "input_to_final_skip": {
+      "config": "input_to_final_skip",
+      "avg_loss": 0.01821301970630884,
+      "group_stats": {
+        "embedding": {
+          "mean": 0.1503136598446872,
+          "std": 0.1921848907899077,
+          "min": 0.0024712520418688653,
+          "max": 0.4720757246017456,
+          "count": 4
+        },
+        "positional": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "transformer": {
+          "mean": 0.016142687106912492,
+          "std": 0.01805119474247738,
+          "min": 0.0008627207891549916,
+          "max": 0.0549866046756506,
+          "count": 12
+        },
+        "reconstruction": {
+          "mean": 0.022937500814441594,
+          "std": 0.02072591823012421,
+          "min": 0.004668086906895042,
+          "max": 0.05614980980753899,
+          "count": 4
+        },
+        "skip": {
+          "mean": 0.0006403622450307012,
+          "std": 6.9439003709703575e-06,
+          "min": 0.0006334183446597308,
+          "max": 0.0006473061454016716,
+          "count": 2
+        },
+        "mask_token": {
+          "mean": 0.0025226209312677384,
+          "std": 0.0,
+          "min": 0.0025226209312677384,
+          "max": 0.0025226209312677384,
+          "count": 1
+        }
+      },
+      "detailed_norms": {
+        "encoder.mask_token": 0.0025226209312677384,
+        "encoder.patch_embedding.0.weight": 0.12346997559070587,
+        "encoder.patch_embedding.0.bias": 0.4720757246017456,
+        "encoder.patch_embedding.1.weight": 0.0024712520418688653,
+        "encoder.patch_embedding.1.bias": 0.0032376871444284917,
+        "encoder.transformer_layers.0.self_attn.in_proj_weight": 0.04622662775218487,
+        "encoder.transformer_layers.0.self_attn.in_proj_bias": 0.005404142616316676,
+        "encoder.transformer_layers.0.self_attn.out_proj.weight": 0.0549866046756506,
+        "encoder.transformer_layers.0.self_attn.out_proj.bias": 0.009254857152700424,
+        "encoder.transformer_layers.0.linear1.weight": 0.024502607621252538,
+        "encoder.transformer_layers.0.linear1.bias": 0.0029331635683774947,
+        "encoder.transformer_layers.0.linear2.weight": 0.032359392195940015,
+        "encoder.transformer_layers.0.linear2.bias": 0.008753894548863172,
+        "encoder.transformer_layers.0.norm1.weight": 0.0030340001452714206,
+        "encoder.transformer_layers.0.norm1.bias": 0.004223274253308773,
+        "encoder.transformer_layers.0.norm2.weight": 0.0008627207891549916,
+        "encoder.transformer_layers.0.norm2.bias": 0.0011709599639289081,
+        "encoder.reconstruction_head.0.weight": 0.05614980980753899,
+        "encoder.reconstruction_head.0.bias": 0.004668086906895042,
+        "encoder.reconstruction_head.3.weight": 0.02467965018004179,
+        "encoder.reconstruction_head.3.bias": 0.006252456363290549,
+        "encoder.skip_projection.weight": 0.0006473061454016716,
+        "encoder.skip_projection.bias": 0.0006334183446597308
+      }
+    },
+    "layers_to_final_skip": {
+      "config": "layers_to_final_skip",
+      "avg_loss": 0.11629004254937172,
+      "group_stats": {
+        "embedding": {
+          "mean": 0.7575050338171424,
+          "std": 0.9596705792970169,
+          "min": 0.014194435253739358,
+          "max": 2.3601726412773134,
+          "count": 4
+        },
+        "positional": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "transformer": {
+          "mean": 0.09010890917852521,
+          "std": 0.10015583304404028,
+          "min": 0.0068256531842052935,
+          "max": 0.31728559732437134,
+          "count": 12
+        },
+        "reconstruction": {
+          "mean": 0.1560599423479289,
+          "std": 0.16110121418191442,
+          "min": 0.01446920372545719,
+          "max": 0.40811450183391573,
+          "count": 4
+        },
+        "skip": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "mask_token": {
+          "mean": 0.01910782530903816,
+          "std": 0.0,
+          "min": 0.01910782530903816,
+          "max": 0.01910782530903816,
+          "count": 1
+        }
+      },
+      "detailed_norms": {
+        "encoder.mask_token": 0.01910782530903816,
+        "encoder.patch_embedding.0.weight": 0.6389287173748016,
+        "encoder.patch_embedding.0.bias": 2.3601726412773134,
+        "encoder.patch_embedding.1.weight": 0.014194435253739358,
+        "encoder.patch_embedding.1.bias": 0.016724341362714768,
+        "encoder.transformer_layers.0.self_attn.in_proj_weight": 0.23401848822832108,
+        "encoder.transformer_layers.0.self_attn.in_proj_bias": 0.027369691990315914,
+        "encoder.transformer_layers.0.self_attn.out_proj.weight": 0.31728559732437134,
+        "encoder.transformer_layers.0.self_attn.out_proj.bias": 0.049947360530495644,
+        "encoder.transformer_layers.0.linear1.weight": 0.14949928671121598,
+        "encoder.transformer_layers.0.linear1.bias": 0.0185655927285552,
+        "encoder.transformer_layers.0.linear2.weight": 0.18240345567464827,
+        "encoder.transformer_layers.0.linear2.bias": 0.04768611341714859,
+        "encoder.transformer_layers.0.norm1.weight": 0.018108290061354636,
+        "encoder.transformer_layers.0.norm1.bias": 0.021076775901019574,
+        "encoder.transformer_layers.0.norm2.weight": 0.0068256531842052935,
+        "encoder.transformer_layers.0.norm2.bias": 0.008520604390650988,
+        "encoder.reconstruction_head.0.weight": 0.40811450183391573,
+        "encoder.reconstruction_head.0.bias": 0.01446920372545719,
+        "encoder.reconstruction_head.3.weight": 0.18489300310611725,
+        "encoder.reconstruction_head.3.bias": 0.016763060726225375
+      }
+    },
+    "residual_layers": {
+      "config": "residual_layers",
+      "avg_loss": 0.021488252468407153,
+      "group_stats": {
+        "embedding": {
+          "mean": 0.1614586697658524,
+          "std": 0.2059287222651784,
+          "min": 0.0029115037992596625,
+          "max": 0.5061042487621308,
+          "count": 4
+        },
+        "positional": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "transformer": {
+          "mean": 0.019552476603227353,
+          "std": 0.020901591818895022,
+          "min": 0.0013281455147080123,
+          "max": 0.059515532851219174,
+          "count": 12
+        },
+        "reconstruction": {
+          "mean": 0.028195446333847945,
+          "std": 0.025726393268947614,
+          "min": 0.005576667981222272,
+          "max": 0.06924471855163575,
+          "count": 4
+        },
+        "skip": {
+          "mean": 0,
+          "std": 0,
+          "min": 0,
+          "max": 0,
+          "count": 0
+        },
+        "mask_token": {
+          "mean": 0.0032138493144884704,
+          "std": 0.0,
+          "min": 0.0032138493144884704,
+          "max": 0.0032138493144884704,
+          "count": 1
+        }
+      },
+      "detailed_norms": {
+        "encoder.mask_token": 0.0032138493144884704,
+        "encoder.patch_embedding.0.weight": 0.13318780064582825,
+        "encoder.patch_embedding.0.bias": 0.5061042487621308,
+        "encoder.patch_embedding.1.weight": 0.0029115037992596625,
+        "encoder.patch_embedding.1.bias": 0.00363112585619092,
+        "encoder.transformer_layers.0.self_attn.in_proj_weight": 0.05512267015874386,
+        "encoder.transformer_layers.0.self_attn.in_proj_bias": 0.006541157606989145,
+        "encoder.transformer_layers.0.self_attn.out_proj.weight": 0.059515532851219174,
+        "encoder.transformer_layers.0.self_attn.out_proj.bias": 0.01107919029891491,
+        "encoder.transformer_layers.0.linear1.weight": 0.033638008683919904,
+        "encoder.transformer_layers.0.linear1.bias": 0.003888228442519903,
+        "encoder.transformer_layers.0.linear2.weight": 0.04216443598270416,
+        "encoder.transformer_layers.0.linear2.bias": 0.01067347703501582,
+        "encoder.transformer_layers.0.norm1.weight": 0.004134521307423711,
+        "encoder.transformer_layers.0.norm1.bias": 0.004899864131584763,
+        "encoder.transformer_layers.0.norm2.weight": 0.0013281455147080123,
+        "encoder.transformer_layers.0.norm2.bias": 0.001644487224984914,
+        "encoder.reconstruction_head.0.weight": 0.06924471855163575,
+        "encoder.reconstruction_head.0.bias": 0.005576667981222272,
+        "encoder.reconstruction_head.3.weight": 0.030831271223723887,
+        "encoder.reconstruction_head.3.bias": 0.0071291275788098575
+      }
+    }
+  },
+  "comparison": {
+    "no_skip": {
+      "avg_loss": 0.01967164035886526,
+      "transformer_grad_mean": 0.01699829772017741,
+      "reconstruction_grad_mean": 0.024265799601562322,
+      "skip_grad_mean": 0
+    },
+    "input_to_final_skip": {
+      "avg_loss": 0.01821301970630884,
+      "transformer_grad_mean": 0.016142687106912492,
+      "reconstruction_grad_mean": 0.022937500814441594,
+      "skip_grad_mean": 0.0006403622450307012
+    },
+    "layers_to_final_skip": {
+      "avg_loss": 0.11629004254937172,
+      "transformer_grad_mean": 0.09010890917852521,
+      "reconstruction_grad_mean": 0.1560599423479289,
+      "skip_grad_mean": 0
+    },
+    "residual_layers": {
+      "avg_loss": 0.021488252468407153,
+      "transformer_grad_mean": 0.019552476603227353,
+      "reconstruction_grad_mean": 0.028195446333847945,
+      "skip_grad_mean": 0
+    }
+  },
+  "best_config": "input_to_final_skip",
+  "args": {
+    "data_path": "aligned_nmr_spectra_128K_WS625to680Zero.npy",
+    "device": "cuda",
+    "batch_size": 8,
+    "n_batches_grad": 10,
+    "output_dir": "gradient_analysis_results",
+    "run_full_training": false
+  }
+}
