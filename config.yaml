@@ -1,0 +1,27 @@
+# The folder containing the code you want to process
+repo_path: /home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/
+
+# Where Pyragify should save the output files
+output_dir: ./pyragify
+
+# Maximum words per output file (200,000 is a good default)
+max_words: 200000
+
+# Skip files larger than 10 MB
+max_file_size: 10485760
+
+# Files and folders to ignore
+skip_patterns:
+ - ".git"
+ - "uv.lock"
+ - ".gitignore"
+ - ".venv"
+ - "archive"
+ - "__pycache__"
+ - "pyragify"
+ - "folder_tree.txt"
+skip_dirs:
+ - "models/Old Models"
+ 
+# Set to true to see detailed progress in the terminal
+verbose: False

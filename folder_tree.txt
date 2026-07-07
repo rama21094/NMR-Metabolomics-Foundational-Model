@@ -1,0 +1,2418 @@
+.
+├── archive
+│   ├── legacy_scripts_dir
+│   │   └── __pycache__
+│   │       └── compare_loocv_summaries.cpython-311.pyc
+│   └── python_cache
+│       └── root___pycache__
+│           ├── check_npy_compare.cpython-311.pyc
+│           ├── classify_binned_auc_cv.cpython-311.pyc
+│           ├── classify_embeddings_cv.cpython-311.pyc
+│           ├── classify_head_cv.cpython-311.pyc
+│           ├── combine_unique_npy.cpython-311.pyc
+│           ├── compare_mtbls326_summaries.cpython-311.pyc
+│           ├── fewshot_ml_comparison.cpython-311.pyc
+│           ├── fewshot_ml_comparison.cpython-312.pyc
+│           ├── mtbls326_loocv.cpython-311.pyc
+│           ├── plot_masking_model_comparison.cpython-311.pyc
+│           ├── plot_support_sweep_comparison.cpython-311.pyc
+│           ├── plot_support_sweep_comparison.cpython-312.pyc
+│           ├── prototype_fewshot.cpython-311.pyc
+│           ├── prototype_fewshot_mtbls326.cpython-311.pyc
+│           ├── run_hparam_sweep_comparison.cpython-311.pyc
+│           ├── run_support_sweep_comparison.cpython-311.pyc
+│           ├── suppress_edta_peak.cpython-311.pyc
+│           ├── Test_suite.cpython-311.pyc
+│           ├── Test_suite.cpython-312.pyc
+│           ├── Test_suite_v2.cpython-311.pyc
+│           ├── trainer_revised.cpython-311.pyc
+│           ├── trainer_revised.cpython-312.pyc
+│           ├── transformer.cpython-312.pyc
+│           └── visualise_random_spectra_slice.cpython-311.pyc
+├── code
+│   ├── evaluation
+│   │   ├── brc_t2d_10fold_cv.py
+│   │   ├── brc_t2d_common.py
+│   │   ├── brc_t2d_jigsaw_loocv.py
+│   │   ├── brc_t2d_loocv.py
+│   │   ├── classify_binned_auc_cv.py
+│   │   ├── classify_embeddings_cv.py
+│   │   ├── classify_head_cv.py
+│   │   ├── fewshot_ml_comparison.py
+│   │   ├── gradient_analysis.py
+│   │   ├── mtbls326_jigsaw_loocv.py
+│   │   ├── mtbls326_loocv.py
+│   │   ├── prototype_fewshot.py
+│   │   ├── __pycache__
+│   │   │   ├── brc_t2d_10fold_cv.cpython-311.pyc
+│   │   │   ├── brc_t2d_common.cpython-311.pyc
+│   │   │   ├── brc_t2d_common.cpython-312.pyc
+│   │   │   ├── brc_t2d_jigsaw_loocv.cpython-311.pyc
+│   │   │   ├── brc_t2d_loocv.cpython-311.pyc
+│   │   │   ├── classify_binned_auc_cv.cpython-311.pyc
+│   │   │   ├── classify_embeddings_cv.cpython-311.pyc
+│   │   │   ├── classify_head_cv.cpython-311.pyc
+│   │   │   ├── fewshot_ml_comparison.cpython-311.pyc
+│   │   │   ├── gradient_analysis.cpython-311.pyc
+│   │   │   ├── mtbls326_jigsaw_loocv.cpython-311.pyc
+│   │   │   ├── mtbls326_loocv.cpython-311.pyc
+│   │   │   ├── prototype_fewshot.cpython-311.pyc
+│   │   │   ├── run_hparam_sweep_comparison.cpython-311.pyc
+│   │   │   ├── run_support_sweep_comparison.cpython-311.pyc
+│   │   │   ├── Test_suite.cpython-311.pyc
+│   │   │   └── Test_suite_v2.cpython-311.pyc
+│   │   ├── run_hparam_sweep_comparison.py
+│   │   ├── run_support_sweep_comparison.py
+│   │   ├── Test_suite.py
+│   │   └── Test_suite_v2.py
+│   ├── plotting
+│   │   ├── compare_loocv_summaries.py
+│   │   ├── compare_mtbls326_summaries.py
+│   │   ├── plot_brc_t2d_loocv_comparison.py
+│   │   ├── plot_compare_summaries.py
+│   │   ├── plot_masking_model_comparison.py
+│   │   ├── plot_model_architecture.py
+│   │   ├── plot_model.py
+│   │   ├── plot_mtbls326_jigsaw_loocv.py
+│   │   ├── plot_mtbls326_loocv_comparison.py
+│   │   ├── plot_recon_peaks.py
+│   │   ├── plot_support_sweep_comparison.py
+│   │   ├── __pycache__
+│   │   │   ├── compare_loocv_summaries.cpython-311.pyc
+│   │   │   ├── compare_mtbls326_summaries.cpython-311.pyc
+│   │   │   ├── plot_brc_t2d_loocv_comparison.cpython-311.pyc
+│   │   │   ├── plot_compare_summaries.cpython-311.pyc
+│   │   │   ├── plot_masking_model_comparison.cpython-311.pyc
+│   │   │   ├── plot_model_architecture.cpython-311.pyc
+│   │   │   ├── plot_model.cpython-311.pyc
+│   │   │   ├── plot_mtbls326_jigsaw_loocv.cpython-311.pyc
+│   │   │   ├── plot_mtbls326_loocv_comparison.cpython-311.pyc
+│   │   │   ├── plot_recon_peaks.cpython-311.pyc
+│   │   │   ├── plot_support_sweep_comparison.cpython-311.pyc
+│   │   │   └── visualise_random_spectra_slice.cpython-311.pyc
+│   │   └── visualise_random_spectra_slice.py
+│   ├── preprocessing
+│   │   ├── alignSpectra.py
+│   │   ├── combine_unique_npy.py
+│   │   ├── findDuplicates.py
+│   │   ├── __pycache__
+│   │   │   ├── alignSpectra.cpython-311.pyc
+│   │   │   ├── combine_unique_npy.cpython-311.pyc
+│   │   │   ├── findDuplicates.cpython-311.pyc
+│   │   │   ├── removeZeroTail.cpython-311.pyc
+│   │   │   ├── row_minmax_normalize.cpython-311.pyc
+│   │   │   ├── suppress_edta_peak.cpython-311.pyc
+│   │   │   ├── visualiseAfterNormalise.cpython-311.pyc
+│   │   │   └── WSZero_62500To68000.cpython-311.pyc
+│   │   ├── removeZeroTail.py
+│   │   ├── row_minmax_normalize.py
+│   │   ├── suppress_edta_peak.py
+│   │   ├── visualiseAfterNormalise.py
+│   │   └── WSZero_62500To68000.py
+│   ├── training
+│   │   ├── autoencoder.py
+│   │   ├── CNN_ContrastiveLearning.py
+│   │   ├── __pycache__
+│   │   │   ├── autoencoder.cpython-311.pyc
+│   │   │   ├── CNN_ContrastiveLearning.cpython-311.pyc
+│   │   │   ├── trainer_revised.cpython-311.pyc
+│   │   │   ├── trainer_revised.cpython-312.pyc
+│   │   │   ├── train_jigsaw_spectra.cpython-311.pyc
+│   │   │   ├── train_jigsaw_spectra.cpython-312.pyc
+│   │   │   ├── transformer_augment.cpython-311.pyc
+│   │   │   └── transformer.cpython-311.pyc
+│   │   ├── trainer_revised.py
+│   │   ├── train_jigsaw_spectra.py
+│   │   ├── transformer_augment.py
+│   │   └── transformer.py
+│   └── utils
+│       ├── check_npy_compare.py
+│       ├── check_npy_shape.py
+│       ├── check_npy_sizes.py
+│       └── __pycache__
+│           ├── check_npy_compare.cpython-311.pyc
+│           ├── check_npy_shape.cpython-311.pyc
+│           └── check_npy_sizes.cpython-311.pyc
+├── config.yaml
+├── data
+│   ├── aligned
+│   │   ├── aligned_128K_WS625to680Zero_Normalized.npy
+│   │   ├── aligned_nmr_spectra_128K_WS625to680Zero_copy.npy
+│   │   ├── aligned_nmr_spectra_128K_WS625to680Zero.npy
+│   │   ├── aligned_nmr_spectra_128K_WSNoise.npy
+│   │   └── aligned_nmr_spectra_128K_WSZero.npy
+│   ├── BrC_T2D
+│   │   ├── BC_T2D_aligned_spectra_WS625to680Zero.npy
+│   │   ├── BC_T2D_aligned_spectra_WS625to680Zero_rowMinMax.npy
+│   │   ├── BC_T2D_EDTASuppressed_WS625to680Zero.npy
+│   │   ├── BC_T2D_metadata_mapping.csv
+│   │   ├── edta_suppression_diagnostics.csv
+│   │   └── row_minmax_diagnostics.csv
+│   ├── combined
+│   │   ├── combined_unique_no_overlap.npy
+│   │   ├── combined_unique_no_overlap_WS625to680Zero.npy
+│   │   ├── combined_unique.npy
+│   │   ├── combined_unique_rowMinMax_noOverlapWith326_563.npy
+│   │   ├── combined_unique_rowMinMax.npy
+│   │   ├── combined_unique_WS625to680Zero.npy
+│   │   └── combine_unique_Water_EDTA_Suppressed.npy
+│   ├── mtbls326
+│   │   ├── MTBLS326_aligned_spectra.npy
+│   │   ├── MTBLS326_aligned_spectra_WS625to680Zero.npy
+│   │   ├── MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy
+│   │   ├── MTBLS326_common_ppm_axis.npy
+│   │   ├── MTBLS326_metadata_mapping.csv
+│   │   └── MTBLS326_WS625to680Zero.png
+│   ├── mtbls563
+│   │   ├── MTBLS563_aligned_spectra.npy
+│   │   ├── MTBLS563_aligned_spectra_WS625to680Zero.npy
+│   │   ├── MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax.npy
+│   │   ├── MTBLS563_common_ppm_axis.npy
+│   │   ├── MTBLS563_metadata_mapping.csv
+│   │   ├── MTBLS563.png
+│   │   └── MTBLS563_WS625to680Zero.png
+│   ├── plasma
+│   │   ├── aligned_128K_Plasma_NoSuppress.npy
+│   │   ├── aligned_128K_Plasma_WS625to680Zero.npy
+│   │   ├── aligned_nmr_spectra_128K_Plasma_NoSuppress.npy
+│   │   ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_copy.npy
+│   │   ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_EDTASuppressed.npy
+│   │   ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero.npy
+│   │   ├── plasma_unique_EDTASuppressed_copy.npy
+│   │   ├── plasma_unique_EDTASuppressed.npy
+│   │   ├── plasma_unique.npy
+│   │   ├── plasma_unique_WS625to680Zero_copy.npy
+│   │   └── plasma_unique_WS625to680Zero.npy
+│   ├── serum
+│   │   ├── serum_unique_WS625to680Zero_copy.npy
+│   │   └── serum_unique_WS625to680Zero.npy
+│   ├── source
+│   │   ├── nmr_spectra.npy
+│   │   ├── water_suppressed_nmr_spectra_64K.npy
+│   │   └── water_suppressed_nmr_spectra.npy
+│   └── tbi_tirupati
+│       ├── aligned_128K_TBI_Tirupati_WS625to680Zero.npy
+│       └── title_labels.csv
+├── docs
+│   ├── data_inventory.csv
+│   ├── duplicate_candidates.csv
+│   ├── move_plan.tsv
+│   ├── ORGANIZATION.md
+│   └── script_catalog.csv
+├── folder_tree.txt
+├── models
+│   ├── jigsaw
+│   │   ├── bin_1024
+│   │   │   └── 20260624_033601
+│   │   │       ├── bin_1024_20260624_033601_best.pth
+│   │   │       ├── bin_1024_20260624_033601_epoch_100.pth
+│   │   │       ├── bin_1024_20260624_033601_epoch_200.pth
+│   │   │       └── bin_1024_20260624_033601_epoch_300.pth
+│   │   ├── bin_2048
+│   │   │   └── 20260624_033601
+│   │   │       ├── bin_2048_20260624_033601_best.pth
+│   │   │       ├── bin_2048_20260624_033601_epoch_100.pth
+│   │   │       ├── bin_2048_20260624_033601_epoch_200.pth
+│   │   │       ├── bin_2048_20260624_033601_epoch_300.pth
+│   │   │       └── bin_2048_20260624_033601_epoch_400.pth
+│   │   ├── bin_256
+│   │   │   ├── 20260624_032751
+│   │   │   └── 20260624_033601
+│   │   │       ├── bin_256_20260624_033601_best.pth
+│   │   │       ├── bin_256_20260624_033601_epoch_100.pth
+│   │   │       ├── bin_256_20260624_033601_epoch_200.pth
+│   │   │       └── bin_256_20260624_033601_epoch_300.pth
+│   │   ├── bin_512
+│   │   │   └── 20260624_033601
+│   │   │       ├── bin_512_20260624_033601_best.pth
+│   │   │       ├── bin_512_20260624_033601_epoch_100.pth
+│   │   │       └── bin_512_20260624_033601_epoch_200.pth
+│   │   └── multibin
+│   │       └── 20260624_032837
+│   │           ├── multibin_20260624_032837_best.pth
+│   │           ├── multibin_20260624_032837_epoch_100.pth
+│   │           ├── multibin_20260624_032837_epoch_200.pth
+│   │           └── multibin_20260624_032837_epoch_300.pth
+│   ├── Old Models
+│   │   ├── checkpoint_epoch_1000_20251212_103256.pth
+│   │   ├── checkpoint_epoch_1000_20260106_041031.pth
+│   │   ├── checkpoint_epoch_1000_20260120_060754.pth
+│   │   ├── checkpoint_epoch_1000_20260223_115451.pth
+│   │   ├── checkpoint_epoch_100_20251208_122646.pth
+│   │   ├── checkpoint_epoch_100_20251208_125133.pth
+│   │   ├── checkpoint_epoch_100_20251209_030845.pth
+│   │   ├── checkpoint_epoch_100_20251209_035637.pth
+│   │   ├── checkpoint_epoch_100_20251209_045417.pth
+│   │   ├── checkpoint_epoch_100_20251211_084137.pth
+│   │   ├── checkpoint_epoch_100_20251212_100739.pth
+│   │   ├── checkpoint_epoch_100_20251212_103256.pth
+│   │   ├── checkpoint_epoch_100_20260105_062242.pth
+│   │   ├── checkpoint_epoch_100_20260106_035853.pth
+│   │   ├── checkpoint_epoch_100_20260106_041031.pth
+│   │   ├── checkpoint_epoch_100_20260119_100840.pth
+│   │   ├── checkpoint_epoch_100_20260120_060754.pth
+│   │   ├── checkpoint_epoch_100_20260203_023928.pth
+│   │   ├── checkpoint_epoch_100_20260222_113533.pth
+│   │   ├── checkpoint_epoch_100_20260223_115451.pth
+│   │   ├── checkpoint_epoch_200_20251209_035637.pth
+│   │   ├── checkpoint_epoch_200_20251209_045417.pth
+│   │   ├── checkpoint_epoch_200_20251211_084137.pth
+│   │   ├── checkpoint_epoch_200_20251212_100739.pth
+│   │   ├── checkpoint_epoch_200_20251212_103256.pth
+│   │   ├── checkpoint_epoch_200_20260105_062242.pth
+│   │   ├── checkpoint_epoch_200_20260106_035853.pth
+│   │   ├── checkpoint_epoch_200_20260106_041031.pth
+│   │   ├── checkpoint_epoch_200_20260119_100840.pth
+│   │   ├── checkpoint_epoch_200_20260120_060754.pth
+│   │   ├── checkpoint_epoch_200_20260203_023928.pth
+│   │   ├── checkpoint_epoch_200_20260222_113533.pth
+│   │   ├── checkpoint_epoch_200_20260223_115451.pth
+│   │   ├── checkpoint_epoch_300_20251209_035637.pth
+│   │   ├── checkpoint_epoch_300_20251209_045417.pth
+│   │   ├── checkpoint_epoch_300_20251211_084137.pth
+│   │   ├── checkpoint_epoch_300_20251212_100739.pth
+│   │   ├── checkpoint_epoch_300_20251212_103256.pth
+│   │   ├── checkpoint_epoch_300_20260105_062242.pth
+│   │   ├── checkpoint_epoch_300_20260106_035853.pth
+│   │   ├── checkpoint_epoch_300_20260106_041031.pth
+│   │   ├── checkpoint_epoch_300_20260120_060754.pth
+│   │   ├── checkpoint_epoch_300_20260203_023928.pth
+│   │   ├── checkpoint_epoch_300_20260222_113533.pth
+│   │   ├── checkpoint_epoch_300_20260223_115451.pth
+│   │   ├── checkpoint_epoch_400_20251211_084137.pth
+│   │   ├── checkpoint_epoch_400_20251212_103256.pth
+│   │   ├── checkpoint_epoch_400_20260105_062242.pth
+│   │   ├── checkpoint_epoch_400_20260106_041031.pth
+│   │   ├── checkpoint_epoch_400_20260120_060754.pth
+│   │   ├── checkpoint_epoch_400_20260203_023928.pth
+│   │   ├── checkpoint_epoch_400_20260222_113533.pth
+│   │   ├── checkpoint_epoch_400_20260223_115451.pth
+│   │   ├── checkpoint_epoch_500_20251211_084137.pth
+│   │   ├── checkpoint_epoch_500_20251212_103256.pth
+│   │   ├── checkpoint_epoch_500_20260105_062242.pth
+│   │   ├── checkpoint_epoch_500_20260106_041031.pth
+│   │   ├── checkpoint_epoch_500_20260120_060754.pth
+│   │   ├── checkpoint_epoch_500_20260203_023928.pth
+│   │   ├── checkpoint_epoch_500_20260222_113533.pth
+│   │   ├── checkpoint_epoch_500_20260223_115451.pth
+│   │   ├── checkpoint_epoch_600_20251212_103256.pth
+│   │   ├── checkpoint_epoch_600_20260105_062242.pth
+│   │   ├── checkpoint_epoch_600_20260106_041031.pth
+│   │   ├── checkpoint_epoch_600_20260120_060754.pth
+│   │   ├── checkpoint_epoch_600_20260203_023928.pth
+│   │   ├── checkpoint_epoch_600_20260222_113533.pth
+│   │   ├── checkpoint_epoch_600_20260223_115451.pth
+│   │   ├── checkpoint_epoch_700_20251212_103256.pth
+│   │   ├── checkpoint_epoch_700_20260105_062242.pth
+│   │   ├── checkpoint_epoch_700_20260106_041031.pth
+│   │   ├── checkpoint_epoch_700_20260120_060754.pth
+│   │   ├── checkpoint_epoch_700_20260203_023928.pth
+│   │   ├── checkpoint_epoch_700_20260222_113533.pth
+│   │   ├── checkpoint_epoch_700_20260223_115451.pth
+│   │   ├── checkpoint_epoch_800_20251212_103256.pth
+│   │   ├── checkpoint_epoch_800_20260105_062242.pth
+│   │   ├── checkpoint_epoch_800_20260106_041031.pth
+│   │   ├── checkpoint_epoch_800_20260120_060754.pth
+│   │   ├── checkpoint_epoch_800_20260203_023928.pth
+│   │   ├── checkpoint_epoch_800_20260223_115451.pth
+│   │   ├── checkpoint_epoch_900_20251212_103256.pth
+│   │   ├── checkpoint_epoch_900_20260105_062242.pth
+│   │   ├── checkpoint_epoch_900_20260106_041031.pth
+│   │   ├── checkpoint_epoch_900_20260120_060754.pth
+│   │   └── checkpoint_epoch_900_20260223_115451.pth
+│   └── SSL_models
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260120_060754_bs16_mr0.50_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260120_060754_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260120_060754_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260120_060754_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260120_060754_training_curves.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260203_023928_bs16_mr0.25_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260203_023928_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260203_023928_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260203_023928_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260203_023928_training_curves.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260222_113533_bs16_mr0.25_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260222_113533_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260222_113533_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260222_113533_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260222_113533_training_curves.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260223_115451_bs16_mr0.35_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260223_115451_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260223_115451_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260223_115451_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_NoSuppress_20260223_115451_training_curves.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_20260519_092803_bs16_mr0.35_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_20260519_092803_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_20260519_092803_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_20260519_092803_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_20260519_092803_training_curves.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260519_121249_bs16_mr0.35_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260519_122423_bs16_mr0.35_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_test_reconstructions.png
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_test_results.json
+│       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_training_curves.png
+│       ├── best_model_2025-09-28_00-39-22.pth
+│       ├── checkpoint_epoch_100_20251009_225655.pth
+│       ├── combined_unique_20260529_124823_bs16_mr0.15_ps1024_best.pth
+│       ├── combined_unique_20260529_125653_bs16_mr0.35_ps1024_best.pth
+│       ├── combined_unique_20260529_125814_bs16_mr0.50_ps1024_best.pth
+│       ├── combined_unique_20260529_134104_bs16_mr0.50_ps1024_best.pth
+│       ├── combined_unique_20260529_134104_reconstructions.png
+│       ├── combined_unique_20260529_134104_training_curves.png
+│       ├── combined_unique_20260529_231637_bs16_mr0.35_ps1024_best.pth
+│       ├── combined_unique_20260529_231741_bs16_mr0.25_ps1024_best.pth
+│       ├── combined_unique_20260529_232939_bs16_mr0.15_ps1024_best.pth
+│       ├── combined_unique_20260529_232939_reconstructions.png
+│       ├── combined_unique_20260529_232939_training_curves.png
+│       ├── combined_unique_20260529_233111_bs16_mr0.35_ps1024_best.pth
+│       ├── combined_unique_20260529_233111_reconstructions.png
+│       ├── combined_unique_20260529_233111_training_curves.png
+│       ├── combined_unique_20260529_233203_bs16_mr0.25_ps1024_best.pth
+│       ├── combined_unique_20260529_233203_reconstructions.png
+│       ├── combined_unique_20260529_233203_training_curves.png
+│       ├── combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth
+│       ├── combined_unique_WS625to680Zero_20260601_084533_reconstructions.png
+│       ├── combined_unique_WS625to680Zero_20260601_084533_training_curves.png
+│       ├── combined_unique_WS625to680Zero_20260601_084611_bs32_mr0.40_ps1024_best.pth
+│       ├── combined_unique_WS625to680Zero_20260601_084611_reconstructions.png
+│       ├── combined_unique_WS625to680Zero_20260601_084611_training_curves.png
+│       ├── combined_unique_WS625to680Zero_20260601_085340_bs32_mr0.30_ps1024_best.pth
+│       ├── combined_unique_WS625to680Zero_20260601_085340_reconstructions.png
+│       ├── combined_unique_WS625to680Zero_20260601_085340_training_curves.png
+│       ├── combined_unique_WS625to680Zero_20260601_091005_bs32_mr0.20_ps1024_best.pth
+│       ├── combined_unique_WS625to680Zero_20260601_091005_reconstructions.png
+│       ├── combined_unique_WS625to680Zero_20260601_091005_training_curves.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084450_reconstructions.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084450_training_curves.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084724_bs32_mr0.40_ps1024_best.pth
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084724_reconstructions.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_084724_training_curves.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_090604_bs32_mr0.50_ps1024_best.pth
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_090604_reconstructions.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_090604_training_curves.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_114013_bs32_mr0.30_ps1024_best.pth
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_114013_reconstructions.png
+│       ├── combine_unique_Water_EDTA_Suppressed_20260614_114013_training_curves.png
+│       ├── contrastive_best_20251009_233235.pth
+│       ├── Itr6Rerun_20251209_020839_bs16_mr0.15_ps1024_20251209_020839_best.pth
+│       ├── Itr6Rerun_20251209_020839_reconstructions.png
+│       ├── Itr6Rerun_20251209_020839_training_curves.png
+│       ├── Itr6Rerun_20251209_023500_bs16_mr0.15_ps1024_20251209_023500_best.pth
+│       ├── Itr6Rerun_20251209_023500_reconstructions.png
+│       ├── Itr6Rerun_20251209_023500_training_curves.png
+│       ├── Itr6Rerun_20251209_030845_bs16_mr0.15_ps1024_20251209_030845_best.pth
+│       ├── Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs.pth
+│       ├── Itr6Rerun_20251209_035637_reconstructions.png
+│       ├── Itr6Rerun_20251209_035637_training_curves.png
+│       ├── Itr6Rerun_20251209_045417_bs16_mr0.15_ps1024_20251209_045417_best.pth
+│       ├── Itr6Rerun_20251209_045417_reconstructions.png
+│       ├── Itr6Rerun_20251209_045417_training_curves.png
+│       ├── Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best.pth
+│       ├── Itr6Rerun_20251211_084137_reconstructions.png
+│       ├── Itr6Rerun_20251211_084137_training_curves.png
+│       ├── Itr6Rerun_20251212_100739_bs16_mr0.35_ps1024_best.pth
+│       ├── Itr6Rerun_20251212_100739_reconstructions.png
+│       ├── Itr6Rerun_20251212_100739_training_curves.png
+│       ├── Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best.pth
+│       ├── Itr6Rerun_20251212_103256_reconstructions.png
+│       ├── Itr6Rerun_20251212_103256_training_curves.png
+│       ├── Itr6Rerun_20260105_062242_bs16_mr0.50_ps1024_best.pth
+│       ├── Itr6Rerun_20260105_062242_reconstructions.png
+│       ├── Itr6Rerun_20260105_062242_training_curves.png
+│       ├── Itr6Rerun_20260106_035853_bs16_mr0.50_ps1024_best.pth
+│       ├── Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best.pth
+│       ├── Itr6Rerun_20260106_041031_reconstructions.png
+│       ├── Itr6Rerun_20260106_041031_test_reconstructions.png
+│       ├── Itr6Rerun_20260106_041031_test_results.json
+│       ├── Itr6Rerun_20260106_041031_training_curves.png
+│       ├── Itr6Rerun_20260119_100840_bs16_mr0.50_ps1024_best.pth
+│       ├── Itr6Rerun_20260120_055529_bs16_mr0.50_ps1024_best.pth
+│       ├── nmr_cosineLR_100epoch_with_val_2025-09-22_01-53-51.pth
+│       ├── nmr_cosLR_100epoch_8k_2025-09-22_01-52-23.pth
+│       ├── nmr_encoder_20251009_233235.pth
+│       ├── nmr_mae_20250928_004449_bs32_mr0.15_ps512_20250928_010650_best.pth
+│       ├── nmr_mae_20250928_012139_bs32_mr0.15_ps512_20250928_012139_best.pth
+│       ├── nmr_mae_20250928_062123_bs32_mr0.15_ps512_20250928_062123_best.pth
+│       ├── nmr_mae_20250928_064900_bs32_mr0.15_ps512_20250928_064900_best.pth
+│       ├── nmr_mae_20250928_071751_bs32_mr0.25_ps2048_20250928_071751_best.pth
+│       ├── nmr_mae_20250928_072620_bs32_mr0.25_ps2048_20250928_072620_best.pth
+│       ├── nmr_mae_20250928_091820_bs32_mr0.25_ps2048_20250928_091820_best.pth
+│       ├── nmr_mae_20250928_094646_bs32_mr0.25_ps2048_20250928_094646_best.pth
+│       ├── nmr_mae_20250928_102535_bs32_mr0.25_ps2048_20250928_102535_best.pth
+│       ├── nmr_mae_v2_20251009_141540_bs32_mr0.40_ps512_20251009_141540_best.pth
+│       ├── nmr_mae_v2_20251009_150517_bs64_mr0.15_ps256_20251009_150517_best.pth
+│       ├── nmr_mae_v2_20251009_225158_bs64_mr0.15_ps256_20251009_225158_best.pth
+│       ├── nmr_mae_v2_20251009_225655_bs64_mr0.15_ps256_20251009_225655_best.pth
+│       ├── nmr_mae_v2_20251023_150253_bs64_mr0.15_ps256_20251023_150253_best.pth
+│       ├── nmr_mae_v2_20251023_151256_bs64_mr0.15_ps256_20251023_151256_best.pth
+│       ├── nmr_mae_v2_20251023_153350_bs64_mr0.15_ps256_20251023_153350_best.pth
+│       ├── nmr_mae_v2_20251023_161238_bs64_mr0.15_ps256_20251023_161238_best.pth
+│       ├── nmr_mae_v2_20251208_051155_bs64_mr0.15_ps256_20251208_051155_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_102551_bs64_mr0.15_ps256_20251208_102551_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_104538_bs64_mr0.15_ps256_20251208_104538_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_104538_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_104538_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114308_bs64_mr0.15_ps256_20251208_114308_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114308_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114308_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114714_bs32_mr0.15_ps1024_20251208_114714_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114714_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_114714_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_120346_bs32_mr0.15_ps1024_20251208_120346_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_120346_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_120346_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_121755_bs32_mr0.15_ps1024_20251208_121755_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_121755_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_121755_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_122646_bs32_mr0.15_ps1024_20251208_122646_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_122646_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_122646_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_123850_bs32_mr0.15_ps1024_20251208_123850_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_123850_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_123850_training_curves.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_125133_bs16_mr0.15_ps1024_20251208_125133_best.pth
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_125133_reconstructions.png
+│       ├── nmr_mae_v2_WSZero_normalised_20251208_125133_training_curves.png
+│       ├── nmr_plateauLR_100epoch_with_val_2025-09-22_09-33-50.pth
+│       ├── nmr_spectra.npy.zip
+│       ├── nmr_ssl_checkpoint_epoch_100.pth
+│       ├── nmr_ssl_checkpoint_epoch_150.pth
+│       ├── nmr_ssl_checkpoint_epoch_200.pth
+│       ├── nmr_ssl_checkpoint_epoch_20.pth
+│       ├── nmr_ssl_checkpoint_epoch_300.pth
+│       ├── nmr_ssl_checkpoint_epoch_40.pth
+│       ├── nmr_ssl_checkpoint_epoch_50.pth
+│       ├── nmr_ssl_checkpoint_epoch_60.pth
+│       ├── nmr_ssl_checkpoint_epoch_80.pth
+│       └── nmr_ssl_final_model.pth
+├── __pycache__
+│   ├── brc_t2d_jigsaw_loocv.cpython-311.pyc
+│   ├── brc_t2d_jigsaw_loocv.cpython-312.pyc
+│   ├── brc_t2d_loocv.cpython-311.pyc
+│   ├── brc_t2d_loocv.cpython-312.pyc
+│   └── trainer_revised.cpython-311.pyc
+├── pyragify
+│   ├── hashes.json
+│   ├── metadata.json
+│   ├── other
+│   │   └── chunk_0.txt
+│   └── remaining
+│       └── chunk_0.txt
+├── pyragify.log
+├── results
+│   ├── classification
+│   │   ├── binned_auc
+│   │   │   ├── all_models_all_bins_fold_metrics.csv
+│   │   │   ├── features_128bins.npy
+│   │   │   ├── features_256bins.npy
+│   │   │   ├── LogisticRegression_128bins_fold_metrics.csv
+│   │   │   ├── LogisticRegression_128bins_oof_pred.npy
+│   │   │   ├── LogisticRegression_128bins_oof_score.npy
+│   │   │   ├── LogisticRegression_128bins_performance.png
+│   │   │   ├── LogisticRegression_256bins_fold_metrics.csv
+│   │   │   ├── LogisticRegression_256bins_oof_pred.npy
+│   │   │   ├── LogisticRegression_256bins_oof_score.npy
+│   │   │   ├── LogisticRegression_256bins_performance.png
+│   │   │   ├── model_summary_by_bins.csv
+│   │   │   ├── per_sample_predictions_128bins.csv
+│   │   │   ├── per_sample_predictions_256bins.csv
+│   │   │   ├── roc_auc_model_bin_heatmap.png
+│   │   │   ├── run_info.json
+│   │   │   ├── SVM_RBF_128bins_fold_metrics.csv
+│   │   │   ├── SVM_RBF_128bins_oof_pred.npy
+│   │   │   ├── SVM_RBF_128bins_oof_score.npy
+│   │   │   ├── SVM_RBF_128bins_performance.png
+│   │   │   ├── SVM_RBF_256bins_fold_metrics.csv
+│   │   │   ├── SVM_RBF_256bins_oof_pred.npy
+│   │   │   ├── SVM_RBF_256bins_oof_score.npy
+│   │   │   ├── SVM_RBF_256bins_performance.png
+│   │   │   ├── XGBoost_128bins_fold_metrics.csv
+│   │   │   ├── XGBoost_128bins_oof_pred.npy
+│   │   │   ├── XGBoost_128bins_oof_score.npy
+│   │   │   ├── XGBoost_128bins_performance.png
+│   │   │   ├── XGBoost_256bins_fold_metrics.csv
+│   │   │   ├── XGBoost_256bins_oof_pred.npy
+│   │   │   ├── XGBoost_256bins_oof_score.npy
+│   │   │   └── XGBoost_256bins_performance.png
+│   │   ├── embeddings
+│   │   │   ├── Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs
+│   │   │   │   ├── all_models_fold_metrics.csv
+│   │   │   │   ├── embeddings.npy
+│   │   │   │   ├── LogisticRegression_fold_metrics.csv
+│   │   │   │   ├── LogisticRegression_oof_pred.npy
+│   │   │   │   ├── LogisticRegression_oof_score.npy
+│   │   │   │   ├── LogisticRegression_performance.png
+│   │   │   │   ├── model_comparison.png
+│   │   │   │   ├── model_summary.csv
+│   │   │   │   ├── per_sample_predictions.csv
+│   │   │   │   ├── run_info.json
+│   │   │   │   ├── sample_metadata.csv
+│   │   │   │   ├── SVM_RBF_fold_metrics.csv
+│   │   │   │   ├── SVM_RBF_oof_pred.npy
+│   │   │   │   ├── SVM_RBF_oof_score.npy
+│   │   │   │   ├── SVM_RBF_performance.png
+│   │   │   │   ├── XGBoost_fold_metrics.csv
+│   │   │   │   ├── XGBoost_oof_pred.npy
+│   │   │   │   ├── XGBoost_oof_score.npy
+│   │   │   │   └── XGBoost_performance.png
+│   │   │   ├── Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best
+│   │   │   │   ├── all_models_fold_metrics.csv
+│   │   │   │   ├── embeddings.npy
+│   │   │   │   ├── LogisticRegression_fold_metrics.csv
+│   │   │   │   ├── LogisticRegression_oof_pred.npy
+│   │   │   │   ├── LogisticRegression_oof_score.npy
+│   │   │   │   ├── LogisticRegression_performance.png
+│   │   │   │   ├── model_comparison.png
+│   │   │   │   ├── model_summary.csv
+│   │   │   │   ├── per_sample_predictions.csv
+│   │   │   │   ├── run_info.json
+│   │   │   │   ├── sample_metadata.csv
+│   │   │   │   ├── SVM_RBF_fold_metrics.csv
+│   │   │   │   ├── SVM_RBF_oof_pred.npy
+│   │   │   │   ├── SVM_RBF_oof_score.npy
+│   │   │   │   ├── SVM_RBF_performance.png
+│   │   │   │   ├── XGBoost_fold_metrics.csv
+│   │   │   │   ├── XGBoost_oof_pred.npy
+│   │   │   │   ├── XGBoost_oof_score.npy
+│   │   │   │   └── XGBoost_performance.png
+│   │   │   ├── Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best
+│   │   │   │   ├── all_models_fold_metrics.csv
+│   │   │   │   ├── embeddings.npy
+│   │   │   │   ├── LogisticRegression_fold_metrics.csv
+│   │   │   │   ├── LogisticRegression_oof_pred.npy
+│   │   │   │   ├── LogisticRegression_oof_score.npy
+│   │   │   │   ├── LogisticRegression_performance.png
+│   │   │   │   ├── model_comparison.png
+│   │   │   │   ├── model_summary.csv
+│   │   │   │   ├── per_sample_predictions.csv
+│   │   │   │   ├── run_info.json
+│   │   │   │   ├── sample_metadata.csv
+│   │   │   │   ├── SVM_RBF_fold_metrics.csv
+│   │   │   │   ├── SVM_RBF_oof_pred.npy
+│   │   │   │   ├── SVM_RBF_oof_score.npy
+│   │   │   │   ├── SVM_RBF_performance.png
+│   │   │   │   ├── XGBoost_fold_metrics.csv
+│   │   │   │   ├── XGBoost_oof_pred.npy
+│   │   │   │   ├── XGBoost_oof_score.npy
+│   │   │   │   └── XGBoost_performance.png
+│   │   │   └── Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best
+│   │   │       ├── all_models_fold_metrics.csv
+│   │   │       ├── embeddings.npy
+│   │   │       ├── LogisticRegression_fold_metrics.csv
+│   │   │       ├── LogisticRegression_oof_pred.npy
+│   │   │       ├── LogisticRegression_oof_score.npy
+│   │   │       ├── LogisticRegression_performance.png
+│   │   │       ├── model_comparison.png
+│   │   │       ├── model_summary.csv
+│   │   │       ├── per_sample_predictions.csv
+│   │   │       ├── run_info.json
+│   │   │       ├── sample_metadata.csv
+│   │   │       ├── SVM_RBF_fold_metrics.csv
+│   │   │       ├── SVM_RBF_oof_pred.npy
+│   │   │       ├── SVM_RBF_oof_score.npy
+│   │   │       ├── SVM_RBF_performance.png
+│   │   │       ├── XGBoost_fold_metrics.csv
+│   │   │       ├── XGBoost_oof_pred.npy
+│   │   │       ├── XGBoost_oof_score.npy
+│   │   │       └── XGBoost_performance.png
+│   │   └── head
+│   │       ├── aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best
+│   │       │   ├── finetune_backbone_fold_metrics.csv
+│   │       │   ├── finetune_backbone_oof_pred.npy
+│   │       │   ├── finetune_backbone_oof_score.npy
+│   │       │   ├── finetune_backbone_performance.png
+│   │       │   ├── frozen_backbone_fold_metrics.csv
+│   │       │   ├── frozen_backbone_oof_pred.npy
+│   │       │   ├── frozen_backbone_oof_score.npy
+│   │       │   ├── frozen_backbone_performance.png
+│   │       │   ├── mode_comparison.png
+│   │       │   ├── mode_summary.csv
+│   │       │   ├── per_sample_predictions.csv
+│   │       │   ├── run_info.json
+│   │       │   └── training_curves.png
+│   │       ├── Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs
+│   │       │   ├── finetune_backbone_fold_metrics.csv
+│   │       │   ├── finetune_backbone_oof_pred.npy
+│   │       │   ├── finetune_backbone_oof_score.npy
+│   │       │   ├── finetune_backbone_performance.png
+│   │       │   ├── frozen_backbone_fold_metrics.csv
+│   │       │   ├── frozen_backbone_oof_pred.npy
+│   │       │   ├── frozen_backbone_oof_score.npy
+│   │       │   ├── frozen_backbone_performance.png
+│   │       │   ├── mode_comparison.png
+│   │       │   ├── mode_summary.csv
+│   │       │   ├── per_sample_predictions.csv
+│   │       │   ├── run_info.json
+│   │       │   └── training_curves.png
+│   │       ├── Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best
+│   │       │   ├── finetune_backbone_fold_metrics.csv
+│   │       │   ├── finetune_backbone_oof_pred.npy
+│   │       │   ├── finetune_backbone_oof_score.npy
+│   │       │   ├── finetune_backbone_performance.png
+│   │       │   ├── frozen_backbone_fold_metrics.csv
+│   │       │   ├── frozen_backbone_oof_pred.npy
+│   │       │   ├── frozen_backbone_oof_score.npy
+│   │       │   ├── frozen_backbone_performance.png
+│   │       │   ├── mode_comparison.png
+│   │       │   ├── mode_summary.csv
+│   │       │   ├── per_sample_predictions.csv
+│   │       │   ├── run_info.json
+│   │       │   └── training_curves.png
+│   │       ├── Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best
+│   │       │   ├── finetune_backbone_fold_metrics.csv
+│   │       │   ├── finetune_backbone_oof_pred.npy
+│   │       │   ├── finetune_backbone_oof_score.npy
+│   │       │   ├── finetune_backbone_performance.png
+│   │       │   ├── frozen_backbone_fold_metrics.csv
+│   │       │   ├── frozen_backbone_oof_pred.npy
+│   │       │   ├── frozen_backbone_oof_score.npy
+│   │       │   ├── frozen_backbone_performance.png
+│   │       │   ├── mode_comparison.png
+│   │       │   ├── mode_summary.csv
+│   │       │   ├── per_sample_predictions.csv
+│   │       │   ├── run_info.json
+│   │       │   └── training_curves.png
+│   │       └── Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best
+│   │           ├── finetune_backbone_fold_metrics.csv
+│   │           ├── finetune_backbone_oof_pred.npy
+│   │           ├── finetune_backbone_oof_score.npy
+│   │           ├── finetune_backbone_performance.png
+│   │           ├── frozen_backbone_fold_metrics.csv
+│   │           ├── frozen_backbone_oof_pred.npy
+│   │           ├── frozen_backbone_oof_score.npy
+│   │           ├── frozen_backbone_performance.png
+│   │           ├── mode_comparison.png
+│   │           ├── mode_summary.csv
+│   │           ├── per_sample_predictions.csv
+│   │           ├── run_info.json
+│   │           └── training_curves.png
+│   ├── cv10
+│   │   └── brc_t2d_foundation_comparison
+│   │       ├── cancer_status
+│   │       │   ├── classical_logistic_regression_oof_pred.npy
+│   │       │   ├── classical_logistic_regression_oof_prob.npy
+│   │       │   ├── classical_svm_rbf_oof_pred.npy
+│   │       │   ├── classical_svm_rbf_oof_prob.npy
+│   │       │   ├── classical_xgboost_oof_pred.npy
+│   │       │   ├── classical_xgboost_oof_prob.npy
+│   │       │   ├── fold_indices.json
+│   │       │   ├── fold_metrics.csv
+│   │       │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_frozen_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_frozen_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_frozen_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_frozen_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_frozen_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_frozen_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── masking_mr0.20_frozen_oof_pred.npy
+│   │       │   ├── masking_mr0.20_frozen_oof_prob.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── masking_mr0.20_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── masking_mr0.30_frozen_oof_pred.npy
+│   │       │   ├── masking_mr0.30_frozen_oof_prob.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── masking_mr0.30_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── masking_mr0.40_frozen_oof_pred.npy
+│   │       │   ├── masking_mr0.40_frozen_oof_prob.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── masking_mr0.40_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── masking_mr0.50_frozen_oof_pred.npy
+│   │       │   ├── masking_mr0.50_frozen_oof_prob.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_1_oof_pred.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_1_oof_prob.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_2_oof_pred.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_2_oof_prob.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_3_oof_pred.npy
+│   │       │   ├── masking_mr0.50_unfreeze_last_3_oof_prob.npy
+│   │       │   ├── oof_predictions.csv
+│   │       │   ├── run_config.json
+│   │       │   └── summary.csv
+│   │       └── diabetes_status
+│   │           └── fold_indices.json
+│   ├── fewshot
+│   │   ├── cli_563_quick
+│   │   │   ├── embeddings.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── hparam_sweep_0.5
+│   │   │   ├── binned_1024_auc.npy
+│   │   │   ├── binned_2048_auc.npy
+│   │   │   ├── comparison_accuracy_bar.png
+│   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   ├── comparison_embeddings.npy
+│   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   ├── ide_quick
+│   │   │   ├── embeddings.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── mask_0.2
+│   │   │   ├── binned_1024_auc.npy
+│   │   │   ├── binned_2048_auc.npy
+│   │   │   ├── comparison_accuracy_bar.png
+│   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   ├── comparison_embeddings.npy
+│   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   ├── mask_0.3
+│   │   │   ├── binned_1024_auc.npy
+│   │   │   ├── binned_2048_auc.npy
+│   │   │   ├── comparison_accuracy_bar.png
+│   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   ├── comparison_embeddings.npy
+│   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   ├── mask_0.4
+│   │   │   ├── binned_1024_auc.npy
+│   │   │   ├── binned_2048_auc.npy
+│   │   │   ├── comparison_accuracy_bar.png
+│   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   ├── comparison_embeddings.npy
+│   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   ├── mask_0.5
+│   │   │   ├── binned_1024_auc.npy
+│   │   │   ├── binned_2048_auc.npy
+│   │   │   ├── comparison_accuracy_bar.png
+│   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   ├── comparison_embeddings.npy
+│   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   ├── masking_comparison_plots
+│   │   │   ├── accuracy_mean_all_methods_bar.png
+│   │   │   ├── accuracy_mean_best_by_masking.png
+│   │   │   ├── accuracy_mean_heatmap.png
+│   │   │   ├── accuracy_mean_trend_top10.png
+│   │   │   ├── macro_f1_mean_all_methods_bar.png
+│   │   │   ├── macro_f1_mean_best_by_masking.png
+│   │   │   ├── macro_f1_mean_heatmap.png
+│   │   │   ├── macro_f1_mean_trend_top10.png
+│   │   │   ├── masking_comparison_combined_summary.csv
+│   │   │   ├── masking_comparison_overall_ranking.csv
+│   │   │   └── masking_comparison_ranked_by_ratio.csv
+│   │   ├── mtbls326_sanity
+│   │   │   ├── embeddings.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── mtbls326_sanity_mahal
+│   │   │   ├── embeddings.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── new_sanity
+│   │   │   ├── embeddings_projected.npy
+│   │   │   ├── embeddings_raw.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── prototype_default
+│   │   │   ├── binned_1024_max.npy
+│   │   │   ├── binned_1024_mean.npy
+│   │   │   ├── binned_2048_max.npy
+│   │   │   ├── binned_2048_mean.npy
+│   │   │   ├── embeddings.npy
+│   │   │   ├── embeddings_projected.npy
+│   │   │   ├── embeddings_raw.npy
+│   │   │   ├── episode_metrics.csv
+│   │   │   ├── pretrain_precision.npz
+│   │   │   ├── pretrain_precision_pca256.npz
+│   │   │   ├── pretrain_precision_pca512.npz
+│   │   │   ├── pretrain_precision_pca64_sanity.npz
+│   │   │   ├── summary.json
+│   │   │   └── used_metadata_rows.csv
+│   │   ├── sandbox
+│   │   │   └── comparison_embeddings.npy
+│   │   ├── support_sweep
+│   │   │   └── mask_0.20
+│   │   │       ├── support_1
+│   │   │       │   ├── binned_1024_auc.npy
+│   │   │       │   ├── binned_2048_auc.npy
+│   │   │       │   ├── comparison_accuracy_bar.png
+│   │   │       │   ├── comparison_accuracy_boxplot.png
+│   │   │       │   ├── comparison_embeddings.npy
+│   │   │       │   ├── comparison_episode_trend_by_group.png
+│   │   │       │   ├── comparison_macro_f1_bar.png
+│   │   │       │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.json
+│   │   │       │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │       ├── support_2
+│   │   │       │   ├── binned_1024_auc.npy
+│   │   │       │   ├── binned_2048_auc.npy
+│   │   │       │   ├── comparison_accuracy_bar.png
+│   │   │       │   ├── comparison_accuracy_boxplot.png
+│   │   │       │   ├── comparison_embeddings.npy
+│   │   │       │   ├── comparison_episode_trend_by_group.png
+│   │   │       │   ├── comparison_macro_f1_bar.png
+│   │   │       │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.json
+│   │   │       │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │       ├── support_4
+│   │   │       │   ├── binned_1024_auc.npy
+│   │   │       │   ├── binned_2048_auc.npy
+│   │   │       │   ├── comparison_accuracy_bar.png
+│   │   │       │   ├── comparison_accuracy_boxplot.png
+│   │   │       │   ├── comparison_embeddings.npy
+│   │   │       │   ├── comparison_episode_trend_by_group.png
+│   │   │       │   ├── comparison_macro_f1_bar.png
+│   │   │       │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.json
+│   │   │       │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │       ├── support_6
+│   │   │       │   ├── binned_1024_auc.npy
+│   │   │       │   ├── binned_2048_auc.npy
+│   │   │       │   ├── comparison_accuracy_bar.png
+│   │   │       │   ├── comparison_accuracy_boxplot.png
+│   │   │       │   ├── comparison_embeddings.npy
+│   │   │       │   ├── comparison_episode_trend_by_group.png
+│   │   │       │   ├── comparison_macro_f1_bar.png
+│   │   │       │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.csv
+│   │   │       │   ├── fewshot_ml_comparison_summary.json
+│   │   │       │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │       └── support_8
+│   │   ├── support_sweep_EDTA_Suppressed_MTBLS326
+│   │   │   ├── mask_0.20
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.30
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.40
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.50
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   └── support_sweep_manifest.csv
+│   │   ├── support_sweep_EDTA_Suppressed_plots_MTBLS326
+│   │   │   ├── accuracy_mean_best_by_support_and_masking.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_mae_prototype_head.png
+│   │   │   ├── accuracy_mean_vs_support_by_masking.png
+│   │   │   ├── macro_f1_mean_best_by_support_and_masking.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_prototype_head.png
+│   │   │   ├── macro_f1_mean_vs_support_by_masking.png
+│   │   │   ├── support_sweep_combined_summary.csv
+│   │   │   ├── support_sweep_overall_ranking.csv
+│   │   │   └── support_sweep_ranked_by_setting.csv
+│   │   ├── support_sweep_MTBLS326
+│   │   │   ├── mask_0.20
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.30
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.40
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.50
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_6
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   └── support_sweep_manifest.csv
+│   │   ├── support_sweep_MTBLS563
+│   │   │   ├── mask_0.20
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_10
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_6
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_8
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.30
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_10
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_6
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_8
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.40
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_10
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_6
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_8
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   ├── mask_0.50
+│   │   │   │   ├── support_1
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_10
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_2
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_4
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   ├── support_6
+│   │   │   │   │   ├── binned_1024_auc.npy
+│   │   │   │   │   ├── binned_2048_auc.npy
+│   │   │   │   │   ├── comparison_accuracy_bar.png
+│   │   │   │   │   ├── comparison_accuracy_boxplot.png
+│   │   │   │   │   ├── comparison_embeddings.npy
+│   │   │   │   │   ├── comparison_episode_trend_by_group.png
+│   │   │   │   │   ├── comparison_macro_f1_bar.png
+│   │   │   │   │   ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.csv
+│   │   │   │   │   ├── fewshot_ml_comparison_summary.json
+│   │   │   │   │   └── fewshot_ml_used_metadata_rows.csv
+│   │   │   │   └── support_8
+│   │   │   │       ├── binned_1024_auc.npy
+│   │   │   │       ├── binned_2048_auc.npy
+│   │   │   │       ├── comparison_accuracy_bar.png
+│   │   │   │       ├── comparison_accuracy_boxplot.png
+│   │   │   │       ├── comparison_embeddings.npy
+│   │   │   │       ├── comparison_episode_trend_by_group.png
+│   │   │   │       ├── comparison_macro_f1_bar.png
+│   │   │   │       ├── fewshot_ml_best_hyperparams.csv
+│   │   │   │       ├── fewshot_ml_comparison_episode_metrics.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.csv
+│   │   │   │       ├── fewshot_ml_comparison_summary.json
+│   │   │   │       └── fewshot_ml_used_metadata_rows.csv
+│   │   │   └── support_sweep_manifest.csv
+│   │   ├── support_sweep_plots_MTBLS326
+│   │   │   ├── accuracy_mean_best_by_support_and_masking.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │   │   ├── accuracy_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │   │   ├── accuracy_mean_heatmap_mae_prototype_head.png
+│   │   │   ├── accuracy_mean_vs_support_by_masking.png
+│   │   │   ├── macro_f1_mean_best_by_support_and_masking.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │   │   ├── macro_f1_mean_heatmap_mae_prototype_head.png
+│   │   │   ├── macro_f1_mean_vs_support_by_masking.png
+│   │   │   ├── support_sweep_combined_summary.csv
+│   │   │   ├── support_sweep_overall_ranking.csv
+│   │   │   └── support_sweep_ranked_by_setting.csv
+│   │   └── support_sweep_plots_MTBLS563
+│   │       ├── accuracy_mean_best_by_support_and_masking.png
+│   │       ├── accuracy_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │       ├── accuracy_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │       ├── accuracy_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │       ├── accuracy_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │       ├── accuracy_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │       ├── accuracy_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │       ├── accuracy_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │       ├── accuracy_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │       ├── accuracy_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │       ├── accuracy_mean_heatmap_mae_prototype_head.png
+│   │       ├── accuracy_mean_vs_support_by_masking.png
+│   │       ├── macro_f1_mean_best_by_support_and_masking.png
+│   │       ├── macro_f1_mean_heatmap_direct_1024_auc_plus_logreg_c0p1.png
+│   │       ├── macro_f1_mean_heatmap_direct_1024_auc_plus_svm_c1p0.png
+│   │       ├── macro_f1_mean_heatmap_direct_1024_auc_plus_xgboost_depth2.png
+│   │       ├── macro_f1_mean_heatmap_direct_2048_auc_plus_logreg_c0p1.png
+│   │       ├── macro_f1_mean_heatmap_direct_2048_auc_plus_svm_c1p0.png
+│   │       ├── macro_f1_mean_heatmap_direct_2048_auc_plus_xgboost_depth2.png
+│   │       ├── macro_f1_mean_heatmap_mae_embeddings_plus_logreg_c0p1.png
+│   │       ├── macro_f1_mean_heatmap_mae_embeddings_plus_svm_c1p0.png
+│   │       ├── macro_f1_mean_heatmap_mae_embeddings_plus_xgboost_depth2.png
+│   │       ├── macro_f1_mean_heatmap_mae_prototype_head.png
+│   │       ├── macro_f1_mean_vs_support_by_masking.png
+│   │       ├── support_sweep_combined_summary.csv
+│   │       ├── support_sweep_overall_ranking.csv
+│   │       └── support_sweep_ranked_by_setting.csv
+│   ├── gradient_analysis
+│   │   └── gradient_analysis_20260119_094911.json
+│   ├── jigsaw
+│   │   ├── bin_1024
+│   │   │   └── 20260624_033601
+│   │   │       ├── config.json
+│   │   │       ├── metrics.csv
+│   │   │       ├── preview_bin_1024.png
+│   │   │       ├── summary.json
+│   │   │       └── training_curves.png
+│   │   ├── bin_2048
+│   │   │   └── 20260624_033601
+│   │   │       ├── config.json
+│   │   │       ├── metrics.csv
+│   │   │       ├── preview_bin_2048.png
+│   │   │       ├── summary.json
+│   │   │       └── training_curves.png
+│   │   ├── bin_256
+│   │   │   └── 20260624_033601
+│   │   │       ├── config.json
+│   │   │       ├── metrics.csv
+│   │   │       ├── preview_bin_256.png
+│   │   │       ├── summary.json
+│   │   │       └── training_curves.png
+│   │   ├── bin_512
+│   │   │   └── 20260624_033601
+│   │   │       ├── config.json
+│   │   │       ├── metrics.csv
+│   │   │       ├── preview_bin_512.png
+│   │   │       ├── summary.json
+│   │   │       └── training_curves.png
+│   │   ├── multibin
+│   │   │   └── 20260624_032837
+│   │   │       ├── config.json
+│   │   │       ├── metrics.csv
+│   │   │       ├── preview_bin_1024.png
+│   │   │       ├── preview_bin_2048.png
+│   │   │       ├── preview_bin_256.png
+│   │   │       ├── preview_bin_512.png
+│   │   │       ├── summary.json
+│   │   │       └── training_curves.png
+│   │   └── sweep_20260624_033601_summary.json
+│   ├── loocv
+│   │   ├── brc_t2d_comparison_plots
+│   │   │   ├── all_models_balanced_accuracy_weighted_f1_heatmap.png
+│   │   │   ├── all_models_ranked_by_balanced_accuracy.csv
+│   │   │   ├── all_models_ranked_by_weighted_f1.csv
+│   │   │   ├── best_by_family_and_metric.csv
+│   │   │   ├── best_family_accuracy.png
+│   │   │   ├── best_family_balanced_accuracy.png
+│   │   │   ├── best_family_macro_f1.png
+│   │   │   ├── classical_accuracy_heatmap.png
+│   │   │   ├── classical_balanced_accuracy_heatmap.png
+│   │   │   ├── classical_macro_f1_heatmap.png
+│   │   │   ├── classical_macro_roc_auc_ovr_heatmap.png
+│   │   │   ├── classical_pr_auc_heatmap.png
+│   │   │   ├── classical_roc_auc_heatmap.png
+│   │   │   ├── classical_weighted_f1_heatmap.png
+│   │   │   ├── combined_deduplicated_summary.csv
+│   │   │   ├── jigsaw_accuracy_heatmap.png
+│   │   │   ├── jigsaw_balanced_accuracy_heatmap.png
+│   │   │   ├── jigsaw_finetune_trend_balanced_accuracy.png
+│   │   │   ├── jigsaw_macro_f1_heatmap.png
+│   │   │   ├── jigsaw_macro_roc_auc_ovr_heatmap.png
+│   │   │   ├── jigsaw_pr_auc_heatmap.png
+│   │   │   ├── jigsaw_roc_auc_heatmap.png
+│   │   │   ├── jigsaw_weighted_f1_heatmap.png
+│   │   │   ├── masking_accuracy_heatmap.png
+│   │   │   ├── masking_balanced_accuracy_heatmap.png
+│   │   │   ├── masking_finetune_trend_balanced_accuracy.png
+│   │   │   ├── masking_macro_f1_heatmap.png
+│   │   │   ├── masking_macro_roc_auc_ovr_heatmap.png
+│   │   │   ├── masking_pr_auc_heatmap.png
+│   │   │   ├── masking_roc_auc_heatmap.png
+│   │   │   ├── masking_weighted_f1_heatmap.png
+│   │   │   ├── pairwise_best_jigsaw_vs_classical_balanced_accuracy.png
+│   │   │   ├── pairwise_best_jigsaw_vs_classical_weighted_f1.png
+│   │   │   ├── pairwise_best_jigsaw_vs_masking_balanced_accuracy.png
+│   │   │   ├── pairwise_best_jigsaw_vs_masking_weighted_f1.png
+│   │   │   ├── pairwise_best_masking_vs_classical_balanced_accuracy.png
+│   │   │   ├── pairwise_best_masking_vs_classical_weighted_f1.png
+│   │   │   ├── pairwise_best_model_deltas.csv
+│   │   │   ├── top_8_balanced_accuracy_rankings.png
+│   │   │   └── top_8_weighted_f1_rankings.png
+│   │   ├── brc_t2d_jigsaw
+│   │   │   ├── cancer_status
+│   │   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   │   ├── classical_logistic_regression_oof_prob.npy
+│   │   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   │   ├── classical_svm_rbf_oof_prob.npy
+│   │   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   │   ├── classical_xgboost_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── oof_predictions.csv
+│   │   │   │   ├── run_config.json
+│   │   │   │   └── summary.csv
+│   │   │   ├── combined_status
+│   │   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   │   ├── classical_logistic_regression_oof_prob.npy
+│   │   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   │   ├── classical_svm_rbf_oof_prob.npy
+│   │   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   │   ├── classical_xgboost_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── oof_predictions.csv
+│   │   │   │   ├── run_config.json
+│   │   │   │   └── summary.csv
+│   │   │   └── diabetes_status
+│   │   │       ├── classical_logistic_regression_oof_pred.npy
+│   │   │       ├── classical_logistic_regression_oof_prob.npy
+│   │   │       ├── classical_svm_rbf_oof_pred.npy
+│   │   │       ├── classical_svm_rbf_oof_prob.npy
+│   │   │       ├── classical_xgboost_oof_pred.npy
+│   │   │       ├── classical_xgboost_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_frozen_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_frozen_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_frozen_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_frozen_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_frozen_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_frozen_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_frozen_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_frozen_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_frozen_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_frozen_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── oof_predictions.csv
+│   │   │       ├── run_config.json
+│   │   │       └── summary.csv
+│   │   ├── brc_t2d_masking
+│   │   │   ├── cancer_status
+│   │   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   │   ├── classical_logistic_regression_oof_prob.npy
+│   │   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   │   ├── classical_svm_rbf_oof_prob.npy
+│   │   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   │   ├── classical_xgboost_oof_prob.npy
+│   │   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   │   ├── foundation_frozen_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── oof_predictions.csv
+│   │   │   │   ├── run_config.json
+│   │   │   │   └── summary.csv
+│   │   │   ├── combined_status
+│   │   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   │   ├── classical_logistic_regression_oof_prob.npy
+│   │   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   │   ├── classical_svm_rbf_oof_prob.npy
+│   │   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   │   ├── classical_xgboost_oof_prob.npy
+│   │   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   │   ├── foundation_frozen_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_1_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_2_oof_prob.npy
+│   │   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   │   ├── foundation_unfreeze_last_3_oof_prob.npy
+│   │   │   │   ├── oof_predictions.csv
+│   │   │   │   ├── run_config.json
+│   │   │   │   └── summary.csv
+│   │   │   └── diabetes_status
+│   │   │       ├── classical_logistic_regression_oof_pred.npy
+│   │   │       ├── classical_logistic_regression_oof_prob.npy
+│   │   │       ├── classical_svm_rbf_oof_pred.npy
+│   │   │       ├── classical_svm_rbf_oof_prob.npy
+│   │   │       ├── classical_xgboost_oof_pred.npy
+│   │   │       ├── classical_xgboost_oof_prob.npy
+│   │   │       ├── foundation_frozen_oof_pred.npy
+│   │   │       ├── foundation_frozen_oof_prob.npy
+│   │   │       ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │       ├── foundation_unfreeze_last_1_oof_prob.npy
+│   │   │       ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │       ├── foundation_unfreeze_last_2_oof_prob.npy
+│   │   │       ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │       ├── foundation_unfreeze_last_3_oof_prob.npy
+│   │   │       ├── oof_predictions.csv
+│   │   │       ├── run_config.json
+│   │   │       └── summary.csv
+│   │   ├── mtbls326_comparison_plots
+│   │   │   ├── all_models_ranked_by_balanced_accuracy.csv
+│   │   │   ├── all_models_ranked_by_weighted_f1.csv
+│   │   │   ├── average_model_performance.png
+│   │   │   ├── best_by_family_and_metric.csv
+│   │   │   ├── best_family_accuracy.png
+│   │   │   ├── best_family_balanced_accuracy.png
+│   │   │   ├── best_family_pr_auc.png
+│   │   │   ├── best_family_roc_auc.png
+│   │   │   ├── best_family_weighted_f1.png
+│   │   │   ├── best_models_by_metric.png
+│   │   │   ├── classical_metric_heatmap.png
+│   │   │   ├── combined_deduplicated_summary.csv
+│   │   │   ├── combined_summary.csv
+│   │   │   ├── confusion_matrix_counts.png
+│   │   │   ├── grouped_core_metrics.png
+│   │   │   ├── jigsaw_finetune_trend_balanced_accuracy.png
+│   │   │   ├── jigsaw_metric_heatmap.png
+│   │   │   ├── masking_finetune_trend_balanced_accuracy.png
+│   │   │   ├── masking_metric_heatmap.png
+│   │   │   ├── metric_heatmaps.png
+│   │   │   ├── metric_trends.png
+│   │   │   ├── pairwise_best_jigsaw_vs_classical_balanced_accuracy.png
+│   │   │   ├── pairwise_best_jigsaw_vs_classical_weighted_f1.png
+│   │   │   ├── pairwise_best_jigsaw_vs_masking_balanced_accuracy.png
+│   │   │   ├── pairwise_best_jigsaw_vs_masking_weighted_f1.png
+│   │   │   ├── pairwise_best_masking_vs_classical_balanced_accuracy.png
+│   │   │   ├── pairwise_best_masking_vs_classical_weighted_f1.png
+│   │   │   ├── pairwise_best_model_deltas.csv
+│   │   │   ├── top_8_balanced_accuracy_rankings.png
+│   │   │   └── top_8_weighted_f1_rankings.png
+│   │   ├── mtbls326_jigsaw
+│   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   ├── classical_logistic_regression_oof_score.npy
+│   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   ├── classical_svm_rbf_oof_score.npy
+│   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   ├── classical_xgboost_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_frozen_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_1_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_2_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_1024_unfreeze_last_3_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_frozen_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_1_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_2_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_2048_unfreeze_last_3_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_frozen_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_1_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_2_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_256_unfreeze_last_3_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_frozen_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_1_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_2_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_bin_512_unfreeze_last_3_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_frozen_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_1_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_2_oof_score.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── jigsaw_jigsaw_multibin_unfreeze_last_3_oof_score.npy
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── plots
+│   │   │   │   ├── confusion_matrices.png
+│   │   │   │   ├── jigsaw_resolution_trend.png
+│   │   │   │   ├── metric_comparison_bars.png
+│   │   │   │   ├── precision_recall_curves.png
+│   │   │   │   ├── ranked_models.csv
+│   │   │   │   ├── roc_curves.png
+│   │   │   │   └── yes_probability_heatmap.png
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   ├── mtbls326_mask_0.20
+│   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   ├── classical_logistic_regression_oof_score.npy
+│   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   ├── classical_svm_rbf_oof_score.npy
+│   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   ├── classical_xgboost_oof_score.npy
+│   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   ├── foundation_frozen_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_score.npy
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   ├── mtbls326_mask_0.30
+│   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   ├── foundation_frozen_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_score.npy
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   ├── mtbls326_mask_0.40
+│   │   │   ├── classical_logistic_regression_oof_pred.npy
+│   │   │   ├── classical_logistic_regression_oof_score.npy
+│   │   │   ├── classical_svm_rbf_oof_pred.npy
+│   │   │   ├── classical_svm_rbf_oof_score.npy
+│   │   │   ├── classical_xgboost_oof_pred.npy
+│   │   │   ├── classical_xgboost_oof_score.npy
+│   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   ├── foundation_frozen_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_score.npy
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   ├── mtbls326_mask_0.50
+│   │   │   ├── combined_summary.csv
+│   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   ├── foundation_frozen_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_score.npy
+│   │   │   ├── grouped_bar_accuracy.png
+│   │   │   ├── heatmap_accuracy.png
+│   │   │   ├── lines_accuracy.png
+│   │   │   ├── lines_balanced_accuracy.png
+│   │   │   ├── lines_f1.png
+│   │   │   ├── lines_pr_auc.png
+│   │   │   ├── lines_precision.png
+│   │   │   ├── lines_recall.png
+│   │   │   ├── lines_roc_auc.png
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   ├── mtbls326_mask_0.50_oldCominedModel
+│   │   │   ├── foundation_frozen_oof_pred.npy
+│   │   │   ├── foundation_frozen_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_1_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_2_oof_score.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │   │   ├── foundation_unfreeze_last_3_oof_score.npy
+│   │   │   ├── oof_predictions.csv
+│   │   │   ├── run_config.json
+│   │   │   └── summary.csv
+│   │   └── mtbls326_mask_0.50_rowMinMax
+│   │       ├── classical_logistic_regression_oof_pred.npy
+│   │       ├── classical_logistic_regression_oof_score.npy
+│   │       ├── classical_svm_rbf_oof_pred.npy
+│   │       ├── classical_svm_rbf_oof_score.npy
+│   │       ├── classical_xgboost_oof_pred.npy
+│   │       ├── classical_xgboost_oof_score.npy
+│   │       ├── foundation_frozen_oof_pred.npy
+│   │       ├── foundation_frozen_oof_score.npy
+│   │       ├── foundation_unfreeze_last_1_oof_pred.npy
+│   │       ├── foundation_unfreeze_last_1_oof_score.npy
+│   │       ├── foundation_unfreeze_last_2_oof_pred.npy
+│   │       ├── foundation_unfreeze_last_2_oof_score.npy
+│   │       ├── foundation_unfreeze_last_3_oof_pred.npy
+│   │       ├── foundation_unfreeze_last_3_oof_score.npy
+│   │       ├── oof_predictions.csv
+│   │       ├── run_config.json
+│   │       └── summary.csv
+│   ├── model_architecture
+│   │   ├── model_plot_summary.txt
+│   │   ├── nmr_mae_summary.txt
+│   │   └── nmr_model_architecture
+│   ├── plots
+│   │   ├── Plots and Visualisations
+│   │   │   ├── nmr_mae_20250928_004449_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_004449_training_curves.png
+│   │   │   ├── nmr_mae_20250928_012139_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_012139_training_curves.png
+│   │   │   ├── nmr_mae_20250928_062123_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_062123_training_curves.png
+│   │   │   ├── nmr_mae_20250928_064900_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_064900_training_curves.png
+│   │   │   ├── nmr_mae_20250928_071751_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_071751_training_curves.png
+│   │   │   ├── nmr_mae_20250928_072620_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_072620_training_curves.png
+│   │   │   ├── nmr_mae_20250928_091820_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_091820_training_curves.png
+│   │   │   ├── nmr_mae_20250928_094646_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_094646_training_curves.png
+│   │   │   ├── nmr_mae_20250928_102535_reconstructions.png
+│   │   │   ├── nmr_mae_20250928_102535_training_curves.png
+│   │   │   ├── nmr_mae_v2_20251009_141540_reconstructions.png
+│   │   │   ├── nmr_mae_v2_20251009_141540_training_curves.png
+│   │   │   ├── nmr_mae_v2_20251009_150517_reconstructions.png
+│   │   │   ├── nmr_mae_v2_20251009_150517_training_curves.png
+│   │   │   ├── nmr_mae_v2_20251009_225655_reconstructions.png
+│   │   │   └── nmr_mae_v2_20251009_225655_training_curves.png
+│   │   ├── preprocessing
+│   │   │   ├── combined_unique.png
+│   │   │   ├── plasma_unique.png
+│   │   │   ├── plasma_unique_WS625to680Zero.png
+│   │   │   ├── Plasma_WS625to680Zero.png
+│   │   │   └── Serum_WS625to680Zero.png
+│   │   └── VisualisationWhileDeveloping
+│   │       ├── augmentation_examples.png
+│   │       ├── model_plot_architecture.png
+│   │       ├── nmr_mae_architecture.png
+│   │       ├── nmr_model_architecture.png
+│   │       ├── random_spectra_lognorm.png
+│   │       ├── random_spectra_orignial_plasma.png
+│   │       ├── random_spectra_orignial.png
+│   │       ├── random_spectra.png
+│   │       ├── random_spectra_pqn.png
+│   │       ├── random_spectra_quantnorm.png
+│   │       ├── reconstructed_examples_64k_withVal.png
+│   │       ├── reconstructed_examples_8k.png
+│   │       ├── reconstructed_examples_8k_withVal.png
+│   │       ├── reconstruction_examples_1.png
+│   │       ├── reconstruction_examples.png
+│   │       ├── spectrum_alignment_results.png
+│   │       ├── training_loss_1.png
+│   │       ├── training_loss_64k_withVal.png
+│   │       ├── training_loss_8k.png
+│   │       ├── training_loss_8k_withVal.png
+│   │       ├── training_loss.png
+│   │       └── training_validation_curves.png
+│   ├── preprocessing_diagnostics
+│   │   ├── edta_suppression_diagnostics.csv
+│   │   ├── edta_suppression_preview.png
+│   │   └── zero_tail_processing_results.png
+│   ├── reconstruction
+│   │   └── recon_peaks
+│   │       ├── sample_1021_region_60000_100000_mr0_15.png
+│   │       ├── sample_1021_region_60000_100000_mr0_25.png
+│   │       ├── sample_1021_region_60000_100000_mr0_35.png
+│   │       ├── sample_1021_region_60000_100000_mr0_50.png
+│   │       ├── sample_1021_region_60000_100000.png
+│   │       ├── sample_1951_region_60000_100000_mr0_15.png
+│   │       ├── sample_1951_region_60000_100000_mr0_25.png
+│   │       ├── sample_1951_region_60000_100000_mr0_35.png
+│   │       ├── sample_1951_region_60000_100000_mr0_50.png
+│   │       ├── sample_1951_region_60000_100000.png
+│   │       ├── sample_307_region_60000_100000_mr0_15.png
+│   │       ├── sample_307_region_60000_100000_mr0_25.png
+│   │       ├── sample_307_region_60000_100000_mr0_35.png
+│   │       ├── sample_307_region_60000_100000_mr0_50.png
+│   │       ├── sample_307_region_60000_100000.png
+│   │       ├── sample_486_region_60000_100000_mr0_15.png
+│   │       ├── sample_486_region_60000_100000_mr0_25.png
+│   │       ├── sample_486_region_60000_100000_mr0_35.png
+│   │       ├── sample_486_region_60000_100000_mr0_50.png
+│   │       ├── sample_486_region_60000_100000.png
+│   │       ├── sample_573_region_60000_100000_mr0_15.png
+│   │       ├── sample_573_region_60000_100000_mr0_25.png
+│   │       ├── sample_573_region_60000_100000_mr0_35.png
+│   │       ├── sample_573_region_60000_100000_mr0_50.png
+│   │       └── sample_573_region_60000_100000.png
+│   └── testing
+│       ├── combined
+│       │   ├── compare_plots
+│       │   │   ├── compare_masked.png
+│       │   │   ├── compare_peaks.png
+│       │   │   └── compare_unmasked.png
+│       │   ├── detailed_results_15mask300epoch.csv
+│       │   ├── detailed_results_15mask_TBI_Tirupati.csv
+│       │   ├── detailed_results_25mask500epoch.csv
+│       │   ├── detailed_results_25mask_TBI_Tirupati.csv
+│       │   ├── detailed_results_35mask500epoch.csv
+│       │   ├── detailed_results_35mask_TBI_Tirupati.csv
+│       │   ├── detailed_results_50mask500epoch.csv
+│       │   ├── detailed_results_50mask_TBI_Tirupati.csv
+│       │   ├── detailed_results.csv
+│       │   ├── distributions_15mask300epoch.png
+│       │   ├── distributions_15mask_TBI_Tirupati.png
+│       │   ├── distributions_25mask500epoch.png
+│       │   ├── distributions_25mask_TBI_Tirupati.png
+│       │   ├── distributions_35mask500epoch.png
+│       │   ├── distributions_35mask_TBI_Tirupati.png
+│       │   ├── distributions_50mask500epoch.png
+│       │   ├── distributions_50mask_TBI_Tirupati.png
+│       │   ├── distributions.png
+│       │   ├── examples_15mask300epoch.png
+│       │   ├── examples_15mask_TBI_Tirupati.png
+│       │   ├── examples_25mask500epoch.png
+│       │   ├── examples_25mask_TBI_Tirupati.png
+│       │   ├── examples_35mask500epoch.png
+│       │   ├── examples_35mask_TBI_Tirupati.png
+│       │   ├── examples_50mask500epoch.png
+│       │   ├── examples_50mask_TBI_Tirupati.png
+│       │   ├── examples.png
+│       │   ├── summary_15mask300epoch.json
+│       │   ├── summary_15mask_TBI_Tirupati.json
+│       │   ├── summary_25mask500epoch.json
+│       │   ├── summary_25mask_TBI_Tirupati.json
+│       │   ├── summary_35mask500epoch.json
+│       │   ├── summary_35mask_TBI_Tirupati.json
+│       │   ├── summary_50mask500epoch.json
+│       │   ├── summary_50mask_TBI_Tirupati.json
+│       │   └── summary.json
+│       ├── debug
+│       │   ├── detailed_results_debug_small.csv
+│       │   ├── distributions_debug_small.png
+│       │   ├── examples_debug_small.png
+│       │   └── summary_debug_small.json
+│       └── plasma
+│           ├── detailed_results_35mask_merged2.csv
+│           ├── detailed_results_50mask.csv
+│           ├── detailed_results.csv
+│           ├── distributions_35mask_merged2.png
+│           ├── distributions_50mask.png
+│           ├── distributions.png
+│           ├── examples_35mask_merged2.png
+│           ├── examples_50mask.png
+│           ├── examples.png
+│           ├── summary_35mask_merged2.json
+│           ├── summary_50mask.json
+│           ├── summary.json
+│           ├── _worker_results_0_13757.csv
+│           ├── _worker_results_0_60323.csv
+│           ├── _worker_results_1_13754.csv
+│           ├── _worker_results_1_60327.csv
+│           ├── _worker_results_2_13758.csv
+│           └── _worker_results_2_60326.csv
+└── tools
+    ├── organize_workspace.py
+    └── __pycache__
+        └── organize_workspace.cpython-311.pyc
+
+206 directories, 2210 files

@@ -1,0 +1,352 @@
+group_id,reason,path,size_bytes,shape,dtype
+candidate_001,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS326_common_ppm_axis.npy,1048704,"(131072,)",float64
+candidate_001,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS563_common_ppm_axis.npy,1048704,"(131072,)",float64
+candidate_002,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/features_128bins.npy,114816,"(224, 128)",float32
+candidate_002,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/embeddings.npy,114816,"(224, 128)",float32
+candidate_002,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/embeddings.npy,114816,"(224, 128)",float32
+candidate_002,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/embeddings.npy,114816,"(224, 128)",float32
+candidate_002,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/embeddings.npy,114816,"(224, 128)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_hparam_sweep_0.5/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_10/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_8/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_10/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_8/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_10/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_8/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_1/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_10/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_2/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_4/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_6/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_003,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_8/binned_2048_auc.npy,1163392,"(142, 2048)",float32
+candidate_004,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS563_aligned_spectra.npy,148897920,"(142, 131072)",float64
+candidate_004,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS563_aligned_spectra_WS625to680Zero.npy,148897920,"(142, 131072)",float64
+candidate_004,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax.npy,148897920,"(142, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_128K_Plasma_NoSuppress.npy,16007561344,"(15266, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_128K_Plasma_WS625to680Zero.npy,16007561344,"(15266, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_Plasma_NoSuppress.npy,16007561344,"(15266, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_Plasma_WS625to680Zero.npy,16007561344,"(15266, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_Plasma_WS625to680Zero_EDTASuppressed.npy,16007561344,"(15266, 131072)",float64
+candidate_005,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_Plasma_WS625to680Zero_copy.npy,16007561344,"(15266, 131072)",float64
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/binned_1024_max.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/binned_1024_mean.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.3/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.5/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_1/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_6/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_1/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_6/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_1/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_6/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_1/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_6/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_1/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_2/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_4/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_006,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_6/binned_1024_auc.npy,172160,"(42, 1024)",float32
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/LogisticRegression_128bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/LogisticRegression_256bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/SVM_RBF_128bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/SVM_RBF_256bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/XGBoost_128bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/XGBoost_256bins_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/finetune_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/frozen_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/finetune_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/frozen_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/finetune_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/frozen_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/finetune_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/frozen_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best/finetune_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best/frozen_backbone_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/LogisticRegression_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/SVM_RBF_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/XGBoost_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/LogisticRegression_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/SVM_RBF_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/XGBoost_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/LogisticRegression_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/SVM_RBF_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/XGBoost_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/LogisticRegression_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/SVM_RBF_oof_pred.npy,1920,"(224,)",int64
+candidate_007,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/XGBoost_oof_pred.npy,1920,"(224,)",int64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/LogisticRegression_128bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/LogisticRegression_256bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/SVM_RBF_128bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/SVM_RBF_256bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/XGBoost_128bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_binned_auc_results/XGBoost_256bins_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/finetune_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/frozen_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/finetune_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/frozen_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/finetune_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/frozen_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/finetune_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/frozen_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best/finetune_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_head_results/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best/frozen_backbone_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/LogisticRegression_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/SVM_RBF_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251209_035637_bs16_mr0.15_ps1024_20251209_035637_best_300epochs/XGBoost_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/LogisticRegression_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/SVM_RBF_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251211_084137_bs16_mr0.25_ps1024_best/XGBoost_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/LogisticRegression_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/SVM_RBF_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20251212_103256_bs16_mr0.35_ps1024_best/XGBoost_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/LogisticRegression_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/SVM_RBF_oof_score.npy,1920,"(224,)",float64
+candidate_008,"same extension, byte size, shape, and dtype; content not hash-verified",classification_results/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best/XGBoost_oof_score.npy,1920,"(224,)",float64
+candidate_009,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/embeddings.npy,21632,"(42, 128)",float32
+candidate_009,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_ide_quick/embeddings.npy,21632,"(42, 128)",float32
+candidate_009,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_mtbls326_sanity/embeddings.npy,21632,"(42, 128)",float32
+candidate_009,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_mtbls326_sanity_mahal/embeddings.npy,21632,"(42, 128)",float32
+candidate_010,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_WS625to680Zero.npy,2250244224,"(2146, 131072)",float64
+candidate_010,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_WS625to680Zero_copy.npy,2250244224,"(2146, 131072)",float64
+candidate_010,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_nmr_spectra_128K_WSZero.npy,2250244224,"(2146, 131072)",float64
+candidate_010,"same extension, byte size, shape, and dtype; content not hash-verified",serum_unique_WS625to680Zero.npy,2250244224,"(2146, 131072)",float64
+candidate_010,"same extension, byte size, shape, and dtype; content not hash-verified",serum_unique_WS625to680Zero_copy.npy,2250244224,"(2146, 131072)",float64
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.3/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.5/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_new_sanity/embeddings_raw.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_sandbox/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_1/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_6/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_1/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_6/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_1/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_6/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_1/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_6/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_1/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_2/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_4/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_011,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_6/comparison_embeddings.npy,2752640,"(42, 16384)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/binned_2048_max.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/binned_2048_mean.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.3/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results_0.5/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_1/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep/mask_0.20/support_6/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_1/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.20/support_6/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_1/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.30/support_6/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_1/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.40/support_6/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_1/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_2/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_4/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_012,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_EDTA_Suppressed_MTBLS326/mask_0.50/support_6/binned_2048_auc.npy,344192,"(42, 2048)",float32
+candidate_013,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS326_aligned_spectra.npy,44040320,"(42, 131072)",float64
+candidate_013,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS326_aligned_spectra_WS625to680Zero.npy,44040320,"(42, 131072)",float64
+candidate_013,"same extension, byte size, shape, and dtype; content not hash-verified",MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy,44040320,"(42, 131072)",float64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_logistic_regression_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_svm_rbf_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_xgboost_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_frozen_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_1_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_2_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_3_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_frozen_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_1_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_2_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_3_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_logistic_regression_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_svm_rbf_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_xgboost_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_frozen_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_1_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_2_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_3_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_frozen_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_1_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_2_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_3_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_frozen_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_1_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_2_oof_pred.npy,464,"(42,)",int64
+candidate_014,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_3_oof_pred.npy,464,"(42,)",int64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_logistic_regression_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_svm_rbf_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/classical_xgboost_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_frozen_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_1_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_2_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.20/foundation_unfreeze_last_3_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_frozen_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_1_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_2_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.30/foundation_unfreeze_last_3_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_logistic_regression_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_svm_rbf_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/classical_xgboost_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_frozen_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_1_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_2_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.40/foundation_unfreeze_last_3_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_frozen_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_1_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_2_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50/foundation_unfreeze_last_3_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_frozen_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_1_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_2_oof_score.npy,464,"(42,)",float64
+candidate_015,"same extension, byte size, shape, and dtype; content not hash-verified",mtbls326_loocv_results_0.50_oldCominedModel/foundation_unfreeze_last_3_oof_score.npy,464,"(42,)",float64
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_hparam_sweep_0.5/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_10/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_8/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_10/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_8/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_10/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_8/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_1/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_10/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_2/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_4/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_6/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_016,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_8/binned_1024_auc.npy,581760,"(142, 1024)",float32
+candidate_017,"same extension, byte size, shape, and dtype; content not hash-verified",plasma_unique.npy,7073693824,"(6746, 131072)",float64
+candidate_017,"same extension, byte size, shape, and dtype; content not hash-verified",plasma_unique_EDTASuppressed.npy,7073693824,"(6746, 131072)",float64
+candidate_017,"same extension, byte size, shape, and dtype; content not hash-verified",plasma_unique_EDTASuppressed_copy.npy,7073693824,"(6746, 131072)",float64
+candidate_017,"same extension, byte size, shape, and dtype; content not hash-verified",plasma_unique_WS625to680Zero.npy,7073693824,"(6746, 131072)",float64
+candidate_017,"same extension, byte size, shape, and dtype; content not hash-verified",plasma_unique_WS625to680Zero_copy.npy,7073693824,"(6746, 131072)",float64
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_hparam_sweep_0.5/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_results/embeddings_raw.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.20/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.30/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.40/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS326/mask_0.50/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_10/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.20/support_8/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_10/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.30/support_8/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_10/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.40/support_8/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_1/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_10/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_2/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_4/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_6/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_018,"same extension, byte size, shape, and dtype; content not hash-verified",fewshot_support_sweep_MTBLS563/mask_0.50/support_8/comparison_embeddings.npy,9306240,"(142, 16384)",float32
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",aligned_128K_WS625to680Zero_Normalized.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combine_unique_Water_EDTA_Suppressed.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique_WS625to680Zero.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique_no_overlap.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique_no_overlap_WS625to680Zero.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique_rowMinMax.npy,9323937920,"(8892, 131072)",float64
+candidate_019,"same extension, byte size, shape, and dtype; content not hash-verified",combined_unique_rowMinMax_noOverlapWith326_563.npy,9323937920,"(8892, 131072)",float64

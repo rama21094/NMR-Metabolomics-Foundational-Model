@@ -1,0 +1,17 @@
+# Virtual Environments
+.venv/
+
+# Directories
+/data/
+/models/
+results/
+
+# Cache files
+__pycache__/
+.DS_Store
+*.pyc
+
+# Specific File Extensions
+*.npy
+*.pth
+*.npz

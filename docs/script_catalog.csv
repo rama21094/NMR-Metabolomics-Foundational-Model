@@ -1,0 +1,1088 @@
+script,planned_location,category,purpose,input_hints,output_hints
+code/training/train_jigsaw_spectra.py,code/training/train_jigsaw_spectra.py,training,Jigsaw self-supervised training for NMR spectra with fixed sweep and multibin modes,combine_unique_Water_EDTA_Suppressed.npy; multiple --data-path .npy files,models/jigsaw; results/jigsaw
+CNN_ContrastiveLearning.py,code/training/CNN_ContrastiveLearning.py,training,CNN contrastive learning experiment for NMR spectra.,Encoder saved to: nmr_encoder_{timestamp}.pth; aligned_nmr_spectra_128K_WSNoise.npy; contrastive_best_{timestamp}.pth; nmr_encoder_{timestamp}.pth,
+Test_suite.py,code/evaluation/Test_suite.py,evaluation,Evaluate trained MAE checkpoints and save reconstruction metrics.,./SSL_models/nmr_mae_v2_WSZero_normalised_20251208_125133_bs16_mr0.15_ps1024_20251208_125133_best.pth; SSL_models/SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; Summary saved to {save_dir}/summary{suffix}.json; \nDetailed results saved to {save_dir}/detailed_results{suffix}.csv; _worker_results_{worker_id}_{os.getpid()}.csv; aligned_128K_TBI_Tirupati_WS625to680Zero.npy; test_results_plasma; {save_dir}/detailed_results{suffix}.csv; {save_dir}/summary{suffix}.json,"
+    Main testing function
+    
+    Args:
+        model_path: Path to saved model (.pth file)
+        data_path: Path to NMR data (.npy file)
+        save_dir: Directory to save results
+        n_samples: Number of samples to test (None = all)
+        mask_realizations_per_sample: Number of random masks per sample
+        patch_size: Should match training
+        mask_ratio: Should match training
+        workers: Number of parallel worker processes (None = auto)
+        normalize_spectra: True/False to force normalization, None = auto
+    ; )
+
+
+def plot_results(df, dataset, model, device, save_dir, suffix=; )
+    
+    # Initialize results storage
+    results = {
+        ; )
+    
+    # Print summary
+    print_summary(summary)
+    
+    # Generate plots
+    plot_results(df, dataset, model, device, save_dir, suffix=suffix)
+    
+    return df, summary
+
+
+def compute_summary(df):
+    ; )
+    import matplotlib.pyplot as plt
+    
+    # 1. Distribution plots
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    
+    # MSE
+    axes[0, 0].hist(df[; )
+    import matplotlib.pyplot as plt
+    fig, axes = plt.subplots(n_examples, 4, figsize=(24, 4*n_examples))
+    
+    indices = np.random.choice(len(dataset), min(n_examples, len(dataset)), replace=False)
+    
+    with torch.no_grad():
+        for idx, sample_idx in enumerate(indices):
+            sample = dataset[sample_idx]
+            original = sample[; , category=stats.ConstantInputWarning)
+                        c, _ = stats.pearsonr(w_o, w_r)
+                    if np.isfinite(c):
+                        local_corrs.append(c)
+
+                local_results[; , e)
+
+        finally:
+            pass
+
+    # Merge results for both serial and parallel paths
+    if WORKERS == 1:
+        for ar in aggregated:
+            for k, v in ar.items():
+                results[k].extend(v)
+        df = pd.DataFrame(results)
+    else:
+        worker_dfs = []
+        for fp in worker_result_files:
+            worker_dfs.append(pd.read_csv(fp))
+        if worker_dfs:
+            df = pd.concat(worker_dfs, ignore_index=True)
+        else:
+            df = pd.DataFrame(results)
+        for fp in worker_result_files:
+            try:
+                Path(fp).unlink(missing_ok=True)
+            except Exception:
+                pass
+    
+    # Save detailed results
+    df.to_csv(f; ./SSL_models/nmr_mae_v2_WSZero_normalised_20251208_125133_bs16_mr0.15_ps1024_20251208_125133_best.pth; :
+        infer_batch_size = 1
+
+    def _process_one(sample_idx, mask_idx, orig, masked_np_input, mask_np, recon):
+                orig, masked_np_input = _align_original_masked_baseline(
+                    orig,
+                    masked_np_input,
+                    mask_np,
+                    patch_size
+                )
+                orig = _zero_baseline_signal(orig, start_idx=62501, end_idx=68000)
+
+                local_results[; : int(len(local_results[; Distribution plots saved to {save_dir}/distributions{suffix}.png"
+Test_suite_v2.py,code/evaluation/Test_suite_v2.py,evaluation,Updated MAE evaluation/test suite with worker support.,./SSL_models/nmr_mae_v2_WSZero_normalised_20251208_125133_bs16_mr0.15_ps1024_20251208_125133_best.pth; SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; Summary saved to {save_dir}/summary{suffix}.json; \nDetailed results saved to {save_dir}/detailed_results{suffix}.csv; _worker_results_{worker_id}_{os.getpid()}.csv; aligned_nmr_spectra_128K_Plasma_NoSuppress.npy; test_results_plasma; {save_dir}/detailed_results{suffix}.csv; {save_dir}/summary{suffix}.json,"
+    Main testing function
+    
+    Args:
+        model_path: Path to saved model (.pth file)
+        data_path: Path to NMR data (.npy file)
+        save_dir: Directory to save results
+        n_samples: Number of samples to test (None = all)
+        mask_realizations_per_sample: Number of random masks per sample
+        patch_size: Should match training
+        mask_ratio: Should match training
+        workers: Number of parallel worker processes (None = auto)
+        normalize_spectra: True/False to force normalization, None = auto
+    ; )
+
+
+def plot_results(df, dataset, model, device, save_dir, suffix=; )
+    
+    # Initialize results storage
+    results = {
+        ; )
+    
+    # Print summary
+    print_summary(summary)
+    
+    # Generate plots
+    plot_results(df, dataset, model, device, save_dir, suffix=suffix)
+    
+    return df, summary
+
+
+def compute_summary(df):
+    ; )
+    import matplotlib.pyplot as plt
+    
+    # 1. Distribution plots
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    
+    # MSE
+    axes[0, 0].hist(df[; )
+    import matplotlib.pyplot as plt
+    fig, axes = plt.subplots(n_examples, 4, figsize=(24, 4*n_examples))
+    
+    indices = np.random.choice(len(dataset), min(n_examples, len(dataset)), replace=False)
+    
+    with torch.no_grad():
+        for idx, sample_idx in enumerate(indices):
+            sample = dataset[sample_idx]
+            original = sample[; , category=stats.ConstantInputWarning)
+                        pearson_result = stats.pearsonr(w_o, w_r)
+                        c = np.asarray(pearson_result[0], dtype=np.float64).item()
+                    if np.isfinite(c):
+                        local_corrs.append(c)
+
+                local_results[; , e)
+
+        finally:
+            pass
+
+    # Merge results for both serial and parallel paths
+    if WORKERS == 1:
+        for ar in aggregated:
+            for k, v in ar.items():
+                results[k].extend(v)
+        df = pd.DataFrame(results)
+    else:
+        worker_dfs = []
+        for fp in worker_result_files:
+            worker_dfs.append(pd.read_csv(fp))
+        if worker_dfs:
+            df = pd.concat(worker_dfs, ignore_index=True)
+        else:
+            df = pd.DataFrame(results)
+        for fp in worker_result_files:
+            try:
+                Path(fp).unlink(missing_ok=True)
+            except Exception:
+                pass
+    
+    # Save detailed results
+    df.to_csv(f; ./SSL_models/nmr_mae_v2_WSZero_normalised_20251208_125133_bs16_mr0.15_ps1024_20251208_125133_best.pth; :
+        infer_batch_size = 1
+
+    def _process_one(sample_idx, mask_idx, orig, masked_np_input, mask_np, recon):
+                orig, masked_np_input = _align_original_masked_baseline(
+                    orig,
+                    masked_np_input,
+                    mask_np,
+                    patch_size
+                )
+                orig = _zero_baseline_signal(orig, start_idx=62501, end_idx=68000)
+
+                local_results[; : int(len(local_results[; Distribution plots saved to {save_dir}/distributions{suffix}.png"
+WSZero_62500To68000.py,code/preprocessing/WSZero_62500To68000.py,preprocessing,Zero/suppress the water-region window 62500:68000.,plasma_unique.npy; plasma_unique_WS625to680Zero.npy,"
+    num_spectra = original_spectra.shape[0]
+    if num_spectra == 0:
+        return
+
+    num_plots = min(num_plots, num_spectra)
+    rng = np.random.default_rng(random_seed)
+    sample_indices = rng.choice(num_spectra, size=num_plots, replace=False)
+
+    cols = 2
+    rows = int(np.ceil(num_plots / cols))
+    fig, axes = plt.subplots(rows, cols, figsize=(14, 4 * rows), squeeze=False)
+    x = np.arange(original_spectra.shape[1])
+
+    for i, ax in enumerate(axes.flat):
+        if i >= num_plots:
+            ax.axis(; 
+    num_spectra, num_points = spectra.shape
+    
+    for i in range(num_spectra):
+        spectrum = spectra[i]
+        
+        # Identify the region around the water peak to zero
+        start_idx = int(lower_bound)
+        end_idx = int(upper_bound)
+        
+        # Check if the region is already near zero by comparing with the threshold
+        region = spectrum[start_idx:end_idx]
+        
+        if np.any(np.abs(region) > threshold):  # If region is not zeroed
+            spectrum[start_idx:end_idx] = 0  # Zero the region
+            
+    return spectra
+
+def plot_comparisons(original_spectra, suppressed_spectra, num_plots=4, random_seed=42):
+    ; plasma_unique_WS625to680Zero.npy"
+alignSpectra.py,code/preprocessing/alignSpectra.py,preprocessing,Align and preprocess NMR spectra to a common length.,aligned_128K_TBI_Tirupati_WS625to680Zero.npy; aligned_spectra.npy,"
+    Visualize the results of spectrum alignment
+    
+    Args:
+        original_spectra: list of original spectra (variable lengths)
+        aligned_spectra: aligned spectra array
+        alignment_info: alignment information dict
+        n_examples: number of spectra to visualize
+        figsize: figure size
+    ; 
+    n_examples = min(n_examples, len(original_spectra))
+    
+    fig, axes = plt.subplots(n_examples, 2, figsize=figsize)
+    if n_examples == 1:
+        axes = axes.reshape(1, -1)
+    
+    # Choose examples with different original lengths if possible
+    original_lengths = alignment_info[; 
+Align and preprocess NMR spectra to a common length for downstream analysis.
+
+This script:
+1. Loads spectra from `nmr_spectra.npy`.
+2. Removes duplicate spectra rows.
+3. Aligns all spectra to the longest spectrum length using a selected method
+   (`interpolate`, `resample`, `duplicate`, or `average`; default is `interpolate`).
+4. Visualizes original vs aligned spectra and saves a comparison figure
+   (`spectrum_alignment_results.png`) with summary statistics.
+5. Saves the aligned output to `aligned_spectra.npy`.
+
+Main outputs:
+- `aligned_spectra.npy`: 2D array of shape (n_spectra, target_length)
+- `spectrum_alignment_results.png`: alignment quality visualization
+; )
+
+# Visualize results
+visualize_alignment_results(spectra, aligned_spectra, alignment_info, n_examples=8)
+
+# Save the aligned spectra
+np.save(; : np.std(spectra_lengths)
+        }
+    }
+    
+    return aligned_spectra, alignment_info
+
+def visualize_alignment_results(original_spectra, aligned_spectra, alignment_info, 
+                               n_examples=6, figsize=(18, 12)):
+    ; spectrum_alignment_results.png"
+autoencoder.py,code/training/autoencoder.py,training,Convolutional autoencoder prototype experiment.,nmr_spectra.npy,
+check_npy_compare.py,code/utils/check_npy_compare.py,utils,Compare .npy files as sets of rows.,MTBLS326_aligned_spectra_WS625to680Zero.npy; MTBLS563_aligned_spectra_WS625to680Zero.npy; aligned_nmr_spectra_128K_Plasma_NoSuppress.npy; aligned_nmr_spectra_128K_Plasma_WS625to680Zero.npy; combined_unique.npy,
+check_npy_shape.py,code/utils/check_npy_shape.py,utils,Print .npy shapes and dtypes.,*.npy,
+check_npy_sizes.py,code/utils/check_npy_sizes.py,utils,Print .npy file sizes.,*.npy,
+classify_binned_auc_cv.py,code/evaluation/classify_binned_auc_cv.py,evaluation,Classical CV classification on binned/AUC spectra features.,aligned_128K_TBI_Tirupati_WS625to680Zero.npy; all_models_all_bins_fold_metrics.csv; features_{n_bins}bins.npy; model_summary_by_bins.csv; per_sample_predictions_{n_bins}bins.csv; run_info.json; title_labels.csv; {model_name}_{n_bins}bins_fold_metrics.csv; {model_name}_{n_bins}bins_oof_pred.npy; {model_name}_{n_bins}bins_oof_score.npy,"
+Classify Day-1 vs Day-4 using handcrafted binned spectral features (no DNN).
+
+Feature extraction:
+- Split each spectrum into equal bins (e.g., 128 or 256)
+- Compute absolute area under the curve (AUC) in each bin w.r.t. zero baseline
+
+Models:
+- Logistic Regression
+- SVM (RBF)
+- XGBoost (if installed)
+
+Evaluation:
+- 5-fold stratified cross-validation
+- OOF metrics, per-model plots, per-bin summaries, and comparison plots
+; Binned-abs-AUC classification (no DNN backbone).; ] = float(fold_df[m].std(ddof=1))
+    return fold_df, summary, oof_pred, oof_score
+
+
+def plot_model_performance(name, y_true, y_pred, y_score, fold_df, out_path):
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    cm = confusion_matrix(y_true, y_pred)
+    sns.heatmap(cm, annot=True, fmt=; classification_binned_auc_results"
+classify_embeddings_cv.py,code/evaluation/classify_embeddings_cv.py,evaluation,CV classification using frozen MAE embeddings.,SSL_models/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best.pth; aligned_128K_TBI_Tirupati_WS625to680Zero.npy; all_models_fold_metrics.csv; embeddings.npy; model_summary.csv; per_sample_predictions.csv; run_info.json; sample_metadata.csv; title_labels.csv; {model_name_key}_fold_metrics.csv; {model_name_key}_oof_pred.npy; {model_name_key}_oof_score.npy,"
+Evaluate MAE embeddings for Day-1 vs Day-4 classification with 5-fold CV.
+
+Pipeline:
+1) Load spectra (.npy) and labels (title_labels.csv)
+2) Filter to Day-1 and Day-4 samples
+3) Extract one embedding vector per sample from the MAE encoder
+4) Train/evaluate classifiers (SVM, Logistic Regression, XGBoost if available)
+5) Save metrics and plots per model + cross-model comparison
+; Evaluate MAE embeddings for Day1 vs Day4 classification.; SSL_models/Itr6Rerun_20260106_041031_bs16_mr0.50_ps1024_best.pth; ]
+
+    x = np.arange(len(metrics))
+    width = 0.25
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for i, (_, row) in enumerate(summary_df.iterrows()):
+        means = [row[m] for m in metrics]
+        stds = [row[m.replace(; ].std(ddof=1)),
+    }
+    return fold_df, summary, oof_pred, oof_score
+
+
+def plot_model_performance(name, y_true, y_pred, y_score, fold_df, out_path):
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    cm = confusion_matrix(y_true, y_pred)
+    sns.heatmap(cm, annot=True, fmt=; classification_results"
+classify_head_cv.py,code/evaluation/classify_head_cv.py,evaluation,CV classification with frozen and finetuned MAE heads.,SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; aligned_128K_TBI_Tirupati_WS625to680Zero.npy; mode_summary.csv; per_sample_predictions.csv; run_info.json; title_labels.csv; {mode}_fold_metrics.csv; {mode}_oof_pred.npy; {mode}_oof_score.npy,"
+5-fold CV classification using a pretrained MAE backbone + classification head.
+
+Two training modes are evaluated:
+1) frozen_backbone: only the classification head is trained
+2) finetune_backbone: backbone and head are both trained
+
+Outputs include fold metrics, summary tables, per-mode plots, comparison plot,
+and per-sample out-of-fold predictions.
+; )
+    plt.close(fig)
+
+
+def plot_training_curves(histories_by_mode, out_path):
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    for mode_name, histories in histories_by_mode.items():
+        for fold_idx, hist in enumerate(histories, start=1):
+            hdf = pd.DataFrame(hist)
+            axes[0].plot(hdf[; 5-fold CV MAE-head classification (frozen + finetune).; SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; ]
+    x = np.arange(len(metrics))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for i, (_, row) in enumerate(summary_df.iterrows()):
+        means = [row[m] for m in metrics]
+        stds = [row[m.replace(; ] = float(df[m].std(ddof=1))
+    return summary
+
+
+def plot_mode_performance(mode_name, y_true, y_pred, y_score, fold_df, out_path):
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    cm = confusion_matrix(y_true, y_pred)
+    sns.heatmap(cm, annot=True, fmt=; classification_head_results"
+combine_unique_npy.py,code/preprocessing/combine_unique_npy.py,preprocessing,Combine .npy spectra arrays and remove duplicate rows.,combine_unique_Water_EDTA_Suppressed.npy; plasma_unique_EDTASuppressed.npy; serum_unique_WS625to680Zero.npy,
+compare_mtbls326_summaries.py,code/plotting/compare_mtbls326_summaries.py,plotting,Compare MTBLS326 LOOCV summaries and create plots.,combined_summary.csv; summary.csv,", ascending=False).reset_index(drop=True)
+
+    x = np.arange(len(means))
+    width = 0.8 / len(CORE_METRICS)
+    fig, ax = plt.subplots(figsize=(14, 7))
+    for i, metric in enumerate(CORE_METRICS):
+        offset = (i - (len(CORE_METRICS) - 1) / 2) * width
+        ax.bar(x + offset, means[metric], width, label=pretty(metric), color=COLORS[i])
+
+    ax.set_xticks(x, means[; , fontsize=16)
+    fig.subplots_adjust(left=0.19, right=0.97, bottom=0.07, top=0.92, wspace=0.15, hspace=0.22)
+    fig.savefig(output, dpi=220, bbox_inches=; , index=False)
+
+    plots = {
+        ; : plot_average_model_performance,
+    }
+    for filename, plotting_function in plots.items():
+        plotting_function(data, args.outdir / filename)
+
+    print(f; Compare the four MTBLS326 LOOCV ``summary.csv`` result files.
+
+With no arguments, this script reads:
+
+    mtbls326_loocv_results_0.20/summary.csv
+    mtbls326_loocv_results_0.30/summary.csv
+    mtbls326_loocv_results_0.40/summary.csv
+    mtbls326_loocv_results_0.50/summary.csv
+
+Classical-model results are treated as threshold-independent baselines. The
+script verifies that repeated classical rows agree, then propagates each
+classical result to thresholds where it was not rerun.
+
+It writes several PNG plots plus a combined CSV to
+``mtbls326_loocv_comparison_plots``.
+; One line panel per score; gaps honestly represent missing model results.; ].unique())
+    fig, axes = plt.subplots(2, 4, figsize=(17, 12), sharex=True, sharey=True)
+    axes_flat = axes.ravel()
+    image = None
+
+    for ax, metric in zip(axes_flat, SCORE_METRICS):
+        pivot = data.pivot(index=; ].unique())
+    fig, axes = plt.subplots(2, 4, figsize=(18, 10), sharex=True, sharey=True)
+    axes_flat = axes.ravel()
+
+    for ax, metric in zip(axes_flat, SCORE_METRICS):
+        pivot = data.pivot(index=; ].unique())
+    ncols = 2
+    nrows = math.ceil(len(models) / ncols)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(14, 4.2 * nrows), sharey=True)
+    axes_flat = np.atleast_1d(axes).ravel()
+    count_colors = {; ].unique())
+    x = np.arange(len(models))
+    width = 0.8 / len(thresholds)
+    fig, axes = plt.subplots(2, 2, figsize=(18, 12), sharex=True, sharey=True)
+
+    for ax, metric in zip(axes.ravel(), CORE_METRICS):
+        pivot = data.pivot(index=; ].unique())
+    x = np.arange(len(thresholds))
+    width = 0.8 / len(CORE_METRICS)
+    fig, ax = plt.subplots(figsize=(13, 7))
+
+    for i, metric in enumerate(CORE_METRICS):
+        winners = data.loc[data.groupby(; mtbls326_loocv_comparison_plots"
+fewshot_ml_comparison.py,code/evaluation/fewshot_ml_comparison.py,evaluation,"Few-shot comparison of MAE embeddings, binned spectra, and prototype baselines.",MTBLS326_aligned_spectra.npy; MTBLS326_metadata_mapping.csv; MTBLS563_aligned_spectra.npy; MTBLS563_metadata_mapping.csv; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth; binned_{n_bins}_{reduction}.npy; comparison_embeddings.npy; fewshot_ml_best_hyperparams.csv; fewshot_ml_comparison_episode_metrics.csv; fewshot_ml_comparison_summary.csv; fewshot_ml_comparison_summary.json; fewshot_ml_used_metadata_rows.csv,"
+    fig.savefig(p1, dpi=160)
+    plt.close(fig)
+    saved.append(str(p1))
+
+    # Plot 2: mean macro-F1 +/- std.
+    fig, ax = plt.subplots(figsize=(14, 6))
+    ax.bar(
+        x,
+        summary_plot[; 
+Compare few-shot classical ML performance with and without a DNN backbone.
+
+Two evaluation tracks:
+1) Foundation backbone features: frozen MAE embeddings -> train SVM / Logistic Regression / XGBoost on support set.
+2) Direct binned spectra: raw spectrum -> bin to 1024 or 2048 using AUC per bin -> train same classifiers on support set.
+3) Prototype head baseline from prototype_fewshot.py: class prototypes + cosine/mahalanobis inference on the same backbone embeddings.
+
+For each episode, support samples are drawn per class and all remaining samples are query samples.
+The same episode splits are reused across all tracks/models for fair comparison.
+; )
+
+
+def create_plots(results_df, summary_df, out_dir):
+    out_dir = Path(out_dir)
+    ok = results_df[results_df[; )
+
+    all_results = []
+    model_dims = None
+    emb = None
+
+    if run_backbone_required:
+        device = torch.device(args.device if torch.cuda.is_available() and str(args.device).startswith(; )
+
+    results_df = pd.concat(all_results, ignore_index=True)
+    summary_df = summarize_results(results_df)
+
+    results_path = out_dir / ; ,
+                    args=args,
+                )
+                all_results.append(df_binned)
+
+    if not all_results:
+        raise RuntimeError(; ,
+            args=args,
+        )
+        all_results.append(df_backbone)
+
+    if args.run_prototype_baseline:
+        df_prototype = evaluate_prototype_head(
+            features=emb,
+            y=y,
+            class_names=class_names,
+            splits=splits,
+            args=args,
+        )
+        all_results.append(df_prototype)
+
+    if args.run_direct_binned:
+        for n_bins in args.bin_counts:
+            for reduction in args.bin_reductions:
+                print(f; , ascending=False)
+
+    # Plot 1: mean accuracy +/- std.
+    fig, ax = plt.subplots(figsize=(14, 6))
+    x = np.arange(len(summary_plot))
+    ax.bar(
+        x,
+        summary_plot[; : str(exc),
+                        }
+                    )
+
+    return pd.DataFrame(rows)
+
+
+def summarize_results(df):
+    ok = df[df[; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth; Saved episode metrics: {results_path}; Saved plots:"
+findDuplicates.py,code/preprocessing/findDuplicates.py,preprocessing,Find duplicate rows in a .npy spectra array.,nmr_spectra.npy,
+gradient_analysis.py,code/evaluation/gradient_analysis.py,evaluation,Analyze gradients and training behavior for NMR MAE.,aligned_nmr_spectra_128K_WS625to680Zero.npy; gradient_analysis_{timestamp}.json,"
+    }
+
+    # Run gradient analysis
+    gradient_results = {}
+    for config_name, skip_mode in configs.items():
+        model = NMRMaskedAutoencoderWithSkips(skip_mode=skip_mode, **base_model_kwargs)
+        result = analyze_gradients_for_config(
+            config_name, model, dataloader, args.device, args.n_batches_grad
+        )
+        gradient_results[config_name] = result
+
+    # Compare gradient magnitudes
+    print(f; )
+
+        comparison.update(training_results)
+
+    # Save results
+    timestamp = datetime.datetime.now().strftime(; )
+
+        final_train_loss = train_losses[-1]
+        final_val_loss = val_losses[-1]
+
+        results[config_name] = {
+            ; )
+
+    comparison = {}
+    for config_name, result in gradient_results.items():
+        group_stats = result[; )
+
+    results = {}
+
+    for config_name, skip_mode in configs.items():
+        print(f; )
+
+    return results
+
+
+def run_full_training_comparison(configs, train_dataloader, val_dataloader, device, base_model_kwargs):
+    ; )
+
+    return results
+
+
+def validate_model(model, dataloader, device):
+    ; )
+
+    with open(results_file, ; )
+        training_results = run_full_training_comparison(
+            configs, dataloader, None, args.device, base_model_kwargs
+        )
+
+        # Update best config based on training
+        best_train_config = min(training_results.keys(),
+                               key=lambda x: training_results[x][; )
+    results_file = os.path.join(args.output_dir, f; : 0}
+
+    avg_loss = np.mean(losses)
+
+    results = {
+        ; Directory to save results"
+mtbls326_loocv.py,code/evaluation/mtbls326_loocv.py,evaluation,LOOCV classification workflow for MTBLS326.,./SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth; MTBLS326_aligned_spectra_WS625to680Zero.npy; MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy; MTBLS326_metadata_mapping.csv; \nResults written to {args.output_dir}/summary.csv; oof_predictions.csv; run_config.json; summary.csv; {family}_{model_name}_oof_pred.npy; {family}_{model_name}_oof_score.npy,",
+        random_state=seed,
+        n_jobs=xgb_jobs,
+    )
+    return models
+
+
+def run_classical_loocv(features, labels, seed, xgb_jobs):
+    results = {}
+    splitter = LeaveOneOut()
+    for name, estimator in classical_models(seed, xgb_jobs).items():
+        predictions = np.empty(len(labels), dtype=np.int64)
+        scores = np.empty(len(labels), dtype=np.float64)
+        for fold, (train_idx, test_idx) in enumerate(splitter.split(features), 1):
+            model = clone(estimator)
+            model.fit(features[train_idx], labels[train_idx])
+            predictions[test_idx] = model.predict(features[test_idx])
+            scores[test_idx] = positive_scores(model, features[test_idx])
+            print(f; , flush=True)
+        print()
+        results[mode] = {
+            ; , flush=True)
+        print()
+        results[name] = {
+            ; ./SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth; : aggregate_metrics(labels, predictions, scores),
+        }
+    return results
+
+
+def checkpoint_state(checkpoint_path):
+    checkpoint = torch.load(checkpoint_path, map_location=; : backbone_lr})
+    optimizer = torch.optim.AdamW(groups, weight_decay=weight_decay)
+    loss_fn = nn.CrossEntropyLoss()
+    generator = torch.Generator().manual_seed(seed)
+    loader = DataLoader(
+        TensorDataset(torch.from_numpy(x_train), torch.from_numpy(y_train)),
+        batch_size=min(batch_size, len(y_train)), shuffle=True, generator=generator,
+        num_workers=0,
+    )
+    model.train()
+    # Frozen encoder blocks should not update dropout state during head training.
+    model.backbone.eval()
+    if model.unfreeze_layers:
+        for layer in list(model.backbone.encoder.transformer.layers)[-model.unfreeze_layers:]:
+            layer.train()
+    for _ in range(epochs):
+        for xb, yb in loader:
+            optimizer.zero_grad(set_to_none=True)
+            logits = model(xb.to(device), return_logits=True)
+            loss = loss_fn(logits, yb.to(device))
+            loss.backward()
+            optimizer.step()
+
+
+def run_foundation_loocv(spectra, labels, checkpoint_path, args, device):
+    state = checkpoint_state(checkpoint_path)
+    results = {}
+    modes = [(; : config,
+        }
+    return results
+
+
+def save_results(output_dir, metadata, labels, label_names, families, run_config):
+    output_dir.mkdir(parents=True, exist_ok=True)
+    summary_rows = []
+    prediction_rows = []
+    for i, row in enumerate(metadata):
+        prediction_rows.append({
+            ; : {str(i): name for i, name in enumerate(label_names)}})
+    save_results(Path(args.output_dir), metadata, labels, label_names, families, run_config)
+    print(f; LOOCV classification for the 42-sample MTBLS326 dataset.
+
+Runs two experiment families:
+  1. Classical baselines without the foundation model: logistic regression,
+     RBF-SVM, and XGBoost.
+  2. A pretrained NMR masked-autoencoder with a two-class softmax head. The
+     head is trained while either all backbone weights remain frozen or the
+     last 1, 2, or 3 transformer encoder blocks are fine-tuned.
+
+All preprocessing that learns parameters (feature scaling) is fitted inside
+each LOOCV training fold. The held-out sample is never used for training or
+early stopping.
+; mtbls326_loocv_results; mtbls326_loocv_results_0.50_oldCominedModel"
+plot_compare_summaries.py,code/plotting/plot_compare_summaries.py,plotting,Compare test summary JSONs across masking ratios.,summary*.json; summary.json,"
+Compare summary JSON files (different mask ratios) and plot comparative charts
+for Masked, Unmasked and Peaks metrics.
+
+Usage:
+    python plot_compare_summaries.py --input-dir test_results --out-dir test_results/compare_plots
+
+The script will look for `summary*.json` files under `--input-dir` and attempt to
+parse mask ratios from filenames (e.g. `summary_25mask500epoch.json` -> 25%).
+If a ratio cannot be parsed, the file will be included and labelled by filename.
+; Output directory for comparison plots; Saved comparison plots to; ] for e in entries]
+    x = np.arange(len(entries))
+
+    n_metrics = len(metrics)
+    fig, axes = plt.subplots(n_metrics, 1, figsize=(6, 3*n_metrics), sharex=True)
+    if n_metrics == 1:
+        axes = [axes]
+
+    for ax, metric in zip(axes, metrics):
+        means = []
+        stds = []
+        for e in entries:
+            m, s = extract_metric(e, category, metric)
+            means.append(m)
+            stds.append(s)
+
+        means = np.array(means, dtype=float)
+        stds = np.array(stds, dtype=float)
+
+        # Bar plot with error bars
+        ax.bar(x, means, yerr=stds, capsize=6, alpha=0.8)
+        ax.set_ylabel(metric)
+        if metric.lower().find(; test_results; test_results/compare_plots"
+plot_masking_model_comparison.py,code/plotting/plot_masking_model_comparison.py,plotting,Plot few-shot masking-ratio comparison summaries.,fewshot_ml_comparison_summary.csv; masking_comparison_combined_summary.csv; masking_comparison_overall_ranking.csv; masking_comparison_ranked_by_ratio.csv,"
+
+
+def load_results(result_dirs, summary_filename):
+    frames = []
+    for result_dir in result_dirs:
+        path = Path(result_dir) / summary_filename
+        if not path.exists():
+            raise FileNotFoundError(f; 
+Plot comparative few-shot ML results across MAE masking ratios.
+
+Expected inputs:
+  fewshot_results_0.2/fewshot_ml_comparison_summary.csv
+  fewshot_results_0.3/fewshot_ml_comparison_summary.csv
+  fewshot_results_0.4/fewshot_ml_comparison_summary.csv
+  fewshot_results_0.5/fewshot_ml_comparison_summary.csv
+
+Each folder is treated as a separate backbone trained with the corresponding
+masking ratio: 20%, 30%, 40%, and 50%.
+; )
+    )
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+    x = np.arange(len(best))
+    ax.bar(x, best[metric].to_numpy(), color=; Saved plots:; ])
+    return parser
+
+
+def args_from_ide_config():
+    parser = build_parser()
+    args = parser.parse_args([])
+    for key, value in IDE_CONFIG.items():
+        setattr(args, key, value)
+    return args
+
+
+def main():
+    args = args_from_ide_config() if USE_IDE_CONFIG else build_parser().parse_args()
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    df = load_results(args.result_dirs, args.summary_filename)
+    combined_path = out_dir / ; ].isin(selected)].copy()
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    std_col = metric_std_name(metric)
+    for method, gdf in work.groupby(; ].tolist()
+    x = np.arange(len(work))
+
+    fig, ax = plt.subplots(figsize=(14, 7))
+    colors = {
+        ; ].unique())
+    ]
+    pivot = pivot.reindex(columns=ordered_cols)
+    pivot = pivot.loc[pivot.mean(axis=1).sort_values(ascending=False).index]
+
+    fig, ax = plt.subplots(figsize=(9, max(5, 0.45 * len(pivot))))
+    im = ax.imshow(pivot.to_numpy(), aspect=; fewshot_masking_comparison_plots; fewshot_ml_comparison_summary.csv; fewshot_results_0.2; fewshot_results_0.3"
+plot_model.py,code/plotting/plot_model.py,plotting,Prototype model architecture plotting script.,nmr_ssl_final_model.pth,
+plot_model_architecture.py,code/plotting/plot_model_architecture.py,plotting,Infer and plot MAE checkpoint architecture.,,")
+    args = p.parse_args()
+
+    model_path = args.model_path
+    if model_path is None:
+        # try to auto-discover a checkpoint in SSL_models/
+        candidates = []
+        try:
+            for fname in os.listdir(; , 4)
+    head_dim = int(d_model // nhead) if nhead and d_model else None
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.axis(; No checkpoint provided and none found in SSL_models/; Path to checkpoint (.pth). If omitted, first .pth in SSL_models/ will be used; SSL_models"
+plot_recon_peaks.py,code/plotting/plot_recon_peaks.py,plotting,Plot reconstruction peak examples.,SSL_models/Itr6Rerun_20260105_062242_bs16_mr0.50_ps1024_best.pth; aligned_nmr_spectra_128K_WS625to680Zero.npy,"
+Plot original vs reconstructed spectra zoomed into a high-resolution peak region.
+Generates one PNG per randomly selected sample (default 5 samples).
+
+Usage:
+    python plot_recon_peaks.py --model-path <checkpoint.pth> --data-path <spectra.npy>
+
+Defaults will auto-select a checkpoint from `SSL_models/` if none provided.
+; No checkpoint provided and none found in SSL_models/; SSL_models; SSL_models/Itr6Rerun_20260105_062242_bs16_mr0.50_ps1024_best.pth; ])
+            except Exception:
+                pass
+
+    model.to(device)
+    model.eval()
+    return model
+
+
+def plot_sample(original, reconstructed, mask_np, dataset_patch_size, region_start, region_end, out_path, sample_idx):
+    L = len(original)
+    rs = max(0, region_start)
+    re = min(L, region_end)
+
+    x = np.arange(rs, re)
+    orig_seg = original[rs:re]
+    recon_seg = reconstructed[rs:re]
+
+    mse = mean_squared_error(orig_seg, recon_seg)
+    try:
+        corr, _ = stats.pearsonr(orig_seg, recon_seg)
+    except Exception:
+        corr = np.nan
+
+    fig, ax = plt.subplots(figsize=(10, 4), dpi=200)
+    ax.plot(x, orig_seg, label="
+plot_support_sweep_comparison.py,code/plotting/plot_support_sweep_comparison.py,plotting,Plot support-count sweep summaries.,fewshot_ml_comparison_summary.csv; support_sweep_combined_summary.csv; support_sweep_overall_ranking.csv; support_sweep_ranked_by_setting.csv,"
+
+
+def load_results(root_dir, summary_filename):
+    root = Path(root_dir)
+    paths = sorted(root.glob(f; 
+Plot support-count sweeps across MAE masking-ratio models.
+
+Expected input layout:
+  fewshot_support_sweep/mask_0.20/support_1/fewshot_ml_comparison_summary.csv
+  fewshot_support_sweep/mask_0.20/support_2/fewshot_ml_comparison_summary.csv
+  ...
+; Saved plots:; ])
+    )
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for ratio, gdf in best.groupby(; ])
+    return parser
+
+
+def args_from_ide_config():
+    parser = build_parser()
+    args = parser.parse_args([])
+    for key, value in IDE_CONFIG.items():
+        setattr(args, key, value)
+    return args
+
+
+def run_plotting(args):
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    df = load_results(args.root_dir, args.summary_filename)
+    combined_path = out_dir / ; ].unique())
+    std_col = metric_std_name(metric)
+
+    ncols = 2
+    nrows = int(np.ceil(len(masks) / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), squeeze=False, sharey=True)
+
+    for ax, ratio in zip(axes.ravel(), masks):
+        gmask = work[work[; ].unique()))
+
+        fig, ax = plt.subplots(figsize=(8, 4))
+        im = ax.imshow(pivot.to_numpy(), aspect=; fewshot_ml_comparison_summary.csv; fewshot_support_sweep; fewshot_support_sweep_plots; plots"
+prototype_fewshot.py,code/evaluation/prototype_fewshot.py,evaluation,Prototype few-shot classifier using frozen MAE embeddings.,MTBLS326_aligned_spectra.npy; MTBLS326_metadata_mapping.csv; MTBLS563_aligned_spectra.npy; MTBLS563_metadata_mapping.csv; SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; combined_unique.npy; embeddings_projected.npy; embeddings_raw.npy; episode_metrics.csv; summary.json; used_metadata_rows.csv,"
+One-shot / few-shot prototype classification using frozen MAE embeddings.
+
+Usage modes:
+1) IDE mode: edit IDE_CONFIG below and run this file.
+2) CLI mode: set USE_IDE_CONFIG = False and pass arguments.
+; Prototype-based one/few-shot classification from frozen MAE embeddings.; SSL_models/aligned_nmr_spectra_128K_Plasma_WS625to680Zero_merged2_20260520_014209_bs16_mr0.35_ps1024_best.pth; fewshot; fewshot_global; fewshot_results; fewshot_results/pretrain_precision_pca512.npz"
+removeZeroTail.py,code/preprocessing/removeZeroTail.py,preprocessing,Inspect and remove/plot zero-tail regions in spectra.,nmr_spectra.npy,"
+    Visualize the results of zero tail removal and alignment
+    
+    Args:
+        original_spectra: original spectra array
+        processed_spectra: processed spectra array
+        processing_info: list of processing information dicts
+        n_examples: number of spectra to visualize
+        figsize: figure size
+    ; 
+    n_examples = min(n_examples, len(original_spectra), len(processed_spectra))
+    
+    fig, axes = plt.subplots(n_examples, 3, figsize=figsize)
+    if n_examples == 1:
+        axes = axes.reshape(1, -1)
+    
+    # Choose random indices for visualization
+    indices = np.random.choice(len(original_spectra), n_examples, replace=False)
+    
+    for plot_idx, spec_idx in enumerate(indices):
+        info = processing_info[spec_idx]
+        
+        # Plot 1: Original spectrum
+        axes[plot_idx, 0].plot(original_spectra[spec_idx], ; ,
+        min_consecutive=100
+    )
+    
+    # Visualize results
+    visualize_processing_results(spectra, processed_spectra, processing_info, n_examples=8)
+    
+    return spectra, processed_spectra, processing_info
+
+if __name__ == ; ,
+        min_consecutive=100
+    )
+    
+    # Visualize results
+    visualize_processing_results(spectra, processed_spectra, processing_info, n_examples=8)
+    # # Remove zero tails
+    # spectra, trimmed_length = remove_zero_tails(spectra)
+    # print(f; : alignment_method
+        })
+    
+    return aligned_spectra, processing_info
+
+def visualize_processing_results(original_spectra, processed_spectra, processing_info, 
+                               n_examples=8, figsize=(20, 16)):
+    ; zero_tail_processing_results.png"
+run_hparam_sweep_comparison.py,code/evaluation/run_hparam_sweep_comparison.py,evaluation,Run few-shot classifier hyperparameter sweeps.,MTBLS326_aligned_spectra.npy; MTBLS326_metadata_mapping.csv; SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth,"
+
+import argparse
+import copy
+
+import torch
+
+import fewshot_ml_comparison as base
+
+
+USE_IDE_CONFIG = True
+
+IDE_CONFIG = {
+    ; 
+Run a classifier hyperparameter sweep for the few-shot comparison.
+
+This script reuses fewshot_ml_comparison.py and evaluates all configured
+SVM/LR/XGBoost variants on the same episode splits.
+; SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth; fewshot_hparam_sweep_0.5"
+run_support_sweep_comparison.py,code/evaluation/run_support_sweep_comparison.py,evaluation,Run support-count sweeps across masking-ratio checkpoints.,SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084724_bs32_mr0.40_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_090604_bs32_mr0.50_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_114013_bs32_mr0.30_ps1024_best.pth; fewshot_ml_comparison_summary.csv; support_sweep_manifest.csv,"
+
+import argparse
+import copy
+from pathlib import Path
+
+import pandas as pd
+
+import fewshot_ml_comparison as base
+
+
+USE_IDE_CONFIG = True
+
+IDE_CONFIG = {
+    ; 
+Run few-shot comparison sweeps across MAE masking ratios and support counts.
+
+This script reuses fewshot_ml_comparison.py as the single-run evaluator and
+adds only the experiment grid orchestration.
+; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084450_bs32_mr0.20_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_084724_bs32_mr0.40_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_090604_bs32_mr0.50_ps1024_best.pth; SSL_models/combine_unique_Water_EDTA_Suppressed_20260614_114013_bs32_mr0.30_ps1024_best.pth; fewshot_ml_comparison_summary.csv; fewshot_support_sweep_EDTA_Suppressed_MTBLS326; fewshot_support_sweep_EDTA_Suppressed_plots_MTBLS326"
+scripts/compare_loocv_summaries.py,code/plotting/compare_loocv_summaries.py,plotting,Compare LOOCV summaries from result folders.,Result folders containing summary.csv; combined_summary.csv; summary.csv,"
+        fig.savefig(out, dpi=160)
+        plt.close(fig)
+        results.append(out)
+    return results
+
+
+def plot_heatmap(df, metric, outdir: Path):
+    pivot = df.pivot_table(index=[; 
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
+    return out
+
+
+def plot_metrics_lines(df, metrics, outdir: Path):
+    # pivot so rows=model, cols=tag_val
+    results = []
+    for metric in metrics:
+        pivot = df.pivot_table(index=[; 
+Compare multiple `summary.csv` files across result folders and generate plots.
+
+Usage example:
+  python scripts/compare_loocv_summaries.py \
+    --dirs mtbls326_loocv_results_0.30 mtbls326_loocv_results_0.20 mtbls326_loocv_results_0.40 mtbls326_loocv_results_0.50 \
+    --outdir comparison_plots
+
+This script reads `summary.csv` from each folder, aggregates them, and creates:
+ - grouped bar plot of `accuracy` per model across folders
+ - line plots for several metrics (accuracy, f1, precision, recall, roc_auc, pr_auc)
+ - heatmap of accuracy (models x folders)
+ - combined CSV `combined_summary.csv` in the output directory
+
+The script is intentionally dependency-light (pandas + matplotlib). If seaborn is installed,
+heatmap will use it for nicer styling; otherwise matplotlib;  for fam, mod in pivot.index.tolist()]
+    x = np.arange(len(labels))
+    n_groups = pivot.shape[1]
+    width = 0.8 / max(1, n_groups)
+
+    fig, ax = plt.subplots(figsize=(max(8, len(labels) * 0.5), 6))
+    for i, col in enumerate(pivot.columns):
+        vals = pivot[col].to_numpy(dtype=float)
+        ax.bar(x + i * width, vals, width=width, label=Path(col).name)
+
+    ax.set_xticks(x + width * (n_groups - 1) / 2)
+    ax.set_xticklabels(labels, rotation=45, ha=; , outdir))
+    # Per-metric line plots
+    out_files.extend(plot_metrics_lines(big, METRICS, outdir))
+
+    print(; , values=metric)
+        pivot = pivot.sort_index()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        for idx, row in pivot.iterrows():
+            ax.plot(pivot.columns, row.values, marker=; , values=metric)
+    pivot = pivot.sort_index()
+    fig, ax = plt.subplots(figsize=(max(6, pivot.shape[0] * 0.25), max(4, pivot.shape[1] * 0.6)))
+    if HAS_SEABORN:
+        sns.heatmap(pivot, annot=True, fmt=; Compare multiple LOOCV summary.csv files and plot results; Output directory for plots; comparison_plots"
+suppress_edta_peak.py,code/preprocessing/suppress_edta_peak.py,preprocessing,Detect and suppress the dominant EDTA peak in aligned plasma spectra.,edta_suppression_diagnostics.csv; plasma_unique.npy; plasma_unique_EDTASuppressed.npy,"
+REPLACEMENT_FLANK_WIDTH = 500
+FLANK_OUTLIER_SIGMA = 3.0
+NOISE_SCALE = 0.5
+BASELINE_LOWERING_NOISE_SD = 0.5
+FILL_RANDOM_SEED = 42
+
+# Keep True for the first run. It detects, reports, and plots without writing
+# the large output array. Set False after reviewing the diagnostics.
+DRY_RUN = False
+NUM_COMPARISON_PLOTS = 6
+RANDOM_SEED = 42
+PLOT_FILE = ; ]
+    if not successful or NUM_COMPARISON_PLOTS <= 0:
+        return
+
+    rng = np.random.default_rng(RANDOM_SEED)
+    selected = rng.choice(
+        len(successful),
+        size=min(NUM_COMPARISON_PLOTS, len(successful)),
+        replace=False,
+    )
+    fig, axes = plt.subplots(len(selected), 1, figsize=(14, 3 * len(selected)), squeeze=False)
+    x = np.arange(SEARCH_START, SEARCH_STOP)
+
+    for ax, selected_index in zip(axes.flat, selected):
+        detection = successful[int(selected_index)]
+        row_index = int(detection[; plasma_unique_EDTASuppressed.npy"
+trainer_revised.py,code/training/trainer_revised.py,training,Train the NMR masked autoencoder/foundation model.,checkpoint_epoch_{epoch+1}_{timestamp}.pth; combine_unique_Water_EDTA_Suppressed.npy; {model_name_prefix}_bs{batch_size}_mr{mask_ratio:.2f}_ps{patch_size}_best.pth; {model_name_prefix}_test_results.json,"
+            )
+
+    return model, train_dataset, val_dataset, test_dataset, test_results
+
+if __name__ == ; 
+    )
+    # Evaluate on test set if available
+    test_results = None
+    if test_dataloader is not None:
+        print(; 
+    model.eval()
+    
+    total_samples = len(dataset)
+    random_indices = random.sample(range(total_samples), min(n_examples, total_samples))
+    
+    fig, axes = plt.subplots(n_examples, 3, figsize=(18, 4*n_examples))
+    if n_examples == 1:
+        axes = axes.reshape(1, -1)
+    
+    print(f; )
+
+        # Save test results to JSON
+        import json
+        test_out = f; )
+        test_loss, test_masked_loss, test_unmasked_loss = validate_model(model, test_dataloader, device)
+        test_results = {
+            ; ) as jf:
+            json.dump(test_results, jf, indent=2)
+        print(f; ./SSL_models/{dataset_name}_{timestamp}; :
+    model, train_dataset, val_dataset, test_dataset, test_results = main()
+
+    # # === Quick unit test for NMRSpectrumDataset __getitem__ ===
+    # print(; Visualize reconstruction results"
+transformer.py,code/training/transformer.py,training,Transformer MAE model/training experiment script.,aligned_nmr_spectra_128K_WSZero.npy; best_model.pth; best_model_{timestamp}.pth; nmr_ssl_checkpoint_epoch_{epoch+1}.pth; nmr_{scheduler_type}LR_{num_epochs}epoch_ps{patch_size}_bs{batch_size}_mr{mask_ratio}_{timestamp}.pth,"
+    model.eval()
+    
+    fig, axes = plt.subplots(n_examples, 3, figsize=(15, 4*n_examples))
+    if n_examples == 1:
+        axes = axes.reshape(1, -1)
+    
+    with torch.no_grad():
+        for i in range(n_examples):
+            sample = dataset[i]
+            original = sample[; Visualize reconstruction results"
+transformer_augment.py,code/training/transformer_augment.py,training,Transformer MAE experiment with augmentation.,nmr_spectra.npy; nmr_ssl_checkpoint_epoch_{epoch+1}.pth; nmr_ssl_final_model.pth,"
+    model.eval()
+    
+    fig, axes = plt.subplots(n_examples, 3, figsize=(15, 4*n_examples))
+    if n_examples == 1:
+        axes = axes.reshape(1, -1)
+    
+    with torch.no_grad():
+        for i in range(n_examples):
+            sample = dataset[i]
+            original = sample[; Visualize reconstruction results"
+visualiseAfterNormalise.py,code/preprocessing/visualiseAfterNormalise.py,preprocessing,Normalize spectra and visualize before/after examples.,MTBLS326_aligned_spectra_WS625to680Zero.npy; _normalized_sample_{normalized.shape[0]}.npy,")
+
+    n_plot = min(int(n_samples), N_plot)
+    cols = int(np.ceil(np.sqrt(n_plot)))
+    rows = int(np.ceil(n_plot / cols))
+    fig, axes = plt.subplots(rows, cols, figsize=figsize, squeeze=False)
+
+    for i, ax in enumerate(axes.flat):
+        if i < n_plot:
+            s = normalized[i].flatten()
+            ax.plot(s, color="
+visualise_random_spectra_slice.py,code/plotting/visualise_random_spectra_slice.py,plotting,Plot random slices from a spectra .npy file.,aligned_nmr_spectra_128K_Plasma_WS625to680Zero.npy,")
+
+    rng = np.random.default_rng(RANDOM_SEED)
+    count = min(N_SAMPLES, spectra.shape[0])
+    indices = rng.choice(spectra.shape[0], size=count, replace=False)
+
+    fig, axes = plt.subplots(count, 1, figsize=(14, 2.5 * count), sharex=True)
+    axes = np.atleast_1d(axes)
+    x = np.arange(start, stop)
+
+    for ax, index in zip(axes, indices):
+        ax.plot(x, spectra[index, start:stop], linewidth=0.8)
+        ax.set_title(f"
