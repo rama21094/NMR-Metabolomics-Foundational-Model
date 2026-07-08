@@ -631,6 +631,7 @@ def run_joint_ssl_loocv_multi(spectra, labels, label_names, checkpoint_map, args
                     normalize_input_mode=args.joint_normalize_input,
                     unfreeze_layers=unfreeze_count,
                     device=device,
+                    include_masked_task=args.joint_include_masked_task,
                 )
                 if normalized_spectra is None:
                     normalized_spectra = maybe_normalize_eval_spectra(spectra, config["normalize_input"])
@@ -728,6 +729,14 @@ def parse_args():
         choices=["checkpoint", "auto", "true", "false"],
         default=IDE_CONFIG["joint_normalize_input"],
     )
+    parser.add_argument(
+        "--joint-include-masked-task",
+        choices=["true", "false"],
+        default="true",
+        help="Pool the masked-reconstruction task embedding alongside the jigsaw "
+        "embeddings for joint_ssl feature extraction. Recorded in run_config.json "
+        "so summary.csv outputs are traceable to this eval-time setting.",
+    )
     parser.add_argument("--xgb-jobs", type=int, default=IDE_CONFIG["xgb_jobs"])
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default=IDE_CONFIG["device"])
     parser.add_argument("--seed", type=int, default=IDE_CONFIG["seed"])
@@ -759,6 +768,7 @@ def parse_args():
 
     args.masking_checkpoints = parse_key_value_paths(args.masking_checkpoint)
     args.joint_checkpoints = parse_key_value_paths(args.joint_checkpoint)
+    args.joint_include_masked_task = args.joint_include_masked_task == "true"
     if args.jigsaw_checkpoint:
         args.jigsaw_checkpoints = normalize_path_mapping(args.jigsaw_checkpoint, checkpoint_label_from_path)
     else:

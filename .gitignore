@@ -4,7 +4,6 @@
 # Directories
 /data/
 /models/
-results/
 
 # Cache files
 __pycache__/
