@@ -806,7 +806,7 @@ def parse_args() -> RunConfig:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-samples", type=int, default=None)
     parser.add_argument("--normalize-input", choices=["auto", "true", "false"], default="auto")
-    parser.add_argument("--save-every", type=int, default=100)
+    parser.add_argument("--save-every", type=int, default=0, help="Save a periodic checkpoint every N epochs in addition to the best one; 0 disables this.")
     parser.add_argument("--min-lr", type=float, default=1e-6)
     args = parser.parse_args()
 

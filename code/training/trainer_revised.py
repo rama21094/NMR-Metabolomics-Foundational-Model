@@ -21,14 +21,16 @@ TEST_SPLIT = 0
 class NMRSpectrumDataset(Dataset):
     """Dataset for NMR spectra with masking for self-supervised learning"""
 
-    def __init__(self, spectra, mask_ratio=0.15, patch_size=256, mask_strategy='sparse_random', mask_fill='zero',
+    def __init__(self, spectra, mask_ratio_min=0.20, mask_ratio_max=0.60, patch_size=256, mask_strategy='sparse_random', mask_fill='zero',
                  augment=False, per_point_std=None, noise_scale=1.0, normalize_input=True,
                  baseline_window_start=62500, baseline_window_end=68000,
                  correct_post_mask_baseline=True, baseline_tol=1e-8):
         """
         Args:
             spectra: numpy array of shape (n_samples, n_points)
-            mask_ratio: fraction of patches to mask (REDUCED for better context)
+            mask_ratio_min: lower bound of the per-sample masking fraction, drawn
+                uniformly at random on every __getitem__ call
+            mask_ratio_max: upper bound of the per-sample masking fraction
             patch_size: size of each patch for masking (SMALLER for finer granularity)
             mask_strategy: 'sparse_random', 'scattered_peaks', or 'random'
             mask_fill: 'zero', 'mean', 'noise', or a float value (for masked patch fill)
@@ -45,7 +47,13 @@ class NMRSpectrumDataset(Dataset):
         if self.normalize_input:
             spectra = self._normalize_numpy(spectra)
         self.spectra = torch.FloatTensor(spectra)
-        self.mask_ratio = mask_ratio
+        if not 0.0 < mask_ratio_min <= mask_ratio_max < 1.0:
+            raise ValueError(
+                f"mask_ratio_min/max must satisfy 0 < min <= max < 1, got "
+                f"min={mask_ratio_min}, max={mask_ratio_max}"
+            )
+        self.mask_ratio_min = float(mask_ratio_min)
+        self.mask_ratio_max = float(mask_ratio_max)
         self.patch_size = patch_size
         self.n_patches = spectra.shape[1] // patch_size
         self.mask_strategy = mask_strategy
@@ -62,7 +70,7 @@ class NMRSpectrumDataset(Dataset):
             print(f"Normalized data range: [{self.spectra.min():.3f}, {self.spectra.max():.3f}]")
         else:
             print(f"Input data range (no normalization): [{self.spectra.min():.3f}, {self.spectra.max():.3f}]")
-        print(f"Mask strategy: {mask_strategy} with ratio {mask_ratio}")
+        print(f"Mask strategy: {mask_strategy} with per-sample ratio in [{self.mask_ratio_min:.2f}, {self.mask_ratio_max:.2f}]")
         print(f"Mask fill strategy: {mask_fill}")
         if self.correct_post_mask_baseline:
             print(
@@ -105,7 +113,8 @@ class NMRSpectrumDataset(Dataset):
     def create_mask(self, n_patches):
         """Create different types of masks - optimized for learning peak relationships"""
         mask = torch.zeros(n_patches, dtype=torch.bool)
-        n_masked = max(1, int(n_patches * self.mask_ratio))
+        ratio = random.uniform(self.mask_ratio_min, self.mask_ratio_max)
+        n_masked = max(1, int(n_patches * ratio))
 
         if self.mask_strategy == 'sparse_random':
             # Random sparse masking - ensures context remains
@@ -624,11 +633,12 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                 
                 # Save best model
                 batch_size = train_dataloader.batch_size
-                mask_ratio = train_dataloader.dataset.mask_ratio
+                mask_ratio_min = train_dataloader.dataset.mask_ratio_min
+                mask_ratio_max = train_dataloader.dataset.mask_ratio_max
                 patch_size = train_dataloader.dataset.patch_size
-                
-                best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio:.2f}_ps{patch_size}_best.pth"
-                
+
+                best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio_min:.2f}-{mask_ratio_max:.2f}_ps{patch_size}_best.pth"
+
                 torch.save({
                     'epoch': epoch,
                     'model_state_dict': model.state_dict(),
@@ -639,7 +649,8 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                     'best_val_loss': best_val_loss,
                     'hyperparameters': {
                         'batch_size': batch_size,
-                        'mask_ratio': mask_ratio,
+                        'mask_ratio_min': mask_ratio_min,
+                        'mask_ratio_max': mask_ratio_max,
                         'patch_size': patch_size,
                         'learning_rate': lr,
                         'num_epochs': num_epochs,
@@ -671,23 +682,6 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
             print(f"Best validation loss: {best_val_loss:.4f}")
             break
         
-        # Save checkpoint every 100 epochs
-        if (epoch + 1) % 100 == 0:
-            checkpoint_data = {
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'scheduler_state_dict': scheduler.state_dict(),
-                'train_loss': avg_train_loss,
-                'train_losses': train_losses,
-                'epochs_without_improvement': epochs_without_improvement,
-            }
-            if val_dataloader is not None:
-                checkpoint_data['val_loss'] = avg_val_loss
-                checkpoint_data['val_losses'] = val_losses
-            
-            torch.save(checkpoint_data, f'checkpoint_epoch_{epoch+1}_{timestamp}.pth')
-    
     print(f"\n{'='*60}")
     print(f"Training completed after {epoch+1} epochs")
     print(f"Best validation loss achieved: {best_val_loss:.4f}")
@@ -837,14 +831,20 @@ def main():
         default=['data/combined/combine_unique_Water_EDTA_Suppressed.npy'],
         help='Path(s) to NMR spectra .npy file(s). Multiple files can be passed separated by space.'
     )
+    parser.add_argument('--mask-ratio-min', type=float, default=0.20, help='Lower bound of per-sample random masking ratio')
+    parser.add_argument('--mask-ratio-max', type=float, default=0.60, help='Upper bound of per-sample random masking ratio')
+    parser.add_argument('--device', default='auto', help="'auto', or an explicit device string like 'cuda:0' / 'cpu'")
     args = parser.parse_args()
-    
+    if not 0.0 < args.mask_ratio_min <= args.mask_ratio_max < 1.0:
+        raise ValueError("--mask-ratio-min/--mask-ratio-max must satisfy 0 < min <= max < 1")
+
     # CONFIG: All configurable parameters
     CONFIG = {
         'data_path': args.data_path,
         'num_epochs': 2000,
         'batch_size': 32,
-        'mask_ratio': 0.3,
+        'mask_ratio_min': args.mask_ratio_min,
+        'mask_ratio_max': args.mask_ratio_max,
         'patch_size': 1024,
         'learning_rate': 1e-4,
         'warmup_epochs': 20,
@@ -859,7 +859,10 @@ def main():
         'test_split': 0.0
     }
     
-    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
+    if args.device == 'auto':
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    else:
+        device = torch.device(args.device)
     print(f"Using device: {device}")
     
     print("Loading NMR spectra...")
@@ -957,29 +960,32 @@ def main():
     # UPDATED PARAMETERS - Optimized for small dataset and peak learning
     spectrum_length = spectra.shape[1]
     patch_size = CONFIG['patch_size']      # Even smaller patches for finer granularity
-    mask_ratio = CONFIG['mask_ratio']     # MUCH lower - keep most context visible
+    mask_ratio_min = CONFIG['mask_ratio_min']
+    mask_ratio_max = CONFIG['mask_ratio_max']
     batch_size = CONFIG['batch_size']       # Larger batches for more stable gradients with small dataset
-    
+
     if spectrum_length % patch_size != 0:
         new_length = (spectrum_length // patch_size) * patch_size
         train_spectra = train_spectra[:, :new_length]
         val_spectra = val_spectra[:, :new_length]
         spectrum_length = new_length
         print(f"Adjusted spectrum length to {spectrum_length}")
-    
+
     train_dataset = NMRSpectrumDataset(
-        train_spectra, 
-        mask_ratio=mask_ratio, 
-        patch_size=patch_size, 
+        train_spectra,
+        mask_ratio_min=mask_ratio_min,
+        mask_ratio_max=mask_ratio_max,
+        patch_size=patch_size,
         mask_strategy='sparse_random',  # Changed - keeps context
         augment=False,  # Will be controlled during training
         per_point_std=torch.from_numpy(per_point_std) if per_point_std is not None else None,
         noise_scale=args.noise_scale
     )
     val_dataset = NMRSpectrumDataset(
-        val_spectra, 
-        mask_ratio=mask_ratio, 
-        patch_size=patch_size, 
+        val_spectra,
+        mask_ratio_min=mask_ratio_min,
+        mask_ratio_max=mask_ratio_max,
+        patch_size=patch_size,
         mask_strategy='sparse_random'
     )
     # Test dataset (if available)
@@ -995,7 +1001,8 @@ def main():
     if has_test:
         test_dataset = NMRSpectrumDataset(
             test_spectra,
-            mask_ratio=mask_ratio,
+            mask_ratio_min=mask_ratio_min,
+            mask_ratio_max=mask_ratio_max,
             patch_size=patch_size,
             mask_strategy='sparse_random',
             augment=False,
@@ -1040,7 +1047,10 @@ def main():
         test_dataloader = None
     
     print(f"Patches per spectrum: {train_dataset.n_patches}")
-    print(f"Patches to mask: {int(train_dataset.n_patches * mask_ratio)}")
+    print(
+        f"Patches to mask: {int(train_dataset.n_patches * mask_ratio_min)}"
+        f"-{int(train_dataset.n_patches * mask_ratio_max)} (random per sample)"
+    )
     
     # OPTIMIZED MODEL for small dataset
     model = NMRMaskedAutoencoder(
@@ -1068,13 +1078,13 @@ def main():
     dataset_name = os.path.splitext(os.path.basename(data_paths[0]))[0]
     if len(data_paths) > 1:
         dataset_name = f"{dataset_name}_merged{len(data_paths)}"
-    model_name_prefix = f"./models/SSL_models/{dataset_name}_{timestamp}"
+    model_name_prefix = f"./models/masked_ssl/{dataset_name}_{timestamp}"
     
     print("\n" + "="*60)
     print("Starting training with OPTIMIZED configuration for small dataset:")
     print(f"  - Dataset size: {len(train_spectra)} train, {len(val_spectra)} val")
     print(f"  - Max normalization (no clipping)")
-    print(f"  - Sparse random masking ({mask_ratio}% - keeps context)")
+    print(f"  - Sparse random masking ({mask_ratio_min:.0%}-{mask_ratio_max:.0%} per sample, randomized) - keeps context")
     print(f"  - Small patches ({patch_size}) for fine detail")
     print(f"  - Small model (3 layers, d=128) to prevent overfitting")
     print(f"  - Larger batches ({batch_size}) for stable gradients")
