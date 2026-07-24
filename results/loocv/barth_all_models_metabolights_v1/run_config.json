@@ -1,0 +1,9 @@
+{
+  "n_samples": 37,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "Control",
+    "1": "Case"
+  },
+  "note": "Reconstructed from surviving per-model .npy files after a partial (masking-only) rerun overwrote summary.csv; see conversation history for provenance of each family."
+}

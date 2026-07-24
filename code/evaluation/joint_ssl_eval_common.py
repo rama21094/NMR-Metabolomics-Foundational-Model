@@ -19,7 +19,11 @@ for path in (ROOT, TRAINING_DIR):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from train_joint_ssl import JointNMRSSLModel, load_joint_checkpoint, normalize_spectrum  # noqa: E402
+from train_joint_ssl import (  # noqa: E402
+    JointNMRSSLModel,
+    build_joint_model_from_loaded_checkpoint,
+    normalize_spectrum,
+)
 
 
 FINE_TUNE_CHOICES = ("frozen", "unfreeze_last_1", "unfreeze_last_2", "unfreeze_last_3")
@@ -31,6 +35,39 @@ def set_seed(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def reinit_xavier_(module: nn.Module) -> None:
+    """Reinitialize a module's own weight matrices with Xavier/Glorot init.
+
+    Used as an ablation: the classifier-building code below always starts
+    every layer (frozen or unfrozen) from the SSL-pretrained checkpoint. This
+    function is applied, optionally, ONLY to the layers that were just
+    unfrozen -- letting a fold fine-tune those layers from a fresh random
+    init instead of their pretrained values, to isolate whether the
+    pretrained weights in the fine-tuned layers matter versus just having
+    trainable capacity there. Call set_seed(...) beforehand for a
+    reproducible reinit (nn.init draws from the global RNG).
+    """
+    for sub in module.modules():
+        if isinstance(sub, nn.MultiheadAttention):
+            if sub.in_proj_weight is not None:
+                nn.init.xavier_uniform_(sub.in_proj_weight)
+            if sub.in_proj_bias is not None:
+                nn.init.zeros_(sub.in_proj_bias)
+            nn.init.xavier_uniform_(sub.out_proj.weight)
+            if sub.out_proj.bias is not None:
+                nn.init.zeros_(sub.out_proj.bias)
+        elif isinstance(sub, nn.Linear):
+            nn.init.xavier_uniform_(sub.weight)
+            if sub.bias is not None:
+                nn.init.zeros_(sub.bias)
+        elif isinstance(sub, nn.LayerNorm):
+            nn.init.ones_(sub.weight)
+            nn.init.zeros_(sub.bias)
+        elif isinstance(sub, nn.Embedding):
+            # e.g. the joint model's per-layer RelativePositionBias table.
+            nn.init.zeros_(sub.weight)
 
 
 def choose_device(device_arg: str) -> torch.device:
@@ -100,7 +137,7 @@ def fine_tune_count(mode: str) -> int:
 
 
 def build_joint_classifier(
-    checkpoint_path: str | Path,
+    checkpoint: dict,
     spectra: np.ndarray,
     n_classes: int,
     head_dropout: float,
@@ -108,8 +145,9 @@ def build_joint_classifier(
     unfreeze_layers: int,
     device: torch.device,
     include_masked_task: bool = True,
+    reinit_unfrozen: bool = False,
 ):
-    backbone, checkpoint = load_joint_checkpoint(checkpoint_path, device)
+    backbone = build_joint_model_from_loaded_checkpoint(checkpoint, device)
     normalize_input = resolve_normalize_mode(normalize_input_mode, spectra, checkpoint)
     bin_sizes = [int(b) for b in checkpoint.get("jigsaw_bin_sizes", backbone.jigsaw_bin_sizes)]
     model = JointSSLSoftmaxClassifier(backbone, bin_sizes, n_classes, head_dropout, include_masked_task=include_masked_task)
@@ -119,9 +157,12 @@ def build_joint_classifier(
     layers = model.backbone.encoder_layers
     if unfreeze_layers > len(layers):
         raise ValueError(f"Cannot unfreeze {unfreeze_layers}; backbone has {len(layers)} layers")
-    for layer in list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []:
+    unfrozen = list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []
+    for layer in unfrozen:
         for parameter in layer.parameters():
             parameter.requires_grad = True
+        if reinit_unfrozen:
+            reinit_xavier_(layer)
     model.unfreeze_layers = unfreeze_layers
     config = {
         "bin_sizes": bin_sizes,
@@ -137,6 +178,19 @@ def build_joint_classifier(
         "include_masked_task": bool(include_masked_task),
     }
     return model.to(device), config
+
+
+def class_balanced_weights(y_train: np.ndarray, n_classes: int, device: torch.device) -> torch.Tensor:
+    """Inverse-frequency class weights (mean 1) for a small imbalanced fold.
+
+    See the identical helper in barth_all_models_loocv.py for why this is
+    needed: plain unweighted cross-entropy on a tiny imbalanced fold can
+    collapse to the majority class even when the features are separable.
+    """
+    counts = np.bincount(y_train, minlength=n_classes).astype(np.float64)
+    counts = np.clip(counts, 1.0, None)
+    weights = counts.sum() / (n_classes * counts)
+    return torch.tensor(weights, dtype=torch.float32, device=device)
 
 
 def train_one_fold(
@@ -158,7 +212,8 @@ def train_one_fold(
     if backbone_params:
         groups.append({"params": backbone_params, "lr": backbone_lr})
     optimizer = torch.optim.AdamW(groups, weight_decay=weight_decay)
-    loss_fn = nn.CrossEntropyLoss()
+    n_classes = model.classifier[-1].out_features
+    loss_fn = nn.CrossEntropyLoss(weight=class_balanced_weights(y_train, n_classes, device))
     generator = torch.Generator().manual_seed(seed)
     loader = DataLoader(
         TensorDataset(torch.from_numpy(x_train), torch.from_numpy(y_train)),
@@ -193,6 +248,11 @@ def run_joint_ssl_loocv(
 ) -> dict:
     n_classes = len(label_names)
     results = {}
+    # Read the (tens-of-MB) checkpoint file once and reuse the in-memory dict
+    # across every fold/fine-tune-mode combination below, instead of
+    # re-reading + unpickling it on every fold (which dominated runtime under
+    # CPU contention).
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
     for mode in args.fine_tune_modes:
         unfreeze_count = fine_tune_count(mode)
@@ -207,13 +267,14 @@ def run_joint_ssl_loocv(
                 break
             set_seed(args.seed + fold)
             model, config = build_joint_classifier(
-                checkpoint_path=checkpoint_path,
+                checkpoint=checkpoint,
                 spectra=spectra,
                 n_classes=n_classes,
                 head_dropout=args.head_dropout,
                 normalize_input_mode=args.normalize_input,
                 unfreeze_layers=unfreeze_count,
                 device=device,
+                reinit_unfrozen=getattr(args, "reinit_unfrozen_xavier", False),
             )
             if normalized_spectra is None:
                 normalized_spectra = maybe_normalize_eval_spectra(spectra, config["normalize_input"])

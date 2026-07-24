@@ -56,6 +56,7 @@ for path in (ROOT, TRAINING_DIR):
         sys.path.insert(0, str(path))
 
 from trainer_revised import NMRMaskedAutoencoder
+from joint_ssl_eval_common import reinit_xavier_
 
 
 # ---------------------------------------------------------------------------
@@ -63,7 +64,7 @@ from trainer_revised import NMRMaskedAutoencoder
 # ---------------------------------------------------------------------------
 # Set this to True to run from an IDE using the values below. Set it to False
 # to use command-line arguments. Only edit this block for normal experiments.
-USE_IDE_CONFIG = True
+USE_IDE_CONFIG = False
 
 IDE_CONFIG = {
     # Input/output files
@@ -278,7 +279,7 @@ class SoftmaxMAEClassifier(nn.Module):
 
 
 def build_foundation_model(state, spectrum_length, nhead, backbone_dropout,
-                           head_dropout, unfreeze_layers, device):
+                           head_dropout, unfreeze_layers, device, reinit_unfrozen=False):
     config = infer_backbone_config(state, nhead, backbone_dropout)
     backbone = NMRMaskedAutoencoder(spectrum_length=spectrum_length, **config)
     backbone.load_state_dict(state, strict=True)
@@ -292,6 +293,8 @@ def build_foundation_model(state, spectrum_length, nhead, backbone_dropout,
     for layer in list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []:
         for parameter in layer.parameters():
             parameter.requires_grad = True
+        if reinit_unfrozen:
+            reinit_xavier_(layer)
     model.unfreeze_layers = unfreeze_layers
     return model.to(device), config
 
@@ -341,6 +344,7 @@ def run_foundation_loocv(spectra, labels, checkpoint_path, args, device):
             model, config = build_foundation_model(
                 state, spectra.shape[1], args.nhead, args.backbone_dropout,
                 args.head_dropout, unfreeze_count, device,
+                reinit_unfrozen=getattr(args, "reinit_unfrozen_xavier", False),
             )
             train_one_fold(
                 model, spectra[train_idx], labels[train_idx], device,
@@ -423,6 +427,11 @@ def parse_args():
     parser.add_argument("--xgb-jobs", type=int, default=4)
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--reinit-unfrozen-xavier", action="store_true",
+        help="Ablation: reinitialize the just-unfrozen layers with Xavier init instead of "
+             "keeping their pretrained weights, before fine-tuning.",
+    )
     if USE_IDE_CONFIG:
         unknown = set(IDE_CONFIG) - {action.dest for action in parser._actions}
         if unknown:

@@ -4,6 +4,10 @@
 # Directories
 /data/
 /models/
+/pyragify/
+/.lgraph/
+/.claude/
+/.agents/
 
 # Cache files
 __pycache__/

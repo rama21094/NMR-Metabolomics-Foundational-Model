@@ -1,7 +1,7 @@
 {
-  "data": "MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy",
-  "metadata": "MTBLS326_metadata_mapping.csv",
-  "checkpoint": "./SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth",
+  "data": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+  "metadata": "data/mtbls326/MTBLS326_metadata_mapping.csv",
+  "checkpoint": "./models/SSL_models/combined_unique_WS625to680Zero_20260601_084533_bs32_mr0.50_ps1024_best.pth",
   "output_dir": "results/loocv/mtbls326_mask_0.50_rowMinMax",
   "classical_only": false,
   "foundation_only": false,

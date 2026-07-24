@@ -1,0 +1,64 @@
+{
+  "data": "data/Barth/aligned_128K_Workbench_Barth_Syndrome.npy",
+  "metadata": "data/Barth/Workbench_Barth_Syndrome_metadata.csv",
+  "output_dir": "results/loocv/barth_all_models_metabolights_v1_xavier",
+  "label_column": "label",
+  "exclude_labels": [
+    "Pool"
+  ],
+  "families": [
+    "masking",
+    "jigsaw",
+    "joint_ssl"
+  ],
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "masking_checkpoint": [
+    "mask_metabolights=models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_20260708_085105_bs32_mr0.20-0.60_ps1024_best.pth"
+  ],
+  "jigsaw_checkpoint": [
+    "models/jigsaw/multibin/20260708_070540/multibin_20260708_070540_best.pth"
+  ],
+  "jigsaw_checkpoint_glob": "models/jigsaw/*/*/*_best.pth",
+  "max_jigsaw_checkpoints": null,
+  "joint_checkpoint": [
+    "joint_ssl_metabolights=models/joint_ssl/joint_ssl_20260708_071714/joint_ssl_20260708_071714_best.pth"
+  ],
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "backbone_dropout": 0.15,
+  "nhead": 8,
+  "normalize_input": "auto",
+  "joint_normalize_input": "checkpoint",
+  "joint_include_masked_task": true,
+  "xgb_jobs": 4,
+  "device": "cuda",
+  "seed": 42,
+  "max_folds": null,
+  "reinit_unfrozen_xavier": true,
+  "masking_checkpoints": {
+    "mask_metabolights": "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_20260708_085105_bs32_mr0.20-0.60_ps1024_best.pth"
+  },
+  "joint_checkpoints": {
+    "joint_ssl_metabolights": "models/joint_ssl/joint_ssl_20260708_071714/joint_ssl_20260708_071714_best.pth"
+  },
+  "jigsaw_checkpoints": {
+    "jigsaw_multibin": "models/jigsaw/multibin/20260708_070540/multibin_20260708_070540_best.pth"
+  },
+  "n_samples": 37,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "Control",
+    "1": "Case"
+  }
+}

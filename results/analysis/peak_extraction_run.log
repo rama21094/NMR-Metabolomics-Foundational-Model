@@ -1,0 +1,11 @@
+Building reference spectrum from 2000/9670 randomly sampled spectra...
+Excluded ranges from peak picking: [(62500, 68000), (72000, 74000)]
+Selected 60 canonical peaks (reference noise_sd=5.02e-05).
+Extracted peaks for 500/9670 spectraExtracted peaks for 1000/9670 spectraExtracted peaks for 1500/9670 spectraExtracted peaks for 2000/9670 spectraExtracted peaks for 2500/9670 spectraExtracted peaks for 3000/9670 spectraExtracted peaks for 3500/9670 spectraExtracted peaks for 4000/9670 spectraExtracted peaks for 4500/9670 spectraExtracted peaks for 5000/9670 spectraExtracted peaks for 5500/9670 spectraExtracted peaks for 6000/9670 spectraExtracted peaks for 6500/9670 spectraExtracted peaks for 7000/9670 spectraExtracted peaks for 7500/9670 spectraExtracted peaks for 8000/9670 spectraExtracted peaks for 8500/9670 spectraExtracted peaks for 9000/9670 spectraExtracted peaks for 9500/9670 spectraExtracted peaks for 9670/9670 spectra
+
+Done. 60 peaks x 9670 spectra.
+Mean detection rate across peaks: 0.330 (min 0.005, max 0.801)
+Warning: 60 peak(s) have >5% of matches sitting at the tolerance edge (peak_id [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]) -- consider a larger --tolerance-points for these regions.
+Wrote: results/analysis/peak_saturation_v1/canonical_peaks.csv
+Wrote: results/analysis/peak_saturation_v1/peak_values.npy shape=(9670, 60)
+Wrote: results/analysis/peak_saturation_v1/alignment_shift_diagnostics.png

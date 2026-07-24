@@ -974,8 +974,14 @@ def build_model_from_checkpoint(checkpoint: dict) -> JointNMRSSLModel:
     )
 
 
-def load_joint_checkpoint(checkpoint_path: str | Path, device: torch.device):
-    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+def build_joint_model_from_loaded_checkpoint(checkpoint: dict, device: torch.device) -> JointNMRSSLModel:
+    """Construct + load a model from an already-`torch.load`-ed checkpoint dict.
+
+    Split out from `load_joint_checkpoint` so callers that build a fresh
+    classifier per LOOCV fold (e.g. `joint_ssl_eval_common.py`) can read the
+    (large) checkpoint file from disk once and reuse the in-memory dict
+    across folds, instead of re-reading/unpickling it every fold.
+    """
     model = build_model_from_checkpoint(checkpoint)
     state = checkpoint["model_state_dict"]
     # reconstruction_skips and task_proj were both added after this model's
@@ -996,7 +1002,13 @@ def load_joint_checkpoint(checkpoint_path: str | Path, device: torch.device):
             raise RuntimeError(
                 f"Checkpoint is incompatible. Missing={missing_keys}, unexpected={unexpected_keys}"
             )
-    return model.to(device), checkpoint
+    return model.to(device)
+
+
+def load_joint_checkpoint(checkpoint_path: str | Path, device: torch.device):
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    model = build_joint_model_from_loaded_checkpoint(checkpoint, device)
+    return model, checkpoint
 
 
 def train_one_run(config: RunConfig) -> dict:

@@ -1,0 +1,10 @@
+Loaded 9670 spectra x 11 peaks from results/analysis/peak_saturation_75k80k
+Analyzed peak 1/11Analyzed peak 2/11Analyzed peak 3/11Analyzed peak 4/11Analyzed peak 5/11Analyzed peak 6/11Analyzed peak 7/11Analyzed peak 8/11Analyzed peak 9/11Analyzed peak 10/11Analyzed peak 11/11
+
+Done. 11 peaks analyzed.
+KS saturation ratio: median=0.097, min=0.094, max=0.313 (lower = more comfortably saturated).
+4 peak(s) never dropped below KS threshold 0.05 using all available probe data -- these are the ones most likely to still benefit from more spectra.
+Wrote: results/analysis/peak_saturation_75k80k/saturation_summary.csv
+Wrote: results/analysis/peak_saturation_75k80k/distributions_grid.png
+Wrote: results/analysis/peak_saturation_75k80k/ks_convergence_grid.png
+Wrote: results/analysis/peak_saturation_75k80k/saturation_ratio_summary.png

@@ -56,6 +56,11 @@ def parse_args():
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-folds", type=int, default=None, help="Debug/smoke-test limit for LOOCV folds.")
+    parser.add_argument(
+        "--reinit-unfrozen-xavier", action="store_true",
+        help="Ablation: reinitialize the just-unfrozen layers with Xavier init instead of "
+             "keeping their pretrained weights, before fine-tuning.",
+    )
     args = parser.parse_args()
 
     if args.classical_only and args.joint_only:

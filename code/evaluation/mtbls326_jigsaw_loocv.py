@@ -47,6 +47,7 @@ if str(TRAINING_DIR) not in sys.path:
     sys.path.insert(0, str(TRAINING_DIR))
 
 from train_jigsaw_spectra import JigsawNMRModel  # noqa: E402
+from joint_ssl_eval_common import reinit_xavier_  # noqa: E402
 
 
 FINE_TUNE_CHOICES = ("frozen", "unfreeze_last_1", "unfreeze_last_2", "unfreeze_last_3")
@@ -258,8 +259,11 @@ def checkpoint_label_from_path(path):
     return path.stem
 
 
-def load_jigsaw_checkpoint(checkpoint_path, device):
-    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+def load_jigsaw_checkpoint_file(checkpoint_path):
+    return torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+
+
+def build_jigsaw_model_from_loaded_checkpoint(checkpoint, device):
     hp = checkpoint.get("hyperparameters", {})
     bin_sizes = [int(b) for b in checkpoint["bin_sizes"]]
     model = JigsawNMRModel(
@@ -272,7 +276,7 @@ def load_jigsaw_checkpoint(checkpoint_path, device):
         dropout=float(hp.get("dropout", 0.15)),
     )
     model.load_state_dict(checkpoint["model_state_dict"], strict=True)
-    return model.to(device), checkpoint
+    return model.to(device)
 
 
 class JigsawSoftmaxClassifier(nn.Module):
@@ -307,8 +311,8 @@ class JigsawSoftmaxClassifier(nn.Module):
         return logits if return_logits else self.softmax(logits)
 
 
-def build_jigsaw_classifier(checkpoint_path, spectra, args, device, unfreeze_layers):
-    backbone, checkpoint = load_jigsaw_checkpoint(checkpoint_path, device)
+def build_jigsaw_classifier(checkpoint, spectra, args, device, unfreeze_layers):
+    backbone = build_jigsaw_model_from_loaded_checkpoint(checkpoint, device)
     bin_sizes = [int(b) for b in checkpoint["bin_sizes"]]
     hp = checkpoint.get("hyperparameters", {})
     normalize_input = resolve_normalize_mode(args.normalize_input, spectra)
@@ -328,6 +332,8 @@ def build_jigsaw_classifier(checkpoint_path, spectra, args, device, unfreeze_lay
     for layer in list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []:
         for parameter in layer.parameters():
             parameter.requires_grad = True
+        if getattr(args, "reinit_unfrozen_xavier", False):
+            reinit_xavier_(layer)
     model.unfreeze_layers = unfreeze_layers
     return model.to(device), {
         "bin_sizes": bin_sizes,
@@ -383,6 +389,7 @@ def run_jigsaw_loocv(spectra, labels, checkpoint_paths, args, device):
     results = {}
     for checkpoint_path in checkpoint_paths:
         base_label = checkpoint_label_from_path(checkpoint_path)
+        checkpoint = load_jigsaw_checkpoint_file(checkpoint_path)
         for mode in args.fine_tune_modes:
             unfreeze_count = fine_tune_count(mode)
             result_name = f"{base_label}_{mode}"
@@ -392,7 +399,7 @@ def run_jigsaw_loocv(spectra, labels, checkpoint_paths, args, device):
             for fold, (train_idx, test_idx) in enumerate(LeaveOneOut().split(spectra), 1):
                 set_seed(args.seed + fold)
                 model, config = build_jigsaw_classifier(
-                    checkpoint_path, spectra, args, device, unfreeze_count
+                    checkpoint, spectra, args, device, unfreeze_count
                 )
                 train_one_fold(
                     model, spectra[train_idx], labels[train_idx], device,
@@ -479,6 +486,11 @@ def parse_args():
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-checkpoints", type=int, default=None)
+    parser.add_argument(
+        "--reinit-unfrozen-xavier", action="store_true",
+        help="Ablation: reinitialize the just-unfrozen layers with Xavier init instead of "
+             "keeping their pretrained weights, before fine-tuning.",
+    )
     args = parser.parse_args()
 
     if args.classical_only and args.jigsaw_only:

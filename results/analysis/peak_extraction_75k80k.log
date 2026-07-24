@@ -1,0 +1,17 @@
+Building reference spectrum from 2000/9670 randomly sampled spectra...
+Restricting peak picking to point-index range [75000, 80000).
+Excluded ranges from peak picking: [(62500, 68000), (72000, 74000), (0, 75000), (80000, 131072)]
+Only 9 peaks passed prominence>=3*noise_sd; relaxing to prominence>=noise_sd to reach --n-peaks=11.
+Selected 11 canonical peaks (reference noise_sd=0.003791).
+Note: shrank search tolerance for 2 peak(s) to avoid overlapping a neighbor.
+Estimating per-spectrum coarse realignment shift from segment [74000, 81000) (max shift +/-800)...
+Estimated local realignment shift for 500/9670 spectraEstimated local realignment shift for 1000/9670 spectraEstimated local realignment shift for 1500/9670 spectraEstimated local realignment shift for 2000/9670 spectraEstimated local realignment shift for 2500/9670 spectraEstimated local realignment shift for 3000/9670 spectraEstimated local realignment shift for 3500/9670 spectraEstimated local realignment shift for 4000/9670 spectraEstimated local realignment shift for 4500/9670 spectraEstimated local realignment shift for 5000/9670 spectraEstimated local realignment shift for 5500/9670 spectraEstimated local realignment shift for 6000/9670 spectraEstimated local realignment shift for 6500/9670 spectraEstimated local realignment shift for 7000/9670 spectraEstimated local realignment shift for 7500/9670 spectraEstimated local realignment shift for 8000/9670 spectraEstimated local realignment shift for 8500/9670 spectraEstimated local realignment shift for 9000/9670 spectraEstimated local realignment shift for 9500/9670 spectraEstimated local realignment shift for 9670/9670 spectra
+Realignment shift: mean=-285.0, std=378.1, median sharpness=1.59
+Extracted peaks for 500/9670 spectraExtracted peaks for 1000/9670 spectraExtracted peaks for 1500/9670 spectraExtracted peaks for 2000/9670 spectraExtracted peaks for 2500/9670 spectraExtracted peaks for 3000/9670 spectraExtracted peaks for 3500/9670 spectraExtracted peaks for 4000/9670 spectraExtracted peaks for 4500/9670 spectraExtracted peaks for 5000/9670 spectraExtracted peaks for 5500/9670 spectraExtracted peaks for 6000/9670 spectraExtracted peaks for 6500/9670 spectraExtracted peaks for 7000/9670 spectraExtracted peaks for 7500/9670 spectraExtracted peaks for 8000/9670 spectraExtracted peaks for 8500/9670 spectraExtracted peaks for 9000/9670 spectraExtracted peaks for 9500/9670 spectraExtracted peaks for 9670/9670 spectra
+
+Done. 11 peaks x 9670 spectra.
+Mean detection rate across peaks: 0.441 (min 0.005, max 0.746)
+Warning: 5 peak(s) have >5% of their DETECTED matches sitting at the tolerance edge (peak_id [0, 3, 4, 5, 8]) -- their true chemical-shift drift likely exceeds --tolerance-points; consider widening it for these regions.
+Wrote: results/analysis/peak_saturation_75k80k/canonical_peaks.csv
+Wrote: results/analysis/peak_saturation_75k80k/peak_values.npy shape=(9670, 11)
+Wrote: results/analysis/peak_saturation_75k80k/alignment_shift_diagnostics.png

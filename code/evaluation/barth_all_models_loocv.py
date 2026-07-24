@@ -54,6 +54,7 @@ from joint_ssl_eval_common import (  # noqa: E402
     choose_device,
     fine_tune_count,
     maybe_normalize_eval_spectra,
+    reinit_xavier_,
     train_one_fold as train_joint_one_fold,
 )
 from train_jigsaw_spectra import JigsawNMRModel  # noqa: E402
@@ -306,8 +307,26 @@ def build_masked_classifier(state, spectrum_length, n_classes, args, device, unf
     for layer in list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []:
         for parameter in layer.parameters():
             parameter.requires_grad = True
+        if getattr(args, "reinit_unfrozen_xavier", False):
+            reinit_xavier_(layer)
     model.unfreeze_layers = unfreeze_layers
     return model.to(device), config
+
+
+def class_balanced_weights(y_train: np.ndarray, n_classes: int, device) -> torch.Tensor:
+    """Inverse-frequency class weights (mean 1) for a small imbalanced fold.
+
+    Plain unweighted cross-entropy on an imbalanced, tiny per-fold training
+    set (e.g. Barth's 14 Control / 23 Case) lets gradient descent settle on
+    the majority-class solution even when the underlying features carry
+    real, linearly-separable signal (confirmed on Barth's masked-model
+    embeddings: a class-balanced probe reached 0.60 balanced accuracy while
+    the unweighted fine-tuned head collapsed to predicting one class).
+    """
+    counts = np.bincount(y_train, minlength=n_classes).astype(np.float64)
+    counts = np.clip(counts, 1.0, None)  # guard divide-by-zero if a fold is missing a class
+    weights = counts.sum() / (n_classes * counts)
+    return torch.tensor(weights, dtype=torch.float32, device=device)
 
 
 def train_classifier_one_fold(
@@ -330,7 +349,8 @@ def train_classifier_one_fold(
     if backbone_params:
         groups.append({"params": backbone_params, "lr": backbone_lr})
     optimizer = torch.optim.AdamW(groups, weight_decay=weight_decay)
-    loss_fn = nn.CrossEntropyLoss()
+    n_classes = model.classifier[-1].out_features
+    loss_fn = nn.CrossEntropyLoss(weight=class_balanced_weights(y_train, n_classes, device))
     generator = torch.Generator().manual_seed(seed)
     loader = DataLoader(
         TensorDataset(torch.from_numpy(x_train), torch.from_numpy(y_train)),
@@ -357,6 +377,19 @@ def train_classifier_one_fold(
 def run_masking_loocv(spectra, labels, label_names, checkpoint_map, args, device):
     results = {}
     n_classes = len(label_names)
+    # The masked-autoencoder pretraining pipeline (trainer_revised.py's
+    # NMRSpectrumDataset) unconditionally applies per-spectrum min-max
+    # normalization before training, so the frozen backbone only saw inputs
+    # with an exact per-row [0, 1] range. Unlike the jigsaw/joint_ssl eval
+    # paths, this function used to skip re-normalizing at eval time -- a
+    # no-op for datasets whose .npy already happens to be exactly per-row
+    # [0, 1] (e.g. MTBLS326's), but for Barth's data (per-row min as low as
+    # -0.043, max as low as 0.9992) it fed the backbone out-of-distribution
+    # inputs and collapsed its pooled embeddings to near-identical vectors
+    # across samples, which in turn collapsed every fine-tune mode's
+    # classifier to predicting the majority class for every sample.
+    normalize_input = resolve_normalize_mode(args.normalize_input, spectra)
+    normalized_spectra = normalize_batch(spectra) if normalize_input else spectra.astype(np.float32, copy=True)
     for checkpoint_label, checkpoint_path in checkpoint_map.items():
         state = checkpoint_state(checkpoint_path)
         for mode in args.fine_tune_modes:
@@ -365,16 +398,16 @@ def run_masking_loocv(spectra, labels, label_names, checkpoint_map, args, device
             predictions = np.full(len(labels), -1, dtype=np.int64)
             probabilities = np.full((len(labels), n_classes), np.nan, dtype=np.float64)
             config = None
-            for fold, (train_idx, test_idx) in enumerate(LeaveOneOut().split(spectra), 1):
+            for fold, (train_idx, test_idx) in enumerate(LeaveOneOut().split(normalized_spectra), 1):
                 if args.max_folds is not None and fold > int(args.max_folds):
                     break
                 set_seed(args.seed + fold)
                 model, config = build_masked_classifier(
-                    state, spectra.shape[1], n_classes, args, device, unfreeze_count
+                    state, normalized_spectra.shape[1], n_classes, args, device, unfreeze_count
                 )
                 train_classifier_one_fold(
                     model,
-                    spectra[train_idx],
+                    normalized_spectra[train_idx],
                     labels[train_idx],
                     device,
                     args.epochs,
@@ -387,7 +420,7 @@ def run_masking_loocv(spectra, labels, label_names, checkpoint_map, args, device
                 )
                 model.eval()
                 with torch.no_grad():
-                    prob = model(torch.from_numpy(spectra[test_idx]).to(device)).cpu().numpy()
+                    prob = model(torch.from_numpy(normalized_spectra[test_idx]).to(device)).cpu().numpy()
                 probabilities[test_idx] = prob
                 predictions[test_idx] = np.argmax(prob, axis=1)
                 del model
@@ -402,7 +435,7 @@ def run_masking_loocv(spectra, labels, label_names, checkpoint_map, args, device
                 probabilities,
                 checkpoint=str(checkpoint_path),
                 unfrozen_transformer_layers=unfreeze_count,
-                backbone_config=config,
+                backbone_config={**config, "normalize_input": normalize_input},
             )
     return results
 
@@ -473,8 +506,11 @@ def discover_jigsaw_checkpoints(pattern: str, max_checkpoints: int | None = None
     return selected
 
 
-def load_jigsaw_checkpoint(checkpoint_path: str | Path, device):
-    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+def load_jigsaw_checkpoint_file(checkpoint_path: str | Path):
+    return torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+
+
+def build_jigsaw_model_from_loaded_checkpoint(checkpoint: dict, device):
     hp = checkpoint.get("hyperparameters", {})
     bin_sizes = [int(b) for b in checkpoint["bin_sizes"]]
     model = JigsawNMRModel(
@@ -487,7 +523,7 @@ def load_jigsaw_checkpoint(checkpoint_path: str | Path, device):
         dropout=float(hp.get("dropout", 0.15)),
     )
     model.load_state_dict(checkpoint["model_state_dict"], strict=True)
-    return model.to(device), checkpoint
+    return model.to(device)
 
 
 class JigsawClassifier(nn.Module):
@@ -521,8 +557,8 @@ class JigsawClassifier(nn.Module):
         return logits if return_logits else self.softmax(logits)
 
 
-def build_jigsaw_classifier(checkpoint_path, spectra, n_classes, args, device, unfreeze_layers):
-    backbone, checkpoint = load_jigsaw_checkpoint(checkpoint_path, device)
+def build_jigsaw_classifier(checkpoint, spectra, n_classes, args, device, unfreeze_layers):
+    backbone = build_jigsaw_model_from_loaded_checkpoint(checkpoint, device)
     hp = checkpoint.get("hyperparameters", {})
     bin_sizes = [int(b) for b in checkpoint["bin_sizes"]]
     normalize_input = resolve_normalize_mode(args.normalize_input, spectra)
@@ -542,6 +578,8 @@ def build_jigsaw_classifier(checkpoint_path, spectra, n_classes, args, device, u
     for layer in list(layers)[len(layers) - unfreeze_layers:] if unfreeze_layers else []:
         for parameter in layer.parameters():
             parameter.requires_grad = True
+        if getattr(args, "reinit_unfrozen_xavier", False):
+            reinit_xavier_(layer)
     model.unfreeze_layers = unfreeze_layers
     config = {
         "bin_sizes": bin_sizes,
@@ -560,6 +598,7 @@ def run_jigsaw_loocv(spectra, labels, label_names, checkpoint_map, args, device)
     results = {}
     n_classes = len(label_names)
     for base_label, checkpoint_path in checkpoint_map.items():
+        checkpoint = load_jigsaw_checkpoint_file(checkpoint_path)
         for mode in args.fine_tune_modes:
             unfreeze_count = fine_tune_count(mode)
             result_name = f"{base_label}_{mode}"
@@ -571,7 +610,7 @@ def run_jigsaw_loocv(spectra, labels, label_names, checkpoint_map, args, device)
                     break
                 set_seed(args.seed + fold)
                 model, config = build_jigsaw_classifier(
-                    checkpoint_path, spectra, n_classes, args, device, unfreeze_count
+                    checkpoint, spectra, n_classes, args, device, unfreeze_count
                 )
                 train_classifier_one_fold(
                     model,
@@ -612,6 +651,7 @@ def run_joint_ssl_loocv_multi(spectra, labels, label_names, checkpoint_map, args
     results = {}
     n_classes = len(label_names)
     for checkpoint_label, checkpoint_path in checkpoint_map.items():
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
         for mode in args.fine_tune_modes:
             unfreeze_count = fine_tune_count(mode)
             result_name = f"{checkpoint_label}_{mode}"
@@ -624,7 +664,7 @@ def run_joint_ssl_loocv_multi(spectra, labels, label_names, checkpoint_map, args
                     break
                 set_seed(args.seed + fold)
                 model, config = build_joint_classifier(
-                    checkpoint_path=checkpoint_path,
+                    checkpoint=checkpoint,
                     spectra=spectra,
                     n_classes=n_classes,
                     head_dropout=args.head_dropout,
@@ -632,6 +672,7 @@ def run_joint_ssl_loocv_multi(spectra, labels, label_names, checkpoint_map, args
                     unfreeze_layers=unfreeze_count,
                     device=device,
                     include_masked_task=args.joint_include_masked_task,
+                    reinit_unfrozen=getattr(args, "reinit_unfrozen_xavier", False),
                 )
                 if normalized_spectra is None:
                     normalized_spectra = maybe_normalize_eval_spectra(spectra, config["normalize_input"])
@@ -741,6 +782,11 @@ def parse_args():
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"], default=IDE_CONFIG["device"])
     parser.add_argument("--seed", type=int, default=IDE_CONFIG["seed"])
     parser.add_argument("--max-folds", type=int, default=IDE_CONFIG["max_folds"])
+    parser.add_argument(
+        "--reinit-unfrozen-xavier", action="store_true",
+        help="Ablation: reinitialize the just-unfrozen layers with Xavier init instead of "
+             "keeping their pretrained weights, before fine-tuning.",
+    )
 
     if USE_IDE_CONFIG:
         unknown = set(IDE_CONFIG) - {action.dest for action in parser._actions} - {
@@ -862,9 +908,56 @@ def main():
     families_to_run = selected_families(args)
     families = {}
 
+    # A rerun of a subset of families (e.g. --families masking) into an
+    # output-dir that already has other families' results would otherwise
+    # get silently wiped: save_results() only ever writes what's in `families`
+    # for *this* process. Recover any other family's saved predictions from
+    # its surviving *_oof_pred.npy/*_oof_prob.npy files so they survive.
+    known_families = ("classical", "masking", "jigsaw", "joint_ssl")
+    other_families = [f for f in known_families if f not in families_to_run]
+    if other_families:
+        output_dir = Path(args.output_dir)
+        for pred_path in sorted(output_dir.glob("*_oof_pred.npy")) if output_dir.exists() else []:
+            stem = pred_path.name[: -len("_oof_pred.npy")]
+            family = next((f for f in other_families if stem.startswith(f + "_")), None)
+            if family is None:
+                continue
+            prob_path = output_dir / f"{stem}_oof_prob.npy"
+            if not prob_path.exists():
+                continue
+            model_name = stem[len(family) + 1 :]
+            pred = np.load(pred_path)
+            prob = np.load(prob_path)
+            evaluated = (pred >= 0) & np.isfinite(prob).all(axis=1)
+            families.setdefault(family, {})[model_name] = {
+                "predictions": pred,
+                "probabilities": prob,
+                "metrics": safe_metrics(labels[evaluated], pred[evaluated], prob[evaluated], label_names),
+                "n_evaluated": int(evaluated.sum()),
+            }
+        recovered = sorted(families.keys())
+        if recovered:
+            print(f"Recovered prior results for families not in this run: {recovered}")
+
     if "classical" in families_to_run:
         features = binned_abs_area(spectra, args.feature_bins) if args.classical_features == "binned_auc" else spectra
         families["classical"] = run_classical_loocv(features, labels, label_names, args)
+
+    run_config = vars(args).copy()
+    run_config.update(
+        {
+            "n_samples": int(len(labels)),
+            "spectrum_length": int(spectra.shape[1]),
+            "label_mapping": {str(i): name for i, name in enumerate(label_names)},
+        }
+    )
+
+    def checkpoint_now():
+        # Persist whatever families have finished so far after each family, so
+        # a crash/interruption partway through (e.g. a later family's checkpoint
+        # path being wrong) doesn't discard hours of already-completed LOOCV
+        # work from earlier families.
+        save_results(args.output_dir, metadata, labels, label_names, args.label_column, families, run_config)
 
     foundation_families = {"masking", "jigsaw", "joint_ssl"} & families_to_run
     if foundation_families:
@@ -873,6 +966,9 @@ def main():
             raise RuntimeError("--device cuda requested but CUDA is unavailable")
         print(f"Foundation-model device: {device}")
 
+    if families:
+        checkpoint_now()
+
     if "masking" in families_to_run:
         print("Masking checkpoints:")
         for label, path in args.masking_checkpoints.items():
@@ -880,6 +976,7 @@ def main():
         families["masking"] = run_masking_loocv(
             spectra, labels, label_names, args.masking_checkpoints, args, device
         )
+        checkpoint_now()
 
     if "jigsaw" in families_to_run:
         if args.jigsaw_checkpoints:
@@ -895,6 +992,7 @@ def main():
         families["jigsaw"] = run_jigsaw_loocv(
             spectra, labels, label_names, jigsaw_paths, args, device
         )
+        checkpoint_now()
 
     if "joint_ssl" in families_to_run:
         print("Joint SSL checkpoints:")
@@ -903,15 +1001,8 @@ def main():
         families["joint_ssl"] = run_joint_ssl_loocv_multi(
             spectra, labels, label_names, args.joint_checkpoints, args, device
         )
+        checkpoint_now()
 
-    run_config = vars(args).copy()
-    run_config.update(
-        {
-            "n_samples": int(len(labels)),
-            "spectrum_length": int(spectra.shape[1]),
-            "label_mapping": {str(i): name for i, name in enumerate(label_names)},
-        }
-    )
     save_results(args.output_dir, metadata, labels, label_names, args.label_column, families, run_config)
 
     print(f"\nResults written to {args.output_dir}/summary.csv")

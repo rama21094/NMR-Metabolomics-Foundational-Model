@@ -1,0 +1,68 @@
+{
+  "dataset": "barth",
+  "data": "data/Barth/aligned_128K_Workbench_Barth_Syndrome.npy",
+  "metadata": "data/Barth/Workbench_Barth_Syndrome_metadata.csv",
+  "label_column": "label",
+  "exclude_labels": [
+    "Pool"
+  ],
+  "output_dir": "results/fewshot/barth_v1_joint",
+  "families": [
+    "joint_ssl"
+  ],
+  "support_min": 2,
+  "support_max": null,
+  "support_step": 1,
+  "support_sizes": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "min_query_per_class": 2,
+  "repeats": 10,
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "xgb_jobs": 4,
+  "masking_checkpoint": "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_20260708_085105_bs32_mr0.20-0.60_ps1024_best.pth",
+  "jigsaw_checkpoint": "models/jigsaw/multibin/20260708_070540/multibin_20260708_070540_best.pth",
+  "joint_checkpoint": "models/joint_ssl/joint_ssl_20260708_071714/joint_ssl_20260708_071714_best.pth",
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "backbone_dropout": 0.15,
+  "nhead": 8,
+  "normalize_input": "auto",
+  "joint_normalize_input": "checkpoint",
+  "joint_include_masked_task": true,
+  "reinit_unfrozen_xavier": false,
+  "device": "cuda",
+  "seed": 42,
+  "make_plots": true,
+  "n_samples": 37,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "Control",
+    "1": "Case"
+  },
+  "class_counts": {
+    "Control": 14,
+    "Case": 23
+  }
+}

@@ -97,6 +97,7 @@ def run_joint_ssl_stratified_cv(spectra, labels, label_names, checkpoint_path, a
     n_splits = effective_n_splits(labels, args.n_splits)
     splitter = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=args.seed)
     results = {}
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
     for mode in args.fine_tune_modes:
         unfreeze_count = fine_tune_count(mode)
@@ -110,7 +111,7 @@ def run_joint_ssl_stratified_cv(spectra, labels, label_names, checkpoint_path, a
                 break
             set_seed(args.seed + fold)
             model, config = build_joint_classifier(
-                checkpoint_path=checkpoint_path,
+                checkpoint=checkpoint,
                 spectra=spectra,
                 n_classes=n_classes,
                 head_dropout=args.head_dropout,

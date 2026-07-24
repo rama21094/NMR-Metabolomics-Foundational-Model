@@ -1,0 +1,28 @@
+{
+  "data": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+  "metadata": "data/mtbls326/MTBLS326_metadata_mapping.csv",
+  "checkpoint": "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_20260708_085105_bs32_mr0.20-0.60_ps1024_best.pth",
+  "output_dir": "results/loocv/mtbls326_masked_metabolights_v1_xavier",
+  "classical_only": false,
+  "foundation_only": false,
+  "classical_features": "binned_auc",
+  "feature_bins": 256,
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "backbone_dropout": 0.15,
+  "nhead": 8,
+  "xgb_jobs": 4,
+  "device": "cuda",
+  "seed": 42,
+  "reinit_unfrozen_xavier": true,
+  "n_samples": 42,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "No",
+    "1": "Yes"
+  }
+}
