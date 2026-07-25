@@ -18,6 +18,7 @@ import json
 import math
 import os
 import random
+import sys
 from contextlib import nullcontext
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -424,7 +425,10 @@ def run_epoch(
             for batch in loaders[bin_size]:
                 iterable.append((bin_size, batch))
 
-    pbar = tqdm(iterable, desc=f"{phase} epoch {epoch}", leave=False)
+    # Disable tqdm's live in-place bar when stdout isn't a real terminal (e.g.
+    # piped through `| tee`) -- otherwise it prints one line per batch instead
+    # of overwriting a single line.
+    pbar = tqdm(iterable, desc=f"{phase} epoch {epoch}", leave=False, disable=not sys.stdout.isatty())
     for bin_size, batch in pbar:
         bins = batch["bins"].to(device, non_blocking=True)
         labels = batch["labels"].to(device, non_blocking=True)

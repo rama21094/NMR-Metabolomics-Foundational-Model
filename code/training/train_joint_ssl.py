@@ -10,6 +10,7 @@ import json
 import math
 import os
 import random
+import sys
 from contextlib import contextmanager, nullcontext
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -826,7 +827,10 @@ def run_epoch(
     is_train = optimizer is not None
     model.train(is_train)
     rows = []
-    pbar = tqdm(loader, desc=f"{phase} epoch {epoch}", leave=False)
+    # Disable tqdm's live in-place bar when stdout isn't a real terminal (e.g.
+    # piped through `| tee`) -- otherwise it prints one line per batch instead
+    # of overwriting a single line.
+    pbar = tqdm(loader, desc=f"{phase} epoch {epoch}", leave=False, disable=not sys.stdout.isatty())
     rng_context = fixed_torch_rng(config.eval_seed, device) if (not is_train and config.deterministic_eval) else nullcontext()
     with rng_context:
         for spectra in pbar:

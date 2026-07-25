@@ -11,6 +11,7 @@ import math
 import os
 import datetime
 import os
+import sys
 
 # Global dataset split fractions (modifiable)
 # These should sum to 1.0 (train + val + test). Modify as needed.
@@ -576,7 +577,12 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
         # Training phase
         model.train()
         epoch_train_loss = 0
-        pbar = tqdm(train_dataloader, desc=f'Epoch {epoch+1}/{num_epochs}')
+        # tqdm's live progress bar overwrites a single line via carriage returns,
+        # which only works on a real terminal. When stdout is redirected/piped
+        # (e.g. `| tee log.txt`), it falls back to printing a new line per
+        # refresh -- one line per batch. Disable it in that case; the epoch
+        # summary printed after this loop already reports the same info.
+        pbar = tqdm(train_dataloader, desc=f'Epoch {epoch+1}/{num_epochs}', disable=not sys.stdout.isatty())
         
         for batch_idx, batch in enumerate(pbar):
             optimizer.zero_grad()

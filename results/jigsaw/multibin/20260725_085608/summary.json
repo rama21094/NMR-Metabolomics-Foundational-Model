@@ -1,0 +1,13 @@
+{
+  "run_name": "multibin/20260725_085608",
+  "best_val_loss": 2.5502202227467397,
+  "best_checkpoint": "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth",
+  "epochs_completed": 400,
+  "bin_sizes": [
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "results_dir": "results/jigsaw/multibin/20260725_085608"
+}
