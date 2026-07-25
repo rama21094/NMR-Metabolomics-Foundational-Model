@@ -17,4 +17,5 @@ __pycache__/
 # Specific File Extensions
 *.npy
 *.pth
+*.pt
 *.npz

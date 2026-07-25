@@ -1,0 +1,24 @@
+{
+  "n_model_rows_compared": 39,
+  "mean_delta_balanced_accuracy": -0.010767466764158252,
+  "median_delta_balanced_accuracy": 0.0,
+  "n_xavier_better": 15,
+  "n_pretrained_better": 15,
+  "n_tied": 9,
+  "worst_regression": {
+    "row": {
+      "dataset": "MTBLS326 (masking)",
+      "family": "foundation",
+      "model": "unfreeze_last_3"
+    },
+    "delta": -0.30000000000000004
+  },
+  "best_xavier_gain": {
+    "row": {
+      "dataset": "Barth",
+      "family": "jigsaw",
+      "model": "jigsaw_multibin_unfreeze_last_2"
+    },
+    "delta": 0.1288819875776398
+  }
+}

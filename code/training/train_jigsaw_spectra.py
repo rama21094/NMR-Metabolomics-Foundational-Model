@@ -780,7 +780,7 @@ def validate_bin_sizes(values: Iterable[int]) -> list[int]:
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser(description="Train NMR jigsaw self-supervised models.")
     parser.add_argument("--mode", choices=["fixed", "sweep", "multibin"], default="fixed")
-    parser.add_argument("--data-path", nargs="+", default=["data/combined/combine_unique_Water_EDTA_Suppressed.npy"])
+    parser.add_argument("--data-path", nargs="+", default=["data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy"])
     parser.add_argument("--bin-size", type=int, default=1024, choices=SUPPORTED_BIN_SIZES)
     parser.add_argument("--bin-sizes", nargs="+", type=int, default=list(SUPPORTED_BIN_SIZES))
     parser.add_argument("--out-dir", default="results/jigsaw")

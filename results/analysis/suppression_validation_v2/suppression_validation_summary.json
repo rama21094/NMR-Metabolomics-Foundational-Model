@@ -1,0 +1,122 @@
+[
+  {
+    "dataset": "train_corpus_v2",
+    "path": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v2.npy",
+    "n_spectra": 9670,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 9670,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 9666,
+    "pct_edta_unmasked_with_real_peak": 99.95863495346433,
+    "water_max_p50": 0.00023124309706676972,
+    "water_max_p99": 0.011234522067118745,
+    "water_max_max": 0.9934452287667438,
+    "edta_max_p50": 0.12152309148919502,
+    "edta_max_p99": 0.703436173324543,
+    "edta_max_max": 1.0
+  },
+  {
+    "dataset": "barth_v2",
+    "path": "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v2.npy",
+    "n_spectra": 40,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 40,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 40,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.00197012807037691,
+    "water_max_p99": 0.01458721333262699,
+    "water_max_max": 0.016509675224418704,
+    "edta_max_p50": 0.17254773917073418,
+    "edta_max_p99": 0.21291817310702077,
+    "edta_max_max": 0.21538314799516603
+  },
+  {
+    "dataset": "mtbls326_v2",
+    "path": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v2.npy",
+    "n_spectra": 42,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 42,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 42,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.0005327131320380851,
+    "water_max_p99": 0.00664569578614657,
+    "water_max_max": 0.007866577788127369,
+    "edta_max_p50": 0.3350337036374025,
+    "edta_max_p99": 1.0,
+    "edta_max_max": 1.0
+  },
+  {
+    "dataset": "mtbls563_v2",
+    "path": "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax_v2.npy",
+    "n_spectra": 142,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 142,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 142,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.001576607397072727,
+    "water_max_p99": 0.08455598431228911,
+    "water_max_max": 0.17849196434734,
+    "edta_max_p50": 0.581516221209336,
+    "edta_max_p99": 1.0,
+    "edta_max_max": 1.0
+  }
+]

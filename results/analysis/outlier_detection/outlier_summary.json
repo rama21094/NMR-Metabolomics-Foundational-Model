@@ -1,0 +1,33 @@
+{
+  "n_spectra": 9670,
+  "n_peaks_used": 60,
+  "contamination": 0.02,
+  "n_flagged_per_method": 193,
+  "n_consensus_2of3": 62,
+  "n_consensus_3of3": 3,
+  "top_consensus_rows": [
+    1,
+    8835,
+    8608,
+    9493,
+    9495,
+    1732,
+    5487,
+    297,
+    9512,
+    1488,
+    6510,
+    9540,
+    7228,
+    1249,
+    8872,
+    9562,
+    8785,
+    1077,
+    1048,
+    7187
+  ],
+  "shape_corr_p1": 0.007617608176064538,
+  "shape_corr_min": -0.12309766762025069,
+  "shape_corr_median": 0.8152675630076198
+}

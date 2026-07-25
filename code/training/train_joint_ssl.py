@@ -1203,7 +1203,7 @@ def train_one_run(config: RunConfig) -> dict:
 
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-path", nargs="+", default=["data/combined/combine_unique_Water_EDTA_Suppressed.npy"])
+    parser.add_argument("--data-path", nargs="+", default=["data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy"])
     parser.add_argument("--out-dir", default="results/joint_ssl")
     parser.add_argument("--model-dir", default="models/joint_ssl")
     parser.add_argument("--epochs", type=int, default=400)

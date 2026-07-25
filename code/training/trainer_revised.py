@@ -828,7 +828,7 @@ def main():
     parser.add_argument(
         '--data-path',
         nargs='+',
-        default=['data/combined/combine_unique_Water_EDTA_Suppressed.npy'],
+        default=['data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy'],
         help='Path(s) to NMR spectra .npy file(s). Multiple files can be passed separated by space.'
     )
     parser.add_argument('--mask-ratio-min', type=float, default=0.20, help='Lower bound of per-sample random masking ratio')

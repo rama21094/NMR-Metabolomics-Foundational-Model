@@ -1,0 +1,10 @@
+Loaded 9670 spectra x 60 peaks from results/analysis/peak_saturation_full_nw
+Analyzed peak 1/60Analyzed peak 2/60Analyzed peak 3/60Analyzed peak 4/60Analyzed peak 5/60Analyzed peak 6/60Analyzed peak 7/60Analyzed peak 8/60Analyzed peak 9/60Analyzed peak 10/60Analyzed peak 11/60Analyzed peak 12/60Analyzed peak 13/60Analyzed peak 14/60Analyzed peak 15/60Analyzed peak 16/60Analyzed peak 17/60Analyzed peak 18/60Analyzed peak 19/60Analyzed peak 20/60Analyzed peak 21/60Analyzed peak 22/60Analyzed peak 23/60Analyzed peak 24/60Analyzed peak 25/60Analyzed peak 26/60Analyzed peak 27/60Analyzed peak 28/60Analyzed peak 29/60Analyzed peak 30/60Analyzed peak 31/60Analyzed peak 32/60Analyzed peak 33/60Analyzed peak 34/60Analyzed peak 35/60Analyzed peak 36/60Analyzed peak 37/60Analyzed peak 38/60Analyzed peak 39/60Analyzed peak 40/60Analyzed peak 41/60Analyzed peak 42/60Analyzed peak 43/60Analyzed peak 44/60Analyzed peak 45/60Analyzed peak 46/60Analyzed peak 47/60Analyzed peak 48/60Analyzed peak 49/60Analyzed peak 50/60Analyzed peak 51/60Analyzed peak 52/60Analyzed peak 53/60Analyzed peak 54/60Analyzed peak 55/60Analyzed peak 56/60Analyzed peak 57/60Analyzed peak 58/60Analyzed peak 59/60Analyzed peak 60/60
+
+Done. 60 peaks analyzed.
+KS saturation ratio: median=0.093, min=0.079, max=0.292 (lower = more comfortably saturated).
+0 peak(s) never dropped below KS threshold 0.05 using all available probe data -- these are the ones most likely to still benefit from more spectra.
+Wrote: results/analysis/peak_saturation_full_nw/saturation_summary.csv
+Wrote: results/analysis/peak_saturation_full_nw/distributions_grid.png
+Wrote: results/analysis/peak_saturation_full_nw/ks_convergence_grid.png
+Wrote: results/analysis/peak_saturation_full_nw/saturation_ratio_summary.png

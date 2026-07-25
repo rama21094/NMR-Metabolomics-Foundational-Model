@@ -11,12 +11,23 @@ B's "peak #7" are not guaranteed to be the same metabolite resonance. Instead:
   2. Peak-pick ONCE on that reference (scipy.signal.find_peaks, prominence +
      minimum-distance gated) -> a canonical list of point positions, each
      meant to represent one real metabolite resonance.
-  3. For every individual spectrum, search a small window around each
-     canonical position for that spectrum's own local maximum -- this
-     absorbs the slight per-sample chemical-shift drift that's normal in NMR
-     even after a shared 0 ppm (solvent) reference alignment. A local SNR
-     gate marks genuinely absent peaks as not-detected (NaN) instead of
-     recording a noise value as if it were real signal.
+  3. Match each individual spectrum's own peaks back to that canonical list.
+     Two --align-method options:
+       - 'nw' (default): independently peak-pick each spectrum and align its
+         peak list against the canonical one via Needleman-Wunsch (see
+         peak_list_alignment.py) -- every peak's match can shift by a
+         different amount, which matters because chemical-shift drift is
+         per-metabolite (pH/ionic-strength sensitive groups move more than
+         inert ones), not a single whole-spectrum offset. Verified on the
+         75k-80k region: recovered several peaks the window method had
+         missed (detection 9-19% -> 65-77%) purely because their drift
+         didn't match that spectrum's single best-fit shift.
+       - 'window': search a small fixed window around each canonical
+         position for that spectrum's own local maximum, optionally after a
+         --realign coarse global shift. Simpler, but assumes one shift (or
+         none) covers every peak in a spectrum.
+     Both gate detection on local SNR so a genuinely absent peak is recorded
+     as not-detected (NaN) rather than a noise value.
 
 Known suppressed regions (water: points [62500, 68000); EDTA: a
 sample-dependent window inside roughly [72000, 74000), see
@@ -51,6 +62,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import find_peaks
+
+from peak_list_alignment import align_peak_lists, pick_spectrum_peaks
 
 
 DEFAULT_DATA = "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax.npy"
@@ -270,6 +283,95 @@ def extract_matched_values(
     return values, shifts, detected
 
 
+def extract_matched_values_nw(
+    data_path: str,
+    peak_indices: np.ndarray,
+    exclude: np.ndarray,
+    area_halfwidth: int,
+    value_mode: str,
+    min_snr: float,
+    chunk_size: int,
+    nw_tolerance: float,
+    nw_gap_penalty: float,
+    nw_match_bonus: float,
+    nw_min_peak_distance: int,
+    nw_min_prominence_snr: float,
+    nw_margin: int,
+    nw_max_query_peaks: int,
+):
+    """Like extract_matched_values, but instead of a fixed per-peak search
+    window, each spectrum is independently peak-picked and its peak list is
+    Needleman-Wunsch-aligned against the canonical peak list (see
+    peak_list_alignment.py). This lets each canonical peak's match shift
+    independently within a spectrum, rather than assuming one shift applies
+    to the whole spectrum (--realign) or a fixed small window catches
+    everything (the plain small-window mode).
+
+    Returns (values, shifts, detected, n_query_peaks, n_matched, align_score)
+    -- the first three have the same (n_spectra, n_peaks) shape as
+    extract_matched_values so they drop into the same
+    save_canonical_peaks/plot_shift_diagnostics/peak_saturation.py pipeline
+    unchanged; the last three are per-spectrum alignment diagnostics.
+    """
+    arr = np.load(data_path, mmap_mode="r")
+    n, length = arr.shape
+    n_peaks = len(peak_indices)
+    values = np.full((n, n_peaks), np.nan, dtype=np.float64)
+    shifts = np.zeros((n, n_peaks), dtype=np.int32)
+    detected = np.zeros((n, n_peaks), dtype=bool)
+    n_query_peaks = np.zeros(n, dtype=np.int32)
+    n_matched = np.zeros(n, dtype=np.int32)
+    align_score = np.zeros(n, dtype=np.float64)
+
+    seg_lo = max(0, int(peak_indices.min()) - nw_margin)
+    seg_hi = min(length, int(peak_indices.max()) + nw_margin + 1)
+
+    for start in range(0, n, chunk_size):
+        stop = min(start + chunk_size, n)
+        chunk = np.asarray(arr[start:stop, seg_lo:seg_hi], dtype=np.float64)
+
+        for k in range(chunk.shape[0]):
+            row = start + k
+            # noise_sd/med below are a single robust estimate over the WHOLE
+            # segment (same one used for peak-picking's prominence
+            # threshold) -- deliberately *not* a narrow local flank, which
+            # would be contaminated by the matched peak's own shoulder and
+            # understate its true SNR (verified: a +-30pt flank gave SNR
+            # ~1 for peaks whose whole-segment SNR was actually 2.5-4.5).
+            query_pos, _query_prom, noise_sd, med = pick_spectrum_peaks(
+                chunk[k], seg_lo, nw_min_prominence_snr, nw_min_peak_distance,
+                exclude=exclude, max_peaks=nw_max_query_peaks,
+            )
+            n_query_peaks[row] = len(query_pos)
+            matches, score = align_peak_lists(
+                peak_indices, query_pos, nw_tolerance, nw_gap_penalty, nw_match_bonus
+            )
+            n_matched[row] = len(matches)
+            align_score[row] = score
+
+            for ref_i, q_i in matches.items():
+                matched_abs = int(query_pos[q_i])
+                local = matched_abs - seg_lo
+
+                peak_val = chunk[k, local]
+                snr = (peak_val - med) / noise_sd
+                is_detected = bool(snr >= min_snr)
+
+                if value_mode == "area":
+                    a_lo, a_hi = max(0, local - area_halfwidth), min(chunk.shape[1], local + area_halfwidth + 1)
+                    out_val = max(float(np.trapz(chunk[k, a_lo:a_hi] - med, dx=1.0)), 0.0)
+                else:
+                    out_val = float(peak_val - med)
+
+                values[row, ref_i] = out_val if is_detected else np.nan
+                shifts[row, ref_i] = matched_abs - int(peak_indices[ref_i])
+                detected[row, ref_i] = is_detected
+
+        print(f"\rNW-aligned {stop}/{n} spectra", end="", flush=True)
+    print()
+    return values, shifts, detected, n_query_peaks, n_matched, align_score
+
+
 def save_canonical_peaks(path, peak_indices, prominences, tolerances, detected, shifts,
                           points_per_ppm, index_at_zero_ppm):
     # Shifts are only meaningful for rows that actually passed the detection
@@ -375,12 +477,51 @@ def parse_args():
     parser.add_argument("--realign-margin", type=int, default=1000)
     parser.add_argument("--realign-max-shift", type=int, default=800,
                          help="Max +/- shift (points) searched during realignment.")
+
+    parser.add_argument(
+        "--align-method", choices=["window", "nw"], default="nw",
+        help="'nw' (default): peak-list Needleman-Wunsch alignment -- each spectrum is independently "
+             "peak-picked and its peak list is aligned against the canonical list, letting every peak's "
+             "match shift independently. Verified on the 75k-80k region to recover several peaks the "
+             "window method missed (detection 9-19%% -> 65-77%%) since their drift didn't match the "
+             "spectrum's single global shift. 'window': fixed small search window per peak, optionally "
+             "coarse-shifted by --realign (one shift for the whole spectrum); --realign is ignored when "
+             "'nw' is used since NW handles per-peak drift natively.",
+    )
+    parser.add_argument("--nw-tolerance", type=float, default=300.0,
+                         help="Max position distance (points) for a canonical/query peak pair to be a "
+                              "valid NW match; beyond this the alignment uses a gap instead.")
+    parser.add_argument("--nw-gap-penalty", type=float, default=-3.0,
+                         help="Score penalty for leaving a canonical peak unmatched or an extra query "
+                              "peak unaligned. More negative discourages gaps (forces more matches); "
+                              "less negative (closer to 0) allows more peaks to go undetected rather "
+                              "than accepting a distant match.")
+    parser.add_argument("--nw-match-bonus", type=float, default=10.0,
+                         help="Score for a perfect (zero-distance) match; falls off linearly to 0 at "
+                              "--nw-tolerance.")
+    parser.add_argument("--nw-min-peak-distance", type=int, default=10,
+                         help="Minimum spacing (points) between distinct peaks picked in each individual "
+                              "spectrum for NW alignment.")
+    parser.add_argument("--nw-min-prominence-snr", type=float, default=2.0,
+                         help="Per-spectrum peak-picking prominence threshold, in robust noise SDs. "
+                              "Lower than the canonical-peak threshold since a real but modest peak in "
+                              "one spectrum should still be picked up; the NW gap penalty (not this "
+                              "threshold) is what rejects spurious matches.")
+    parser.add_argument("--nw-margin", type=int, default=1000,
+                         help="Peak-picking region margin (points) beyond the canonical peaks' own "
+                              "range, so peaks that drifted outside that range can still be found.")
+    parser.add_argument("--nw-max-query-peaks", type=int, default=200,
+                         help="Cap on peaks picked per spectrum (keeps the most prominent), bounding "
+                              "the O(R*Q) alignment cost for unusually noisy spectra.")
+
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     if len(args.extra_exclude_ranges) % 2 != 0:
         parser.error("--extra-exclude-ranges expects an even number of ints (lo hi pairs).")
     if args.realign and args.search_range is None and args.realign_segment is None:
         parser.error("--realign requires --search-range or an explicit --realign-segment.")
+    if args.align_method == "nw" and args.realign:
+        print("Note: --align-method nw ignores --realign (NW aligns each peak independently).")
     return args
 
 
@@ -419,31 +560,60 @@ def main():
         n_shrunk = int(np.sum(tolerances < args.tolerance_points))
         print(f"Note: shrank search tolerance for {n_shrunk} peak(s) to avoid overlapping a neighbor.")
 
+    nw_diagnostics = None
     row_shifts = None
-    if args.realign:
-        if args.realign_segment is not None:
-            seg_lo, seg_hi = args.realign_segment
-        else:
-            search_lo, search_hi = args.search_range
-            seg_lo = max(0, search_lo - args.realign_margin)
-            seg_hi = min(length, search_hi + args.realign_margin)
-        print(f"Estimating per-spectrum coarse realignment shift from segment [{seg_lo}, {seg_hi}) "
-              f"(max shift +/-{args.realign_max_shift})...")
-        row_shifts, sharpness = estimate_local_shifts(
-            args.data, reference, seg_lo, seg_hi, args.realign_max_shift, args.chunk_size
-        )
-        np.save(out_dir / "spectrum_realignment_shift.npy", row_shifts)
-        np.save(out_dir / "spectrum_realignment_sharpness.npy", sharpness)
+    if args.align_method == "nw":
         print(
-            f"Realignment shift: mean={row_shifts.mean():.1f}, std={row_shifts.std():.1f}, "
-            f"median sharpness={np.nanmedian(sharpness):.2f}"
+            f"NW peak-list alignment: tolerance={args.nw_tolerance}, gap_penalty={args.nw_gap_penalty}, "
+            f"per-spectrum peak picking distance>={args.nw_min_peak_distance}, "
+            f"prominence>={args.nw_min_prominence_snr}*noise_sd."
         )
+        values, shifts, detected, n_query_peaks, n_matched, align_score = extract_matched_values_nw(
+            args.data, peak_indices, exclude,
+            args.area_halfwidth, args.value_mode, args.min_snr, args.chunk_size,
+            args.nw_tolerance, args.nw_gap_penalty, args.nw_match_bonus,
+            args.nw_min_peak_distance, args.nw_min_prominence_snr, args.nw_margin, args.nw_max_query_peaks,
+        )
+        tolerances = np.full(len(peak_indices), args.nw_tolerance)
+        np.save(out_dir / "nw_n_query_peaks.npy", n_query_peaks)
+        np.save(out_dir / "nw_n_matched.npy", n_matched)
+        np.save(out_dir / "nw_align_score.npy", align_score)
+        nw_diagnostics = {
+            "mean_query_peaks_found": float(n_query_peaks.mean()),
+            "mean_canonical_peaks_matched": float(n_matched.mean()),
+            "mean_match_fraction": float((n_matched / max(len(peak_indices), 1)).mean()),
+        }
+        print(
+            f"NW alignment: mean {nw_diagnostics['mean_query_peaks_found']:.1f} query peaks found/spectrum, "
+            f"mean {nw_diagnostics['mean_canonical_peaks_matched']:.1f}/{len(peak_indices)} canonical peaks "
+            f"matched ({nw_diagnostics['mean_match_fraction']:.1%})."
+        )
+    else:
+        row_shifts = None
+        if args.realign:
+            if args.realign_segment is not None:
+                seg_lo, seg_hi = args.realign_segment
+            else:
+                search_lo, search_hi = args.search_range
+                seg_lo = max(0, search_lo - args.realign_margin)
+                seg_hi = min(length, search_hi + args.realign_margin)
+            print(f"Estimating per-spectrum coarse realignment shift from segment [{seg_lo}, {seg_hi}) "
+                  f"(max shift +/-{args.realign_max_shift})...")
+            row_shifts, sharpness = estimate_local_shifts(
+                args.data, reference, seg_lo, seg_hi, args.realign_max_shift, args.chunk_size
+            )
+            np.save(out_dir / "spectrum_realignment_shift.npy", row_shifts)
+            np.save(out_dir / "spectrum_realignment_sharpness.npy", sharpness)
+            print(
+                f"Realignment shift: mean={row_shifts.mean():.1f}, std={row_shifts.std():.1f}, "
+                f"median sharpness={np.nanmedian(sharpness):.2f}"
+            )
 
-    values, shifts, detected = extract_matched_values(
-        args.data, peak_indices, tolerances, exclude,
-        args.area_halfwidth, args.value_mode, args.min_snr, args.chunk_size,
-        row_shifts=row_shifts,
-    )
+        values, shifts, detected = extract_matched_values(
+            args.data, peak_indices, tolerances, exclude,
+            args.area_halfwidth, args.value_mode, args.min_snr, args.chunk_size,
+            row_shifts=row_shifts,
+        )
 
     np.save(out_dir / "peak_values.npy", values)
     np.save(out_dir / "peak_shifts.npy", shifts)
@@ -467,6 +637,7 @@ def main():
             "peaks_with_edge_clipping_gt_5pct": int(np.sum(edge_frac > 0.05)),
             "realignment_shift_mean": float(row_shifts.mean()) if row_shifts is not None else None,
             "realignment_shift_std": float(row_shifts.std()) if row_shifts is not None else None,
+            "nw_diagnostics": nw_diagnostics,
         }
     )
     with (out_dir / "run_config.json").open("w", encoding="utf-8") as handle:

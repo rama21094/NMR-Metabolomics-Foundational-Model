@@ -1,0 +1,15 @@
+[
+  {
+    "dataset": "train_corpus",
+    "input": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed.npy",
+    "final_output": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy",
+    "water_summary": {
+      "rows": 9670,
+      "changed_rows": 6746
+    },
+    "edta_summary": {
+      "rows": 9670,
+      "n_rows_suppressed": 257
+    }
+  }
+]

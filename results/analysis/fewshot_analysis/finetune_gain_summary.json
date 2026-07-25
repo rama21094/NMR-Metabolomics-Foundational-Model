@@ -1,0 +1,14 @@
+{
+  "mean_gain_over_frozen_overall": 0.003401635853014536,
+  "frac_modes_positive_gain": 0.5555555555555556,
+  "by_family_mean_gain": {
+    "jigsaw": 0.006795512140515661,
+    "joint_ssl": -0.00428164572670242,
+    "masking": 0.0076910411452303686
+  },
+  "by_dataset_mean_gain": {
+    "Barth": -0.0005716457748191433,
+    "MTBLS326": 0.0064953488028907675,
+    "MTBLS563 (multiclass)": 0.004281204530971983
+  }
+}
