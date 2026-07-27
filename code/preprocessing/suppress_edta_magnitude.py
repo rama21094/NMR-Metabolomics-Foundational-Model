@@ -99,6 +99,12 @@ def detect_dominant_peaks(spectrum: np.ndarray) -> list[dict]:
             break  # tallest remaining candidate isn't dominant -> nothing more to do
 
         cutoff = baseline + max(TAIL_FRACTION * prominence, NOISE_MULTIPLIER * noise_sd)
+        # Guard: if edge noise is itself elevated, the noise-floor cutoff can exceed
+        # the peak's own height, so the boundary search below never advances and a
+        # confirmed-dominant peak (ratio >= RATIO_THRESHOLD) silently goes unsuppressed.
+        # Cap the cutoff at the midpoint between baseline and peak so the peak always
+        # clears its own boundary cutoff.
+        cutoff = min(cutoff, baseline + 0.5 * max(peak_value - baseline, 0.0))
         left = peak
         while left > 0 and window[left] > cutoff:
             left -= 1

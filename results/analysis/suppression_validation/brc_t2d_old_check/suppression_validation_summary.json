@@ -1,0 +1,32 @@
+[
+  {
+    "dataset": "brc_t2d_old_rowminmax",
+    "path": "data/BrC_T2D/BC_T2D_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+    "n_spectra": 115,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 115,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 115,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.001155330217107838,
+    "water_max_p99": 0.017842643864694634,
+    "water_max_max": 0.01792592384777439,
+    "edta_max_p50": 0.49776723620495683,
+    "edta_max_p99": 0.9742826677012366,
+    "edta_max_max": 1.0
+  }
+]

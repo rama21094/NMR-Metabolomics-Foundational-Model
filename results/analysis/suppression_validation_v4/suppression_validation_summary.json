@@ -1,0 +1,152 @@
+[
+  {
+    "dataset": "train_corpus_v4",
+    "path": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy",
+    "n_spectra": 9670,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 9670,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 9665,
+    "pct_edta_unmasked_with_real_peak": 99.9482936918304,
+    "water_max_p50": 0.00023328321345782464,
+    "water_max_p99": 0.027818862252719026,
+    "water_max_max": 0.9934452287667438,
+    "edta_max_p50": 0.12140983036456401,
+    "edta_max_p99": 0.5614066862732379,
+    "edta_max_max": 1.0
+  },
+  {
+    "dataset": "barth_v4",
+    "path": "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v4.npy",
+    "n_spectra": 40,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 40,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 40,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.00197012807037691,
+    "water_max_p99": 0.01458721333262699,
+    "water_max_max": 0.016509675224418704,
+    "edta_max_p50": 0.1734045913605008,
+    "edta_max_p99": 0.21291817310702077,
+    "edta_max_max": 0.21538314799516603
+  },
+  {
+    "dataset": "mtbls326_v4",
+    "path": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+    "n_spectra": 42,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 42,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 42,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.0006181613734032904,
+    "water_max_p99": 0.007570131927483756,
+    "water_max_max": 0.007866577788127369,
+    "edta_max_p50": 0.3328283674534762,
+    "edta_max_p99": 0.8407029002020953,
+    "edta_max_max": 0.9506982658357491
+  },
+  {
+    "dataset": "mtbls563_v4",
+    "path": "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+    "n_spectra": 142,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 142,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 142,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.02040390877347239,
+    "water_max_p99": 0.0877206465048868,
+    "water_max_max": 0.17849196434734,
+    "edta_max_p50": 0.5155618500476827,
+    "edta_max_p99": 0.9684615798468056,
+    "edta_max_max": 1.0
+  },
+  {
+    "dataset": "brc_t2d_v4",
+    "path": "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v4.npy",
+    "n_spectra": 78,
+    "length": 131072,
+    "water_range": [
+      62500,
+      68000
+    ],
+    "edta_range": [
+      72000,
+      74000
+    ],
+    "prominence_k": 3.0,
+    "flat_rel_eps": 1e-06,
+    "n_water_hard_masked": 78,
+    "pct_water_hard_masked": 100.0,
+    "n_water_unmasked_with_real_peak": 0,
+    "pct_water_unmasked_with_real_peak": 0.0,
+    "n_edta_hard_masked": 0,
+    "pct_edta_hard_masked": 0.0,
+    "n_edta_unmasked_with_real_peak": 78,
+    "pct_edta_unmasked_with_real_peak": 100.0,
+    "water_max_p50": 0.0014852753775539485,
+    "water_max_p99": 0.027721920434442437,
+    "water_max_max": 0.060517213355026044,
+    "edta_max_p50": 0.3847510419461351,
+    "edta_max_p99": 0.8157286762396757,
+    "edta_max_max": 0.9222661222134341
+  }
+]

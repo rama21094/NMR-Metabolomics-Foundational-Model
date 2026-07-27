@@ -1,0 +1,67 @@
+[
+  {
+    "dataset": "train_corpus",
+    "input": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed.npy",
+    "final_output": "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy",
+    "water_summary": {
+      "rows": 9670,
+      "changed_rows": 6746
+    },
+    "edta_summary": {
+      "rows": 9670,
+      "n_rows_suppressed": 287
+    }
+  },
+  {
+    "dataset": "barth",
+    "input": "data/Barth/aligned_128K_Workbench_Barth_Syndrome.npy",
+    "final_output": "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v4.npy",
+    "water_summary": {
+      "rows": 40,
+      "changed_rows": 40
+    },
+    "edta_summary": {
+      "rows": 40,
+      "n_rows_suppressed": 0
+    }
+  },
+  {
+    "dataset": "mtbls326",
+    "input": "data/mtbls326/MTBLS326_aligned_spectra.npy",
+    "final_output": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+    "water_summary": {
+      "rows": 42,
+      "changed_rows": 42
+    },
+    "edta_summary": {
+      "rows": 42,
+      "n_rows_suppressed": 10
+    }
+  },
+  {
+    "dataset": "mtbls563",
+    "input": "data/mtbls563/MTBLS563_aligned_spectra.npy",
+    "final_output": "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+    "water_summary": {
+      "rows": 142,
+      "changed_rows": 142
+    },
+    "edta_summary": {
+      "rows": 142,
+      "n_rows_suppressed": 86
+    }
+  },
+  {
+    "dataset": "brc_t2d_newlabels",
+    "input": "data/BrC_T2D/BC_T2D_newlabels_aligned_spectra.npy",
+    "final_output": "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v4.npy",
+    "water_summary": {
+      "rows": 78,
+      "changed_rows": 0
+    },
+    "edta_summary": {
+      "rows": 78,
+      "n_rows_suppressed": 35
+    }
+  }
+]

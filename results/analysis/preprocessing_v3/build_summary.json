@@ -1,0 +1,15 @@
+[
+  {
+    "dataset": "brc_t2d_newlabels",
+    "input": "data/BrC_T2D/BC_T2D_newlabels_aligned_spectra.npy",
+    "final_output": "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v3.npy",
+    "water_summary": {
+      "rows": 78,
+      "changed_rows": 0
+    },
+    "edta_summary": {
+      "rows": 78,
+      "n_rows_suppressed": 23
+    }
+  }
+]
