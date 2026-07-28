@@ -126,14 +126,51 @@ def _reinit_all_parameters_(model, seed: int) -> None:
             nn.init.normal_(p, mean=0.0, std=0.02)
 
 
-def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, seed=42):
+def pool_tokens(enc: "torch.Tensor", pooling: str) -> "torch.Tensor":
+    """Pool a (B, T, D) token sequence down to a per-spectrum feature vector.
+
+    "mean_pool" averages over tokens, which discards WHERE in the spectrum each
+    token came from -- and chemical-shift position is the discriminative
+    information in NMR, so this costs real accuracy (experiment #4: +0.030..
+    +0.129 recovered by keeping it).
+
+    "flatten" keeps every position but gives T*D features (16384 at
+    patch_size=1024), which is a lot against n=37..113 samples.
+
+    "regional:G" is the middle ground: mean-pool within G contiguous token
+    groups and concatenate, for G*D features. G=1 reproduces mean_pool and G=T
+    reproduces flatten. All three are frozen, label-independent transforms, so
+    they compose with a cross-validated probe without leakage.
+    """
+    if pooling == "mean_pool":
+        return enc.mean(dim=1)
+    if pooling == "flatten":
+        return enc.reshape(enc.shape[0], -1)
+    if pooling.startswith("regional:"):
+        groups = int(pooling.split(":", 1)[1])
+        b, t, d = enc.shape
+        if groups > t:
+            raise ValueError(f"regional groups={groups} exceeds token count {t}")
+        t_use = (t // groups) * groups
+        return enc[:, :t_use, :].reshape(b, groups, t_use // groups, d).mean(dim=2).reshape(b, groups * d)
+    raise ValueError(f"unknown pooling {pooling!r}")
+
+
+def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, seed=42,
+                  pooling="mean_pool", nhead=None):
     from trainer_revised import NMRMaskedAutoencoder
     from barth_all_models_loocv import infer_mae_config
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     state = ck["model_state_dict"]
+    # nhead is not recoverable from tensor shapes (in_proj_weight is
+    # (3*d_model, d_model) for any head count), so prefer the recorded value and
+    # fall back to 8 -- what the committed eval scripts guessed -- for legacy
+    # checkpoints that predate architecture recording.
+    recorded = ck.get("hyperparameters", {}).get("nhead")
+    nh = nhead if nhead is not None else (recorded if recorded else 8)
     _maybe_seed(random_init, seed)
-    model = NMRMaskedAutoencoder(spectrum_length=spectra.shape[1], **infer_mae_config(state, 8, 0.0))
+    model = NMRMaskedAutoencoder(spectrum_length=spectra.shape[1], **infer_mae_config(state, int(nh), 0.0))
     # random_init: keep the architecture, load NOTHING -- a genuine
     # untrained-backbone control (patch embedding and positional encoding
     # included), unlike --reinit-unfrozen-xavier which only resets the layers
@@ -146,12 +183,18 @@ def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, s
         for s in range(0, len(spectra), batch_size):
             x = torch.from_numpy(np.asarray(spectra[s:s + batch_size], dtype=np.float32)).to(device)
             _, enc = model(x, mask=None)
-            out.append(enc.mean(dim=1).cpu().numpy())
+            out.append(pool_tokens(enc, pooling).cpu().numpy())
     del model
     return np.vstack(out).astype(np.float32)
 
 
-def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42):
+def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42,
+                 pooling="native", nhead=None):
+    # jigsaw pools natively as concat-of-per-bin-size-mean-pools (768-d). The
+    # alternative poolings are only evidenced for masking (experiment #4), and a
+    # flatten here would be ~184k features, so "native" is the only mode.
+    if pooling not in ("native", "mean_pool"):
+        raise ValueError(f"jigsaw supports pooling='native' only, got {pooling!r}")
     from train_jigsaw_spectra import JigsawNMRModel
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
@@ -186,7 +229,11 @@ def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, se
     return np.vstack(out).astype(np.float32)
 
 
-def embed_joint(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42):
+def embed_joint(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42,
+                pooling="native", nhead=None):
+    # joint pools natively via encode_spectrum (960-d); see embed_jigsaw note.
+    if pooling not in ("native", "mean_pool"):
+        raise ValueError(f"joint supports pooling='native' only, got {pooling!r}")
     from train_joint_ssl import build_joint_model_from_loaded_checkpoint
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)

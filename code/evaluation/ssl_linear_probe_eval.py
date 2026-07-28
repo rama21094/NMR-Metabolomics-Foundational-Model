@@ -60,6 +60,14 @@ from probe_logreg_advantage import DATASETS, load_generic  # noqa: E402
 
 C_GRID = [1e-3, 1e-2, 1e-1, 1.0, 10.0, 100.0]
 
+# Default pooling per family. masking defaults to "flatten" because experiment #4
+# showed position-preserving pooling beats mean-pooling on all five targets
+# (+0.030..+0.129) -- chemical-shift position is the discriminative signal in NMR
+# and mean-pooling averages it away. jigsaw and joint keep their native pooling:
+# no alternative was evidenced for them, and a flatten there would run to ~184k
+# features. Override per run with --pooling.
+DEFAULT_POOLING = {"masking": "flatten", "jigsaw": "native", "joint": "native"}
+
 
 def build_probe(seed: int, tune_c: bool, inner_splits: int):
     """Pipeline with optional nested-CV selection of the L2 strength."""
@@ -125,6 +133,12 @@ def main():
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--output-root", default="results/linear_probe/ssl_linear_probe_v4")
     parser.add_argument(
+        "--pooling", default=None,
+        help="Override token pooling for ALL families: 'mean_pool', 'flatten', "
+             "'regional:G' (mean-pool within G contiguous token groups), or "
+             "'native'. Default is per-family: masking=flatten (experiment #4), "
+             "jigsaw/joint=native.")
+    parser.add_argument(
         "--random-backbone", action="store_true",
         help="EXPERIMENT #3 CONTROL: keep each architecture but load no pretrained "
              "weights at all, so the probe reads a genuinely untrained backbone. "
@@ -159,8 +173,10 @@ def main():
         summary_rows, fold_rows, oof_cols = [], [], {}
 
         for family in args.families:
+            pooling = args.pooling or DEFAULT_POOLING[family]
             emb = EMBEDDERS[family](CHECKPOINTS[family], spectra, device,
-                                    random_init=args.random_backbone, seed=args.seed)
+                                    random_init=args.random_backbone, seed=args.seed,
+                                    pooling=pooling)
             if device.type == "cuda":
                 torch.cuda.empty_cache()
 
@@ -168,7 +184,8 @@ def main():
                 emb, labels, n_splits, args.seed, args.tune_c, args.inner_splits, n_classes)
 
             metrics = aggregate_metrics(labels, oof_pred, oof_prob, label_names)
-            model_name = (f"{family}_linear_probe"
+            pool_tag = pooling.replace(":", "")
+            model_name = (f"{family}_linear_probe_{pool_tag}"
                           + ("_tunedC" if args.tune_c else "_C1")
                           + ("_randominit" if args.random_backbone else ""))
             row = dict(family=family, model=model_name, n_evaluated=len(labels), **metrics)
@@ -176,6 +193,7 @@ def main():
                 row["C_median"] = float(np.median(chosen_c))
                 row["C_values"] = ";".join(f"{c:g}" for c in chosen_c)
             row["embed_dim"] = int(emb.shape[1])
+            row["pooling"] = pooling
             summary_rows.append(row)
             all_rows.append(dict(dataset=name, **row))
 
@@ -213,6 +231,7 @@ def main():
         with (ds_dir / "run_config.json").open("w") as fh:
             json.dump(dict(dataset=name, data=cfg["data"], metadata=cfg["metadata"],
                            random_backbone=args.random_backbone,
+                           pooling={f: (args.pooling or DEFAULT_POOLING[f]) for f in args.families},
                            label_column=cfg["label_column"], cv=str(n_splits),
                            families=args.families, checkpoints=CHECKPOINTS,
                            tune_C=args.tune_c, C_grid=C_GRID if args.tune_c else [1.0],

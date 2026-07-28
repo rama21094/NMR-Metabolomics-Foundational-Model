@@ -1,0 +1,79 @@
+
+=== brc_t2d_cancer  n=78  tokens=128  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.8329 auc=0.9007 (= mean-pool)
+  groups=2    d=256    bal=0.8461 auc=0.9079
+  groups=4    d=512    bal=0.8322 auc=0.9191
+  groups=8    d=1024   bal=0.8586 auc=0.9329
+  groups=16   d=2048   bal=0.8579 auc=0.9316
+  groups=32   d=4096   bal=0.8711 auc=0.9355
+  groups=64   d=8192   bal=0.8586 auc=0.9434
+  groups=128  d=16384  bal=0.8586 auc=0.9572 (= flatten)
+
+=== brc_t2d_diabetes  n=78  tokens=128  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.8095 auc=0.8489 (= mean-pool)
+  groups=2    d=256    bal=0.7834 auc=0.8690
+  groups=4    d=512    bal=0.7948 auc=0.8663
+  groups=8    d=1024   bal=0.7607 auc=0.8496
+  groups=16   d=2048   bal=0.7574 auc=0.8516
+  groups=32   d=4096   bal=0.7687 auc=0.8616
+  groups=64   d=8192   bal=0.7426 auc=0.8643
+  groups=128  d=16384  bal=0.7801 auc=0.8616 (= flatten)
+
+=== mtbls563  n=113  tokens=128  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.6072 auc=0.7463 (= mean-pool)
+  groups=2    d=256    bal=0.6320 auc=0.7692
+  groups=4    d=512    bal=0.6507 auc=0.7794
+  groups=8    d=1024   bal=0.6528 auc=0.7903
+  groups=16   d=2048   bal=0.6409 auc=0.7999
+  groups=32   d=4096   bal=0.6340 auc=0.8082
+  groups=64   d=8192   bal=0.6185 auc=0.8078
+  groups=128  d=16384  bal=0.6212 auc=0.8020 (= flatten)
+
+=== mtbls326  n=42  tokens=128  d_model=128  cv=loo ===
+  groups=1    d=128    bal=0.9444 auc=1.0000 (= mean-pool)
+  groups=2    d=256    bal=0.9815 auc=1.0000
+  groups=4    d=512    bal=0.9815 auc=1.0000
+  groups=8    d=1024   bal=0.9815 auc=1.0000
+  groups=16   d=2048   bal=0.9815 auc=1.0000
+  groups=32   d=4096   bal=1.0000 auc=1.0000
+  groups=64   d=8192   bal=1.0000 auc=1.0000
+  groups=128  d=16384  bal=1.0000 auc=1.0000 (= flatten)
+
+=== barth  n=37  tokens=128  d_model=128  cv=loo ===
+  groups=1    d=128    bal=0.7702 auc=0.8509 (= mean-pool)
+  groups=2    d=256    bal=0.7345 auc=0.8571
+  groups=4    d=512    bal=0.7345 auc=0.8665
+  groups=8    d=1024   bal=0.7345 auc=0.9006
+  groups=16   d=2048   bal=0.8416 auc=0.9037
+  groups=32   d=4096   bal=0.8059 auc=0.8851
+  groups=64   d=8192   bal=0.8059 auc=0.8789
+  groups=128  d=16384  bal=0.8059 auc=0.8851 (= flatten)
+
+Wrote results/analysis/pooling_sweep/pooling_sweep_results.csv
+
+--- balanced accuracy by number of pooling groups ---
+groups              1      2      4      8      16     32     64     128
+dataset                                                                 
+barth             0.770  0.734  0.734  0.734  0.842  0.806  0.806  0.806
+brc_t2d_cancer    0.833  0.846  0.832  0.859  0.858  0.871  0.859  0.859
+brc_t2d_diabetes  0.809  0.783  0.795  0.761  0.757  0.769  0.743  0.780
+mtbls326          0.944  0.981  0.981  0.981  0.981  1.000  1.000  1.000
+mtbls563          0.607  0.632  0.651  0.653  0.641  0.634  0.618  0.621
+
+best group count per dataset:
+  barth              best groups=16   bal=0.8416   (mean-pool=0.7702, flatten=0.8059)
+  brc_t2d_cancer     best groups=32   bal=0.8711   (mean-pool=0.8329, flatten=0.8586)
+  brc_t2d_diabetes   best groups=1    bal=0.8095   (mean-pool=0.8095, flatten=0.7801)
+  mtbls326           best groups=32   bal=1.0000   (mean-pool=0.9444, flatten=1.0000)
+  mtbls563           best groups=8    bal=0.6528   (mean-pool=0.6072, flatten=0.6212)
+
+mean balanced accuracy across datasets, by group count:
+groups
+1      0.7928
+2      0.7955
+4      0.7987
+8      0.7976
+16     0.8158
+32     0.8159
+64     0.8051
+128    0.8131
