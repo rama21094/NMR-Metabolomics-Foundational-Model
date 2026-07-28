@@ -528,8 +528,33 @@ def validate_model(model, val_dataloader, device):
 
     return avg_val_loss, avg_masked_loss, avg_unmasked_loss
 
-def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num_epochs=10, 
-                   lr=1e-4, device='cuda', warmup_epochs=10, min_lr=1e-6, 
+def describe_architecture(model):
+    """Read the architecture back off the built model, for the checkpoint.
+
+    Why this exists: nn.MultiheadAttention stores in_proj_weight as
+    (3*d_model, d_model) regardless of nhead, so a checkpoint loaded with the
+    WRONG nhead still passes load_state_dict(strict=True) silently -- while
+    splitting d_model into a different number of heads than it was trained
+    with, i.e. quietly reinterpreting the trained weights. Because nhead was
+    not recorded, every masking eval script had to guess it, and they defaulted
+    to 8 while training used 4. Recording the real values makes that class of
+    silent mismatch impossible. Derived from the model rather than from CONFIG
+    so it reflects what was actually built.
+    """
+    enc = model.encoder
+    layer0 = enc.transformer.layers[0]
+    return {
+        'patch_size': int(enc.patch_embedding[0].weight.shape[1]),
+        'd_model': int(enc.patch_embedding[0].weight.shape[0]),
+        'nhead': int(layer0.self_attn.num_heads),
+        'num_layers': int(len(enc.transformer.layers)),
+        'dim_feedforward': int(layer0.linear1.out_features),
+        'dropout': float(layer0.dropout.p),
+    }
+
+
+def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num_epochs=10,
+                   lr=1e-4, device='cuda', warmup_epochs=10, min_lr=1e-6,
                    patience=30, model_name_prefix="nmr_ssl_model",
                    augment_enabled=False, augment_every=10):
     """Training loop with early stopping"""
@@ -661,7 +686,10 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                         'learning_rate': lr,
                         'num_epochs': num_epochs,
                         'warmup_epochs': warmup_epochs,
-                        'min_lr': min_lr
+                        'min_lr': min_lr,
+                        # Full architecture, read off the model -- see
+                        # describe_architecture() for why this is essential.
+                        **describe_architecture(model),
                     }
                 }, best_model_name)
                 print(f"✓ New best model saved: {best_model_name}")
@@ -840,26 +868,46 @@ def main():
     parser.add_argument('--mask-ratio-min', type=float, default=0.20, help='Lower bound of per-sample random masking ratio')
     parser.add_argument('--mask-ratio-max', type=float, default=0.60, help='Upper bound of per-sample random masking ratio')
     parser.add_argument('--device', default='auto', help="'auto', or an explicit device string like 'cuda:0' / 'cpu'")
+    # Architecture / schedule knobs. These were previously hardcoded in CONFIG;
+    # exposing them is what makes the patch-size experiment runnable (see
+    # docs/SSL_vs_classical_analysis.md experiment #4). patch_size sets the
+    # model's spectral resolution: 131072/patch_size tokens, so 1024 -> 128
+    # tokens and 128 -> 1024 tokens. Attention cost grows quadratically in the
+    # token count, so reducing patch_size is expensive -- check the printed
+    # per-epoch time before committing to a long run.
+    parser.add_argument('--patch-size', type=int, default=1024,
+                        help='Points per patch. 131072/patch_size = number of tokens.')
+    parser.add_argument('--batch-size', type=int, default=32)
+    parser.add_argument('--num-epochs', type=int, default=2000)
+    parser.add_argument('--learning-rate', type=float, default=1e-4)
+    parser.add_argument('--patience', type=int, default=200, help='Early-stopping patience in epochs')
+    parser.add_argument('--d-model', type=int, default=128)
+    parser.add_argument('--nhead', type=int, default=4)
+    parser.add_argument('--num-layers', type=int, default=3)
+    parser.add_argument('--dim-feedforward', type=int, default=256)
+    parser.add_argument('--dropout', type=float, default=0.2)
     args = parser.parse_args()
     if not 0.0 < args.mask_ratio_min <= args.mask_ratio_max < 1.0:
         raise ValueError("--mask-ratio-min/--mask-ratio-max must satisfy 0 < min <= max < 1")
+    if args.d_model % args.nhead:
+        raise ValueError(f"--d-model ({args.d_model}) must be divisible by --nhead ({args.nhead})")
 
     # CONFIG: All configurable parameters
     CONFIG = {
         'data_path': args.data_path,
-        'num_epochs': 2000,
-        'batch_size': 32,
+        'num_epochs': args.num_epochs,
+        'batch_size': args.batch_size,
         'mask_ratio_min': args.mask_ratio_min,
         'mask_ratio_max': args.mask_ratio_max,
-        'patch_size': 1024,
-        'learning_rate': 1e-4,
+        'patch_size': args.patch_size,
+        'learning_rate': args.learning_rate,
         'warmup_epochs': 20,
-        'patience': 200,
-        'd_model': 128,
-        'nhead': 4,
-        'num_layers': 3,
-        'dim_feedforward': 256,
-        'dropout': 0.2,
+        'patience': args.patience,
+        'd_model': args.d_model,
+        'nhead': args.nhead,
+        'num_layers': args.num_layers,
+        'dim_feedforward': args.dim_feedforward,
+        'dropout': args.dropout,
         'train_split': 0.80,
         'val_split': 0.20,
         'test_split': 0.0
