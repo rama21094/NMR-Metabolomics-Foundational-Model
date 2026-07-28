@@ -1,0 +1,47 @@
+
+=== brc_t2d_cancer  n=78  classes=['No Cancer', 'Cancer'] cv=10 ===
+  masking  d=128   probe_bal=0.8329 auc=0.9007 | reported head best=0.7961 | delta=+0.0368
+  jigsaw   d=768   probe_bal=0.7684 auc=0.8487 | reported head best=0.7816 | delta=-0.0132
+  joint    d=960   probe_bal=0.7691 auc=0.8263 | reported head best=0.7566 | delta=+0.0125
+
+=== brc_t2d_diabetes  n=78  classes=['No Diabetes', 'Diabetes'] cv=10 ===
+  masking  d=128   probe_bal=0.8095 auc=0.8489 | reported head best=0.6531 | delta=+0.1564
+  jigsaw   d=768   probe_bal=0.5943 auc=0.6176 | reported head best=0.6203 | delta=-0.0261
+  joint    d=960   probe_bal=0.6350 auc=0.7226 | reported head best=0.6237 | delta=+0.0114
+
+=== mtbls563  n=113  classes=['primary bacterial infectious disease', 'surgery (control)', 'viral infectious disease'] cv=10 ===
+  masking  d=128   probe_bal=0.6072 auc=0.7460 | reported head best=0.5583 | delta=+0.0490
+  jigsaw   d=768   probe_bal=0.5269 auc=0.7310 | reported head best=0.5505 | delta=-0.0236
+  joint    d=960   probe_bal=0.4853 auc=0.7145 | reported head best=0.5001 | delta=-0.0149
+
+=== mtbls326  n=42  classes=['No', 'Yes'] cv=loo ===
+  masking  d=128   probe_bal=0.9444 auc=1.0000 | reported head best=0.9815 | delta=-0.0370
+  jigsaw   d=768   probe_bal=0.8741 auc=0.9235 | reported head best=0.8741 | delta=+0.0000
+  joint    d=960   probe_bal=0.8111 auc=0.9235 | reported head best=0.9296 | delta=-0.1185
+
+=== barth  n=37  classes=['Case', 'Control'] cv=loo ===
+  masking  d=128   probe_bal=0.7702 auc=0.8509 | reported head best=0.6910 | delta=+0.0792
+  jigsaw   d=768   probe_bal=0.6273 auc=0.7671 | reported head best=0.6770 | delta=-0.0497
+  joint    d=960   probe_bal=0.6630 auc=0.7019 | reported head best=0.6491 | delta=+0.0140
+
+Wrote results/analysis/linear_probe_frozen/linear_probe_results.csv
+
+         dataset  family  embed_dim  linear_probe_bal_acc  ssl_head_best  delta_probe_minus_head_best
+  brc_t2d_cancer masking        128              0.832895       0.796053                     0.036842
+  brc_t2d_cancer  jigsaw        768              0.768421       0.781579                    -0.013158
+  brc_t2d_cancer   joint        960              0.769079       0.756579                     0.012500
+brc_t2d_diabetes masking        128              0.809492       0.653075                     0.156417
+brc_t2d_diabetes  jigsaw        768              0.594251       0.620321                    -0.026070
+brc_t2d_diabetes   joint        960              0.635027       0.623663                     0.011364
+        mtbls563 masking        128              0.607231       0.558268                     0.048963
+        mtbls563  jigsaw        768              0.526926       0.550499                    -0.023573
+        mtbls563   joint        960              0.485259       0.500133                    -0.014874
+        mtbls326 masking        128              0.944444       0.981481                    -0.037037
+        mtbls326  jigsaw        768              0.874074       0.874074                     0.000000
+        mtbls326   joint        960              0.811111       0.929630                    -0.118519
+           barth masking        128              0.770186       0.690994                     0.079193
+           barth  jigsaw        768              0.627329       0.677019                    -0.049689
+           barth   joint        960              0.663043       0.649068                     0.013975
+
+Mean improvement of linear probe over reported head: +0.0051
+Wins/ties/losses: 7/1/7

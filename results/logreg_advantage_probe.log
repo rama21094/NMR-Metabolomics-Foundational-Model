@@ -1,0 +1,134 @@
+
+=== brc_t2d_cancer ===
+  n=78, classes=['No Cancer', 'Cancer'], counts=[40, 38]
+  binned_abs_area              16 bins        d=16      bal_acc=0.8355
+  binned_abs_area              64 bins        d=64      bal_acc=0.8592
+  binned_abs_area              256 bins       d=256     bal_acc=0.8980
+  binned_abs_area              1024 bins      d=1024    bal_acc=0.9368
+  binned_abs_area              4096 bins      d=4096    bal_acc=0.9368
+  raw_spectrum                 131072 pts     d=131072  bal_acc=0.9112
+  global_scalar                total_abs_area d=1       bal_acc=0.6158
+  global_scalar                row_std        d=1       bal_acc=0.7053
+  backbone: {'patch_size': 1024, 'd_model': 128, 'nhead': 8, 'num_layers': 3, 'dim_feedforward': 256, 'dropout': 0.0}
+  masked_ssl_embedding         mean_pool      d=128     bal_acc=0.8329
+  masked_ssl_embedding         flatten        d=16384   bal_acc=0.8586
+  permutation null (1024 bins, 200 perms): mean=0.4941 p95=0.6164 max=0.7171 | observed=0.9368 p=0.004975
+
+=== brc_t2d_diabetes ===
+  n=78, classes=['No Diabetes', 'Diabetes'], counts=[44, 34]
+  binned_abs_area              16 bins        d=16      bal_acc=0.6484
+  binned_abs_area              64 bins        d=64      bal_acc=0.7086
+  binned_abs_area              256 bins       d=256     bal_acc=0.7313
+  binned_abs_area              1024 bins      d=1024    bal_acc=0.8289
+  binned_abs_area              4096 bins      d=4096    bal_acc=0.7881
+  raw_spectrum                 131072 pts     d=131072  bal_acc=0.7834
+  global_scalar                total_abs_area d=1       bal_acc=0.5929
+  global_scalar                row_std        d=1       bal_acc=0.3924
+  backbone: {'patch_size': 1024, 'd_model': 128, 'nhead': 8, 'num_layers': 3, 'dim_feedforward': 256, 'dropout': 0.0}
+  masked_ssl_embedding         mean_pool      d=128     bal_acc=0.8095
+  masked_ssl_embedding         flatten        d=16384   bal_acc=0.7914
+  permutation null (1024 bins, 200 perms): mean=0.4980 p95=0.6191 max=0.6745 | observed=0.8289 p=0.004975
+
+=== mtbls563 ===
+  n=113, classes=['primary bacterial infectious disease', 'surgery (control)', 'viral infectious disease'], counts=[26, 56, 31]
+  binned_abs_area              16 bins        d=16      bal_acc=0.5535
+  binned_abs_area              64 bins        d=64      bal_acc=0.5919
+  binned_abs_area              256 bins       d=256     bal_acc=0.6704
+  binned_abs_area              1024 bins      d=1024    bal_acc=0.7208
+  binned_abs_area              4096 bins      d=4096    bal_acc=0.6684
+  raw_spectrum                 131072 pts     d=131072  bal_acc=0.6615
+  global_scalar                total_abs_area d=1       bal_acc=0.3370
+  global_scalar                row_std        d=1       bal_acc=0.4260
+  backbone: {'patch_size': 1024, 'd_model': 128, 'nhead': 8, 'num_layers': 3, 'dim_feedforward': 256, 'dropout': 0.0}
+  masked_ssl_embedding         mean_pool      d=128     bal_acc=0.6072
+  masked_ssl_embedding         flatten        d=16384   bal_acc=0.6212
+  permutation null (1024 bins, 200 perms): mean=0.3324 p95=0.4172 max=0.5256 | observed=0.7208 p=0.004975
+
+=== mtbls326 ===
+  n=42, classes=['No', 'Yes'], counts=[15, 27]
+  binned_abs_area              16 bins        d=16      bal_acc=0.7037
+  binned_abs_area              64 bins        d=64      bal_acc=0.9111
+  binned_abs_area              256 bins       d=256     bal_acc=1.0000
+  binned_abs_area              1024 bins      d=1024    bal_acc=1.0000
+  binned_abs_area              4096 bins      d=4096    bal_acc=0.9815
+  raw_spectrum                 131072 pts     d=131072  bal_acc=0.9630
+  global_scalar                total_abs_area d=1       bal_acc=0.5370
+  global_scalar                row_std        d=1       bal_acc=0.4519
+  backbone: {'patch_size': 1024, 'd_model': 128, 'nhead': 8, 'num_layers': 3, 'dim_feedforward': 256, 'dropout': 0.0}
+  masked_ssl_embedding         mean_pool      d=128     bal_acc=0.9444
+  masked_ssl_embedding         flatten        d=16384   bal_acc=1.0000
+  permutation null (1024 bins, 200 perms): mean=0.4848 p95=0.6335 max=0.7370 | observed=1.0000 p=0.004975
+
+=== barth ===
+  n=37, classes=['Case', 'Control'], counts=[23, 14]
+  binned_abs_area              16 bins        d=16      bal_acc=0.6553
+  binned_abs_area              64 bins        d=64      bal_acc=0.6910
+  binned_abs_area              256 bins       d=256     bal_acc=0.7624
+  binned_abs_area              1024 bins      d=1024    bal_acc=0.7050
+  binned_abs_area              4096 bins      d=4096    bal_acc=0.7050
+  raw_spectrum                 131072 pts     d=131072  bal_acc=0.7050
+  global_scalar                total_abs_area d=1       bal_acc=0.5543
+  global_scalar                row_std        d=1       bal_acc=0.6910
+  backbone: {'patch_size': 1024, 'd_model': 128, 'nhead': 8, 'num_layers': 3, 'dim_feedforward': 256, 'dropout': 0.0}
+  masked_ssl_embedding         mean_pool      d=128     bal_acc=0.7702
+  masked_ssl_embedding         flatten        d=16384   bal_acc=0.8059
+  permutation null (1024 bins, 200 perms): mean=0.4980 p95=0.6553 max=0.7919 | observed=0.7050 p=0.0199
+
+Wrote results/analysis/logreg_advantage_probe/probe_results.csv
+
+         dataset       representation         detail  n_features  balanced_accuracy
+  brc_t2d_cancer      binned_abs_area        16 bins          16           0.835526
+  brc_t2d_cancer      binned_abs_area        64 bins          64           0.859211
+  brc_t2d_cancer      binned_abs_area       256 bins         256           0.898026
+  brc_t2d_cancer      binned_abs_area      1024 bins        1024           0.936842
+  brc_t2d_cancer      binned_abs_area      4096 bins        4096           0.936842
+  brc_t2d_cancer         raw_spectrum     131072 pts      131072           0.911184
+  brc_t2d_cancer        global_scalar total_abs_area           1           0.615789
+  brc_t2d_cancer        global_scalar        row_std           1           0.705263
+  brc_t2d_cancer masked_ssl_embedding      mean_pool         128           0.832895
+  brc_t2d_cancer masked_ssl_embedding        flatten       16384           0.858553
+  brc_t2d_cancer     permutation_null      1024 bins        1024           0.494053
+brc_t2d_diabetes      binned_abs_area        16 bins          16           0.648396
+brc_t2d_diabetes      binned_abs_area        64 bins          64           0.708556
+brc_t2d_diabetes      binned_abs_area       256 bins         256           0.731283
+brc_t2d_diabetes      binned_abs_area      1024 bins        1024           0.828877
+brc_t2d_diabetes      binned_abs_area      4096 bins        4096           0.788102
+brc_t2d_diabetes         raw_spectrum     131072 pts      131072           0.783422
+brc_t2d_diabetes        global_scalar total_abs_area           1           0.592914
+brc_t2d_diabetes        global_scalar        row_std           1           0.392380
+brc_t2d_diabetes masked_ssl_embedding      mean_pool         128           0.809492
+brc_t2d_diabetes masked_ssl_embedding        flatten       16384           0.791444
+brc_t2d_diabetes     permutation_null      1024 bins        1024           0.498048
+        mtbls563      binned_abs_area        16 bins          16           0.553483
+        mtbls563      binned_abs_area        64 bins          64           0.591930
+        mtbls563      binned_abs_area       256 bins         256           0.670418
+        mtbls563      binned_abs_area      1024 bins        1024           0.720785
+        mtbls563      binned_abs_area      4096 bins        4096           0.668350
+        mtbls563         raw_spectrum     131072 pts      131072           0.661482
+        mtbls563        global_scalar total_abs_area           1           0.336967
+        mtbls563        global_scalar        row_std           1           0.426031
+        mtbls563 masked_ssl_embedding      mean_pool         128           0.607231
+        mtbls563 masked_ssl_embedding        flatten       16384           0.621204
+        mtbls563     permutation_null      1024 bins        1024           0.332369
+        mtbls326      binned_abs_area        16 bins          16           0.703704
+        mtbls326      binned_abs_area        64 bins          64           0.911111
+        mtbls326      binned_abs_area       256 bins         256           1.000000
+        mtbls326      binned_abs_area      1024 bins        1024           1.000000
+        mtbls326      binned_abs_area      4096 bins        4096           0.981481
+        mtbls326         raw_spectrum     131072 pts      131072           0.962963
+        mtbls326        global_scalar total_abs_area           1           0.537037
+        mtbls326        global_scalar        row_std           1           0.451852
+        mtbls326 masked_ssl_embedding      mean_pool         128           0.944444
+        mtbls326 masked_ssl_embedding        flatten       16384           1.000000
+        mtbls326     permutation_null      1024 bins        1024           0.484778
+           barth      binned_abs_area        16 bins          16           0.655280
+           barth      binned_abs_area        64 bins          64           0.690994
+           barth      binned_abs_area       256 bins         256           0.762422
+           barth      binned_abs_area      1024 bins        1024           0.704969
+           barth      binned_abs_area      4096 bins        4096           0.704969
+           barth         raw_spectrum     131072 pts      131072           0.704969
+           barth        global_scalar total_abs_area           1           0.554348
+           barth        global_scalar        row_std           1           0.690994
+           barth masked_ssl_embedding      mean_pool         128           0.770186
+           barth masked_ssl_embedding        flatten       16384           0.805901
+           barth     permutation_null      1024 bins        1024           0.497981
