@@ -1,7 +1,8 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** analysis complete as of 2026-07-28, on the v4 (cleaned) datasets and the
-2026-07-25 SSL checkpoints. Experiments **#1, #2, #3, #5 are done**; #4, #6, #7, #8 queued.
+**Status:** updated 2026-07-28. Experiments **#1, #2, #3, #4, #5 are done**; #6, #7, #8 queued.
+Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is the
+correction of record. It also found the actual win (pooling).
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -167,6 +168,77 @@ it is just starved of resolution.
 Mean-pooling is a *minor* factor by comparison: flatten (position-preserving) vs
 mean-pool changed cancer +0.026 and MTBLS563 +0.014, but *hurt* diabetes −0.018.
 
+### 5b. Experiment #4 result — the resolution hypothesis is REFUTED
+
+Two backbones were pretrained on the v4 corpus with everything else held fixed
+(`patch_size` 256 and 128 vs the 1024 baseline) and compared through the frozen linear
+probe. Script `code/analysis/compare_patch_sizes.py`, figure
+`fig9_patch_size_and_pooling.png`, data
+`results/analysis/patch_size_comparison/patch_size_results.csv`.
+
+All arms are read at `nhead=4`, the value training actually used, so this is a clean
+resolution comparison (see the §6c note on the nhead recording bug).
+
+Balanced accuracy, flatten pooling:
+
+| dataset | patch 1024 (128 tok) | patch 256 (512 tok) | patch 128 (1024 tok) |
+|---|---|---|---|
+| Barth | **0.806** | 0.598 | 0.655 |
+| MTBLS326 | **1.000** | 0.907 | 0.930 |
+| BrC-T2D cancer | **0.859** | 0.832 | 0.795 |
+| BrC-T2D diabetes | 0.780 | **0.783** | 0.749 |
+| MTBLS563 | **0.618** | 0.581 | 0.616 |
+
+Mean Δ vs patch 1024: **patch 256 −0.072, patch 128 −0.063 — 0 of 5 wins.** With
+mean-pooling: −0.040 and −0.058. **Finer patches consistently made things worse.**
+
+Why the prediction failed. Best validation reconstruction loss *fell* as patches shrank:
+9.26e-5 (ps1024) → 5.56e-5 (ps256) → 4.46e-5 (ps128). A masked 128-point patch is largely
+interpolable from its immediate neighbours, so shrinking the patch made the pretext task
+**easier**, not more informative — the model can solve it by local smoothing without
+learning metabolite structure. This is the standard MAE trade-off (patch size and mask
+ratio jointly set task difficulty), and it evidently outweighs the resolution gain.
+
+Confound recorded: the small-patch models also have ~3× fewer parameters (0.63M / 0.66M
+vs 1.89M), because the patch embedding and reconstruction head scale with patch size. So
+the negative result is not purely about resolution. The falling reconstruction loss is
+independent evidence for the trivial-task explanation, but a capacity-matched rerun
+(`--d-model 256 --nhead 8 --dim-feedforward 512` at ps=128) would settle it if anyone
+wants to reopen this.
+
+### 5c. What actually worked: position-preserving pooling
+
+The same experiment found a real, cheap win. Replacing `encoded.mean(dim=1)` (which
+averages away *where* in the spectrum each token came from) with a flattened
+position-preserving embedding helps on **all five** targets, at patch 1024:
+
+| dataset | mean-pool (current) | flatten | gain |
+|---|---|---|---|
+| Barth | 0.677 | **0.806** | +0.129 |
+| BrC-T2D diabetes | 0.687 | **0.780** | +0.093 |
+| BrC-T2D cancer | 0.782 | **0.859** | +0.077 |
+| MTBLS326 | 0.948 | **1.000** | +0.052 |
+| MTBLS563 | 0.588 | **0.618** | +0.030 |
+
+This makes sense given §5: chemical-shift position *is* the discriminative information in
+NMR, and mean-pooling discards it. Note this is a **pooling** fix, not a resolution fix —
+the tokens always carried the position information; the head was throwing it away.
+
+Combining the two cheap wins (LogReg head from #2/#5 + flatten pooling) against the
+originally reported DNN-head numbers:
+
+| dataset | reported DNN head | best probe + flatten | classical LogReg | vs classical |
+|---|---|---|---|---|
+| Barth | 0.691 | **0.806** | 0.705 | **+0.101 (SSL wins)** |
+| MTBLS326 | 0.981 | **1.000** | 1.000 | 0.000 (tie) |
+| BrC-T2D cancer | 0.796 | 0.859 | **0.937** | −0.078 |
+| BrC-T2D diabetes | 0.653 | 0.783 | **0.829** | −0.046 |
+| MTBLS563 | 0.558 | 0.621 | **0.721** | −0.100 |
+
+**+0.078 mean improvement over the reported numbers, with no retraining at all.** The
+SSL-vs-classical record moves from 0 wins / 0 ties / 5 losses to **1 win / 1 tie / 3
+losses**. Barth now favours SSL and MTBLS326 is a tie.
+
 ---
 
 ## 6. Controls — what this is NOT
@@ -316,10 +388,16 @@ Still outstanding if wanted: the same three-arm comparison *through the fine-tun
 path* (pretrained / unfrozen-reinit / fully-random), mode by mode. The frozen-feature
 version above is cleaner and was sufficient to answer the question.
 
-### #4 — Reduce `patch_size` 1024 → 256 (HIGH; targets the largest gap component)
-Directly attacks the resolution ceiling that dominates cancer and MTBLS563. 512 tokens
-instead of 128; attention cost grows ~16×, so 256 is the pragmatic choice over 128.
-Requires re-pretraining the masking backbone on the v4 corpus.
+### ✅ #4 — Patch size (DONE, REFUTED — see §5b)
+```bash
+# pretraining (ps128 ~6.2h, ps256 ~4.0h on an L40S)
+python -u code/training/trainer_revised.py --patch-size 128 --nhead 4 \
+  --data-path data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy
+# evaluation
+python -u code/analysis/compare_patch_sizes.py
+python code/plotting/plot_patch_size_experiment.py
+```
+**Outcome: shrinking patch_size hurt.** Do not pursue further. The win was pooling.
 
 ### ✅ #5 — Linear-probe head as a first-class evaluator (DONE)
 ```bash
@@ -387,5 +465,7 @@ both.
   `code/plotting/plot_logreg_advantage_probe.py`,
   `code/plotting/plot_linear_probe_vs_head.py`,
   `code/evaluation/ssl_linear_probe_eval.py`,
-  `code/plotting/plot_pretraining_gain.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig8`.
+  `code/plotting/plot_pretraining_gain.py`,
+  `code/analysis/compare_patch_sizes.py`,
+  `code/plotting/plot_patch_size_experiment.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig9`.
