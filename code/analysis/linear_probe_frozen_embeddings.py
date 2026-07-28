@@ -94,14 +94,52 @@ def official_head(dataset: str, family: str) -> tuple[float | None, float | None
 # Embedding extraction, one function per family, each replicating the real
 # classifier's own pooling.
 # --------------------------------------------------------------------------
-def embed_masking(ckpt_path, spectra, device, batch_size=8):
+def _maybe_seed(random_init: bool, seed: int) -> None:
+    """Seed before constructing a randomly-initialized backbone so the control
+    arm is reproducible (nn.init draws from the global RNG)."""
+    if random_init:
+        torch.manual_seed(seed)
+        np.random.seed(seed)
+
+
+def _reinit_all_parameters_(model, seed: int) -> None:
+    """Reset every parameter of an already-built model, in place.
+
+    Weight matrices (ndim >= 2) get Xavier-uniform; biases, norms and learned
+    embeddings/tokens (ndim < 2) are handled by their module's own
+    reset_parameters() where available, else zeroed. Buffers such as a
+    non-learned positional-encoding table are left alone -- they are fixed
+    functions of position, not learned knowledge.
+    """
+    import torch.nn as nn
+
+    torch.manual_seed(seed)
+    for module in model.modules():
+        if hasattr(module, "reset_parameters"):
+            module.reset_parameters()
+    for name, p in model.named_parameters():
+        if p.ndim >= 2:
+            nn.init.xavier_uniform_(p)
+        elif "bias" in name:
+            nn.init.zeros_(p)
+        else:
+            nn.init.normal_(p, mean=0.0, std=0.02)
+
+
+def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, seed=42):
     from trainer_revised import NMRMaskedAutoencoder
     from barth_all_models_loocv import infer_mae_config
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     state = ck["model_state_dict"]
+    _maybe_seed(random_init, seed)
     model = NMRMaskedAutoencoder(spectrum_length=spectra.shape[1], **infer_mae_config(state, 8, 0.0))
-    model.load_state_dict(state, strict=True)
+    # random_init: keep the architecture, load NOTHING -- a genuine
+    # untrained-backbone control (patch embedding and positional encoding
+    # included), unlike --reinit-unfrozen-xavier which only resets the layers
+    # being fine-tuned and always keeps those two pretrained.
+    if not random_init:
+        model.load_state_dict(state, strict=True)
     model.eval().to(device)
     out = []
     with torch.no_grad():
@@ -113,12 +151,13 @@ def embed_masking(ckpt_path, spectra, device, batch_size=8):
     return np.vstack(out).astype(np.float32)
 
 
-def embed_jigsaw(ckpt_path, spectra, device, batch_size=4):
+def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42):
     from train_jigsaw_spectra import JigsawNMRModel
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     hp = ck.get("hyperparameters", {})
     bin_sizes = [int(b) for b in ck["bin_sizes"]]
+    _maybe_seed(random_init, seed)
     model = JigsawNMRModel(
         spectrum_length=int(ck["spectrum_length"]), bin_sizes=bin_sizes,
         d_model=int(hp.get("d_model", 192)), nhead=int(hp.get("nhead", 6)),
@@ -126,7 +165,8 @@ def embed_jigsaw(ckpt_path, spectra, device, batch_size=4):
         dim_feedforward=int(hp.get("dim_feedforward", 768)),
         dropout=float(hp.get("dropout", 0.15)),
     )
-    model.load_state_dict(ck["model_state_dict"], strict=True)
+    if not random_init:
+        model.load_state_dict(ck["model_state_dict"], strict=True)
     model.eval().to(device)
     out = []
     with torch.no_grad():
@@ -146,11 +186,18 @@ def embed_jigsaw(ckpt_path, spectra, device, batch_size=4):
     return np.vstack(out).astype(np.float32)
 
 
-def embed_joint(ckpt_path, spectra, device, batch_size=4):
+def embed_joint(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42):
     from train_joint_ssl import build_joint_model_from_loaded_checkpoint
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    _maybe_seed(random_init, seed)
     model = build_joint_model_from_loaded_checkpoint(ck, device)
+    if random_init:
+        # Rebuild the same architecture from scratch: re-initialize every
+        # parameter in place, so nothing pretrained survives anywhere in the
+        # backbone. Done post-hoc here because the joint builder loads weights
+        # as part of construction.
+        _reinit_all_parameters_(model, seed)
     model.eval()
     bin_sizes = [int(b) for b in ck.get("jigsaw_bin_sizes", model.jigsaw_bin_sizes)]
     out = []

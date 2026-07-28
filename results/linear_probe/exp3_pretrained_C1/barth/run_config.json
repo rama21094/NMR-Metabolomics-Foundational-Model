@@ -1,0 +1,24 @@
+{
+  "dataset": "barth",
+  "data": "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v4.npy",
+  "metadata": "data/Barth/Workbench_Barth_Syndrome_metadata.csv",
+  "random_backbone": false,
+  "label_column": "label",
+  "cv": "loo",
+  "families": [
+    "masking",
+    "jigsaw",
+    "joint"
+  ],
+  "checkpoints": {
+    "masking": "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth",
+    "jigsaw": "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth",
+    "joint": "models/joint_ssl/joint_ssl_20260725_085627/joint_ssl_20260725_085627_best.pth"
+  },
+  "tune_C": false,
+  "C_grid": [
+    1.0
+  ],
+  "inner_splits": 5,
+  "seed": 42
+}

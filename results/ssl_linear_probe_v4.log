@@ -1,0 +1,44 @@
+
+=== brc_t2d_cancer  n=78  classes=['No Cancer', 'Cancer']  cv=10 ===
+  masking  d=128   bal_acc=0.8454 C_median=10
+  jigsaw   d=768   bal_acc=0.7816 C_median=0.055
+  joint    d=960   bal_acc=0.6921 C_median=0.1
+
+=== brc_t2d_diabetes  n=78  classes=['No Diabetes', 'Diabetes']  cv=10 ===
+  masking  d=128   bal_acc=0.8095 C_median=5.5
+  jigsaw   d=768   bal_acc=0.5441 C_median=0.001
+  joint    d=960   bal_acc=0.6056 C_median=0.1
+
+=== mtbls563  n=113  classes=['primary bacterial infectious disease', 'surgery (control)', 'viral infectious disease']  cv=10 ===
+  masking  d=128   bal_acc=0.5631 C_median=1
+  jigsaw   d=768   bal_acc=0.5583 C_median=0.01
+  joint    d=960   bal_acc=0.4608 C_median=0.1
+
+=== mtbls326  n=42  classes=['No', 'Yes']  cv=loo ===
+  masking  d=128   bal_acc=0.9630 C_median=100
+  jigsaw   d=768   bal_acc=0.8741 C_median=0.01
+  joint    d=960   bal_acc=0.7704 C_median=0.01
+
+=== barth  n=37  classes=['Case', 'Control']  cv=loo ===
+  masking  d=128   bal_acc=0.7702 C_median=0.1
+  jigsaw   d=768   bal_acc=0.5839 C_median=100
+  joint    d=960   bal_acc=0.6413 C_median=1
+
+Wrote results/linear_probe/ssl_linear_probe_v4/all_datasets_summary.csv
+
+         dataset  family                       model  embed_dim  balanced_accuracy  C_median
+  brc_t2d_cancer masking masking_linear_probe_tunedC        128           0.845395    10.000
+  brc_t2d_cancer  jigsaw  jigsaw_linear_probe_tunedC        768           0.781579     0.055
+  brc_t2d_cancer   joint   joint_linear_probe_tunedC        960           0.692105     0.100
+brc_t2d_diabetes masking masking_linear_probe_tunedC        128           0.809492     5.500
+brc_t2d_diabetes  jigsaw  jigsaw_linear_probe_tunedC        768           0.544118     0.001
+brc_t2d_diabetes   joint   joint_linear_probe_tunedC        960           0.605615     0.100
+        mtbls563 masking masking_linear_probe_tunedC        128           0.563069     1.000
+        mtbls563  jigsaw  jigsaw_linear_probe_tunedC        768           0.558268     0.010
+        mtbls563   joint   joint_linear_probe_tunedC        960           0.460770     0.100
+        mtbls326 masking masking_linear_probe_tunedC        128           0.962963   100.000
+        mtbls326  jigsaw  jigsaw_linear_probe_tunedC        768           0.874074     0.010
+        mtbls326   joint   joint_linear_probe_tunedC        960           0.770370     0.010
+           barth masking masking_linear_probe_tunedC        128           0.770186     0.100
+           barth  jigsaw  jigsaw_linear_probe_tunedC        768           0.583851   100.000
+           barth   joint   joint_linear_probe_tunedC        960           0.641304     1.000

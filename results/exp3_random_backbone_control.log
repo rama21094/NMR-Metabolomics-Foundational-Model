@@ -1,0 +1,90 @@
+
+=== brc_t2d_cancer  n=78  classes=['No Cancer', 'Cancer']  cv=10 ===
+  masking  d=128   bal_acc=0.8329
+  jigsaw   d=768   bal_acc=0.7684
+  joint    d=960   bal_acc=0.7691
+
+=== brc_t2d_diabetes  n=78  classes=['No Diabetes', 'Diabetes']  cv=10 ===
+  masking  d=128   bal_acc=0.8095
+  jigsaw   d=768   bal_acc=0.5943
+  joint    d=960   bal_acc=0.6350
+
+=== mtbls563  n=113  classes=['primary bacterial infectious disease', 'surgery (control)', 'viral infectious disease']  cv=10 ===
+  masking  d=128   bal_acc=0.6072
+  jigsaw   d=768   bal_acc=0.5269
+  joint    d=960   bal_acc=0.4853
+
+=== mtbls326  n=42  classes=['No', 'Yes']  cv=loo ===
+  masking  d=128   bal_acc=0.9444
+  jigsaw   d=768   bal_acc=0.8741
+  joint    d=960   bal_acc=0.8111
+
+=== barth  n=37  classes=['Case', 'Control']  cv=loo ===
+  masking  d=128   bal_acc=0.7702
+  jigsaw   d=768   bal_acc=0.6273
+  joint    d=960   bal_acc=0.6630
+
+Wrote results/linear_probe/exp3_pretrained_C1/all_datasets_summary.csv
+
+         dataset  family                   model  embed_dim  balanced_accuracy
+  brc_t2d_cancer masking masking_linear_probe_C1        128           0.832895
+  brc_t2d_cancer  jigsaw  jigsaw_linear_probe_C1        768           0.768421
+  brc_t2d_cancer   joint   joint_linear_probe_C1        960           0.769079
+brc_t2d_diabetes masking masking_linear_probe_C1        128           0.809492
+brc_t2d_diabetes  jigsaw  jigsaw_linear_probe_C1        768           0.594251
+brc_t2d_diabetes   joint   joint_linear_probe_C1        960           0.635027
+        mtbls563 masking masking_linear_probe_C1        128           0.607231
+        mtbls563  jigsaw  jigsaw_linear_probe_C1        768           0.526926
+        mtbls563   joint   joint_linear_probe_C1        960           0.485259
+        mtbls326 masking masking_linear_probe_C1        128           0.944444
+        mtbls326  jigsaw  jigsaw_linear_probe_C1        768           0.874074
+        mtbls326   joint   joint_linear_probe_C1        960           0.811111
+           barth masking masking_linear_probe_C1        128           0.770186
+           barth  jigsaw  jigsaw_linear_probe_C1        768           0.627329
+           barth   joint   joint_linear_probe_C1        960           0.663043
+=== ARM 1 (pretrained) DONE ===
+
+=== brc_t2d_cancer  n=78  classes=['No Cancer', 'Cancer']  cv=10 ===
+  masking  d=128   bal_acc=0.7697
+  jigsaw   d=768   bal_acc=0.7961
+  joint    d=960   bal_acc=0.8461
+
+=== brc_t2d_diabetes  n=78  classes=['No Diabetes', 'Diabetes']  cv=10 ===
+  masking  d=128   bal_acc=0.6384
+  jigsaw   d=768   bal_acc=0.6611
+  joint    d=960   bal_acc=0.6578
+
+=== mtbls563  n=113  classes=['primary bacterial infectious disease', 'surgery (control)', 'viral infectious disease']  cv=10 ===
+  masking  d=128   bal_acc=0.5601
+  jigsaw   d=768   bal_acc=0.5914
+  joint    d=960   bal_acc=0.6111
+
+=== mtbls326  n=42  classes=['No', 'Yes']  cv=loo ===
+  masking  d=128   bal_acc=0.8926
+  jigsaw   d=768   bal_acc=0.8593
+  joint    d=960   bal_acc=0.9111
+
+=== barth  n=37  classes=['Case', 'Control']  cv=loo ===
+  masking  d=128   bal_acc=0.5186
+  jigsaw   d=768   bal_acc=0.5404
+  joint    d=960   bal_acc=0.4612
+
+Wrote results/linear_probe/exp3_randominit_C1/all_datasets_summary.csv
+
+         dataset  family                              model  embed_dim  balanced_accuracy
+  brc_t2d_cancer masking masking_linear_probe_C1_randominit        128           0.769737
+  brc_t2d_cancer  jigsaw  jigsaw_linear_probe_C1_randominit        768           0.796053
+  brc_t2d_cancer   joint   joint_linear_probe_C1_randominit        960           0.846053
+brc_t2d_diabetes masking masking_linear_probe_C1_randominit        128           0.638369
+brc_t2d_diabetes  jigsaw  jigsaw_linear_probe_C1_randominit        768           0.661096
+brc_t2d_diabetes   joint   joint_linear_probe_C1_randominit        960           0.657754
+        mtbls563 masking masking_linear_probe_C1_randominit        128           0.560100
+        mtbls563  jigsaw  jigsaw_linear_probe_C1_randominit        768           0.591442
+        mtbls563   joint   joint_linear_probe_C1_randominit        960           0.611131
+        mtbls326 masking masking_linear_probe_C1_randominit        128           0.892593
+        mtbls326  jigsaw  jigsaw_linear_probe_C1_randominit        768           0.859259
+        mtbls326   joint   joint_linear_probe_C1_randominit        960           0.911111
+           barth masking masking_linear_probe_C1_randominit        128           0.518634
+           barth  jigsaw  jigsaw_linear_probe_C1_randominit        768           0.540373
+           barth   joint   joint_linear_probe_C1_randominit        960           0.461180
+=== ARM 2 (random backbone) DONE ===

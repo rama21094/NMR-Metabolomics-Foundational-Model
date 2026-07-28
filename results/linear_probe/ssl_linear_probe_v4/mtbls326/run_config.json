@@ -1,0 +1,28 @@
+{
+  "dataset": "mtbls326",
+  "data": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+  "metadata": "data/mtbls326/MTBLS326_metadata_mapping.csv",
+  "label_column": "label",
+  "cv": "loo",
+  "families": [
+    "masking",
+    "jigsaw",
+    "joint"
+  ],
+  "checkpoints": {
+    "masking": "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth",
+    "jigsaw": "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth",
+    "joint": "models/joint_ssl/joint_ssl_20260725_085627/joint_ssl_20260725_085627_best.pth"
+  },
+  "tune_C": true,
+  "C_grid": [
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "inner_splits": 5,
+  "seed": 42
+}

@@ -1,7 +1,7 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
 **Status:** analysis complete as of 2026-07-28, on the v4 (cleaned) datasets and the
-2026-07-25 SSL checkpoints. Experiments #1–#2 below are **done**; #3–#7 are **queued**.
+2026-07-25 SSL checkpoints. Experiments **#1, #2, #3, #5 are done**; #4, #6, #7, #8 queued.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -223,7 +223,47 @@ MTBLS563 at +3 layers: pretrained wins all three families (0.566/0.540/0.463 vs
 
 An earlier verbal claim in this project that "pretraining contributes nothing" came from
 taking `max()` over four noisy modes per arm and is **retracted**. A true random-backbone
-control still does not exist and needs to be added (experiment #3).
+control has now been run — see §6b, which supersedes this section.
+
+### 6b. Experiment #3 — the true random-backbone control (DONE)
+
+`code/evaluation/ssl_linear_probe_eval.py --random-backbone` keeps each architecture but
+loads **no pretrained weights anywhere** (patch embedding and positional encoding
+included), and the classifier is held fixed at a converged LogReg (C=1) on frozen
+features in both arms. Holding the head fixed removes the head-underfitting confound of
+§4b, which is what made the original ablation unreadable.
+Verified as a genuine control: embeddings differ from pretrained for all three families,
+and are reproducible under a fixed seed.
+
+Δ balanced accuracy (pretrained − random init):
+`results/linear_probe/exp3_pretrained_vs_random.csv`,
+figure `fig8_pretraining_gain.png`
+
+| dataset | masking | jigsaw | joint |
+|---|---|---|---|
+| Barth | **+0.252** | +0.087 | +0.202 |
+| MTBLS326 | **+0.052** | +0.015 | −0.100 |
+| BrC-T2D cancer | **+0.063** | −0.028 | −0.077 |
+| BrC-T2D diabetes | **+0.171** | −0.067 | −0.023 |
+| MTBLS563 | **+0.047** | −0.065 | −0.126 |
+| **mean** | **+0.117** | −0.011 | −0.025 |
+
+**This is the single most important result in this document:**
+
+- **Masked pretraining works.** Positive on 5/5 targets, mean +0.117. It is the only
+  objective that earns its keep.
+- **Jigsaw pretraining is worthless** (mean −0.011, loses to random on 3/5).
+- **Joint pretraining is actively harmful** (mean −0.025, loses on 3/5, worst −0.126).
+  A *random* joint backbone scores 0.846 on BrC-T2D cancer and 0.911 on MTBLS326 versus
+  the pretrained 0.769 and 0.811 — the joint objective is destroying useful structure.
+
+Interpretation caveat: a random transformer is a legitimately strong random-projection
+baseline (cf. random-feature kernel methods), so "random wins" means **the objective adds
+nothing over a random projection**, not that the architecture is useless.
+
+Consequence for the roadmap: concentrate on the masking objective. Jigsaw and especially
+joint pretraining need rethinking or dropping — and experiment #7 (peak-weighted
+objective) is now *more* attractive for them, not less.
 
 ---
 
@@ -263,22 +303,42 @@ python code/plotting/plot_linear_probe_vs_head.py
 ```
 **Outcome:** masking head underfit by +0.120 mean on 5/5 targets. jigsaw/joint unaffected.
 
-### #3 — Re-run the Xavier ablation properly, on v4 (HIGH)
-Two reasons it must be redone: the v1 checkpoints it used were pretrained on the **old,
-dirty** corpus (majority lacking water suppression), and the flag only reinitializes
-unfrozen layers (§6). Add a genuine `--random-backbone` option that reinitializes the
-**entire** backbone including `patch_embedding` and `pos_encoding`, then compare three
-arms — pretrained / unfrozen-reinit / fully-random — **mode by mode, never max-over-modes**.
+### ✅ #3 — True random-backbone control (DONE, §6b)
+```bash
+python -u code/evaluation/ssl_linear_probe_eval.py --no-tune-C \
+  --output-root results/linear_probe/exp3_pretrained_C1
+python -u code/evaluation/ssl_linear_probe_eval.py --no-tune-C --random-backbone \
+  --output-root results/linear_probe/exp3_randominit_C1
+python code/plotting/plot_pretraining_gain.py
+```
+**Outcome:** masked pretraining +0.117 on 5/5; jigsaw −0.011; joint −0.025 (harmful).
+Still outstanding if wanted: the same three-arm comparison *through the fine-tuning
+path* (pretrained / unfrozen-reinit / fully-random), mode by mode. The frozen-feature
+version above is cleaner and was sufficient to answer the question.
 
 ### #4 — Reduce `patch_size` 1024 → 256 (HIGH; targets the largest gap component)
 Directly attacks the resolution ceiling that dominates cancer and MTBLS563. 512 tokens
 instead of 128; attention cost grows ~16×, so 256 is the pragmatic choice over 128.
 Requires re-pretraining the masking backbone on the v4 corpus.
 
-### #5 — Adopt the linear-probe head for the masking family (LOW effort, banked win)
-Fold experiment #2's finding into the evaluation scripts: for masking, fit the final
-linear layer as a converged L2 logistic regression on frozen features (or tune weight
-decay / epochs / LR schedule). Expect ≈ +0.06 over the current best configuration.
+### ✅ #5 — Linear-probe head as a first-class evaluator (DONE)
+```bash
+python -u code/evaluation/ssl_linear_probe_eval.py            # nested-CV tuned C
+python -u code/evaluation/ssl_linear_probe_eval.py --no-tune-C # fixed C=1 (recommended)
+```
+`code/evaluation/ssl_linear_probe_eval.py` emits standard `summary.csv` /
+`fold_metrics.csv` / `oof_predictions.csv` / `run_config.json` per dataset, reporting the
+probe as an **additional** model per family rather than silently replacing the fine-tuned
+heads (on MTBLS326 the fine-tuned masking head 0.981 genuinely beats the probe 0.963).
+
+**Outcome:** masking probe beats its best fine-tuned head by **+0.054** (tuned C) /
+**+0.057** (fixed C=1).
+
+**Negative finding worth recording: nested-CV tuning of C did not help.** Mean change
+across the 15 dataset×family cells was negative — it gained in 4 cells (+0.013..+0.031)
+but lost in 7 (down to −0.077). With n=78 at 10-fold the inner CV selects C from ~14
+samples per inner fold, so tuning adds variance without reducing bias. **Use fixed
+`C=1`** at these sample sizes; the theoretically-cleaner option is empirically worse.
 
 ### #6 — Re-run the few-shot benchmark on v4 (MEDIUM)
 The previous run used pre-cleaning data and 20260708 checkpoints, and its Barth default
@@ -325,5 +385,7 @@ both.
   `code/plotting/plot_all_datasets_summary.py`,
   `code/plotting/plot_brc_t2d_fold_variability.py`,
   `code/plotting/plot_logreg_advantage_probe.py`,
-  `code/plotting/plot_linear_probe_vs_head.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig7`.
+  `code/plotting/plot_linear_probe_vs_head.py`,
+  `code/evaluation/ssl_linear_probe_eval.py`,
+  `code/plotting/plot_pretraining_gain.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig8`.
