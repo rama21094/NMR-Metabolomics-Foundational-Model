@@ -1,0 +1,40 @@
+{
+  "data": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
+  "metadata": "data/mtbls326/MTBLS326_metadata_mapping.csv",
+  "checkpoint_glob": "models/jigsaw/*/*/*_best.pth",
+  "checkpoint": [
+    "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth"
+  ],
+  "output_dir": "results/loocv/mtbls326_jigsaw_v4",
+  "classical_only": false,
+  "jigsaw_only": false,
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "normalize_input": "true",
+  "xgb_jobs": 4,
+  "device": "cuda",
+  "seed": 42,
+  "max_checkpoints": null,
+  "reinit_unfrozen_xavier": false,
+  "n_samples": 42,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "No",
+    "1": "Yes"
+  },
+  "checkpoint_paths": [
+    "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth"
+  ]
+}

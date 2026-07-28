@@ -49,7 +49,6 @@ FAMILY_LABELS = {
     "joint_ssl": "Joint SSL",
 }
 FAMILY_ORDER = ["classical", "masked", "jigsaw", "joint_ssl"]
-UNRELIABLE = {("Barth", "masked")}  # flagged per README -- collapse/imbalance issues, not a clean result
 
 FINE_TUNE_ORDER = ["frozen", "unfreeze_last_1", "unfreeze_last_2", "unfreeze_last_3"]
 
@@ -59,6 +58,16 @@ def _strip_mode(model_name: str, family: str) -> str:
         if model_name.endswith(mode):
             return mode
     return "" if family == "classical" else model_name
+
+
+def _is_degenerate(row: pd.Series) -> bool:
+    """Flag a row whose confusion matrix shows it collapsed to predicting a
+    single class (tp==0 or tn==0 in the binary case). Computed from the run's
+    own numbers rather than a hardcoded list, so it never goes stale when a
+    checkpoint is retrained."""
+    if "tp" not in row or "tn" not in row:
+        return False
+    return bool(row["tp"] == 0 or row["tn"] == 0)
 
 
 def load_dataset(name: str, sources: list[tuple[str, str, dict]]) -> pd.DataFrame:
@@ -71,7 +80,9 @@ def load_dataset(name: str, sources: list[tuple[str, str, dict]]) -> pd.DataFram
             _strip_mode(model, family) for model, family in zip(df["model"], df["family"])
         ]
         df["roc_auc_display"] = df[roc_col]
-        rows.append(df[["family", "model", "mode", "balanced_accuracy", "roc_auc_display"]])
+        df["degenerate"] = df.apply(_is_degenerate, axis=1)
+        cols = ["family", "model", "mode", "balanced_accuracy", "roc_auc_display", "degenerate"]
+        rows.append(df[cols])
     out = pd.concat(rows, ignore_index=True)
     out["dataset"] = name
     return out
@@ -123,7 +134,7 @@ def grouped_bar_figure(best_by_dataset: dict[str, pd.DataFrame], metric: str, yl
             df = best_by_dataset[dataset]
             match = df[df["family"] == family]
             heights.append(float(match[metric].iloc[0]) if len(match) else np.nan)
-            hatches.append("////" if (dataset, family) in UNRELIABLE else None)
+            hatches.append("////" if (len(match) and bool(match["degenerate"].iloc[0])) else None)
         bars = ax.bar(
             xs, heights, width=width * 0.92, color=FAMILY_COLORS[family],
             label=FAMILY_LABELS[family], zorder=3,
@@ -146,7 +157,7 @@ def grouped_bar_figure(best_by_dataset: dict[str, pd.DataFrame], metric: str, yl
     ax.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=4, frameon=False, fontsize=9)
     fig.text(
         0.01, 0.01,
-        "Hatched bar: flagged unreliable (Barth masked-SSL collapse under class imbalance -- see run README).\n"
+        "Hatched bar: model collapsed to predicting a single class (tp==0 or tn==0 in its confusion matrix).\n"
         "Dashed line: chance level (0.5). MTBLS563 ROC-AUC is macro one-vs-rest (3-class); others are binary.",
         fontsize=7, color="#898781",
     )
@@ -203,6 +214,7 @@ def heatmap_figure(by_dataset: dict[str, pd.DataFrame], out_path: Path):
 
     for ax, (metric, metric_label) in zip(axes, metrics):
         matrix = np.full((len(row_order), len(datasets)), np.nan)
+        flags = np.zeros((len(row_order), len(datasets)), dtype=bool)
         for r, (family, mode, _) in enumerate(row_order):
             for c, dataset in enumerate(datasets):
                 df = by_dataset[dataset]
@@ -210,6 +222,7 @@ def heatmap_figure(by_dataset: dict[str, pd.DataFrame], out_path: Path):
                 sub = sub[sub["model"] == mode] if family == "classical" else sub[sub["mode"] == mode]
                 if len(sub):
                     matrix[r, c] = float(sub[metric].iloc[0])
+                    flags[r, c] = bool(sub["degenerate"].iloc[0])
 
         im = ax.imshow(matrix, cmap="Blues", vmin=0, vmax=1, aspect="auto")
         for r in range(len(row_order)):
@@ -218,7 +231,7 @@ def heatmap_figure(by_dataset: dict[str, pd.DataFrame], out_path: Path):
                 if not np.isfinite(value):
                     ax.text(c, r, "--", ha="center", va="center", fontsize=8, color="#898781")
                     continue
-                flagged = (datasets[c], row_order[r][0]) in UNRELIABLE
+                flagged = bool(flags[r, c])
                 text_color = "#0b0b0b" if value < 0.6 else "#ffffff"
                 label = f"{value:.2f}" + ("*" if flagged else "")
                 ax.text(c, r, label, ha="center", va="center", fontsize=8, color=text_color, fontweight="bold" if flagged else "normal")
@@ -237,7 +250,7 @@ def heatmap_figure(by_dataset: dict[str, pd.DataFrame], out_path: Path):
         fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02)
 
     fig.suptitle("All evaluated models across datasets", fontsize=13, x=0.02, ha="left", y=1.0)
-    fig.text(0.02, -0.01, "* flagged unreliable (Barth masked-SSL collapse under class imbalance -- see run README).", fontsize=7.5, color="#898781")
+    fig.text(0.02, -0.01, "* model collapsed to predicting a single class (tp==0 or tn==0 in its confusion matrix).", fontsize=7.5, color="#898781")
     fig.tight_layout(rect=(0, 0.01, 1, 0.98))
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
@@ -265,7 +278,7 @@ def finetune_depth_figure(df_by_dataset: dict[str, pd.DataFrame], out_path: Path
             if sub["balanced_accuracy"].isna().all():
                 continue
             style = dict(color=FAMILY_COLORS[family], marker="o", markersize=5, linewidth=2, zorder=3)
-            if (dataset, family) in UNRELIABLE:
+            if sub["degenerate"].fillna(False).any():
                 style.update(linestyle="--", alpha=0.55)
             ax.plot(range(len(FINE_TUNE_ORDER)), sub["balanced_accuracy"].to_numpy(), label=FAMILY_LABELS[family], **style)
 
@@ -288,16 +301,16 @@ def finetune_depth_figure(df_by_dataset: dict[str, pd.DataFrame], out_path: Path
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--barth", default="results/loocv/barth_all_models_metabolights_v1/summary.csv")
-    parser.add_argument("--mtbls326-masked", default="results/loocv/mtbls326_masked_metabolights_v1/summary.csv")
-    parser.add_argument("--mtbls326-jigsaw", default="results/loocv/mtbls326_jigsaw_metabolights_v1/summary.csv")
-    parser.add_argument("--mtbls326-joint", default="results/loocv/mtbls326_joint_ssl_metabolights_v1/summary.csv")
-    parser.add_argument("--mtbls563", default="results/loocv/mtbls563_all_models_metabolights_v1/summary.csv")
-    parser.add_argument("--brc-t2d-cancer", default="results/cv10/brc_t2d_all_models_metabolights_v1/cancer_status/summary.csv")
-    parser.add_argument("--brc-t2d-cancer-joint", default="results/cv10/brc_t2d_joint_ssl_metabolights_v1/cancer_status/summary.csv")
-    parser.add_argument("--brc-t2d-diabetes", default="results/cv10/brc_t2d_all_models_metabolights_v1/diabetes_status/summary.csv")
-    parser.add_argument("--brc-t2d-diabetes-joint", default="results/cv10/brc_t2d_joint_ssl_metabolights_v1/diabetes_status/summary.csv")
-    parser.add_argument("--output-dir", default="results/plots/all_datasets_summary")
+    parser.add_argument("--barth", default="results/loocv/barth_all_models_v4/summary.csv")
+    parser.add_argument("--mtbls326-masked", default="results/loocv/mtbls326_masking_v4/summary.csv")
+    parser.add_argument("--mtbls326-jigsaw", default="results/loocv/mtbls326_jigsaw_v4/summary.csv")
+    parser.add_argument("--mtbls326-joint", default="results/loocv/mtbls326_joint_ssl_v4/summary.csv")
+    parser.add_argument("--mtbls563", default="results/loocv/mtbls563_all_models_v4/summary.csv")
+    parser.add_argument("--brc-t2d-cancer", default="results/cv10/brc_t2d_newlabels_v4/cancer_status/summary.csv")
+    parser.add_argument("--brc-t2d-cancer-joint", default="results/cv10/brc_t2d_newlabels_v4_joint/cancer_status/summary.csv")
+    parser.add_argument("--brc-t2d-diabetes", default="results/cv10/brc_t2d_newlabels_v4/diabetes_status/summary.csv")
+    parser.add_argument("--brc-t2d-diabetes-joint", default="results/cv10/brc_t2d_newlabels_v4_joint/diabetes_status/summary.csv")
+    parser.add_argument("--output-dir", default="results/plots/all_datasets_summary_v4")
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)

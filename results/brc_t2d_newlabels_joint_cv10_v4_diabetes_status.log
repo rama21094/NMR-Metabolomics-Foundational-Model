@@ -1,12 +1,12 @@
-Loaded (78, 131072); label_column=cancer_status; labels={0: 'No Cancer', 1: 'Cancer'}; counts={'No Cancer': 40, 'Cancer': 38}; n_splits=10
+Loaded (78, 131072); label_column=diabetes_status; labels={0: 'No Diabetes', 1: 'Diabetes'}; counts={'No Diabetes': 44, 'Diabetes': 34}; n_splits=10
 Joint SSL device: cuda
 joint_ssl/frozen: fold 1/10joint_ssl/frozen: fold 2/10joint_ssl/frozen: fold 3/10joint_ssl/frozen: fold 4/10joint_ssl/frozen: fold 5/10joint_ssl/frozen: fold 6/10joint_ssl/frozen: fold 7/10joint_ssl/frozen: fold 8/10joint_ssl/frozen: fold 9/10joint_ssl/frozen: fold 10/10
 joint_ssl/unfreeze_last_1: fold 1/10joint_ssl/unfreeze_last_1: fold 2/10joint_ssl/unfreeze_last_1: fold 3/10joint_ssl/unfreeze_last_1: fold 4/10joint_ssl/unfreeze_last_1: fold 5/10joint_ssl/unfreeze_last_1: fold 6/10joint_ssl/unfreeze_last_1: fold 7/10joint_ssl/unfreeze_last_1: fold 8/10joint_ssl/unfreeze_last_1: fold 9/10joint_ssl/unfreeze_last_1: fold 10/10
 joint_ssl/unfreeze_last_2: fold 1/10joint_ssl/unfreeze_last_2: fold 2/10joint_ssl/unfreeze_last_2: fold 3/10joint_ssl/unfreeze_last_2: fold 4/10joint_ssl/unfreeze_last_2: fold 5/10joint_ssl/unfreeze_last_2: fold 6/10joint_ssl/unfreeze_last_2: fold 7/10joint_ssl/unfreeze_last_2: fold 8/10joint_ssl/unfreeze_last_2: fold 9/10joint_ssl/unfreeze_last_2: fold 10/10
 joint_ssl/unfreeze_last_3: fold 1/10joint_ssl/unfreeze_last_3: fold 2/10joint_ssl/unfreeze_last_3: fold 3/10joint_ssl/unfreeze_last_3: fold 4/10joint_ssl/unfreeze_last_3: fold 5/10joint_ssl/unfreeze_last_3: fold 6/10joint_ssl/unfreeze_last_3: fold 7/10joint_ssl/unfreeze_last_3: fold 8/10joint_ssl/unfreeze_last_3: fold 9/10joint_ssl/unfreeze_last_3: fold 10/10
 
-Results written to results/cv10/brc_t2d_newlabels_v4_joint/cancer_status/summary.csv
-joint_ssl/frozen: accuracy=0.756, balanced_accuracy=0.757, macro_f1=0.756
-joint_ssl/unfreeze_last_1: accuracy=0.731, balanced_accuracy=0.730, macro_f1=0.730
-joint_ssl/unfreeze_last_2: accuracy=0.718, balanced_accuracy=0.717, macro_f1=0.717
-joint_ssl/unfreeze_last_3: accuracy=0.718, balanced_accuracy=0.716, macro_f1=0.716
+Results written to results/cv10/brc_t2d_newlabels_v4_joint/diabetes_status/summary.csv
+joint_ssl/frozen: accuracy=0.615, balanced_accuracy=0.616, macro_f1=0.613
+joint_ssl/unfreeze_last_1: accuracy=0.628, balanced_accuracy=0.624, macro_f1=0.623
+joint_ssl/unfreeze_last_2: accuracy=0.603, balanced_accuracy=0.598, macro_f1=0.597
+joint_ssl/unfreeze_last_3: accuracy=0.615, balanced_accuracy=0.616, macro_f1=0.613

@@ -1,0 +1,58 @@
+{
+  "data": "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v4.npy",
+  "metadata": "data/BrC_T2D/BC_T2D_newlabels_metadata_mapping.csv",
+  "label_columns": [
+    "cancer_status",
+    "diabetes_status"
+  ],
+  "output_root": "results/cv10/brc_t2d_newlabels_v4",
+  "folds": 10,
+  "masking_checkpoint_glob": "models/SSL_models/combine_unique_Water_EDTA_Suppressed_*_bs32_mr*_ps1024_best.pth",
+  "masking_checkpoint": [
+    "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth"
+  ],
+  "jigsaw_checkpoint_glob": "models/jigsaw/*/*/*_best.pth",
+  "jigsaw_checkpoint": [
+    "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth"
+  ],
+  "max_masking_checkpoints": null,
+  "max_jigsaw_checkpoints": null,
+  "fine_tune_modes": [
+    "frozen",
+    "unfreeze_last_1",
+    "unfreeze_last_2",
+    "unfreeze_last_3"
+  ],
+  "skip_completed": false,
+  "classical_only": false,
+  "foundation_only": false,
+  "masking_only": false,
+  "jigsaw_only": false,
+  "classical_features": "binned_auc",
+  "feature_bins": 1024,
+  "epochs": 50,
+  "batch_size": 8,
+  "head_lr": 0.001,
+  "backbone_lr": 1e-05,
+  "weight_decay": 0.0001,
+  "head_dropout": 0.1,
+  "masking_backbone_dropout": 0.15,
+  "masking_nhead": 8,
+  "normalize_input": "true",
+  "xgb_jobs": 4,
+  "device": "cuda",
+  "seed": 42,
+  "label_column": "cancer_status",
+  "n_samples": 78,
+  "spectrum_length": 131072,
+  "label_mapping": {
+    "0": "No Cancer",
+    "1": "Cancer"
+  },
+  "masking_checkpoint_paths": [
+    "models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth"
+  ],
+  "jigsaw_checkpoint_paths": [
+    "models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth"
+  ]
+}

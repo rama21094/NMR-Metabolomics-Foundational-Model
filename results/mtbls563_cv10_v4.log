@@ -7,4 +7,31 @@ Masking checkpoint: models/masked_ssl/combine_unique_MetaboLights_Workbench_Wate
 masking/frozen: CV fold 1/10masking/frozen: CV fold 2/10masking/frozen: CV fold 3/10masking/frozen: CV fold 4/10masking/frozen: CV fold 5/10masking/frozen: CV fold 6/10masking/frozen: CV fold 7/10masking/frozen: CV fold 8/10masking/frozen: CV fold 9/10masking/frozen: CV fold 10/10
 masking/unfreeze_last_1: CV fold 1/10masking/unfreeze_last_1: CV fold 2/10masking/unfreeze_last_1: CV fold 3/10masking/unfreeze_last_1: CV fold 4/10masking/unfreeze_last_1: CV fold 5/10masking/unfreeze_last_1: CV fold 6/10masking/unfreeze_last_1: CV fold 7/10masking/unfreeze_last_1: CV fold 8/10masking/unfreeze_last_1: CV fold 9/10masking/unfreeze_last_1: CV fold 10/10
 masking/unfreeze_last_2: CV fold 1/10masking/unfreeze_last_2: CV fold 2/10masking/unfreeze_last_2: CV fold 3/10masking/unfreeze_last_2: CV fold 4/10masking/unfreeze_last_2: CV fold 5/10masking/unfreeze_last_2: CV fold 6/10masking/unfreeze_last_2: CV fold 7/10masking/unfreeze_last_2: CV fold 8/10masking/unfreeze_last_2: CV fold 9/10masking/unfreeze_last_2: CV fold 10/10
-masking/unfreeze_last_3: CV fold 1/10masking/unfreeze_last_3: CV fold 2/10
+masking/unfreeze_last_3: CV fold 1/10masking/unfreeze_last_3: CV fold 2/10masking/unfreeze_last_3: CV fold 3/10masking/unfreeze_last_3: CV fold 4/10masking/unfreeze_last_3: CV fold 5/10masking/unfreeze_last_3: CV fold 6/10masking/unfreeze_last_3: CV fold 7/10masking/unfreeze_last_3: CV fold 8/10masking/unfreeze_last_3: CV fold 9/10masking/unfreeze_last_3: CV fold 10/10
+Jigsaw checkpoint: models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth
+jigsaw/frozen: CV fold 1/10jigsaw/frozen: CV fold 2/10jigsaw/frozen: CV fold 3/10jigsaw/frozen: CV fold 4/10jigsaw/frozen: CV fold 5/10jigsaw/frozen: CV fold 6/10jigsaw/frozen: CV fold 7/10jigsaw/frozen: CV fold 8/10jigsaw/frozen: CV fold 9/10jigsaw/frozen: CV fold 10/10
+jigsaw/unfreeze_last_1: CV fold 1/10jigsaw/unfreeze_last_1: CV fold 2/10jigsaw/unfreeze_last_1: CV fold 3/10jigsaw/unfreeze_last_1: CV fold 4/10jigsaw/unfreeze_last_1: CV fold 5/10jigsaw/unfreeze_last_1: CV fold 6/10jigsaw/unfreeze_last_1: CV fold 7/10jigsaw/unfreeze_last_1: CV fold 8/10jigsaw/unfreeze_last_1: CV fold 9/10jigsaw/unfreeze_last_1: CV fold 10/10
+jigsaw/unfreeze_last_2: CV fold 1/10jigsaw/unfreeze_last_2: CV fold 2/10jigsaw/unfreeze_last_2: CV fold 3/10jigsaw/unfreeze_last_2: CV fold 4/10jigsaw/unfreeze_last_2: CV fold 5/10jigsaw/unfreeze_last_2: CV fold 6/10jigsaw/unfreeze_last_2: CV fold 7/10jigsaw/unfreeze_last_2: CV fold 8/10jigsaw/unfreeze_last_2: CV fold 9/10jigsaw/unfreeze_last_2: CV fold 10/10
+jigsaw/unfreeze_last_3: CV fold 1/10jigsaw/unfreeze_last_3: CV fold 2/10jigsaw/unfreeze_last_3: CV fold 3/10jigsaw/unfreeze_last_3: CV fold 4/10jigsaw/unfreeze_last_3: CV fold 5/10jigsaw/unfreeze_last_3: CV fold 6/10jigsaw/unfreeze_last_3: CV fold 7/10jigsaw/unfreeze_last_3: CV fold 8/10jigsaw/unfreeze_last_3: CV fold 9/10jigsaw/unfreeze_last_3: CV fold 10/10
+Joint SSL checkpoint: models/joint_ssl/joint_ssl_20260725_085627/joint_ssl_20260725_085627_best.pth
+joint_ssl/frozen: CV fold 1/10joint_ssl/frozen: CV fold 2/10joint_ssl/frozen: CV fold 3/10joint_ssl/frozen: CV fold 4/10joint_ssl/frozen: CV fold 5/10joint_ssl/frozen: CV fold 6/10joint_ssl/frozen: CV fold 7/10joint_ssl/frozen: CV fold 8/10joint_ssl/frozen: CV fold 9/10joint_ssl/frozen: CV fold 10/10
+joint_ssl/unfreeze_last_1: CV fold 1/10joint_ssl/unfreeze_last_1: CV fold 2/10joint_ssl/unfreeze_last_1: CV fold 3/10joint_ssl/unfreeze_last_1: CV fold 4/10joint_ssl/unfreeze_last_1: CV fold 5/10joint_ssl/unfreeze_last_1: CV fold 6/10joint_ssl/unfreeze_last_1: CV fold 7/10joint_ssl/unfreeze_last_1: CV fold 8/10joint_ssl/unfreeze_last_1: CV fold 9/10joint_ssl/unfreeze_last_1: CV fold 10/10
+joint_ssl/unfreeze_last_2: CV fold 1/10joint_ssl/unfreeze_last_2: CV fold 2/10joint_ssl/unfreeze_last_2: CV fold 3/10joint_ssl/unfreeze_last_2: CV fold 4/10joint_ssl/unfreeze_last_2: CV fold 5/10joint_ssl/unfreeze_last_2: CV fold 6/10joint_ssl/unfreeze_last_2: CV fold 7/10joint_ssl/unfreeze_last_2: CV fold 8/10joint_ssl/unfreeze_last_2: CV fold 9/10joint_ssl/unfreeze_last_2: CV fold 10/10
+joint_ssl/unfreeze_last_3: CV fold 1/10joint_ssl/unfreeze_last_3: CV fold 2/10joint_ssl/unfreeze_last_3: CV fold 3/10joint_ssl/unfreeze_last_3: CV fold 4/10joint_ssl/unfreeze_last_3: CV fold 5/10joint_ssl/unfreeze_last_3: CV fold 6/10joint_ssl/unfreeze_last_3: CV fold 7/10joint_ssl/unfreeze_last_3: CV fold 8/10joint_ssl/unfreeze_last_3: CV fold 9/10joint_ssl/unfreeze_last_3: CV fold 10/10
+
+Results written to results/loocv/mtbls563_all_models_v4/summary.csv
+classical/logistic_regression: balanced_accuracy=0.721, weighted_f1=0.751
+classical/svm_rbf: balanced_accuracy=0.437, weighted_f1=0.520
+classical/xgboost: balanced_accuracy=0.552, weighted_f1=0.600
+masking/frozen: balanced_accuracy=0.530, weighted_f1=0.581
+masking/unfreeze_last_1: balanced_accuracy=0.531, weighted_f1=0.583
+masking/unfreeze_last_2: balanced_accuracy=0.507, weighted_f1=0.577
+masking/unfreeze_last_3: balanced_accuracy=0.558, weighted_f1=0.612
+jigsaw/frozen: balanced_accuracy=0.550, weighted_f1=0.589
+jigsaw/unfreeze_last_1: balanced_accuracy=0.530, weighted_f1=0.572
+jigsaw/unfreeze_last_2: balanced_accuracy=0.487, weighted_f1=0.537
+jigsaw/unfreeze_last_3: balanced_accuracy=0.519, weighted_f1=0.563
+joint_ssl/frozen: balanced_accuracy=0.491, weighted_f1=0.541
+joint_ssl/unfreeze_last_1: balanced_accuracy=0.488, weighted_f1=0.545
+joint_ssl/unfreeze_last_2: balanced_accuracy=0.495, weighted_f1=0.538
+joint_ssl/unfreeze_last_3: balanced_accuracy=0.500, weighted_f1=0.549
