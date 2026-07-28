@@ -184,16 +184,22 @@ Balanced accuracy, flatten pooling:
 | dataset | patch 1024 (128 tok) | patch 256 (512 tok) | patch 128 (1024 tok) |
 |---|---|---|---|
 | Barth | **0.806** | 0.598 | 0.655 |
-| MTBLS326 | **1.000** | 0.907 | 0.930 |
-| BrC-T2D cancer | **0.859** | 0.832 | 0.795 |
-| BrC-T2D diabetes | 0.780 | **0.783** | 0.749 |
-| MTBLS563 | **0.618** | 0.581 | 0.616 |
+| MTBLS326 | **1.000** | 0.907 | 0.911 |
+| BrC-T2D cancer | **0.859** | 0.832 | 0.768 |
+| BrC-T2D diabetes | 0.780 | **0.783** | 0.738 |
+| MTBLS563 | **0.618** | 0.581 | 0.607 |
 
-Mean Δ vs patch 1024: **patch 256 −0.072, patch 128 −0.063 — 0 of 5 wins.** With
-mean-pooling: −0.040 and −0.058. **Finer patches consistently made things worse.**
+Mean Δ vs patch 1024: **patch 256 −0.072, patch 128 −0.077 — 0 of 5 wins.** With
+mean-pooling: −0.040 and −0.060. **Finer patches consistently made things worse.**
+
+(ps128 numbers are from its final epoch-1813 checkpoint. An earlier reading used the
+epoch-1632 checkpoint, before training finished; the final one scored 0.000–0.026 *lower*
+downstream on 4 of 5 targets despite a 2.4% better reconstruction loss — a small extra
+illustration of the same reconstruction-vs-utility disconnect described below. The
+conclusion is unchanged and marginally strengthened.)
 
 Why the prediction failed. Best validation reconstruction loss *fell* as patches shrank:
-9.26e-5 (ps1024) → 5.56e-5 (ps256) → 4.46e-5 (ps128). A masked 128-point patch is largely
+9.26e-5 (ps1024) → 5.56e-5 (ps256) → 4.36e-5 (ps128). A masked 128-point patch is largely
 interpolable from its immediate neighbours, so shrinking the patch made the pretext task
 **easier**, not more informative — the model can solve it by local smoothing without
 learning metabolite structure. This is the standard MAE trade-off (patch size and mask

@@ -1976,3 +1976,174 @@ Epoch 1852: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvemen
 Epoch 1853: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 39/200
 Epoch 1854: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 40/200
 Epoch 1855: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 41/200
+Epoch 1856: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 42/200
+Epoch 1857: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 43/200
+Epoch 1858: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 44/200
+Epoch 1859: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 45/200
+Epoch 1860: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 46/200
+Epoch 1861: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 47/200
+Epoch 1862: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 48/200
+Epoch 1863: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 49/200
+Epoch 1864: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 50/200
+Epoch 1865: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 51/200
+Epoch 1866: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 52/200
+Epoch 1867: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 53/200
+Epoch 1868: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 54/200
+Epoch 1869: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 55/200
+Epoch 1870: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 56/200
+Epoch 1871: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 57/200
+Epoch 1872: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 58/200
+Epoch 1873: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 59/200
+Epoch 1874: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 60/200
+Epoch 1875: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 61/200
+Epoch 1876: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 62/200
+Epoch 1877: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 63/200
+Epoch 1878: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 64/200
+Epoch 1879: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 65/200
+Epoch 1880: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 66/200
+Epoch 1881: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 67/200
+Epoch 1882: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 68/200
+Epoch 1883: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 69/200
+Epoch 1884: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 70/200
+Epoch 1885: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 71/200
+Epoch 1886: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 72/200
+Epoch 1887: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 73/200
+Epoch 1888: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 74/200
+Epoch 1889: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 75/200
+Epoch 1890: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 76/200
+Epoch 1891: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 77/200
+Epoch 1892: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 78/200
+Epoch 1893: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 79/200
+Epoch 1894: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 80/200
+Epoch 1895: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 81/200
+Epoch 1896: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 82/200
+Epoch 1897: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 83/200
+Epoch 1898: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 84/200
+Epoch 1899: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 85/200
+Epoch 1900: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 86/200
+Epoch 1901: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 87/200
+Epoch 1902: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 88/200
+Epoch 1903: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 89/200
+Epoch 1904: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 90/200
+Epoch 1905: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 91/200
+Epoch 1906: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 92/200
+Epoch 1907: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 93/200
+Epoch 1908: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 94/200
+Epoch 1909: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000002, No improvement: 95/200
+Epoch 1910: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000002, No improvement: 96/200
+Epoch 1911: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 97/200
+Epoch 1912: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 98/200
+Epoch 1913: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 99/200
+Epoch 1914: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 100/200
+Epoch 1915: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 101/200
+Epoch 1916: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 102/200
+Epoch 1917: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 103/200
+Epoch 1918: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 104/200
+Epoch 1919: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 105/200
+Epoch 1920: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 106/200
+Epoch 1921: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 107/200
+Epoch 1922: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 108/200
+Epoch 1923: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 109/200
+Epoch 1924: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 110/200
+Epoch 1925: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 111/200
+Epoch 1926: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 112/200
+Epoch 1927: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 113/200
+Epoch 1928: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 114/200
+Epoch 1929: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 115/200
+Epoch 1930: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 116/200
+Epoch 1931: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 117/200
+Epoch 1932: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 118/200
+Epoch 1933: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 119/200
+Epoch 1934: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 120/200
+Epoch 1935: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 121/200
+Epoch 1936: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 122/200
+Epoch 1937: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 123/200
+Epoch 1938: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 124/200
+Epoch 1939: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 125/200
+Epoch 1940: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 126/200
+Epoch 1941: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 127/200
+Epoch 1942: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 128/200
+Epoch 1943: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 129/200
+Epoch 1944: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 130/200
+Epoch 1945: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 131/200
+Epoch 1946: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 132/200
+Epoch 1947: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 133/200
+Epoch 1948: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 134/200
+Epoch 1949: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 135/200
+Epoch 1950: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 136/200
+Epoch 1951: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 137/200
+Epoch 1952: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 138/200
+Epoch 1953: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 139/200
+Epoch 1954: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 140/200
+Epoch 1955: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 141/200
+Epoch 1956: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 142/200
+Epoch 1957: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 143/200
+Epoch 1958: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 144/200
+Epoch 1959: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 145/200
+Epoch 1960: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 146/200
+Epoch 1961: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 147/200
+Epoch 1962: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 148/200
+Epoch 1963: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 149/200
+Epoch 1964: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 150/200
+Epoch 1965: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 151/200
+Epoch 1966: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 152/200
+Epoch 1967: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 153/200
+Epoch 1968: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 154/200
+Epoch 1969: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 155/200
+Epoch 1970: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 156/200
+Epoch 1971: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 157/200
+Epoch 1972: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 158/200
+Epoch 1973: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 159/200
+Epoch 1974: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 160/200
+Epoch 1975: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 161/200
+Epoch 1976: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 162/200
+Epoch 1977: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 163/200
+Epoch 1978: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000001, No improvement: 164/200
+Epoch 1979: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 165/200
+Epoch 1980: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 166/200
+Epoch 1981: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 167/200
+Epoch 1982: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 168/200
+Epoch 1983: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 169/200
+Epoch 1984: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 170/200
+Epoch 1985: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 171/200
+Epoch 1986: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 172/200
+Epoch 1987: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 173/200
+Epoch 1988: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 174/200
+Epoch 1989: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 175/200
+Epoch 1990: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 176/200
+Epoch 1991: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 177/200
+Epoch 1992: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 178/200
+Epoch 1993: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 179/200
+Epoch 1994: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 180/200
+Epoch 1995: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 181/200
+Epoch 1996: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 182/200
+Epoch 1997: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 183/200
+Epoch 1998: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 184/200
+Epoch 1999: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000001, No improvement: 185/200
+Epoch 2000: Train Loss = 0.0001, Val Loss = 0.0000, LR = 0.000001, No improvement: 186/200
+
+============================================================
+Training completed after 2000 epochs
+Best validation loss achieved: 0.0000
+============================================================
+
+
+Generating training curves...
+Training curves saved to: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_053503_training_curves.png
+
+=== Training Statistics ===
+Total epochs: 2000
+Final training loss: 0.000065
+Final validation loss: 0.000048
+Best validation loss: 0.000044
+Best validation achieved at epoch: 1814
+
+Generating reconstruction examples...
+
+Visualizing reconstruction for random samples: [657, 1057, 620, 1158, 505]
+Sample 657: MSE = 0.000002, Correlation = 0.9966
+Sample 1057: MSE = 0.000010, Correlation = 0.9863
+Sample 620: MSE = 0.000004, Correlation = 0.9974
+Sample 1158: MSE = 0.000002, Correlation = 0.9978
+Sample 505: MSE = 0.000029, Correlation = 0.9632
+Reconstruction examples saved to: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_053503_reconstructions.png

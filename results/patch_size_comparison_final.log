@@ -1,0 +1,71 @@
+
+=== brc_t2d_cancer  n=78  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.8329 auc=0.9007
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.8586 auc=0.9572
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.7822 auc=0.8651
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.8592 auc=0.9342
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.8086 auc=0.8336
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.8322 auc=0.8855
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.7039 auc=0.7928
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.7684 auc=0.8447
+
+=== brc_t2d_diabetes  n=78  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.8095 auc=0.8489
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.7801 auc=0.8616
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.6872 auc=0.7607
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.7801 auc=0.8088
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.7086 auc=0.7547
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.7834 auc=0.8262
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.6825 auc=0.7754
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.7380 auc=0.7908
+
+=== mtbls563  n=113  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.6072 auc=0.7462
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.6212 auc=0.8020
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.5878 auc=0.7419
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.6176 auc=0.8184
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.5058 auc=0.6978
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.5807 auc=0.7528
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.4628 auc=0.6516
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.6066 auc=0.7546
+
+=== mtbls326  n=42  cv=loo ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.9444 auc=1.0000
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=1.0000 auc=1.0000
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.9481 auc=0.9951
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=1.0000 auc=1.0000
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.8741 auc=0.8963
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.9074 auc=0.9481
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.9111 auc=0.9654
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.9111 auc=0.9852
+
+=== barth  n=37  cv=loo ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.7702 auc=0.8509
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.8059 auc=0.8851
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.6770 auc=0.8416
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.8059 auc=0.8913
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.5839 auc=0.6087
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.5978 auc=0.6894
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.6196 auc=0.7112
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.6553 auc=0.7516
+
+Wrote results/analysis/patch_size_comparison/patch_size_results.csv
+
+--- balanced accuracy, pooling=mean_pool ---
+arm               ps1024_nhead4_true  ps1024_nhead8_legacy  ps128  ps256
+dataset                                                                 
+barth                          0.677                 0.770  0.620  0.584
+brc_t2d_cancer                 0.782                 0.833  0.704  0.809
+brc_t2d_diabetes               0.687                 0.809  0.682  0.709
+mtbls326                       0.948                 0.944  0.911  0.874
+mtbls563                       0.588                 0.607  0.463  0.506
+
+--- balanced accuracy, pooling=flatten ---
+arm               ps1024_nhead4_true  ps1024_nhead8_legacy  ps128  ps256
+dataset                                                                 
+barth                          0.806                 0.806  0.655  0.598
+brc_t2d_cancer                 0.859                 0.859  0.768  0.832
+brc_t2d_diabetes               0.780                 0.780  0.738  0.783
+mtbls326                       1.000                 1.000  0.911  0.907
+mtbls563                       0.618                 0.621  0.607  0.581
+

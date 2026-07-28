@@ -36,8 +36,8 @@ axl.set_ylabel("Balanced accuracy (frozen linear probe)")
 axl.set_ylim(0.4,1.06)
 axl.set_title("Smaller patches HURT — hypothesis refuted",fontsize=11,loc="left")
 axl.legend(frameon=False,fontsize=8,loc="lower left")
-axl.text(0.0,-0.235,"Mean Δ vs patch 1024: patch 256 −0.072, patch 128 −0.063 (0 of 5 wins).\n"
-  "Reconstruction loss FELL as patches shrank (9.3e-5 → 5.6e-5 → 4.5e-5): a masked 128-point\n"
+axl.text(0.0,-0.235,"Mean Δ vs patch 1024: patch 256 −0.072, patch 128 −0.077 (0 of 5 wins).\n"
+  "Reconstruction loss FELL as patches shrank (9.3e-5 → 5.6e-5 → 4.4e-5): a masked 128-point\n"
   "patch is interpolable from its neighbours, so the pretext task got easier, not more informative.\n"
   "Caveat: the small-patch models also have ~3× fewer parameters (0.63/0.66M vs 1.89M).",
   transform=axl.transAxes,fontsize=7.3,color="#898781",va="top")
