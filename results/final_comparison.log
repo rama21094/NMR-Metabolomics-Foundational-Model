@@ -1,0 +1,247 @@
+
+=== brc_t2d_cancer  n=78  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.8329 auc=0.9007
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.8586 auc=0.9572
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.7822 auc=0.8651
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.8592 auc=0.9342
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.8086 auc=0.8336
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.8322 auc=0.8855
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.7039 auc=0.7928
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.7684 auc=0.8447
+  ps2048                 ps=2048  tok=64    nhead=4 mean_pool d=128    bal=0.7553 auc=0.7993
+  ps2048                 ps=2048  tok=64    nhead=4 flatten   d=8192   bal=0.8204 auc=0.9039
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 mean_pool d=256    bal=0.8454 auc=0.9171
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 flatten   d=32768  bal=0.8586 auc=0.9447
+
+=== brc_t2d_diabetes  n=78  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.8095 auc=0.8489
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.7801 auc=0.8616
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.6872 auc=0.7607
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.7801 auc=0.8088
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.7086 auc=0.7547
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.7834 auc=0.8262
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.6825 auc=0.7754
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.7380 auc=0.7908
+  ps2048                 ps=2048  tok=64    nhead=4 mean_pool d=128    bal=0.6417 auc=0.6905
+  ps2048                 ps=2048  tok=64    nhead=4 flatten   d=8192   bal=0.6464 auc=0.7814
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 mean_pool d=256    bal=0.6905 auc=0.7460
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 flatten   d=32768  bal=0.6905 auc=0.7533
+
+=== mtbls563  n=113  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.6072 auc=0.7462
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.6212 auc=0.8020
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.5878 auc=0.7419
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.6176 auc=0.8181
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.5058 auc=0.6978
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.5807 auc=0.7528
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.4628 auc=0.6516
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.6066 auc=0.7546
+  ps2048                 ps=2048  tok=64    nhead=4 mean_pool d=128    bal=0.5244 auc=0.6901
+  ps2048                 ps=2048  tok=64    nhead=4 flatten   d=8192   bal=0.5550 auc=0.7752
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 mean_pool d=256    bal=0.5502 auc=0.7338
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 flatten   d=32768  bal=0.5514 auc=0.7725
+
+=== mtbls326  n=42  cv=loo ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.9444 auc=1.0000
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=1.0000 auc=1.0000
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.9481 auc=0.9951
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=1.0000 auc=1.0000
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.8741 auc=0.8963
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.9074 auc=0.9481
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.9111 auc=0.9654
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.9111 auc=0.9852
+  ps2048                 ps=2048  tok=64    nhead=4 mean_pool d=128    bal=0.9296 auc=0.9630
+  ps2048                 ps=2048  tok=64    nhead=4 flatten   d=8192   bal=0.9296 auc=0.9877
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 mean_pool d=256    bal=0.9630 auc=0.9975
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 flatten   d=32768  bal=0.9630 auc=0.9926
+
+=== barth  n=37  cv=loo ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.7702 auc=0.8509
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.8059 auc=0.8851
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.6770 auc=0.8416
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.8059 auc=0.8913
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.5839 auc=0.6087
+  ps256                  ps=256   tok=512   nhead=4 flatten   d=65536  bal=0.5978 auc=0.6894
+  ps128                  ps=128   tok=1024  nhead=4 mean_pool d=128    bal=0.6196 auc=0.7112
+  ps128                  ps=128   tok=1024  nhead=4 flatten   d=131072 bal=0.6553 auc=0.7516
+  ps2048                 ps=2048  tok=64    nhead=4 mean_pool d=128    bal=0.7702 auc=0.8944
+  ps2048                 ps=2048  tok=64    nhead=4 flatten   d=8192   bal=0.7702 auc=0.8820
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 mean_pool d=256    bal=0.6335 auc=0.7547
+  ps1024_d256_L6         ps=1024  tok=128   nhead=8 flatten   d=32768  bal=0.6553 auc=0.7795
+
+Wrote results/analysis/patch_size_comparison/patch_size_results.csv
+
+--- balanced accuracy, pooling=mean_pool ---
+arm               ps1024_d256_L6  ps1024_nhead4_true  ps1024_nhead8_legacy  ps128  ps2048  ps256
+dataset                                                                                         
+barth                      0.634               0.677                 0.770  0.620   0.770  0.584
+brc_t2d_cancer             0.845               0.782                 0.833  0.704   0.755  0.809
+brc_t2d_diabetes           0.691               0.687                 0.809  0.682   0.642  0.709
+mtbls326                   0.963               0.948                 0.944  0.911   0.930  0.874
+mtbls563                   0.550               0.588                 0.607  0.463   0.524  0.506
+
+--- balanced accuracy, pooling=flatten ---
+arm               ps1024_d256_L6  ps1024_nhead4_true  ps1024_nhead8_legacy  ps128  ps2048  ps256
+dataset                                                                                         
+barth                      0.655               0.806                 0.806  0.655   0.770  0.598
+brc_t2d_cancer             0.859               0.859                 0.859  0.768   0.820  0.832
+brc_t2d_diabetes           0.691               0.780                 0.780  0.738   0.646  0.783
+mtbls326                   0.963               1.000                 1.000  0.911   0.930  0.907
+mtbls563                   0.551               0.618                 0.621  0.607   0.555  0.581
+
+=== COMPARISON DONE ===
+########## sweep ps2048 ##########
+
+=== brc_t2d_cancer  n=78  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.7553 auc=0.7993 (= mean-pool)
+  groups=2    d=256    bal=0.7684 auc=0.7980
+  groups=4    d=512    bal=0.8211 auc=0.8586
+  groups=8    d=1024   bal=0.8204 auc=0.8803
+  groups=16   d=2048   bal=0.8072 auc=0.8914
+  groups=32   d=4096   bal=0.8072 auc=0.8914
+  groups=64   d=8192   bal=0.8204 auc=0.9039 (= flatten)
+
+=== brc_t2d_diabetes  n=78  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.6417 auc=0.6905 (= mean-pool)
+  groups=2    d=256    bal=0.6464 auc=0.7172
+  groups=4    d=512    bal=0.6056 auc=0.7420
+  groups=8    d=1024   bal=0.6350 auc=0.7467
+  groups=16   d=2048   bal=0.6350 auc=0.7346
+  groups=32   d=4096   bal=0.6497 auc=0.7406
+  groups=64   d=8192   bal=0.6464 auc=0.7814 (= flatten)
+
+=== mtbls563  n=113  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.5244 auc=0.6901 (= mean-pool)
+  groups=2    d=256    bal=0.5413 auc=0.6911
+  groups=4    d=512    bal=0.5445 auc=0.7205
+  groups=8    d=1024   bal=0.5082 auc=0.7457
+  groups=16   d=2048   bal=0.5560 auc=0.7440
+  groups=32   d=4096   bal=0.5738 auc=0.7722
+  groups=64   d=8192   bal=0.5550 auc=0.7752 (= flatten)
+
+=== mtbls326  n=42  tokens=64  d_model=128  cv=loo ===
+  groups=1    d=128    bal=0.9296 auc=0.9630 (= mean-pool)
+  groups=2    d=256    bal=0.9296 auc=0.9531
+  groups=4    d=512    bal=0.9296 auc=0.9753
+  groups=8    d=1024   bal=0.9296 auc=0.9827
+  groups=16   d=2048   bal=0.9296 auc=0.9852
+  groups=32   d=4096   bal=0.9296 auc=0.9852
+  groups=64   d=8192   bal=0.9296 auc=0.9877 (= flatten)
+
+=== barth  n=37  tokens=64  d_model=128  cv=loo ===
+  groups=1    d=128    bal=0.7702 auc=0.8944 (= mean-pool)
+  groups=2    d=256    bal=0.7702 auc=0.8758
+  groups=4    d=512    bal=0.7702 auc=0.8789
+  groups=8    d=1024   bal=0.7345 auc=0.8789
+  groups=16   d=2048   bal=0.7345 auc=0.8789
+  groups=32   d=4096   bal=0.7345 auc=0.8851
+  groups=64   d=8192   bal=0.7702 auc=0.8820 (= flatten)
+
+Wrote results/analysis/pooling_sweep_ps2048/pooling_sweep_results.csv
+
+--- balanced accuracy by number of pooling groups ---
+groups               1      2      4      8      16     32     64
+dataset                                                          
+barth             0.770  0.770  0.770  0.734  0.734  0.734  0.770
+brc_t2d_cancer    0.755  0.768  0.821  0.820  0.807  0.807  0.820
+brc_t2d_diabetes  0.642  0.646  0.606  0.635  0.635  0.650  0.646
+mtbls326          0.930  0.930  0.930  0.930  0.930  0.930  0.930
+mtbls563          0.524  0.541  0.545  0.508  0.556  0.574  0.555
+
+best group count per dataset:
+  barth              best groups=1    bal=0.7702   (mean-pool=0.7702, flatten=0.7702)
+  brc_t2d_cancer     best groups=4    bal=0.8211   (mean-pool=0.7553, flatten=0.8204)
+  brc_t2d_diabetes   best groups=32   bal=0.6497   (mean-pool=0.6417, flatten=0.6464)
+  mtbls326           best groups=1    bal=0.9296   (mean-pool=0.9296, flatten=0.9296)
+  mtbls563           best groups=32   bal=0.5738   (mean-pool=0.5244, flatten=0.5550)
+
+mean balanced accuracy across datasets, by group count:
+groups
+1     0.7242
+2     0.7312
+4     0.7342
+8     0.7255
+16    0.7325
+32    0.7390
+64    0.7443
+########## sweep d256L6 ##########
+
+=== brc_t2d_cancer  n=78  tokens=128  d_model=256  cv=10 ===
+  groups=1    d=256    bal=0.8454 auc=0.9171 (= mean-pool)
+  groups=2    d=512    bal=0.8454 auc=0.9164
+  groups=4    d=1024   bal=0.8586 auc=0.9270
+  groups=8    d=2048   bal=0.8454 auc=0.9309
+  groups=16   d=4096   bal=0.8461 auc=0.9322
+  groups=32   d=8192   bal=0.8592 auc=0.9362
+  groups=64   d=16384  bal=0.8717 auc=0.9428
+  groups=128  d=32768  bal=0.8586 auc=0.9447 (= flatten)
+
+=== brc_t2d_diabetes  n=78  tokens=128  d_model=256  cv=10 ===
+  groups=1    d=256    bal=0.6905 auc=0.7460 (= mean-pool)
+  groups=2    d=512    bal=0.7019 auc=0.7440
+  groups=4    d=1024   bal=0.6644 auc=0.7400
+  groups=8    d=2048   bal=0.6872 auc=0.7353
+  groups=16   d=4096   bal=0.6872 auc=0.7253
+  groups=32   d=8192   bal=0.6725 auc=0.7440
+  groups=64   d=16384  bal=0.6758 auc=0.7360
+  groups=128  d=32768  bal=0.6905 auc=0.7533 (= flatten)
+
+=== mtbls563  n=113  tokens=128  d_model=256  cv=10 ===
+  groups=1    d=256    bal=0.5502 auc=0.7342 (= mean-pool)
+  groups=2    d=512    bal=0.5335 auc=0.7387
+  groups=4    d=1024   bal=0.5729 auc=0.7527
+  groups=8    d=2048   bal=0.5789 auc=0.7560
+  groups=16   d=4096   bal=0.5789 auc=0.7614
+  groups=32   d=8192   bal=0.5860 auc=0.7688
+  groups=64   d=16384  bal=0.5564 auc=0.7742
+  groups=128  d=32768  bal=0.5514 auc=0.7725 (= flatten)
+
+=== mtbls326  n=42  tokens=128  d_model=256  cv=loo ===
+  groups=1    d=256    bal=0.9630 auc=0.9975 (= mean-pool)
+  groups=2    d=512    bal=0.9630 auc=1.0000
+  groups=4    d=1024   bal=0.9630 auc=1.0000
+  groups=8    d=2048   bal=0.9630 auc=0.9951
+  groups=16   d=4096   bal=0.9630 auc=0.9951
+  groups=32   d=8192   bal=0.9630 auc=0.9975
+  groups=64   d=16384  bal=0.9630 auc=1.0000
+  groups=128  d=32768  bal=0.9630 auc=0.9926 (= flatten)
+
+=== barth  n=37  tokens=128  d_model=256  cv=loo ===
+  groups=1    d=256    bal=0.6335 auc=0.7547 (= mean-pool)
+  groups=2    d=512    bal=0.6553 auc=0.7671
+  groups=4    d=1024   bal=0.6196 auc=0.7484
+  groups=8    d=2048   bal=0.6413 auc=0.7826
+  groups=16   d=4096   bal=0.6770 auc=0.7857
+  groups=32   d=8192   bal=0.6553 auc=0.7609
+  groups=64   d=16384  bal=0.6553 auc=0.7702
+  groups=128  d=32768  bal=0.6553 auc=0.7795 (= flatten)
+
+Wrote results/analysis/pooling_sweep_d256L6/pooling_sweep_results.csv
+
+--- balanced accuracy by number of pooling groups ---
+groups              1      2      4      8      16     32     64     128
+dataset                                                                 
+barth             0.634  0.655  0.620  0.641  0.677  0.655  0.655  0.655
+brc_t2d_cancer    0.845  0.845  0.859  0.845  0.846  0.859  0.872  0.859
+brc_t2d_diabetes  0.691  0.702  0.664  0.687  0.687  0.672  0.676  0.691
+mtbls326          0.963  0.963  0.963  0.963  0.963  0.963  0.963  0.963
+mtbls563          0.550  0.534  0.573  0.579  0.579  0.586  0.556  0.551
+
+best group count per dataset:
+  barth              best groups=16   bal=0.6770   (mean-pool=0.6335, flatten=0.6553)
+  brc_t2d_cancer     best groups=64   bal=0.8717   (mean-pool=0.8454, flatten=0.8586)
+  brc_t2d_diabetes   best groups=2    bal=0.7019   (mean-pool=0.6905, flatten=0.6905)
+  mtbls326           best groups=1    bal=0.9630   (mean-pool=0.9630, flatten=0.9630)
+  mtbls563           best groups=32   bal=0.5860   (mean-pool=0.5502, flatten=0.5514)
+
+mean balanced accuracy across datasets, by group count:
+groups
+1      0.7365
+2      0.7398
+4      0.7357
+8      0.7431
+16     0.7504
+32     0.7472
+64     0.7444
+128    0.7437
+ALLDONE

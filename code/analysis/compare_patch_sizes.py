@@ -53,6 +53,15 @@ ARMS = [
     ("ps1024_nhead4_true", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth", 4),
     ("ps256", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_054053_bs32_mr0.20-0.60_ps256_best.pth", None),
     ("ps128", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_053503_bs32_mr0.20-0.60_ps128_best.pth", None),
+    # patch 2048 (64 tokens). Continues the trend in the opposite direction to
+    # the refuted hypothesis, and carries MORE parameters (5.42M) than the
+    # baseline, so if it still loses that is strong evidence patch 1024 is near
+    # optimal rather than capacity-limited.
+    ("ps2048", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth", None),
+    # Capacity arm: patch 1024 held fixed, d_model 128->256, layers 3->6,
+    # ff 256->512 (5.13M params, near-matched to ps2048's 5.42M). Comparing
+    # these two isolates HOW ~5M parameters are best spent.
+    ("ps1024_d256_L6", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_124558_bs32_mr0.20-0.60_ps1024_best.pth", None),
 ]
 
 

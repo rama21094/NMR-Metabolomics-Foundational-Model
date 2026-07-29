@@ -1,0 +1,53 @@
+########## ps2048_best ##########
+
+=== mtbls563  n=113  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.6134 auc=0.7745 (= mean-pool)
+  groups=16   d=2048   bal=0.6430 auc=0.8020
+
+=== brc_t2d_diabetes  n=78  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.7313 auc=0.7467 (= mean-pool)
+  groups=16   d=2048   bal=0.7279 auc=0.8142
+
+Wrote /tmp/claude-303029/-home-nmrbox-0012-shasharma-Desktop-NMR-Metabolomics/c3b6ace1-c28d-46ec-af66-07a121e95987/scratchpad/wip_ps2048_best/pooling_sweep_results.csv
+
+--- balanced accuracy by number of pooling groups ---
+groups               1      16
+dataset                       
+brc_t2d_diabetes  0.731  0.728
+mtbls563          0.613  0.643
+
+best group count per dataset:
+  brc_t2d_diabetes   best groups=1    bal=0.7313   (mean-pool=0.7313, flatten=0.7279)
+  mtbls563           best groups=16   bal=0.6430   (mean-pool=0.6134, flatten=0.6430)
+
+mean balanced accuracy across datasets, by group count:
+groups
+1     0.6724
+16    0.6855
+########## ps1024_best ##########
+
+=== mtbls563  n=113  tokens=128  d_model=256  cv=10 ===
+  groups=1    d=256    bal=0.5162 auc=0.6874 (= mean-pool)
+  groups=16   d=4096   bal=0.5752 auc=0.7275
+
+=== brc_t2d_diabetes  n=78  tokens=128  d_model=256  cv=10 ===
+  groups=1    d=256    bal=0.7313 auc=0.8289 (= mean-pool)
+  groups=16   d=4096   bal=0.7493 auc=0.8503
+
+Wrote /tmp/claude-303029/-home-nmrbox-0012-shasharma-Desktop-NMR-Metabolomics/c3b6ace1-c28d-46ec-af66-07a121e95987/scratchpad/wip_ps1024_best/pooling_sweep_results.csv
+
+--- balanced accuracy by number of pooling groups ---
+groups               1      16
+dataset                       
+brc_t2d_diabetes  0.731  0.749
+mtbls563          0.516  0.575
+
+best group count per dataset:
+  brc_t2d_diabetes   best groups=16   bal=0.7493   (mean-pool=0.7313, flatten=0.7493)
+  mtbls563           best groups=16   bal=0.5752   (mean-pool=0.5162, flatten=0.5752)
+
+mean balanced accuracy across datasets, by group count:
+groups
+1     0.6237
+16    0.6623
+ALLDONE

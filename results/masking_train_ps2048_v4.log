@@ -1,0 +1,920 @@
+Using device: cuda:0
+Loading NMR spectra...
+Loading data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy with shape (9670, 131072)
+Loaded combined spectra shape: (9670, 131072)
+Validating data...
+Removed 0 duplicate spectra
+Final clean spectra shape: (9670, 131072)
+Data range: [0.000, 1.000]
+Training set: (7736, 131072)
+Validation set: (1934, 131072)
+Test set: (0, 131072)
+Normalized data range: [0.000, 1.000]
+Mask strategy: sparse_random with per-sample ratio in [0.20, 0.60]
+Mask fill strategy: zero
+Post-mask baseline correction: enabled [62500:68000]
+Data augmentation disabled
+Normalized data range: [0.000, 1.000]
+Mask strategy: sparse_random with per-sample ratio in [0.20, 0.60]
+Mask fill strategy: zero
+Post-mask baseline correction: enabled [62500:68000]
+Data augmentation disabled
+Patches per spectrum: 64
+Patches to mask: 12-38 (random per sample)
+Model parameters: 5,415,808
+
+============================================================
+Starting training with OPTIMIZED configuration for small dataset:
+  - Dataset size: 7736 train, 1934 val
+  - Max normalization (no clipping)
+  - Sparse random masking (20%-60% per sample, randomized) - keeps context
+  - Small patches (2048) for fine detail
+  - Small model (3 layers, d=128) to prevent overfitting
+  - Larger batches (32) for stable gradients
+  - Standard MSE loss
+============================================================
+
+/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/code/training/trainer_revised.py:565: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler()
+Training with warmup (20 epochs) + cosine annealing
+Initial LR: 0.0001, Min LR: 1e-06
+Early stopping patience: 200 epochs
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 1: Train Loss = 0.0056, Val Loss = 0.0046, LR = 0.000005, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 2: Train Loss = 0.0034, Val Loss = 0.0024, LR = 0.000010, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 3: Train Loss = 0.0022, Val Loss = 0.0019, LR = 0.000015, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 4: Train Loss = 0.0020, Val Loss = 0.0018, LR = 0.000020, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 5: Train Loss = 0.0016, Val Loss = 0.0017, LR = 0.000025, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 6: Train Loss = 0.0016, Val Loss = 0.0017, LR = 0.000030, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 7: Train Loss = 0.0014, Val Loss = 0.0015, LR = 0.000035, No improvement: 0/200 ✓ IMPROVED
+Epoch 8: Train Loss = 0.0014, Val Loss = 0.0017, LR = 0.000040, No improvement: 1/200
+Epoch 9: Train Loss = 0.0014, Val Loss = 0.0015, LR = 0.000045, No improvement: 2/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 10: Train Loss = 0.0013, Val Loss = 0.0013, LR = 0.000050, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 11: Train Loss = 0.0011, Val Loss = 0.0012, LR = 0.000055, No improvement: 0/200 ✓ IMPROVED
+Epoch 12: Train Loss = 0.0011, Val Loss = 0.0012, LR = 0.000060, No improvement: 1/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 13: Train Loss = 0.0009, Val Loss = 0.0010, LR = 0.000065, No improvement: 0/200 ✓ IMPROVED
+Epoch 14: Train Loss = 0.0009, Val Loss = 0.0011, LR = 0.000070, No improvement: 1/200
+Epoch 15: Train Loss = 0.0009, Val Loss = 0.0011, LR = 0.000075, No improvement: 2/200
+Epoch 16: Train Loss = 0.0008, Val Loss = 0.0012, LR = 0.000080, No improvement: 3/200
+Epoch 17: Train Loss = 0.0007, Val Loss = 0.0011, LR = 0.000085, No improvement: 4/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 18: Train Loss = 0.0007, Val Loss = 0.0009, LR = 0.000090, No improvement: 0/200 ✓ IMPROVED
+Epoch 19: Train Loss = 0.0007, Val Loss = 0.0012, LR = 0.000095, No improvement: 1/200
+Epoch 20: Train Loss = 0.0007, Val Loss = 0.0010, LR = 0.000100, No improvement: 2/200
+Epoch 21: Train Loss = 0.0006, Val Loss = 0.0009, LR = 0.000100, No improvement: 3/200
+Epoch 22: Train Loss = 0.0006, Val Loss = 0.0010, LR = 0.000100, No improvement: 4/200
+Epoch 23: Train Loss = 0.0006, Val Loss = 0.0012, LR = 0.000100, No improvement: 5/200
+Epoch 24: Train Loss = 0.0006, Val Loss = 0.0010, LR = 0.000100, No improvement: 6/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 25: Train Loss = 0.0005, Val Loss = 0.0007, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 26: Train Loss = 0.0006, Val Loss = 0.0013, LR = 0.000100, No improvement: 1/200
+Epoch 27: Train Loss = 0.0006, Val Loss = 0.0011, LR = 0.000100, No improvement: 2/200
+Epoch 28: Train Loss = 0.0007, Val Loss = 0.0020, LR = 0.000100, No improvement: 3/200
+Epoch 29: Train Loss = 0.0005, Val Loss = 0.0008, LR = 0.000100, No improvement: 4/200
+Epoch 30: Train Loss = 0.0005, Val Loss = 0.0009, LR = 0.000100, No improvement: 5/200
+Epoch 31: Train Loss = 0.0005, Val Loss = 0.0007, LR = 0.000100, No improvement: 6/200
+Epoch 32: Train Loss = 0.0005, Val Loss = 0.0012, LR = 0.000100, No improvement: 7/200
+Epoch 33: Train Loss = 0.0006, Val Loss = 0.0007, LR = 0.000100, No improvement: 8/200
+Epoch 34: Train Loss = 0.0005, Val Loss = 0.0011, LR = 0.000100, No improvement: 9/200
+Epoch 35: Train Loss = 0.0004, Val Loss = 0.0010, LR = 0.000100, No improvement: 10/200
+Epoch 36: Train Loss = 0.0005, Val Loss = 0.0012, LR = 0.000100, No improvement: 11/200
+Epoch 37: Train Loss = 0.0007, Val Loss = 0.0009, LR = 0.000100, No improvement: 12/200
+Epoch 38: Train Loss = 0.0004, Val Loss = 0.0008, LR = 0.000100, No improvement: 13/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 39: Train Loss = 0.0004, Val Loss = 0.0006, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 40: Train Loss = 0.0004, Val Loss = 0.0008, LR = 0.000100, No improvement: 1/200
+Epoch 41: Train Loss = 0.0004, Val Loss = 0.0008, LR = 0.000100, No improvement: 2/200
+Epoch 42: Train Loss = 0.0005, Val Loss = 0.0010, LR = 0.000100, No improvement: 3/200
+Epoch 43: Train Loss = 0.0005, Val Loss = 0.0007, LR = 0.000100, No improvement: 4/200
+Epoch 44: Train Loss = 0.0004, Val Loss = 0.0010, LR = 0.000100, No improvement: 5/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 45: Train Loss = 0.0004, Val Loss = 0.0005, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 46: Train Loss = 0.0007, Val Loss = 0.0009, LR = 0.000100, No improvement: 1/200
+Epoch 47: Train Loss = 0.0004, Val Loss = 0.0007, LR = 0.000100, No improvement: 2/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 48: Train Loss = 0.0004, Val Loss = 0.0005, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 49: Train Loss = 0.0004, Val Loss = 0.0006, LR = 0.000100, No improvement: 1/200
+Epoch 50: Train Loss = 0.0004, Val Loss = 0.0007, LR = 0.000100, No improvement: 2/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 51: Train Loss = 0.0004, Val Loss = 0.0005, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 52: Train Loss = 0.0004, Val Loss = 0.0008, LR = 0.000100, No improvement: 1/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 53: Train Loss = 0.0004, Val Loss = 0.0005, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 54: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 55: Train Loss = 0.0004, Val Loss = 0.0006, LR = 0.000100, No improvement: 1/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 56: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 57: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 1/200
+Epoch 58: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 2/200
+Epoch 59: Train Loss = 0.0004, Val Loss = 0.0005, LR = 0.000100, No improvement: 3/200
+Epoch 60: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 4/200
+Epoch 61: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000100, No improvement: 5/200
+Epoch 62: Train Loss = 0.0003, Val Loss = 0.0007, LR = 0.000100, No improvement: 6/200
+Epoch 63: Train Loss = 0.0004, Val Loss = 0.0007, LR = 0.000100, No improvement: 7/200
+Epoch 64: Train Loss = 0.0005, Val Loss = 0.0008, LR = 0.000100, No improvement: 8/200
+Epoch 65: Train Loss = 0.0004, Val Loss = 0.0007, LR = 0.000100, No improvement: 9/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 66: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 67: Train Loss = 0.0005, Val Loss = 0.0006, LR = 0.000100, No improvement: 1/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 68: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 69: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000100, No improvement: 1/200
+Epoch 70: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 2/200
+Epoch 71: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 3/200
+Epoch 72: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000100, No improvement: 4/200
+Epoch 73: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 5/200
+Epoch 74: Train Loss = 0.0003, Val Loss = 0.0006, LR = 0.000100, No improvement: 6/200
+Epoch 75: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000100, No improvement: 7/200
+Epoch 76: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 8/200
+Epoch 77: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 9/200
+Epoch 78: Train Loss = 0.0003, Val Loss = 0.0006, LR = 0.000100, No improvement: 10/200
+Epoch 79: Train Loss = 0.0003, Val Loss = 0.0007, LR = 0.000100, No improvement: 11/200
+Epoch 80: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 12/200
+Epoch 81: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 13/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 82: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 83: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 84: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000100, No improvement: 1/200
+Epoch 85: Train Loss = 0.0004, Val Loss = 0.0006, LR = 0.000100, No improvement: 2/200
+Epoch 86: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000100, No improvement: 3/200
+Epoch 87: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 4/200
+Epoch 88: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 5/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 89: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 0/200 ✓ IMPROVED
+Epoch 90: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 1/200
+Epoch 91: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 2/200
+Epoch 92: Train Loss = 0.0003, Val Loss = 0.0007, LR = 0.000100, No improvement: 3/200
+Epoch 93: Train Loss = 0.0005, Val Loss = 0.0006, LR = 0.000100, No improvement: 4/200
+Epoch 94: Train Loss = 0.0003, Val Loss = 0.0008, LR = 0.000100, No improvement: 5/200
+Epoch 95: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 6/200
+Epoch 96: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 7/200
+Epoch 97: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 8/200
+Epoch 98: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000100, No improvement: 9/200
+Epoch 99: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000100, No improvement: 10/200
+Epoch 100: Train Loss = 0.0004, Val Loss = 0.0006, LR = 0.000100, No improvement: 11/200
+Epoch 101: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000100, No improvement: 12/200
+Epoch 102: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 13/200
+Epoch 103: Train Loss = 0.0004, Val Loss = 0.0010, LR = 0.000100, No improvement: 14/200
+Epoch 104: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 15/200
+Epoch 105: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000100, No improvement: 16/200
+Epoch 106: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 17/200
+Epoch 107: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 18/200
+Epoch 108: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 19/200
+Epoch 109: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000100, No improvement: 20/200
+Epoch 110: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 21/200
+Epoch 111: Train Loss = 0.0005, Val Loss = 0.0005, LR = 0.000099, No improvement: 22/200
+Epoch 112: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 23/200
+Epoch 113: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 24/200
+Epoch 114: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000099, No improvement: 25/200
+Epoch 115: Train Loss = 0.0003, Val Loss = 0.0008, LR = 0.000099, No improvement: 26/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 116: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 117: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 118: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 1/200
+Epoch 119: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 2/200
+Epoch 120: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 3/200
+Epoch 121: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 4/200
+Epoch 122: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 5/200
+Epoch 123: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 6/200
+Epoch 124: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000099, No improvement: 7/200
+Epoch 125: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000099, No improvement: 8/200
+Epoch 126: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 9/200
+Epoch 127: Train Loss = 0.0003, Val Loss = 0.0009, LR = 0.000099, No improvement: 10/200
+Epoch 128: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 11/200
+Epoch 129: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 12/200
+Epoch 130: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000099, No improvement: 13/200
+Epoch 131: Train Loss = 0.0003, Val Loss = 0.0007, LR = 0.000099, No improvement: 14/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 132: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 133: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 1/200
+Epoch 134: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000099, No improvement: 2/200
+Epoch 135: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000099, No improvement: 3/200
+Epoch 136: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 4/200
+Epoch 137: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 5/200
+Epoch 138: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 6/200
+Epoch 139: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 7/200
+Epoch 140: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000099, No improvement: 8/200
+Epoch 141: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000099, No improvement: 9/200
+Epoch 142: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000099, No improvement: 10/200
+Epoch 143: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 11/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 144: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 145: Train Loss = 0.0005, Val Loss = 0.0002, LR = 0.000099, No improvement: 1/200
+Epoch 146: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 2/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 147: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 148: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 1/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 149: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 150: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 1/200
+Epoch 151: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000099, No improvement: 2/200
+Epoch 152: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000099, No improvement: 3/200
+Epoch 153: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 4/200
+Epoch 154: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000099, No improvement: 5/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 155: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 156: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 1/200
+Epoch 157: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 2/200
+Epoch 158: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000099, No improvement: 3/200
+Epoch 159: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000099, No improvement: 4/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 160: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 0/200 ✓ IMPROVED
+Epoch 161: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 1/200
+Epoch 162: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 2/200
+Epoch 163: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000099, No improvement: 3/200
+Epoch 164: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 4/200
+Epoch 165: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000099, No improvement: 5/200
+Epoch 166: Train Loss = 0.0003, Val Loss = 0.0010, LR = 0.000099, No improvement: 6/200
+Epoch 167: Train Loss = 0.0004, Val Loss = 0.0003, LR = 0.000099, No improvement: 7/200
+Epoch 168: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 8/200
+Epoch 169: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 9/200
+Epoch 170: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000099, No improvement: 10/200
+Epoch 171: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000099, No improvement: 11/200
+Epoch 172: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 12/200
+Epoch 173: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 13/200
+Epoch 174: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000099, No improvement: 14/200
+Epoch 175: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000099, No improvement: 15/200
+Epoch 176: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000098, No improvement: 16/200
+Epoch 177: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 17/200
+Epoch 178: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 18/200
+Epoch 179: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 19/200
+Epoch 180: Train Loss = 0.0004, Val Loss = 0.0007, LR = 0.000098, No improvement: 20/200
+Epoch 181: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000098, No improvement: 21/200
+Epoch 182: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 22/200
+Epoch 183: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000098, No improvement: 23/200
+Epoch 184: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 24/200
+Epoch 185: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 25/200
+Epoch 186: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 26/200
+Epoch 187: Train Loss = 0.0004, Val Loss = 0.0008, LR = 0.000098, No improvement: 27/200
+Epoch 188: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 28/200
+Epoch 189: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 29/200
+Epoch 190: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 30/200
+Epoch 191: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 31/200
+Epoch 192: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 32/200
+Epoch 193: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 33/200
+Epoch 194: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 34/200
+Epoch 195: Train Loss = 0.0002, Val Loss = 0.0010, LR = 0.000098, No improvement: 35/200
+Epoch 196: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 36/200
+Epoch 197: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 37/200
+Epoch 198: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 38/200
+Epoch 199: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 39/200
+Epoch 200: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000098, No improvement: 40/200
+Epoch 201: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 41/200
+Epoch 202: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 42/200
+Epoch 203: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000098, No improvement: 43/200
+Epoch 204: Train Loss = 0.0003, Val Loss = 0.0009, LR = 0.000098, No improvement: 44/200
+Epoch 205: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000098, No improvement: 45/200
+Epoch 206: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 46/200
+Epoch 207: Train Loss = 0.0003, Val Loss = 0.0009, LR = 0.000098, No improvement: 47/200
+Epoch 208: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 48/200
+Epoch 209: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 49/200
+Epoch 210: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 50/200
+Epoch 211: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 51/200
+Epoch 212: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 52/200
+Epoch 213: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 53/200
+Epoch 214: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000098, No improvement: 54/200
+Epoch 215: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 55/200
+Epoch 216: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000098, No improvement: 56/200
+Epoch 217: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 57/200
+Epoch 218: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000098, No improvement: 58/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 219: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000098, No improvement: 0/200 ✓ IMPROVED
+Epoch 220: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 1/200
+Epoch 221: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000098, No improvement: 2/200
+Epoch 222: Train Loss = 0.0004, Val Loss = 0.0002, LR = 0.000097, No improvement: 3/200
+Epoch 223: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000097, No improvement: 4/200
+Epoch 224: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 5/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 225: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 0/200 ✓ IMPROVED
+Epoch 226: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000097, No improvement: 1/200
+Epoch 227: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 2/200
+Epoch 228: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000097, No improvement: 3/200
+Epoch 229: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 4/200
+Epoch 230: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000097, No improvement: 5/200
+Epoch 231: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 6/200
+Epoch 232: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 7/200
+Epoch 233: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000097, No improvement: 8/200
+Epoch 234: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 9/200
+Epoch 235: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 10/200
+Epoch 236: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000097, No improvement: 11/200
+Epoch 237: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000097, No improvement: 12/200
+Epoch 238: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 13/200
+Epoch 239: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 14/200
+Epoch 240: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 15/200
+Epoch 241: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 16/200
+Epoch 242: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000097, No improvement: 17/200
+Epoch 243: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 18/200
+Epoch 244: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000097, No improvement: 19/200
+Epoch 245: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000097, No improvement: 20/200
+Epoch 246: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000097, No improvement: 21/200
+Epoch 247: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 22/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 248: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 0/200 ✓ IMPROVED
+Epoch 249: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000097, No improvement: 1/200
+Epoch 250: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 2/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 251: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000097, No improvement: 0/200 ✓ IMPROVED
+Epoch 252: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000097, No improvement: 1/200
+Epoch 253: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000097, No improvement: 2/200
+Epoch 254: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 3/200
+Epoch 255: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000097, No improvement: 4/200
+Epoch 256: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000097, No improvement: 5/200
+Epoch 257: Train Loss = 0.0003, Val Loss = 0.0008, LR = 0.000097, No improvement: 6/200
+Epoch 258: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000097, No improvement: 7/200
+Epoch 259: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 8/200
+Epoch 260: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 9/200
+Epoch 261: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 10/200
+Epoch 262: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 11/200
+Epoch 263: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000096, No improvement: 12/200
+Epoch 264: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000096, No improvement: 13/200
+Epoch 265: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 14/200
+Epoch 266: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000096, No improvement: 15/200
+Epoch 267: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 16/200
+Epoch 268: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 17/200
+Epoch 269: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 18/200
+Epoch 270: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000096, No improvement: 19/200
+Epoch 271: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000096, No improvement: 20/200
+Epoch 272: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000096, No improvement: 21/200
+Epoch 273: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000096, No improvement: 22/200
+Epoch 274: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 23/200
+Epoch 275: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000096, No improvement: 24/200
+Epoch 276: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000096, No improvement: 25/200
+Epoch 277: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000096, No improvement: 26/200
+Epoch 278: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000096, No improvement: 27/200
+Epoch 279: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 28/200
+Epoch 280: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 29/200
+Epoch 281: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000096, No improvement: 30/200
+Epoch 282: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000096, No improvement: 31/200
+Epoch 283: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000096, No improvement: 32/200
+Epoch 284: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 33/200
+Epoch 285: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000096, No improvement: 34/200
+Epoch 286: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000096, No improvement: 35/200
+Epoch 287: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000096, No improvement: 36/200
+Epoch 288: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000096, No improvement: 37/200
+Epoch 289: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000096, No improvement: 38/200
+Epoch 290: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000096, No improvement: 39/200
+Epoch 291: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 40/200
+Epoch 292: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 41/200
+Epoch 293: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000095, No improvement: 42/200
+Epoch 294: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 43/200
+Epoch 295: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 44/200
+Epoch 296: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 45/200
+Epoch 297: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000095, No improvement: 46/200
+Epoch 298: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000095, No improvement: 47/200
+Epoch 299: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000095, No improvement: 48/200
+Epoch 300: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000095, No improvement: 49/200
+Epoch 301: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000095, No improvement: 50/200
+Epoch 302: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 51/200
+Epoch 303: Train Loss = 0.0003, Val Loss = 0.0005, LR = 0.000095, No improvement: 52/200
+Epoch 304: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 53/200
+Epoch 305: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 54/200
+Epoch 306: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 55/200
+Epoch 307: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000095, No improvement: 56/200
+Epoch 308: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 57/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 309: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 0/200 ✓ IMPROVED
+Epoch 310: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 1/200
+Epoch 311: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 2/200
+Epoch 312: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 3/200
+Epoch 313: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000095, No improvement: 4/200
+Epoch 314: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 5/200
+Epoch 315: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000095, No improvement: 6/200
+Epoch 316: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 7/200
+Epoch 317: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000095, No improvement: 8/200
+Epoch 318: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 9/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 319: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000095, No improvement: 0/200 ✓ IMPROVED
+Epoch 320: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 1/200
+Epoch 321: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 2/200
+Epoch 322: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000094, No improvement: 3/200
+Epoch 323: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 4/200
+Epoch 324: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 5/200
+Epoch 325: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000094, No improvement: 6/200
+Epoch 326: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000094, No improvement: 7/200
+Epoch 327: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 8/200
+Epoch 328: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 9/200
+Epoch 329: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000094, No improvement: 10/200
+Epoch 330: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000094, No improvement: 11/200
+Epoch 331: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 12/200
+Epoch 332: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 13/200
+Epoch 333: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 14/200
+Epoch 334: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 15/200
+Epoch 335: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000094, No improvement: 16/200
+Epoch 336: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000094, No improvement: 17/200
+Epoch 337: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000094, No improvement: 18/200
+Epoch 338: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000094, No improvement: 19/200
+Epoch 339: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000094, No improvement: 20/200
+Epoch 340: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 21/200
+Epoch 341: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000094, No improvement: 22/200
+Epoch 342: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000094, No improvement: 23/200
+Epoch 343: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 24/200
+Epoch 344: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000094, No improvement: 25/200
+Epoch 345: Train Loss = 0.0002, Val Loss = 0.0020, LR = 0.000094, No improvement: 26/200
+Epoch 346: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000094, No improvement: 27/200
+Epoch 347: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 28/200
+Epoch 348: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000093, No improvement: 29/200
+Epoch 349: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000093, No improvement: 30/200
+Epoch 350: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000093, No improvement: 31/200
+Epoch 351: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 32/200
+Epoch 352: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000093, No improvement: 33/200
+Epoch 353: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 34/200
+Epoch 354: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000093, No improvement: 35/200
+Epoch 355: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 36/200
+Epoch 356: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000093, No improvement: 37/200
+Epoch 357: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000093, No improvement: 38/200
+Epoch 358: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000093, No improvement: 39/200
+Epoch 359: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 40/200
+Epoch 360: Train Loss = 0.0003, Val Loss = 0.0004, LR = 0.000093, No improvement: 41/200
+Epoch 361: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000093, No improvement: 42/200
+Epoch 362: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 43/200
+Epoch 363: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 44/200
+Epoch 364: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000093, No improvement: 45/200
+Epoch 365: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000093, No improvement: 46/200
+Epoch 366: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000093, No improvement: 47/200
+Epoch 367: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 48/200
+Epoch 368: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 49/200
+Epoch 369: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 50/200
+Epoch 370: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000093, No improvement: 51/200
+Epoch 371: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000093, No improvement: 52/200
+Epoch 372: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000092, No improvement: 53/200
+Epoch 373: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000092, No improvement: 54/200
+Epoch 374: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000092, No improvement: 55/200
+Epoch 375: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 56/200
+Epoch 376: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000092, No improvement: 57/200
+Epoch 377: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 58/200
+Epoch 378: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 59/200
+Epoch 379: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000092, No improvement: 60/200
+Epoch 380: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000092, No improvement: 61/200
+Epoch 381: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000092, No improvement: 62/200
+Epoch 382: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 63/200
+Epoch 383: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 64/200
+Epoch 384: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 65/200
+Epoch 385: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 66/200
+Epoch 386: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 67/200
+Epoch 387: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 68/200
+Epoch 388: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 69/200
+Epoch 389: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 70/200
+Epoch 390: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000092, No improvement: 71/200
+Epoch 391: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000092, No improvement: 72/200
+Epoch 392: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 73/200
+Epoch 393: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 74/200
+Epoch 394: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 75/200
+Epoch 395: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 76/200
+Epoch 396: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 77/200
+Epoch 397: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 78/200
+Epoch 398: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000091, No improvement: 79/200
+Epoch 399: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 80/200
+Epoch 400: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 81/200
+Epoch 401: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000091, No improvement: 82/200
+Epoch 402: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000091, No improvement: 83/200
+Epoch 403: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000091, No improvement: 84/200
+Epoch 404: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 85/200
+Epoch 405: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 86/200
+Epoch 406: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000091, No improvement: 87/200
+Epoch 407: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 88/200
+Epoch 408: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 89/200
+Epoch 409: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000091, No improvement: 90/200
+Epoch 410: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000091, No improvement: 91/200
+Epoch 411: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 92/200
+Epoch 412: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 93/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 413: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 0/200 ✓ IMPROVED
+Epoch 414: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 1/200
+Epoch 415: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 2/200
+Epoch 416: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000091, No improvement: 3/200
+Epoch 417: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000091, No improvement: 4/200
+Epoch 418: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000090, No improvement: 5/200
+Epoch 419: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000090, No improvement: 6/200
+Epoch 420: TEpoch 390: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 5/200
+Epoch 391: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000092, No improvement: 6/200
+Epoch 392: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 7/200
+Epoch 393: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 8/200
+Epoch 394: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000092, No improvement: 9/200
+Epoch 395: Train Loss = 0.0003, Val Loss = 0.0001, LR = 0.000091, No improvement: 10/200
+Epoch 396: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000091, No improvement: 11/200
+Epoch 397: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 12/200
+Epoch 398: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 13/200
+Epoch 399: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 14/200
+Epoch 400: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 15/200
+Epoch 401: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 16/200
+Epoch 402: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 17/200
+Epoch 403: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 18/200
+Epoch 404: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 19/200
+Epoch 405: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 20/200
+Epoch 406: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 21/200
+Epoch 407: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 22/200
+Epoch 408: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 23/200
+Epoch 409: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000091, No improvement: 24/200
+Epoch 410: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 25/200
+Epoch 411: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 26/200
+Epoch 412: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 27/200
+Epoch 413: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 28/200
+Epoch 414: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 29/200
+Epoch 415: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 30/200
+Epoch 416: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000091, No improvement: 31/200
+Epoch 417: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000091, No improvement: 32/200
+Epoch 418: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000090, No improvement: 33/200
+Epoch 419: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000090, No improvement: 34/200
+Epoch 420: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000090, No improvement: 35/200
+Loss = 0.0002, Val Loss = 0.0001, LR = 0.000089, No improvement: 22/200
+Epoch 450: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000089, No improvement: 23/200
+Epoch 451: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000089, No improvement: 24/200
+Epoch 452: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000089, No improvement: 25/200
+Epoch 453: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000089, No improvement: 26/200
+Epoch 454: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000089, No improvement: 27/200
+Epoch 455: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000089, No improvement: 28/200
+Epoch 456: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000089, No improvement: 29/200
+Epoch 457: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000089, No improvement: 30/200
+Epoch 458: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000089, No improvement: 31/200
+Epoch 459: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 32/200
+Epoch 460: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 33/200
+Epoch 461: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 34/200
+Epoch 462: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000088, No improvement: 35/200
+Epoch 463: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000088, No improvement: 36/200
+Epoch 464: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 37/200
+Epoch 465: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 38/200
+Epoch 466: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 39/200
+Epoch 467: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 40/200
+Epoch 468: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 41/200
+Epoch 469: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 42/200
+Epoch 470: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 43/200
+Epoch 471: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 44/200
+Epoch 472: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 45/200
+Epoch 473: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 46/200
+Epoch 474: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 47/200
+Epoch 475: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000088, No improvement: 48/200
+Epoch 476: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 49/200
+Epoch 477: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000088, No improvement: 50/200
+Epoch 478: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000087, No improvement: 51/200
+Epoch 479: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000087, No improvement: 52/200
+Epoch 480: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000087, No improvement: 53/200
+Epoch 481: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000087, No improvement: 54/200
+Epoch 482: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 55/200
+Epoch 483: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000087, No improvement: 56/200
+Epoch 484: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 57/200
+Epoch 485: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000087, No improvement: 58/200
+Epoch 486: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 59/200
+Epoch 487: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 60/200
+Epoch 488: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000087, No improvement: 61/200
+Epoch 489: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000087, No improvement: 62/200
+Epoch 490: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000087, No improvement: 63/200
+Epoch 491: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000087, No improvement: 64/200
+Epoch 492: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000087, No improvement: 65/200
+Epoch 493: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 66/200
+Epoch 494: Train Loss = 0.0004, Val Loss = 0.0002, LR = 0.000087, No improvement: 67/200
+Epoch 495: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000087, No improvement: 68/200
+Epoch 496: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000087, No improvement: 69/200
+Epoch 497: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 70/200
+Epoch 498: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 71/200
+Epoch 499: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 72/200
+Epoch 500: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 73/200
+Epoch 501: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 74/200
+Epoch 502: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 75/200
+Epoch 503: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 76/200
+Epoch 504: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 77/200
+Epoch 505: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 78/200
+Epoch 506: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 79/200
+Epoch 507: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 80/200
+Epoch 508: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 81/200
+Epoch 509: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000086, No improvement: 82/200
+Epoch 510: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 83/200
+Epoch 511: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000086, No improvement: 84/200
+Epoch 512: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 85/200
+Epoch 513: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000086, No improvement: 86/200
+Epoch 514: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000086, No improvement: 87/200
+Epoch 515: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000086, No improvement: 88/200
+Epoch 516: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 89/200
+Epoch 517: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 90/200
+Epoch 518: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000085, No improvement: 91/200
+Epoch 519: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000085, No improvement: 92/200
+Epoch 520: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 93/200
+Epoch 521: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000085, No improvement: 94/200
+Epoch 522: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 95/200
+Epoch 523: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000085, No improvement: 96/200
+Epoch 524: Train Loss = 0.0004, Val Loss = 0.0004, LR = 0.000085, No improvement: 97/200
+Epoch 525: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000085, No improvement: 98/200
+Epoch 526: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000085, No improvement: 99/200
+Epoch 527: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 100/200
+Epoch 528: Train Loss = 0.0003, Val Loss = 0.0003, LR = 0.000085, No improvement: 101/200
+Epoch 529: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 102/200
+Epoch 530: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000085, No improvement: 103/200
+Epoch 531: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 104/200
+Epoch 532: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000085, No improvement: 105/200
+Epoch 533: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000084, No improvement: 106/200
+Epoch 534: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 107/200
+Epoch 535: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 108/200
+Epoch 536: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 109/200
+Epoch 537: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000084, No improvement: 110/200
+Epoch 538: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000084, No improvement: 111/200
+Epoch 539: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 112/200
+Epoch 540: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 113/200
+Epoch 541: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 114/200
+Epoch 542: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 115/200
+Epoch 543: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000084, No improvement: 116/200
+Epoch 544: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000084, No improvement: 117/200
+Epoch 545: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 118/200
+Epoch 546: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 119/200
+Epoch 547: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 120/200
+Epoch 548: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000084, No improvement: 121/200
+Epoch 549: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000084, No improvement: 122/200
+Epoch 550: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000084, No improvement: 123/200
+Epoch 551: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 124/200
+Epoch 552: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 125/200
+Epoch 553: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 126/200
+Epoch 554: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000083, No improvement: 127/200
+Epoch 555: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000083, No improvement: 128/200
+Epoch 556: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000083, No improvement: 129/200
+Epoch 557: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 130/200
+Epoch 558: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000083, No improvement: 131/200
+Epoch 559: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 132/200
+Epoch 560: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000083, No improvement: 133/200
+Epoch 561: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000083, No improvement: 134/200
+Epoch 562: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 135/200
+Epoch 563: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000083, No improvement: 136/200
+Epoch 564: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000083, No improvement: 137/200
+Epoch 565: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000083, No improvement: 138/200
+Epoch 566: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000083, No improvement: 139/200
+Epoch 567: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 140/200
+Epoch 568: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 141/200
+Epoch 569: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 142/200
+Epoch 570: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 143/200
+Epoch 571: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000082, No improvement: 144/200
+Epoch 572: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 145/200
+Epoch 573: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 146/200
+Epoch 574: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 147/200
+Epoch 575: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 148/200
+Epoch 576: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000082, No improvement: 149/200
+Epoch 577: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000082, No improvement: 150/200
+Epoch 578: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 151/200
+Epoch 579: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 152/200
+Epoch 580: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000082, No improvement: 153/200
+Epoch 581: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 154/200
+Epoch 582: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 155/200
+Epoch 583: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000082, No improvement: 156/200
+Epoch 584: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 157/200
+Epoch 585: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 158/200
+Epoch 586: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000081, No improvement: 159/200
+Epoch 587: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 160/200
+Epoch 588: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 161/200
+Epoch 589: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 162/200
+Epoch 590: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 163/200
+Epoch 591: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000081, No improvement: 164/200
+Epoch 592: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 165/200
+Epoch 593: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 166/200
+Epoch 594: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 167/200
+Epoch 595: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 168/200
+Epoch 596: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 169/200
+Epoch 597: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000081, No improvement: 170/200
+Epoch 598: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 171/200
+Epoch 599: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000081, No improvement: 172/200
+Epoch 600: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 173/200
+Epoch 601: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 174/200
+Epoch 602: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 175/200
+Epoch 603: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 176/200
+Epoch 604: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 177/200
+Epoch 605: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000080, No improvement: 178/200
+Epoch 606: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 179/200
+Epoch 607: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 180/200
+Epoch 608: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 181/200
+✓ New best model saved: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_bs32_mr0.20-0.60_ps2048_best.pth
+Epoch 609: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 0/200 ✓ IMPROVED
+Epoch 610: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 1/200
+Epoch 611: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 2/200
+Epoch 612: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 3/200
+Epoch 613: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 4/200
+Epoch 614: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000080, No improvement: 5/200
+Epoch 615: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000080, No improvement: 6/200
+Epoch 616: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000079, No improvement: 7/200
+Epoch 617: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000079, No improvement: 8/200
+Epoch 618: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 9/200
+Epoch 619: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 10/200
+Epoch 620: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 11/200
+Epoch 621: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 12/200
+Epoch 622: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 13/200
+Epoch 623: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 14/200
+Epoch 624: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 15/200
+Epoch 625: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 16/200
+Epoch 626: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000079, No improvement: 17/200
+Epoch 627: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 18/200
+Epoch 628: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000079, No improvement: 19/200
+Epoch 629: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000079, No improvement: 20/200
+Epoch 630: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 21/200
+Epoch 631: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000079, No improvement: 22/200
+Epoch 632: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 23/200
+Epoch 633: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 24/200
+Epoch 634: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 25/200
+Epoch 635: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000078, No improvement: 26/200
+Epoch 636: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 27/200
+Epoch 637: Train Loss = 0.0003, Val Loss = 0.0002, LR = 0.000078, No improvement: 28/200
+Epoch 638: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 29/200
+Epoch 639: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000078, No improvement: 30/200
+Epoch 640: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000078, No improvement: 31/200
+Epoch 641: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 32/200
+Epoch 642: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000078, No improvement: 33/200
+Epoch 643: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000078, No improvement: 34/200
+Epoch 644: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000078, No improvement: 35/200
+Epoch 645: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000078, No improvement: 36/200
+Epoch 646: Train Loss = 0.0004, Val Loss = 0.0001, LR = 0.000078, No improvement: 37/200
+Epoch 647: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 38/200
+Epoch 648: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 39/200
+Epoch 649: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000077, No improvement: 40/200
+Epoch 650: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 41/200
+Epoch 651: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 42/200
+Epoch 652: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 43/200
+Epoch 653: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 44/200
+Epoch 654: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 45/200
+Epoch 655: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000077, No improvement: 46/200
+Epoch 656: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000077, No improvement: 47/200
+Epoch 657: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 48/200
+Epoch 658: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000077, No improvement: 49/200
+Epoch 659: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 50/200
+Epoch 660: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 51/200
+Epoch 661: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000077, No improvement: 52/200
+Epoch 662: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 53/200
+Epoch 663: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 54/200
+Epoch 664: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 55/200
+Epoch 665: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 56/200
+Epoch 666: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 57/200
+Epoch 667: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 58/200
+Epoch 668: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 59/200
+Epoch 669: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000076, No improvement: 60/200
+Epoch 670: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000076, No improvement: 61/200
+Epoch 671: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 62/200
+Epoch 672: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000076, No improvement: 63/200
+Epoch 673: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 64/200
+Epoch 674: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000076, No improvement: 65/200
+Epoch 675: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 66/200
+Epoch 676: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000076, No improvement: 67/200
+Epoch 677: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000075, No improvement: 68/200
+Epoch 678: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000075, No improvement: 69/200
+Epoch 679: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000075, No improvement: 70/200
+Epoch 680: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000075, No improvement: 71/200
+Epoch 681: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000075, No improvement: 72/200
+Epoch 682: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000075, No improvement: 73/200
+Epoch 683: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000075, No improvement: 74/200
+Epoch 684: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000075, No improvement: 75/200
+Epoch 685: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000075, No improvement: 76/200
+Epoch 686: Train Loss = 0.0002, Val Loss = 0.0003, LR = 0.000075, No improvement: 77/200
+Epoch 687: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000075, No improvement: 78/200
+Epoch 688: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000075, No improvement: 79/200
+Epoch 689: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000075, No improvement: 80/200
+Epoch 690: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000075, No improvement: 81/200
+Epoch 691: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000074, No improvement: 82/200
+Epoch 692: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000074, No improvement: 83/200
+Epoch 693: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 84/200
+Epoch 694: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 85/200
+Epoch 695: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000074, No improvement: 86/200
+Epoch 696: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000074, No improvement: 87/200
+Epoch 697: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000074, No improvement: 88/200
+Epoch 698: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000074, No improvement: 89/200
+Epoch 699: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 90/200
+Epoch 700: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 91/200
+Epoch 701: Train Loss = 0.0002, Val Loss = 0.0008, LR = 0.000074, No improvement: 92/200
+Epoch 702: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000074, No improvement: 93/200
+Epoch 703: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000074, No improvement: 94/200
+Epoch 704: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 95/200
+Epoch 705: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000074, No improvement: 96/200
+Epoch 706: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000073, No improvement: 97/200
+Epoch 707: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000073, No improvement: 98/200
+Epoch 708: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000073, No improvement: 99/200
+Epoch 709: Train Loss = 0.0002, Val Loss = 0.0009, LR = 0.000073, No improvement: 100/200
+Epoch 710: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000073, No improvement: 101/200
+Epoch 711: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000073, No improvement: 102/200
+Epoch 712: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000073, No improvement: 103/200
+Epoch 713: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000073, No improvement: 104/200
+Epoch 714: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000073, No improvement: 105/200
+Epoch 715: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000073, No improvement: 106/200
+Epoch 716: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000073, No improvement: 107/200
+Epoch 717: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000073, No improvement: 108/200
+Epoch 718: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000073, No improvement: 109/200
+Epoch 719: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000073, No improvement: 110/200
+Epoch 720: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000072, No improvement: 111/200
+Epoch 721: Train Loss = 0.0002, Val Loss = 0.0005, LR = 0.000072, No improvement: 112/200
+Epoch 722: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000072, No improvement: 113/200
+Epoch 723: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000072, No improvement: 114/200
+Epoch 724: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000072, No improvement: 115/200
+Epoch 725: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000072, No improvement: 116/200
+Epoch 726: Train Loss = 0.0001, Val Loss = 0.0003, LR = 0.000072, No improvement: 117/200
+Epoch 727: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000072, No improvement: 118/200
+Epoch 728: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000072, No improvement: 119/200
+Epoch 729: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000072, No improvement: 120/200
+Epoch 730: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000072, No improvement: 121/200
+Epoch 731: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000072, No improvement: 122/200
+Epoch 732: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000072, No improvement: 123/200
+Epoch 733: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000072, No improvement: 124/200
+Epoch 734: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 125/200
+Epoch 735: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 126/200
+Epoch 736: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000071, No improvement: 127/200
+Epoch 737: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 128/200
+Epoch 738: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000071, No improvement: 129/200
+Epoch 739: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000071, No improvement: 130/200
+Epoch 740: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 131/200
+Epoch 741: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 132/200
+Epoch 742: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000071, No improvement: 133/200
+Epoch 743: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 134/200
+Epoch 744: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000071, No improvement: 135/200
+Epoch 745: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000071, No improvement: 136/200
+Epoch 746: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000071, No improvement: 137/200
+Epoch 747: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000071, No improvement: 138/200
+Epoch 748: Train Loss = 0.0001, Val Loss = 0.0007, LR = 0.000070, No improvement: 139/200
+Epoch 749: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 140/200
+Epoch 750: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 141/200
+Epoch 751: Train Loss = 0.0002, Val Loss = 0.0006, LR = 0.000070, No improvement: 142/200
+Epoch 752: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 143/200
+Epoch 753: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 144/200
+Epoch 754: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 145/200
+Epoch 755: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000070, No improvement: 146/200
+Epoch 756: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000070, No improvement: 147/200
+Epoch 757: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000070, No improvement: 148/200
+Epoch 758: Train Loss = 0.0001, Val Loss = 0.0004, LR = 0.000070, No improvement: 149/200
+Epoch 759: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000070, No improvement: 150/200
+Epoch 760: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000070, No improvement: 151/200
+Epoch 761: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000070, No improvement: 152/200
+Epoch 762: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000069, No improvement: 153/200
+Epoch 763: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000069, No improvement: 154/200
+Epoch 764: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000069, No improvement: 155/200
+Epoch 765: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000069, No improvement: 156/200
+Epoch 766: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000069, No improvement: 157/200
+Epoch 767: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000069, No improvement: 158/200
+Epoch 768: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000069, No improvement: 159/200
+Epoch 769: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000069, No improvement: 160/200
+Epoch 770: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000069, No improvement: 161/200
+Epoch 771: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000069, No improvement: 162/200
+Epoch 772: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000069, No improvement: 163/200
+Epoch 773: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000069, No improvement: 164/200
+Epoch 774: Train Loss = 0.0002, Val Loss = 0.0004, LR = 0.000069, No improvement: 165/200
+Epoch 775: Train Loss = 0.0001, Val Loss = 0.0007, LR = 0.000069, No improvement: 166/200
+Epoch 776: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 167/200
+Epoch 777: Train Loss = 0.0001, Val Loss = 0.0005, LR = 0.000068, No improvement: 168/200
+Epoch 778: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 169/200
+Epoch 779: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 170/200
+Epoch 780: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000068, No improvement: 171/200
+Epoch 781: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000068, No improvement: 172/200
+Epoch 782: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 173/200
+Epoch 783: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000068, No improvement: 174/200
+Epoch 784: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000068, No improvement: 175/200
+Epoch 785: Train Loss = 0.0001, Val Loss = 0.0004, LR = 0.000068, No improvement: 176/200
+Epoch 786: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000068, No improvement: 177/200
+Epoch 787: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 178/200
+Epoch 788: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 179/200
+Epoch 789: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000068, No improvement: 180/200
+Epoch 790: Train Loss = 0.0002, Val Loss = 0.0007, LR = 0.000067, No improvement: 181/200
+Epoch 791: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000067, No improvement: 182/200
+Epoch 792: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000067, No improvement: 183/200
+Epoch 793: Train Loss = 0.0001, Val Loss = 0.0006, LR = 0.000067, No improvement: 184/200
+Epoch 794: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000067, No improvement: 185/200
+Epoch 795: Train Loss = 0.0001, Val Loss = 0.0007, LR = 0.000067, No improvement: 186/200
+Epoch 796: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000067, No improvement: 187/200
+Epoch 797: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000067, No improvement: 188/200
+Epoch 798: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000067, No improvement: 189/200
+Epoch 799: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000067, No improvement: 190/200
+Epoch 800: Train Loss = 0.0004, Val Loss = 0.0001, LR = 0.000067, No improvement: 191/200
+Epoch 801: Train Loss = 0.0002, Val Loss = 0.0001, LR = 0.000067, No improvement: 192/200
+Epoch 802: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000067, No improvement: 193/200
+Epoch 803: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000066, No improvement: 194/200
+Epoch 804: Train Loss = 0.0002, Val Loss = 0.0002, LR = 0.000066, No improvement: 195/200
+Epoch 805: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000066, No improvement: 196/200
+Epoch 806: Train Loss = 0.0001, Val Loss = 0.0006, LR = 0.000066, No improvement: 197/200
+Epoch 807: Train Loss = 0.0001, Val Loss = 0.0006, LR = 0.000066, No improvement: 198/200
+Epoch 808: Train Loss = 0.0001, Val Loss = 0.0002, LR = 0.000066, No improvement: 199/200
+Epoch 809: Train Loss = 0.0001, Val Loss = 0.0001, LR = 0.000066, No improvement: 200/200
+Early stopping triggered after 200 epochs without improvement
+Best validation loss: 0.0001
+
+============================================================
+Training completed after 809 epochs
+Best validation loss achieved: 0.0001
+============================================================
+
+
+Generating training curves...
+Training curves saved to: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_training_curves.png
+
+=== Training Statistics ===
+Total epochs: 809
+Final training loss: 0.000141
+Final validation loss: 0.000125
+Best validation loss: 0.000102
+Best validation achieved at epoch: 609
+
+Generating reconstruction examples...
+
+Visualizing reconstruction for random samples: [288, 529, 31, 1233, 1130]
+Sample 288: MSE = 0.000014, Correlation = 0.9887
+Sample 529: MSE = 0.000001, Correlation = 0.9991
+Sample 31: MSE = 0.000005, Correlation = 0.9940
+Sample 1233: MSE = 0.000047, Correlation = 0.9900
+Sample 1130: MSE = 0.000013, Correlation = 0.9969
+Reconstruction examples saved to: ./models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_221507_reconstructions.png

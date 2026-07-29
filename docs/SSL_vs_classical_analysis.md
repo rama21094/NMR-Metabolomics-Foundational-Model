@@ -1,6 +1,9 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-07-28. Experiments **#1, #2, #3, #4, #5 are done**; #6, #7, #8 queued.
+**Status:** updated 2026-07-29. Experiments **#1–#5 done, plus the ps2048 and capacity
+arms (§5d)**; #6, #7, #8 queued. **The backbone axis is exhausted** — five pretrained
+backbones, none beats the original 1.89M patch-1024 model. Remaining leverage is in the
+objective and the head, not scale.
 Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is the
 correction of record. It also found the actual win (pooling).
 
@@ -245,6 +248,61 @@ originally reported DNN-head numbers:
 SSL-vs-classical record moves from 0 wins / 0 ties / 5 losses to **1 win / 1 tie / 3
 losses**. Barth now favours SSL and MTBLS326 is a tie.
 
+### 5d. Backbone scaling is exhausted (ps2048 + capacity arms)
+
+Two further backbones were pretrained on the v4 corpus and compared through the frozen
+probe: `patch_size=2048` (64 tokens, 5.42M params) and a capacity arm holding patch 1024
+fixed while raising d_model 128→256, layers 3→6, ff 256→512 (5.17M params). Both
+early-stopped. Figure `fig11_backbone_scaling.png`.
+
+Mean balanced accuracy on the **held-out three** (Barth, MTBLS326, BrC-T2D cancer):
+
+| backbone | params | recon loss | mean-pool | flatten |
+|---|---|---|---|---|
+| patch 128 | 0.63M | 4.36e-5 | 0.745 | 0.778 |
+| patch 256 | 0.66M | 5.56e-5 | 0.755 | 0.779 |
+| **patch 1024 (original)** | **1.89M** | 9.26e-5 | 0.802 | **0.888** |
+| patch 2048 | 5.42M | 1.020e-4 | 0.818 | 0.840 |
+| patch 1024 d256 L6 | 5.17M | **3.95e-5** | 0.814 | 0.826 |
+| *classical LogReg* | — | — | — | *0.881* |
+
+Even letting each backbone pick its own best pooling G **on the selection subset only**
+(MTBLS563 + BrC-T2D diabetes), the held-out means are: original 0.849, ps2048 0.824,
+d256L6 0.817. **The original small model wins under every pooling.**
+
+Two conclusions:
+
+1. **Patch size 1024 is near-optimal and this is not a capacity limit.** ps2048 carries
+   2.9× the baseline's parameters and still loses. Four attempts (128, 256, 2048, and
+   2.7× capacity) all failed. Stop scaling the backbone.
+2. **Capacity compensates for bad pooling but does not beat fixing the pooling.** Under
+   mean-pool, accuracy rises monotonically with parameters (Spearman = +1.00, p<0.01:
+   0.745 → 0.755 → 0.802 → 0.814 → 0.818). But the 1.89M model with *flatten* (0.888)
+   beats every 5M model. The bottleneck was information destroyed by pooling, not model
+   capacity — extra capacity partially papers over the loss instead of removing it.
+
+### 5e. Reconstruction loss is not a proxy for downstream utility
+
+Across the five backbones, Spearman(validation reconstruction loss, held-out accuracy) =
+**+0.60** for flatten and +0.40 for mean-pool — i.e. if anything, *worse* reconstruction
+goes with *better* transfer (n=5, not significant, but the sign is consistent).
+
+The starkest case: the d256 L6 model reconstructs **2.3× better** than the baseline
+(3.95e-5 vs 9.26e-5) and transfers **worse** (0.826 vs 0.888). The same disconnect showed
+up within a single run in §5b, where ps128's final epoch-1813 checkpoint had 2.4% better
+reconstruction and scored lower downstream on 4 of 5 targets.
+
+**Operational rule: never select checkpoints, architectures, or epochs on reconstruction
+loss.** Selection must use a downstream signal — but on a *pre-committed* subset, never on
+the datasets used for reporting (see the note below).
+
+> **On selection bias.** Choosing configurations by comparing downstream CV scores and
+> then quoting the winner inflates the reported number, even though no label information
+> crosses folds. From §5d onward, configuration choices (pooling G, backbone) are made on
+> a designated selection subset — MTBLS563 + BrC-T2D diabetes — and reported on the
+> held-out three. The *comparative signs* in this document are more trustworthy than the
+> absolute values, because each holds consistently across five independent datasets.
+
 ---
 
 ## 6. Controls — what this is NOT
@@ -474,4 +532,4 @@ both.
   `code/plotting/plot_pretraining_gain.py`,
   `code/analysis/compare_patch_sizes.py`,
   `code/plotting/plot_patch_size_experiment.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig9`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig11`.

@@ -1,0 +1,7 @@
+
+=== brc_t2d_cancer  n=78  cv=10 ===
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 mean_pool d=128    bal=0.8329 auc=0.9007
+  ps1024_nhead8_legacy   ps=1024  tok=128   nhead=8 flatten   d=16384  bal=0.8586 auc=0.9572
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 mean_pool d=128    bal=0.7822 auc=0.8651
+  ps1024_nhead4_true     ps=1024  tok=128   nhead=4 flatten   d=16384  bal=0.8592 auc=0.9342
+  ps256                  ps=256   tok=512   nhead=4 mean_pool d=128    bal=0.8086 auc=0.8336

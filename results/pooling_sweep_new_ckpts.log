@@ -1,0 +1,28 @@
+########## ps2048 ##########
+
+=== brc_t2d_cancer  n=78  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.7553 auc=0.7993 (= mean-pool)
+  groups=2    d=256    bal=0.7684 auc=0.7980
+  groups=4    d=512    bal=0.8211 auc=0.8586
+  groups=8    d=1024   bal=0.8204 auc=0.8803
+  groups=16   d=2048   bal=0.8072 auc=0.8914
+  groups=32   d=4096   bal=0.8072 auc=0.8914
+  groups=64   d=8192   bal=0.8204 auc=0.9039 (= flatten)
+
+=== brc_t2d_diabetes  n=78  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.6417 auc=0.6905 (= mean-pool)
+  groups=2    d=256    bal=0.6464 auc=0.7172
+  groups=4    d=512    bal=0.6056 auc=0.7420
+  groups=8    d=1024   bal=0.6350 auc=0.7467
+  groups=16   d=2048   bal=0.6350 auc=0.7346
+  groups=32   d=4096   bal=0.6497 auc=0.7406
+  groups=64   d=8192   bal=0.6464 auc=0.7814 (= flatten)
+
+=== mtbls563  n=113  tokens=64  d_model=128  cv=10 ===
+  groups=1    d=128    bal=0.5244 auc=0.6901 (= mean-pool)
+  groups=2    d=256    bal=0.5413 auc=0.6911
+  groups=4    d=512    bal=0.5445 auc=0.7205
+  groups=8    d=1024   bal=0.5082 auc=0.7457
+  groups=16   d=2048   bal=0.5560 auc=0.7440
+Terminated
+########## 124558 ##########
