@@ -501,11 +501,61 @@ python -u code/evaluation/fewshot_benchmark.py --dataset barth \
 (and analogously for `--dataset mtbls326` / `mtbls563` with their v4 `_rowMinMax_v4.npy`
 paths; BrC-T2D is not yet supported by this script and would need a loader added.)
 
-### #7 — Peak-weighted pretraining objective (MEDIUM/EXPLORATORY)
-Reconstruction MSE on min-max-normalized spectra is dominated by trivially predictable
-baseline. A peak-weighted loss (a `topPeakLoss` variant exists in the repo) or a
-contrastive objective would push capacity toward peaks. Lower priority than #3/#4 now
-that pretraining is known to help rather than being inert.
+### 🔄 #7 — Harder / better-aligned pretext task (SET UP, RUNNING)
+This is now the top-ranked experiment, because §5b identified the *reason* the previous
+attempt failed and this attacks it directly. Two orthogonal changes, run as a 2×2
+factorial on identical v4 data at the winning geometry (ps1024, d128, L3, nhead 4):
+
+**(a) Block masking** — `--mask-strategy block --mask-block-patches 8`.
+§5b showed that shrinking the patch size made reconstruction *easier* (loss fell
+9.26e-5 → 4.36e-5) while downstream transfer got *worse*: a lone masked patch bracketed
+by intact neighbours is largely interpolable, so the model can win by local smoothing
+without learning spectral structure. Masking a contiguous 8-patch span (8192 points,
+~0.75 ppm of a 12 ppm window) removes the neighbours too, so filling it in requires
+long-range information. This is the standard fix in vision MAE (block/grid masking) for
+exactly the same failure.
+
+**(b) Peak-weighted reconstruction** — `--peak-top-fraction 0.25`.
+Restricts the loss to the highest-magnitude 25% of patches per spectrum, ranked by
+`0.5·mean|x| + 0.5·max|x|`. Ported verbatim from `top_peak_bin_weights()` in
+`train_joint_ssl.py`, which the joint family already uses, so the two families now weight
+reconstruction identically. Verified by `code/tests/verify_top_peak_loss.py` (elementwise
+agreement with the joint implementation on synthetic and real spectra; exact-k selection;
+per-spectrum thresholding; bit-identical to the old uniform loss at fraction 1.0).
+
+**Measured caveat on (b), from that verification.** At ps1024 each patch spans 1024
+points, so nearly every patch contains *some* signal and the "mostly flat baseline"
+framing is weaker than it sounds. Share of total |intensity| held by the kept patches, on
+64 real corpus spectra:
+
+| fraction kept | 0.05 | 0.10 | 0.25 | 0.50 | 0.75 |
+|---|---|---|---|---|---|
+| intensity share | 0.234 | 0.394 | 0.594 | 0.761 | 0.897 |
+| enrichment vs. uniform | 4.67× | 3.94× | 2.38× | 1.52× | 1.20× |
+
+So `0.25` concentrates supervision 2.4× but **discards ~40% of the signal**. 0.25 is used
+anyway for comparability with the joint family; if the peak-weighted arms lose, rerun at
+`--peak-top-fraction 0.50` (1.5× enrichment, only 24% of signal dropped) before
+concluding the idea is wrong.
+
+**Arms.** D is not optional: every existing masking baseline was pretrained on **v3**,
+so without a v4 ps1024 default run the factorial confounds objective with data version.
+
+| arm | flags | checkpoint tag |
+|---|---|---|
+| D — baseline | *(defaults)* | *(none)* |
+| A — block only | `--mask-strategy block --mask-block-patches 8` | `_blk8` |
+| B — peak only | `--peak-top-fraction 0.25` | `_pk0.25` |
+| C — both | both of the above | `_blk8_pk0.25` |
+
+**Reading the result.** Validation loss is **not** comparable across arms — the arms
+optimize different quantities, and per §5e reconstruction loss does not predict downstream
+utility anyway. Judge only on the frozen linear probe with flatten pooling, using the
+pre-committed split: select on MTBLS563 + BrC-T2D diabetes, report on Barth + MTBLS326 +
+BrC-T2D cancer.
+
+Evaluation requires adding the four new checkpoint paths to `ARMS` in
+`code/analysis/compare_patch_sizes.py` once the timestamps exist.
 
 ### #8 — Hybrid features (CHEAP, worth a shot)
 Concatenate the SSL embedding with binned areas. They are partly complementary — on

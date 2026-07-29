@@ -25,7 +25,8 @@ class NMRSpectrumDataset(Dataset):
     def __init__(self, spectra, mask_ratio_min=0.20, mask_ratio_max=0.60, patch_size=256, mask_strategy='sparse_random', mask_fill='zero',
                  augment=False, per_point_std=None, noise_scale=1.0, normalize_input=True,
                  baseline_window_start=62500, baseline_window_end=68000,
-                 correct_post_mask_baseline=True, baseline_tol=1e-8):
+                 correct_post_mask_baseline=True, baseline_tol=1e-8,
+                 mask_block_patches=8):
         """
         Args:
             spectra: numpy array of shape (n_samples, n_points)
@@ -33,7 +34,7 @@ class NMRSpectrumDataset(Dataset):
                 uniformly at random on every __getitem__ call
             mask_ratio_max: upper bound of the per-sample masking fraction
             patch_size: size of each patch for masking (SMALLER for finer granularity)
-            mask_strategy: 'sparse_random', 'scattered_peaks', or 'random'
+            mask_strategy: 'sparse_random', 'block', 'scattered_peaks', or 'random'
             mask_fill: 'zero', 'mean', 'noise', or a float value (for masked patch fill)
             augment: whether to apply data augmentation
             per_point_std: tensor of per-point std for augmentation
@@ -43,6 +44,7 @@ class NMRSpectrumDataset(Dataset):
             baseline_window_end: end index (exclusive) of known zero baseline window
             correct_post_mask_baseline: if True, re-center unmasked points so known zero window stays near zero
             baseline_tol: tolerance for applying baseline correction
+            mask_block_patches: span length, in patches, for mask_strategy='block'
         """
         self.normalize_input = bool(normalize_input)
         if self.normalize_input:
@@ -58,6 +60,7 @@ class NMRSpectrumDataset(Dataset):
         self.patch_size = patch_size
         self.n_patches = spectra.shape[1] // patch_size
         self.mask_strategy = mask_strategy
+        self.mask_block_patches = max(1, int(mask_block_patches))
         self.mask_fill = mask_fill
         self.augment = augment
         self.per_point_std = per_point_std.to('cpu') if per_point_std is not None else None
@@ -72,6 +75,11 @@ class NMRSpectrumDataset(Dataset):
         else:
             print(f"Input data range (no normalization): [{self.spectra.min():.3f}, {self.spectra.max():.3f}]")
         print(f"Mask strategy: {mask_strategy} with per-sample ratio in [{self.mask_ratio_min:.2f}, {self.mask_ratio_max:.2f}]")
+        if mask_strategy == 'block':
+            print(
+                f"Block masking: contiguous spans of {self.mask_block_patches} patches "
+                f"({self.mask_block_patches * patch_size} points each)"
+            )
         print(f"Mask fill strategy: {mask_fill}")
         if self.correct_post_mask_baseline:
             print(
@@ -120,6 +128,42 @@ class NMRSpectrumDataset(Dataset):
         if self.mask_strategy == 'sparse_random':
             # Random sparse masking - ensures context remains
             masked_indices = torch.randperm(n_patches)[:n_masked].tolist()
+
+        elif self.mask_strategy == 'block':
+            # EXPERIMENT #7. Mask CONTIGUOUS spans of `mask_block_patches`
+            # patches instead of independent single patches.
+            #
+            # Why: experiment #4 found that shrinking the patch size made the
+            # pretext task EASIER (reconstruction loss fell, downstream transfer
+            # got worse) because a lone masked patch surrounded by intact
+            # neighbours is largely interpolable -- the model can win by local
+            # smoothing without learning anything about spectral structure.
+            # Masking a whole span removes the neighbours too, so filling it in
+            # requires long-range information: which multiplet this is, what the
+            # rest of the spectrum implies about the metabolite present.
+            #
+            # Spans are drawn independently and may overlap, which is fine: the
+            # union is what matters, and overlap just yields occasional longer
+            # runs. The loop tracks the most recent span so an overshoot can be
+            # trimmed from its tail rather than by deleting scattered patches
+            # (which would silently reintroduce the sparse-mask regime).
+            span = min(self.mask_block_patches, n_patches)
+            masked_set = set()
+            last_span = []
+            guard = 0
+            while len(masked_set) < n_masked and guard < 4 * n_patches:
+                start = random.randint(0, max(0, n_patches - span))
+                last_span = [start + j for j in range(span) if (start + j) not in masked_set]
+                masked_set.update(last_span)
+                guard += 1
+            overshoot = len(masked_set) - n_masked
+            for idx in reversed(last_span):
+                if overshoot <= 0:
+                    break
+                masked_set.discard(idx)
+                overshoot -= 1
+            mask[torch.tensor(sorted(masked_set), dtype=torch.long)] = True
+            return mask
 
         elif self.mask_strategy == 'scattered_peaks':
             # Mask small scattered regions (1-4 patches at a time)
@@ -468,9 +512,49 @@ class NMRMaskedAutoencoder(nn.Module):
 
 #     return loss
 
-def compute_loss(model, batch, device, reconstruction_weight=0.3):
+def top_peak_patch_weights(target_patches, top_fraction):
+    """Per-patch 0/1 weights keeping the top `top_fraction` patches by magnitude.
+
+    EXPERIMENT #7, peak-weighted arm. Ported from top_peak_bin_weights() in
+    train_joint_ssl.py, which the joint family already uses, so the two families
+    weight reconstruction identically and the arms stay comparable.
+
+    Rationale: a row-min-max-normalized 131,072-point spectrum is mostly flat
+    baseline. Uniform MSE therefore spends most of its gradient on predicting
+    "still zero", which any model solves immediately, and the peaks -- the only
+    part a downstream classifier reads -- contribute a small share of the loss.
+    Restricting supervision to the highest-magnitude patches per spectrum makes
+    the objective care about the same thing the probe cares about.
+
+    Ranking uses 0.5*mean + 0.5*max of |signal| within the patch. Mean alone
+    would rank a broad low hump above a sharp tall multiplet; max alone would
+    keep any patch containing a single spike, including residual artifacts.
+
+    Args:
+        target_patches: (B, n_patches, patch_size) ground-truth patches.
+        top_fraction: keep this fraction of patches per spectrum. 1.0 disables
+            weighting and returns all-ones (the original uniform loss).
+    Returns:
+        (B, n_patches) tensor of 0/1 weights, matching target_patches.dtype.
+    """
+    if top_fraction >= 1.0:
+        return torch.ones(target_patches.shape[:2], device=target_patches.device,
+                          dtype=target_patches.dtype)
+    magnitude = target_patches.abs()
+    peak_score = 0.5 * magnitude.mean(dim=2) + 0.5 * magnitude.amax(dim=2)
+    n_patches = peak_score.shape[1]
+    k = max(1, int(round(float(top_fraction) * n_patches)))
+    threshold = peak_score.topk(k, dim=1).values.min(dim=1, keepdim=True).values
+    return (peak_score >= threshold).to(target_patches.dtype)
+
+
+def compute_loss(model, batch, device, reconstruction_weight=0.3, peak_top_fraction=1.0):
     """
     Dual loss: primary on masked regions, auxiliary on full reconstruction
+
+    peak_top_fraction < 1.0 restricts both terms to the highest-magnitude
+    patches per spectrum (see top_peak_patch_weights). At 1.0 the arithmetic is
+    bit-identical to the original uniform loss, so existing runs are unaffected.
     """
     original = batch['original'].to(device, non_blocking=True)
     masked = batch['masked'].to(device, non_blocking=True)
@@ -491,18 +575,31 @@ def compute_loss(model, batch, device, reconstruction_weight=0.3):
 
     # PRIMARY LOSS: Masked regions (higher weight)
     se_per_patch = ((rec_patches - orig_patches) ** 2).mean(dim=2)  # Mean over patch
-    masked_loss = (se_per_patch * mask_bool.float()).sum() / (mask_bool.sum() + 1e-8)
+    # Relevance weights: all-ones unless the peak-weighted arm is enabled.
+    se_dtype = se_per_patch.dtype
+    peak_w = top_peak_patch_weights(orig_patches, peak_top_fraction).to(se_dtype)
+    masked_w = mask_bool.to(se_dtype) * peak_w
+    masked_loss = (se_per_patch * masked_w).sum() / (masked_w.sum() + 1e-8)
 
     # AUXILIARY LOSS: Unmasked regions (forces peak preservation)
-    unmasked_loss = (se_per_patch * (~mask_bool).float()).sum() / ((~mask_bool).sum() + 1e-8)
+    unmasked_w = (~mask_bool).to(se_dtype) * peak_w
+    unmasked_loss = (se_per_patch * unmasked_w).sum() / (unmasked_w.sum() + 1e-8)
 
     # Combined loss
     total_loss = masked_loss + reconstruction_weight * unmasked_loss
 
     return total_loss, masked_loss, unmasked_loss
 
-def validate_model(model, val_dataloader, device):
-    """Validate the model and return average validation loss"""
+def validate_model(model, val_dataloader, device, peak_top_fraction=1.0):
+    """Validate the model and return average validation loss
+
+    peak_top_fraction must match the training run's, otherwise val loss measures
+    a different objective than the one being optimized. Note that val loss is
+    only comparable WITHIN an arm: a peak-weighted loss and a uniform loss are
+    different quantities, so early stopping is valid but cross-arm ranking by
+    loss is not (and per docs §5e, reconstruction loss does not predict
+    downstream utility anyway).
+    """
     model.eval()
     total_loss = 0
     total_masked_loss = 0
@@ -511,7 +608,8 @@ def validate_model(model, val_dataloader, device):
     
     with torch.no_grad():
         for batch in val_dataloader:
-            loss, masked_loss, unmasked_loss = compute_loss(model, batch, device)
+            loss, masked_loss, unmasked_loss = compute_loss(
+                model, batch, device, peak_top_fraction=peak_top_fraction)
             total_loss += loss.item()
             total_masked_loss += masked_loss.item()
             total_unmasked_loss += unmasked_loss.item()
@@ -556,7 +654,7 @@ def describe_architecture(model):
 def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num_epochs=10,
                    lr=1e-4, device='cuda', warmup_epochs=10, min_lr=1e-6,
                    patience=30, model_name_prefix="nmr_ssl_model",
-                   augment_enabled=False, augment_every=10):
+                   augment_enabled=False, augment_every=10, peak_top_fraction=1.0):
     """Training loop with early stopping"""
     
     model.to(device)
@@ -614,7 +712,8 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
 
             # In train_ssl_model, replace compute_loss call:
             with torch.amp.autocast('cuda', enabled=(device != 'cpu')):
-                loss, masked_loss, unmasked_loss = compute_loss(model, batch, device)            
+                loss, masked_loss, unmasked_loss = compute_loss(
+                    model, batch, device, peak_top_fraction=peak_top_fraction)
 
             # # Mixed precision forward/backward
             # with torch.cuda.amp.autocast(enabled=(device != 'cpu')):
@@ -653,7 +752,8 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
         val_loss_str = ""
         improved = False
         if val_dataloader is not None:
-            avg_val_loss, val_masked_loss, val_unmasked_loss = validate_model(model, val_dataloader, device)
+            avg_val_loss, val_masked_loss, val_unmasked_loss = validate_model(
+                model, val_dataloader, device, peak_top_fraction=peak_top_fraction)
             val_losses.append(avg_val_loss)
             val_loss_str = f", Val Loss = {avg_val_loss:.4f}"
             
@@ -668,7 +768,19 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                 mask_ratio_max = train_dataloader.dataset.mask_ratio_max
                 patch_size = train_dataloader.dataset.patch_size
 
-                best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio_min:.2f}-{mask_ratio_max:.2f}_ps{patch_size}_best.pth"
+                mask_strategy = train_dataloader.dataset.mask_strategy
+                mask_block_patches = train_dataloader.dataset.mask_block_patches
+
+                # Experiment #7 arms are tagged in the filename so the ablation
+                # is readable off `ls` and cannot be confused with the baseline.
+                # Untagged when at defaults, keeping legacy names unchanged.
+                arm_tag = ""
+                if mask_strategy == 'block':
+                    arm_tag += f"_blk{mask_block_patches}"
+                if peak_top_fraction < 1.0:
+                    arm_tag += f"_pk{peak_top_fraction:.2f}"
+
+                best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio_min:.2f}-{mask_ratio_max:.2f}_ps{patch_size}{arm_tag}_best.pth"
 
                 torch.save({
                     'epoch': epoch,
@@ -683,6 +795,9 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                         'mask_ratio_min': mask_ratio_min,
                         'mask_ratio_max': mask_ratio_max,
                         'patch_size': patch_size,
+                        'mask_strategy': mask_strategy,
+                        'mask_block_patches': mask_block_patches,
+                        'peak_top_fraction': float(peak_top_fraction),
                         'learning_rate': lr,
                         'num_epochs': num_epochs,
                         'warmup_epochs': warmup_epochs,
@@ -886,9 +1001,27 @@ def main():
     parser.add_argument('--num-layers', type=int, default=3)
     parser.add_argument('--dim-feedforward', type=int, default=256)
     parser.add_argument('--dropout', type=float, default=0.2)
+    # EXPERIMENT #7: harder / better-aligned pretext task. Both knobs default to
+    # the previous behaviour, so omitting them reproduces the baseline exactly.
+    parser.add_argument('--mask-strategy', default='sparse_random',
+                        choices=['sparse_random', 'block', 'scattered_peaks', 'single_peak', 'random'],
+                        help="'sparse_random' masks independent single patches (baseline). "
+                             "'block' masks contiguous multi-patch spans, which cannot be "
+                             "filled in by interpolating from surviving neighbours.")
+    parser.add_argument('--mask-block-patches', type=int, default=8,
+                        help='Span length in patches for --mask-strategy block. At ps1024 a '
+                             'span of 8 covers 8192 points (~0.5 ppm over a 12 ppm window).')
+    parser.add_argument('--peak-top-fraction', type=float, default=1.0,
+                        help='Restrict reconstruction loss to the highest-magnitude fraction of '
+                             'patches per spectrum (1.0 = uniform loss, the baseline). 0.25 '
+                             'matches what the joint family already uses.')
     args = parser.parse_args()
     if not 0.0 < args.mask_ratio_min <= args.mask_ratio_max < 1.0:
         raise ValueError("--mask-ratio-min/--mask-ratio-max must satisfy 0 < min <= max < 1")
+    if not 0.0 < args.peak_top_fraction <= 1.0:
+        raise ValueError("--peak-top-fraction must satisfy 0 < f <= 1")
+    if args.mask_block_patches < 1:
+        raise ValueError("--mask-block-patches must be >= 1")
     if args.d_model % args.nhead:
         raise ValueError(f"--d-model ({args.d_model}) must be divisible by --nhead ({args.nhead})")
 
@@ -908,6 +1041,9 @@ def main():
         'num_layers': args.num_layers,
         'dim_feedforward': args.dim_feedforward,
         'dropout': args.dropout,
+        'mask_strategy': args.mask_strategy,
+        'mask_block_patches': args.mask_block_patches,
+        'peak_top_fraction': args.peak_top_fraction,
         'train_split': 0.80,
         'val_split': 0.20,
         'test_split': 0.0
@@ -1030,7 +1166,8 @@ def main():
         mask_ratio_min=mask_ratio_min,
         mask_ratio_max=mask_ratio_max,
         patch_size=patch_size,
-        mask_strategy='sparse_random',  # Changed - keeps context
+        mask_strategy=CONFIG['mask_strategy'],
+        mask_block_patches=CONFIG['mask_block_patches'],
         augment=False,  # Will be controlled during training
         per_point_std=torch.from_numpy(per_point_std) if per_point_std is not None else None,
         noise_scale=args.noise_scale
@@ -1040,7 +1177,8 @@ def main():
         mask_ratio_min=mask_ratio_min,
         mask_ratio_max=mask_ratio_max,
         patch_size=patch_size,
-        mask_strategy='sparse_random'
+        mask_strategy=CONFIG['mask_strategy'],
+        mask_block_patches=CONFIG['mask_block_patches'],
     )
     # Test dataset (if available)
     has_test = False
@@ -1058,7 +1196,8 @@ def main():
             mask_ratio_min=mask_ratio_min,
             mask_ratio_max=mask_ratio_max,
             patch_size=patch_size,
-            mask_strategy='sparse_random',
+            mask_strategy=CONFIG['mask_strategy'],
+            mask_block_patches=CONFIG['mask_block_patches'],
             augment=False,
             per_point_std=None,
             noise_scale=args.noise_scale
@@ -1138,11 +1277,17 @@ def main():
     print("Starting training with OPTIMIZED configuration for small dataset:")
     print(f"  - Dataset size: {len(train_spectra)} train, {len(val_spectra)} val")
     print(f"  - Max normalization (no clipping)")
-    print(f"  - Sparse random masking ({mask_ratio_min:.0%}-{mask_ratio_max:.0%} per sample, randomized) - keeps context")
+    print(f"  - {CONFIG['mask_strategy']} masking ({mask_ratio_min:.0%}-{mask_ratio_max:.0%} per sample, randomized)"
+          + (f", contiguous spans of {CONFIG['mask_block_patches']} patches"
+             if CONFIG['mask_strategy'] == 'block' else " - keeps context"))
     print(f"  - Small patches ({patch_size}) for fine detail")
     print(f"  - Small model (3 layers, d=128) to prevent overfitting")
     print(f"  - Larger batches ({batch_size}) for stable gradients")
-    print(f"  - Standard MSE loss")
+    if CONFIG['peak_top_fraction'] < 1.0:
+        print(f"  - Peak-weighted MSE: loss restricted to top {CONFIG['peak_top_fraction']:.0%} "
+              f"of patches by magnitude")
+    else:
+        print(f"  - Standard MSE loss")
     print("="*60 + "\n")
     
     train_losses, val_losses = train_ssl_model(
@@ -1158,7 +1303,8 @@ def main():
         model_name_prefix=model_name_prefix,
         timestamp=timestamp,
         augment_enabled=args.augment,
-        augment_every=args.augment_every
+        augment_every=args.augment_every,
+        peak_top_fraction=CONFIG['peak_top_fraction']
     )
     
     print("\nGenerating training curves...")
@@ -1173,7 +1319,8 @@ def main():
     test_results = None
     if test_dataloader is not None:
         print("\nEvaluating on test dataset...")
-        test_loss, test_masked_loss, test_unmasked_loss = validate_model(model, test_dataloader, device)
+        test_loss, test_masked_loss, test_unmasked_loss = validate_model(
+            model, test_dataloader, device, peak_top_fraction=CONFIG['peak_top_fraction'])
         test_results = {
             'test_loss': float(test_loss),
             'test_masked_loss': float(test_masked_loss),
