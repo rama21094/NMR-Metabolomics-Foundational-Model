@@ -370,6 +370,16 @@ not compare a v3-pretrained checkpoint against a v4-pretrained one.
 `trainer_revised.py` has no `--seed` flag, which is why this could not be diagnosed from the
 existing artifacts. Adding one is a prerequisite for any further single-run comparison.
 
+> **✅ RESOLVED — reading (1). The corpus is the cause.** Two further v4 baseline runs
+> (`--seed 101`, `--seed 202`) put three independent draws of this configuration at held-out
+> means **0.8199 / 0.8232 / 0.8158**. The v3 reference at **0.8884** sits above the entire v4
+> cluster, and at or above every individual v4 draw on all three held-out targets (strictly
+> above on Barth and MTBLS326; tied on cancer). The +0.069 gap is real and **the v4 corpus is
+> worse for pretraining than v3** — the EDTA-cutoff "fix" improved artifact removal on paper
+> and cost downstream transfer. This is §5e again in a new place: v4 reconstructs better
+> (7.10e-5 vs 9.26e-5) and transfers worse. See §7b for the noise floor this establishes,
+> which is smaller than 0.069 but still large enough to invalidate several claims here.
+
 ## 6. Controls — what this is NOT
 
 ### Not CV overfitting
@@ -615,51 +625,82 @@ Factorial main effects (each averaged over both levels of the other factor):
 
 **Do not pursue block masking further.** Resolve §5f before running any new arm.
 
-#### Follow-up now in progress: seeding + a matched-reference peak arm
+### ❌ #7b — RESULT: peak weighting also fails once the corpus is matched, and the noise floor is 0.020
 
-Two gaps this result exposed, both closed in code:
+Three follow-up runs, `results/analysis/exp7_replicates/`, summarized by
+`code/analysis/summarize_exp7_replicates.py`, figure `fig13_exp7_replicates.png`.
 
-1. **§5f could not be diagnosed because nothing was seeded.** `trainer_revised.py` now has
-   `--seed`: fixes python `random`, numpy, and torch (CPU + all CUDA devices) before any
-   dataset or model is built, and additionally reseeds each DataLoader worker process (the
-   default `worker_init_fn` only reseeds torch's own RNG per worker, not the `random`/numpy
-   calls `NMRSpectrumDataset.create_mask` makes — without this fix, forked workers would
-   silently draw identical mask sequences). Verified two `--seed 123` runs produce a
-   bit-identical `model_state_dict` after 3 epochs on CPU, a `--seed 7` run diverges from
-   both, and the no-`--seed` default is untouched (prints "Unseeded run" and behaves exactly
-   as every prior command did). Omitting `--seed` reproduces old behaviour because old
-   behaviour was itself unseeded — there is no "legacy value" to default to.
-2. **Arm B (+0.011) was read against arm D, which is v4-pretrained**, but the only matched,
-   apples-to-apples reference for a peak-weighted run is the **v3** checkpoint every earlier
-   number in this document was measured against (patch 1024, d128, L3, nhead4 — identical
-   geometry). Training a peak-weighted arm on v3 and comparing it to the *v3* baseline
-   (0.888 held-out) removes the corpus-version confound entirely, at the cost of not being
-   part of the v4 factorial.
+**(1) `--seed` does not make GPU training reproducible — a correction.** The v3 peak arm was
+launched twice with `--seed 101`, identical flags and corpus, and the two runs did **not**
+match: best epoch 724 vs 776, val loss 2.386e-4 vs 2.190e-4, **max|ΔW| = 5.3e-2**.
+`trainer_revised.py` sets `torch.backends.cudnn.benchmark = True`, which autotunes kernels by
+timing race, and AMP rescales dynamically; kernel choice and float reduction order therefore
+vary between processes no matter what the RNGs do. Seeding removes RNG variance only. The
+CPU verification that was used to sign off on `--seed` passed *because* it was CPU and could
+not speak to this. To get bit-reproducibility one would additionally need
+`cudnn.benchmark = False`, `torch.use_deterministic_algorithms(True)`, and
+`CUBLAS_WORKSPACE_CONFIG=:4096:8` — at a real throughput cost, and it has **not** been done.
+The accidental duplicate is useful though: r1 vs r2 is a **same-seed** pair, so it isolates
+pure implementation nondeterminism.
 
-Three runs to make both fixes actionable:
+**(2) The noise floor.** Three independent v4 baseline runs (unseeded, seed 101, seed 202):
 
-```bash
-V4=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy
-V3=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy
+| target | run 1 | run 2 | run 3 | sd | range | v3 ref |
+|---|---|---|---|---|---|---|
+| Barth | 0.7484 | 0.6988 | 0.6770 | 0.037 | 0.071 | 0.8059 |
+| MTBLS326 | 0.9296 | 0.9630 | 0.9111 | 0.026 | 0.052 | 1.0000 |
+| BrC-T2D cancer | 0.7816 | 0.8079 | 0.8592 | 0.040 | 0.078 | 0.8592 |
+| MTBLS563 | 0.6283 | 0.5505 | 0.6331 | 0.046 | 0.083 | 0.6176 |
+| BrC-T2D diabetes | 0.7052 | 0.7701 | 0.7052 | 0.037 | 0.065 | 0.7654 |
+| **held-out mean** | **0.8199** | **0.8232** | **0.8158** | **0.0037** | 0.0074 | **0.8884** |
 
-# (1) Two seeded replicates of arm D, to separate "v4 corpus is worse" from
-# "run-to-run variance is ~0.07". Same seed on both -> if GPU nondeterminism
-# (cuDNN autotune, AMP) still lets them diverge, that itself is informative.
-python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 101
-python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 202
+**Do not read that 0.0037 as precision.** Per-target sd averages 0.035, so a 3-target mean
+should scatter by ≈0.035/√3 = **0.020** if the targets were independent. The observed 0.0037
+is 5.4× tighter because Barth *falls* while cancer *rises* across the three draws
+(r = −0.92) and the errors cancel inside the mean. With three draws that cancellation is
+luck, not a property to rely on. **Use 0.020 as the floor for a held-out-mean claim and
+≈0.035 for any single-target claim.**
 
-# (2) Peak-weighted arm on the v3 corpus, matched to the v3 reference checkpoint
-# (..._v3_20260725_085527_..._best.pth) rather than to v4 arm D.
-python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V3 \
-  --peak-top-fraction 0.25 --seed 101
-```
+**(3) Peak weighting, matched corpus — it loses.** Peak-weighted runs on v3, against the v3
+baseline (no corpus confound):
 
-Read the result by adding these three checkpoints to `ARMS` in
-`code/analysis/compare_patch_sizes.py` and re-running the probe. Two v4 replicates close
-together (say within 0.02 of each other) would mean the −0.069 in §5f is real and about the
-corpus; if they instead spread across most of that 0.069, the whole document's single-run
-comparisons need error bars before any of them can be trusted. The v3 peak arm's result
-should replace, not supplement, arm B's reading of +0.011.
+| target | classical | v3 baseline | v3 + top-25% r1 | r2 |
+|---|---|---|---|---|
+| Barth | 0.705 | 0.8059 | 0.7484 | 0.6910 |
+| MTBLS326 | 1.000 | 1.0000 | 0.9630 | 0.9630 |
+| BrC-T2D cancer | 0.937 | 0.8592 | 0.8461 | 0.8842 |
+| MTBLS563 | 0.721 | 0.6176 | 0.5928 | 0.5949 |
+| BrC-T2D diabetes | 0.829 | 0.7654 | **0.6237** | **0.6237** |
+| **held-out mean** | 0.8807 | **0.8884** | 0.8525 | 0.8461 |
+| selection mean | 0.7750 | 0.6915 | 0.6082 | 0.6093 |
+
+**−0.039 held-out** (2.0× the floor) and **−0.083 on the selection subset**, driven by a
+−0.142 collapse on BrC-T2D diabetes. Arm B's +0.011 was an artifact of being measured
+against a v4 baseline that the corpus had already depressed by 0.069. **Experiment #7 is now
+negative on both factors.**
+
+**(4) Recalibration — half of this document's claims do not clear the floor.**
+
+| claim | Δ | vs 0.020 floor | verdict |
+|---|---|---|---|
+| §5f v3 vs v4 corpus | +0.069 | 3.4× | **survives** |
+| §5b patch 128 vs 1024 | −0.042 | 2.1× | **survives** |
+| §7b peak weighting (v3, matched) | −0.039 | 2.0× | survives (marginal) |
+| §5b patch 256 vs 1024 | −0.034 | 1.7× | marginal |
+| §7 block masking | −0.030 | 1.5× | marginal |
+| §5d ps2048 vs ps1024 | +0.020 | 1.0× | **within noise** |
+| §7 peak weighting (v4, unmatched) | +0.011 | 0.5× | **within noise** |
+| §5d d256L6 vs ps1024 | +0.006 | 0.3× | **within noise** |
+
+Consequences: **§5d's partial retraction is itself now unsupported** — the "+0.020 ps2048"
+that motivated it sits exactly at the floor, so the honest statement is that ps2048, d256L6
+and ps1024 are *indistinguishable* on one run each, not that scaling helps. §5c (pooling)
+is unaffected because it is measured *within* a fixed checkpoint and is therefore paired —
+that remains the only robust positive result in this document.
+
+**Standing rule from here on: no single-run comparison below 0.04 gets reported as an
+effect.** Either run ≥3 replicates per arm, or restrict claims to paired within-checkpoint
+comparisons like §5c.
 
 <details><summary>Original design notes (kept for the record)</summary>
 This is now the top-ranked experiment, because §5b identified the *reason* the previous
@@ -735,12 +776,44 @@ python code/tests/verify_top_peak_loss.py
 python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp7_objective_comparison
 python code/analysis/summarize_exp7_factorial.py
 python code/plotting/plot_exp7_factorial.py
+
+# #7b follow-up: 3 v4 replicates + a matched-corpus peak arm (~4.5 h each)
+V3=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 101
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 202
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V3 \
+  --peak-top-fraction 0.25 --seed 101
+python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp7_replicates
+python code/analysis/summarize_exp7_replicates.py
+python code/plotting/plot_exp7_replicates.py
 ```
 
 ### #8 — Hybrid features (CHEAP, worth a shot)
 Concatenate the SSL embedding with binned areas. They are partly complementary — on
 diabetes and Barth the embedding beats same-resolution binning — so the union may exceed
 both.
+
+### ⭐ #9 — Revert the pretraining corpus to v3 (CHEAP, HIGHEST VALUE)
+§5f established with three replicates that v3-pretrained backbones transfer **+0.069 better**
+than v4-pretrained ones at identical configuration — the largest and best-supported effect in
+this document, and it points the wrong way relative to the data-cleaning work. The v4 EDTA
+cutoff cap removes less artifact, and apparently that residual artifact was *useful* signal
+for the pretext task (or the harsher v3 suppression acted as a beneficial augmentation).
+Nothing needs training to start: **every v4-pretrained arm should be re-read against v3**, and
+all future pretraining should default to v3 until this is understood. Diagnosing *why* is the
+scientifically interesting part — compare what the two corpora look like in the EDTA window
+and whether v4's residual peaks correlate with the classes.
+
+### #10 — Determinism, if any single-run number is ever to be trusted again (CHEAP)
+`--seed` alone is insufficient (§7b). Add an opt-in `--deterministic` that also sets
+`cudnn.benchmark = False`, `torch.use_deterministic_algorithms(True)` and requires
+`CUBLAS_WORKSPACE_CONFIG=:4096:8`. Slower, but it makes an arm's number an actual property of
+the arm. Without it, every future comparison needs ≥3 replicates.
+
+### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
+Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
+n=42 is more likely a batch/run-order artifact than real biology. Until this is checked,
+MTBLS326 should not be counted as evidence for anything.
 
 ---
 
@@ -761,5 +834,17 @@ both.
   `code/evaluation/ssl_linear_probe_eval.py`,
   `code/plotting/plot_pretraining_gain.py`,
   `code/analysis/compare_patch_sizes.py`,
-  `code/plotting/plot_patch_size_experiment.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig11`.
+  `code/plotting/plot_patch_size_experiment.py`,
+  `code/analysis/summarize_exp7_factorial.py`,
+  `code/plotting/plot_exp7_factorial.py`,
+  `code/analysis/summarize_exp7_replicates.py`,
+  `code/plotting/plot_exp7_replicates.py`,
+  `code/tests/verify_top_peak_loss.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig13`.
+- **Reproducibility caveat (§7b):** GPU runs are not bit-reproducible even with `--seed`, because
+  `cudnn.benchmark = True` and AMP vary kernel selection and reduction order between processes.
+  Measured noise floor for a held-out-mean claim: **0.020**; for a single-target claim: **≈0.035**.
+  Two same-seed runs of the same arm differed by max|ΔW| = 5.3e-2.
+- **Corpus caveat (§5f):** v3-pretrained backbones transfer +0.069 better than v4-pretrained ones
+  at identical configuration (3 replicates). Never compare a v3-pretrained checkpoint to a
+  v4-pretrained one.

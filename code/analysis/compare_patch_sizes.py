@@ -71,6 +71,21 @@ ARMS = [
     ("exp7_A_blk8", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_100612_bs32_mr0.20-0.60_ps1024_blk8_best.pth", None),
     ("exp7_B_pk025", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_054925_bs32_mr0.20-0.60_ps1024_pk0.25_best.pth", None),
     ("exp7_C_blk8_pk025", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_110345_bs32_mr0.20-0.60_ps1024_blk8_pk0.25_best.pth", None),
+    # EXPERIMENT #7 FOLLOW-UP (docs §5f/§7b). Replicates of the v4 baseline, to
+    # decide whether the -0.069 v3-vs-v4 gap is the corpus or just run-to-run
+    # noise. Together with the unseeded exp7_D_baseline_v4 above these are three
+    # independent draws of the SAME configuration on the SAME corpus.
+    ("exp7_D_v4_seed101", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260730_050654_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    ("exp7_D_v4_seed202", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260730_050931_bs32_mr0.20-0.60_ps1024_seed202_best.pth", None),
+    # Peak-weighted arm trained on the V3 corpus, so it can be compared against
+    # the v3 reference checkpoint (ps1024_nhead4_true) with no corpus confound.
+    # This launched twice with the SAME --seed 101, and the two runs did NOT come
+    # out identical (max|dW| = 5.3e-2, best epoch 724 vs 776) -- cudnn.benchmark
+    # autotuning plus AMP make GPU training nondeterministic regardless of RNG
+    # seeding. That accident is useful: the pair isolates pure implementation
+    # nondeterminism from seed choice, so keep BOTH.
+    ("exp7_v3_pk025_r1", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260730_053708_bs32_mr0.20-0.60_ps1024_pk0.25_seed101_best.pth", None),
+    ("exp7_v3_pk025_r2", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260730_054128_bs32_mr0.20-0.60_ps1024_pk0.25_seed101_best.pth", None),
 ]
 
 
