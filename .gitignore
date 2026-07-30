@@ -4,6 +4,7 @@
 # Directories
 /data/
 /models/
+/logs/
 /pyragify/
 /.lgraph/
 /.claude/
