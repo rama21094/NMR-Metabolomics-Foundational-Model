@@ -248,7 +248,30 @@ originally reported DNN-head numbers:
 SSL-vs-classical record moves from 0 wins / 0 ties / 5 losses to **1 win / 1 tie / 3
 losses**. Barth now favours SSL and MTBLS326 is a tie.
 
-### 5d. Backbone scaling is exhausted (ps2048 + capacity arms)
+### 5d. Backbone scaling is exhausted (ps2048 + capacity arms) — ⚠️ PARTIALLY RETRACTED
+
+> **CORRECTION (experiment #7, §7).** This section's reference cell is the **v3**-pretrained
+> ps1024 checkpoint, while all four comparison backbones were pretrained on **v4**. When a
+> v4 ps1024 baseline was finally trained with byte-identical config (arm D of experiment
+> #7, verified against the CONFIG block in force on 2026-07-25), it scored **0.820**
+> held-out flatten, not 0.888. Against that same-data reference the ordering changes sign:
+>
+> | backbone (all v4) | held-out flatten | vs v4 ps1024 |
+> |---|---|---|
+> | patch 2048 (5.42M) | 0.840 | **+0.020** |
+> | patch 1024 d256 L6 (5.17M) | 0.826 | **+0.006** |
+> | patch 1024 (1.89M) — v4 baseline | 0.820 | — |
+> | patch 256 (0.66M) | 0.786 | −0.033 |
+> | patch 128 (0.63M) | 0.778 | −0.042 |
+>
+> **Conclusion 1 below ("stop scaling the backbone") is not supported by the data as
+> corrected** — on a same-data comparison the two ~5M arms are level-to-slightly-ahead, not
+> behind. Conclusion 2 (pooling, not capacity, was the bottleneck) and §5b (shrinking the
+> patch size hurts) both survive: ps256/ps128 are v4 and still lose to the v4 baseline.
+> Everything below is left as originally written for the record. Do not cite the 0.888
+> figure as a same-data baseline again.
+
+
 
 Two further backbones were pretrained on the v4 corpus and compared through the frozen
 probe: `patch_size=2048` (64 tokens, 5.42M params) and a capacity arm holding patch 1024
@@ -304,6 +327,48 @@ the datasets used for reporting (see the note below).
 > absolute values, because each holds consistently across five independent datasets.
 
 ---
+
+### 5f. ⚠️ The largest effect measured so far is the baseline itself
+
+Experiment #7 required a v4-pretrained ps1024 baseline (arm D). Comparing it to the
+v3-pretrained ps1024 checkpoint that every earlier number was measured against — **same
+architecture, same objective, same hyperparameters, config verified byte-identical against
+the CONFIG block in force on 2026-07-25** — gives:
+
+| target | v3 baseline | v4 baseline (arm D) | Δ |
+|---|---|---|---|
+| Barth | 0.8059 | 0.7484 | −0.0575 |
+| MTBLS326 | 1.0000 | 0.9296 | −0.0704 |
+| BrC-T2D cancer | 0.8592 | 0.7816 | −0.0776 |
+| MTBLS563 | 0.6176 | 0.6283 | +0.0108 |
+| BrC-T2D diabetes | 0.7654 | 0.7052 | −0.0602 |
+| **held-out mean** | **0.8884** | **0.8199** | **−0.0685** |
+
+Down on 4/5 targets, all by a similar 0.06–0.08, so this is not one outlier dataset. Only
+two things differ between the runs: the pretraining corpus version (v3 → v4, the EDTA
+cutoff fix) and the unseeded model initialization / shuffling order.
+
+**This −0.069 is larger than every effect any experiment here has reported** (§5b patch
+size ±0.08 is comparable; §5c pooling +0.03..+0.13 overlaps; §7's factorial effects are
+−0.030 and +0.011). Two mutually exclusive readings, and the data cannot currently
+distinguish them:
+
+1. **The v4 corpus is worse for pretraining than v3.** Plausible in principle — v4 caps the
+   EDTA cutoff at the baseline-to-peak midpoint, so it removes less of the artifact and
+   leaves more residual structure. Note arm D also *reconstructs better* (7.10e-5 vs
+   9.26e-5) while transferring worse, which is another instance of §5e.
+2. **Run-to-run variance at n=37..113 is ≈0.07.** If so, most conclusions in this document
+   that rest on a single run per arm are underpowered, and only §5c (pooling, which is
+   measured *within* a fixed checkpoint and therefore paired) is safe.
+
+**Neither reading is optimistic, and (2) is the one to rule out first.** The check is cheap:
+rerun arm D's exact command on v4 a second time (~4.5 h on one L40S; init is unseeded, so a
+rerun is a genuine replicate) and see whether it lands at 0.82 or 0.89. Until that is done,
+**treat any single-run difference below ~0.07 in this document as not established**, and do
+not compare a v3-pretrained checkpoint against a v4-pretrained one.
+
+`trainer_revised.py` has no `--seed` flag, which is why this could not be diagnosed from the
+existing artifacts. Adding one is a prerequisite for any further single-run comparison.
 
 ## 6. Controls — what this is NOT
 
@@ -501,7 +566,56 @@ python -u code/evaluation/fewshot_benchmark.py --dataset barth \
 (and analogously for `--dataset mtbls326` / `mtbls563` with their v4 `_rowMinMax_v4.npy`
 paths; BrC-T2D is not yet supported by this script and would need a loader added.)
 
-### 🔄 #7 — Harder / better-aligned pretext task (SET UP, RUNNING)
+### ❌ #7 — RESULT: block masking fails, peak weighting is a wash
+
+All four arms early-stopped cleanly (D ep1254, A ep1703, B ep1628, C ep1640).
+Evaluated through the frozen linear probe, `results/analysis/exp7_objective_comparison/`,
+summarized by `code/analysis/summarize_exp7_factorial.py`, figure `fig12_exp7_factorial.png`.
+
+**The pretext-difficulty mechanism fired.** D and A optimize the same uniform loss on the
+same data, so their val losses are directly comparable: block masking raised val loss
+7.10e-5 → 1.00e-4 (**+41% harder**) and pushed the best epoch out by 450. The task did get
+harder as designed. It just did not help.
+
+Balanced accuracy, flatten pooling:
+
+| target | classical | D (ref) | A block | B peak | C both |
+|---|---|---|---|---|---|
+| Barth | 0.705 | 0.748 | 0.562 | 0.655 | 0.634 |
+| MTBLS326 | 1.000 | 0.930 | 0.944 | **1.000** | 0.911 |
+| BrC-T2D cancer | 0.937 | 0.782 | 0.872 | 0.845 | 0.858 |
+| MTBLS563 *(sel)* | 0.721 | 0.628 | 0.556 | 0.596 | 0.594 |
+| BrC-T2D diabetes *(sel)* | 0.829 | 0.705 | 0.710 | 0.754 | 0.686 |
+| **held-out mean** | **0.881** | 0.820 | 0.793 | **0.834** | 0.801 |
+| selection mean | 0.775 | 0.667 | 0.633 | 0.675 | 0.640 |
+
+Factorial main effects (each averaged over both levels of the other factor):
+
+| effect | held-out | selection | all 5 |
+|---|---|---|---|
+| block masking | **−0.030** | **−0.034** | **−0.032** |
+| peak weighting | +0.011 | +0.007 | +0.009 |
+| interaction | −0.006 | −0.001 | −0.004 |
+
+1. **Block masking hurts, consistently.** Negative on both splits and both poolings
+   (−0.014..−0.034), and it does not merely fail to help — Barth collapses 0.748 → 0.562.
+   Making the pretext task harder is not sufficient; §5b's diagnosis ("the task is too
+   easy") was correct as a description but wrong as a prescription. A plausible reading: an
+   8-patch span is ~0.75 ppm, wide enough that the true content is genuinely
+   unrecoverable rather than merely non-trivial, so the model learns to predict a
+   conditional mean and loses the sharp local detail the probe reads.
+2. **Peak weighting is a wash.** +0.011 held-out flatten, +0.007 selection — same sign
+   everywhere and B is the best of the four arms (and reaches 1.000 on MTBLS326 under both
+   poolings), but the magnitude is ~6× smaller than the baseline uncertainty established in
+   §5f. **Not established.** Retesting at `--peak-top-fraction 0.50` is defensible; treating
+   +0.011 as a win is not.
+3. **No arm approaches classical.** Best held-out mean 0.834 vs 0.881 classical.
+4. **The factorial's real payoff was arm D**, which exposed the v3/v4 baseline confound
+   (§5f) — an effect 2× larger than anything the experiment was designed to measure.
+
+**Do not pursue block masking further.** Resolve §5f before running any new arm.
+
+<details><summary>Original design notes (kept for the record)</summary>
 This is now the top-ranked experiment, because §5b identified the *reason* the previous
 attempt failed and this attacks it directly. Two orthogonal changes, run as a 2×2
 factorial on identical v4 data at the winning geometry (ps1024, d128, L3, nhead 4):
@@ -556,6 +670,26 @@ BrC-T2D cancer.
 
 Evaluation requires adding the four new checkpoint paths to `ARMS` in
 `code/analysis/compare_patch_sizes.py` once the timestamps exist.
+
+</details>
+
+```bash
+# the four arms as run (each ~4.5 h on an L40S)
+V4=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4                      # D
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 \
+  --mask-strategy block --mask-block-patches 8                                                              # A
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 \
+  --peak-top-fraction 0.25                                                                                  # B
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 \
+  --mask-strategy block --mask-block-patches 8 --peak-top-fraction 0.25                                     # C
+# verification of the loss, before any GPU time
+python code/tests/verify_top_peak_loss.py
+# evaluation
+python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp7_objective_comparison
+python code/analysis/summarize_exp7_factorial.py
+python code/plotting/plot_exp7_factorial.py
+```
 
 ### #8 — Hybrid features (CHEAP, worth a shot)
 Concatenate the SSL embedding with binned areas. They are partly complementary — on

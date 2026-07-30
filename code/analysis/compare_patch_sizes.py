@@ -62,6 +62,15 @@ ARMS = [
     # ff 256->512 (5.13M params, near-matched to ps2048's 5.42M). Comparing
     # these two isolates HOW ~5M parameters are best spent.
     ("ps1024_d256_L6", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260728_124558_bs32_mr0.20-0.60_ps1024_best.pth", None),
+    # EXPERIMENT #7 -- 2x2 factorial over the pretext task, all four arms at the
+    # winning geometry (ps1024, d128, L3, nhead4, 1.89M params) on IDENTICAL v4
+    # data. exp7_D is the reference cell: every earlier masking baseline was
+    # pretrained on v3, so without it the factorial would confound the objective
+    # change with the data version.
+    ("exp7_D_baseline_v4", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_052637_bs32_mr0.20-0.60_ps1024_best.pth", None),
+    ("exp7_A_blk8", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_100612_bs32_mr0.20-0.60_ps1024_blk8_best.pth", None),
+    ("exp7_B_pk025", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_054925_bs32_mr0.20-0.60_ps1024_pk0.25_best.pth", None),
+    ("exp7_C_blk8_pk025", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260729_110345_bs32_mr0.20-0.60_ps1024_blk8_pk0.25_best.pth", None),
 ]
 
 
