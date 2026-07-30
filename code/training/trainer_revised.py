@@ -654,7 +654,7 @@ def describe_architecture(model):
 def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num_epochs=10,
                    lr=1e-4, device='cuda', warmup_epochs=10, min_lr=1e-6,
                    patience=30, model_name_prefix="nmr_ssl_model",
-                   augment_enabled=False, augment_every=10, peak_top_fraction=1.0):
+                   augment_enabled=False, augment_every=10, peak_top_fraction=1.0, seed=None):
     """Training loop with early stopping"""
     
     model.to(device)
@@ -779,6 +779,8 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                     arm_tag += f"_blk{mask_block_patches}"
                 if peak_top_fraction < 1.0:
                     arm_tag += f"_pk{peak_top_fraction:.2f}"
+                if seed is not None:
+                    arm_tag += f"_seed{seed}"
 
                 best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio_min:.2f}-{mask_ratio_max:.2f}_ps{patch_size}{arm_tag}_best.pth"
 
@@ -798,6 +800,7 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                         'mask_strategy': mask_strategy,
                         'mask_block_patches': mask_block_patches,
                         'peak_top_fraction': float(peak_top_fraction),
+                        'seed': seed,
                         'learning_rate': lr,
                         'num_epochs': num_epochs,
                         'warmup_epochs': warmup_epochs,
@@ -1015,6 +1018,19 @@ def main():
                         help='Restrict reconstruction loss to the highest-magnitude fraction of '
                              'patches per spectrum (1.0 = uniform loss, the baseline). 0.25 '
                              'matches what the joint family already uses.')
+    # No run before this flag existed seeded anything -- model init, DataLoader
+    # shuffling, and the per-sample mask draw in NMRSpectrumDataset.create_mask
+    # were all left to whatever state the process RNGs happened to be in. That
+    # is why the v3 vs v4 ps1024 baselines (docs §5f) differ by 0.069 held-out
+    # despite byte-identical config: nothing separates "different corpus" from
+    # "different unseeded run" after the fact. --seed fixes python `random`,
+    # numpy, and torch (CPU + all CUDA devices) before any dataset or model is
+    # built. Default is None (unseeded, exactly the old behaviour) so every
+    # existing command line keeps behaving as it always did.
+    parser.add_argument('--seed', type=int, default=None,
+                        help='Seed python/numpy/torch RNGs for a reproducible run. Default: '
+                             'unseeded (legacy behaviour). Two runs with the same --seed and '
+                             'the same everything else are exact replicates.')
     args = parser.parse_args()
     if not 0.0 < args.mask_ratio_min <= args.mask_ratio_max < 1.0:
         raise ValueError("--mask-ratio-min/--mask-ratio-max must satisfy 0 < min <= max < 1")
@@ -1024,6 +1040,15 @@ def main():
         raise ValueError("--mask-block-patches must be >= 1")
     if args.d_model % args.nhead:
         raise ValueError(f"--d-model ({args.d_model}) must be divisible by --nhead ({args.nhead})")
+
+    if args.seed is not None:
+        random.seed(args.seed)
+        np.random.seed(args.seed)
+        torch.manual_seed(args.seed)
+        torch.cuda.manual_seed_all(args.seed)
+        print(f"Seeded run: --seed={args.seed}")
+    else:
+        print("Unseeded run (pass --seed for a reproducible replicate)")
 
     # CONFIG: All configurable parameters
     CONFIG = {
@@ -1044,6 +1069,7 @@ def main():
         'mask_strategy': args.mask_strategy,
         'mask_block_patches': args.mask_block_patches,
         'peak_top_fraction': args.peak_top_fraction,
+        'seed': args.seed,
         'train_split': 0.80,
         'val_split': 0.20,
         'test_split': 0.0
@@ -1208,6 +1234,22 @@ def main():
     cpu_count = os.cpu_count() or 4
     suggested_workers = max(2, min(16, cpu_count // 2))
 
+    # With num_workers>0, forked worker processes inherit the parent's python
+    # `random`/numpy global RNG state identically -- DataLoader's default
+    # worker_init only reseeds torch's own RNG per worker (base_seed +
+    # worker_id), not `random`/np.random. NMRSpectrumDataset.create_mask uses
+    # both, so without this every worker would draw the SAME mask sequence.
+    # Only wired up when --seed is set, so the unseeded path is untouched.
+    def _seed_worker(worker_id):
+        worker_seed = (torch.initial_seed() + worker_id) % (2 ** 32)
+        np.random.seed(worker_seed)
+        random.seed(worker_seed)
+
+    worker_init_fn = _seed_worker if args.seed is not None else None
+    shuffle_generator = torch.Generator()
+    if args.seed is not None:
+        shuffle_generator.manual_seed(args.seed)
+
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -1215,7 +1257,9 @@ def main():
         num_workers=suggested_workers,
         pin_memory=True,
         persistent_workers=True,
-        prefetch_factor=4
+        prefetch_factor=4,
+        worker_init_fn=worker_init_fn,
+        generator=shuffle_generator if args.seed is not None else None
     )
     val_dataloader = DataLoader(
         val_dataset,
@@ -1224,7 +1268,8 @@ def main():
         num_workers=suggested_workers,
         pin_memory=True,
         persistent_workers=True,
-        prefetch_factor=4
+        prefetch_factor=4,
+        worker_init_fn=worker_init_fn
     )
     if test_dataset is not None:
         test_dataloader = DataLoader(
@@ -1234,7 +1279,8 @@ def main():
             num_workers=suggested_workers,
             pin_memory=True,
             persistent_workers=True,
-            prefetch_factor=4
+            prefetch_factor=4,
+            worker_init_fn=worker_init_fn
         )
     else:
         test_dataloader = None
@@ -1304,7 +1350,8 @@ def main():
         timestamp=timestamp,
         augment_enabled=args.augment,
         augment_every=args.augment_every,
-        peak_top_fraction=CONFIG['peak_top_fraction']
+        peak_top_fraction=CONFIG['peak_top_fraction'],
+        seed=args.seed
     )
     
     print("\nGenerating training curves...")

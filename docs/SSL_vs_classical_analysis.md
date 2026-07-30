@@ -615,6 +615,52 @@ Factorial main effects (each averaged over both levels of the other factor):
 
 **Do not pursue block masking further.** Resolve §5f before running any new arm.
 
+#### Follow-up now in progress: seeding + a matched-reference peak arm
+
+Two gaps this result exposed, both closed in code:
+
+1. **§5f could not be diagnosed because nothing was seeded.** `trainer_revised.py` now has
+   `--seed`: fixes python `random`, numpy, and torch (CPU + all CUDA devices) before any
+   dataset or model is built, and additionally reseeds each DataLoader worker process (the
+   default `worker_init_fn` only reseeds torch's own RNG per worker, not the `random`/numpy
+   calls `NMRSpectrumDataset.create_mask` makes — without this fix, forked workers would
+   silently draw identical mask sequences). Verified two `--seed 123` runs produce a
+   bit-identical `model_state_dict` after 3 epochs on CPU, a `--seed 7` run diverges from
+   both, and the no-`--seed` default is untouched (prints "Unseeded run" and behaves exactly
+   as every prior command did). Omitting `--seed` reproduces old behaviour because old
+   behaviour was itself unseeded — there is no "legacy value" to default to.
+2. **Arm B (+0.011) was read against arm D, which is v4-pretrained**, but the only matched,
+   apples-to-apples reference for a peak-weighted run is the **v3** checkpoint every earlier
+   number in this document was measured against (patch 1024, d128, L3, nhead4 — identical
+   geometry). Training a peak-weighted arm on v3 and comparing it to the *v3* baseline
+   (0.888 held-out) removes the corpus-version confound entirely, at the cost of not being
+   part of the v4 factorial.
+
+Three runs to make both fixes actionable:
+
+```bash
+V4=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy
+V3=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy
+
+# (1) Two seeded replicates of arm D, to separate "v4 corpus is worse" from
+# "run-to-run variance is ~0.07". Same seed on both -> if GPU nondeterminism
+# (cuDNN autotune, AMP) still lets them diverge, that itself is informative.
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 101
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V4 --seed 202
+
+# (2) Peak-weighted arm on the v3 corpus, matched to the v3 reference checkpoint
+# (..._v3_20260725_085527_..._best.pth) rather than to v4 arm D.
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --data-path $V3 \
+  --peak-top-fraction 0.25 --seed 101
+```
+
+Read the result by adding these three checkpoints to `ARMS` in
+`code/analysis/compare_patch_sizes.py` and re-running the probe. Two v4 replicates close
+together (say within 0.02 of each other) would mean the −0.069 in §5f is real and about the
+corpus; if they instead spread across most of that 0.069, the whole document's single-run
+comparisons need error bars before any of them can be trusted. The v3 peak arm's result
+should replace, not supplement, arm B's reading of +0.011.
+
 <details><summary>Original design notes (kept for the record)</summary>
 This is now the top-ranked experiment, because §5b identified the *reason* the previous
 attempt failed and this attacks it directly. Two orthogonal changes, run as a 2×2
