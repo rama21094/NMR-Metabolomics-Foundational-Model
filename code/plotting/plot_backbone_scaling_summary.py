@@ -34,8 +34,9 @@ axl.axhline(0.881,color="#0b0b0b",linestyle="--",linewidth=1.5,zorder=5,label="c
 axl.set_xticks(np.arange(len(ARMS))); axl.set_xticklabels([l for _,l in ARMS],fontsize=8)
 axl.set_ylabel("mean balanced accuracy\n(held-out 3: Barth, MTBLS326, cancer)")
 axl.set_ylim(0.6,0.95)
-axl.set_title("No new backbone beats the original small one",fontsize=11,loc="left")
-axl.legend(frameon=False,fontsize=8,loc="lower left",ncol=1)
+axl.set_title("No new backbone beats the original small one",fontsize=11,loc="left",pad=20)
+# Above the axes: bars run to the axis floor, so an in-axes legend covers them.
+axl.legend(frameon=False,fontsize=7.4,loc="lower left",bbox_to_anchor=(0,1.0),ncol=3,columnspacing=1.0,handletextpad=0.45)
 axl.text(0.0,-0.28,"Four new pretraining runs — patch 128, 256, 2048, and a 2.7x-capacity model — all fail to beat\n"
  "patch 1024 at 1.89M params. Patch size and capacity are both exhausted as axes of improvement.\n"
  "ps2048 carries 2.9x the baseline's parameters and still loses, so this is not a capacity limit.",

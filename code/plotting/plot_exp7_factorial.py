@@ -61,8 +61,11 @@ axl.set_xticks(np.arange(len(DS)))
 axl.set_xticklabels([LBL[d] for d in DS], fontsize=8.5)
 axl.set_ylabel("Balanced accuracy (frozen linear probe, flatten)")
 axl.set_ylim(0.42, 1.08)
-axl.set_title("No arm reaches classical LogReg", fontsize=11, loc="left")
-axl.legend(frameon=False, fontsize=8, loc="lower left", ncol=2)
+axl.set_title("No arm reaches classical LogReg", fontsize=11, loc="left", pad=20)
+# Legend above the axes: bars always run to the axis floor, so any in-axes
+# placement sits on top of them and the values behind it become unreadable.
+axl.legend(frameon=False, fontsize=7.6, loc="lower left", bbox_to_anchor=(0, 1.0),
+           ncol=5, columnspacing=1.0, handletextpad=0.45)
 axl.grid(axis="y", alpha=0.25, zorder=0)
 
 # ---------------- MIDDLE: main effects ----------------

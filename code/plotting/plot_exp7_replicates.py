@@ -76,8 +76,10 @@ axm.axvspan(2.5, 4.5, color="#f2f2f2", zorder=0)
 axm.set_xticks(range(5)); axm.set_xticklabels([LBL[d] for d in ALL5], fontsize=8.3)
 axm.set_ylim(0.50, 1.10)
 axm.set_ylabel("Balanced accuracy")
-axm.set_title("Peak weighting, matched corpus:\nit LOSES (−0.039 held-out)", fontsize=10.5, loc="left")
-axm.legend(frameon=False, fontsize=7.6, loc="lower left", ncol=2)
+axm.set_title("Peak weighting, matched corpus:\nit LOSES (−0.039 held-out)", fontsize=10.5, loc="left", pad=18)
+# Above the axes -- bars run to the axis floor, so an in-axes legend covers them.
+axm.legend(frameon=False, fontsize=7.4, loc="lower left", bbox_to_anchor=(0, 1.0),
+           ncol=4, columnspacing=0.9, handletextpad=0.4)
 axm.grid(axis="y", alpha=.25)
 
 # ---------------- RIGHT: recalibration ----------------

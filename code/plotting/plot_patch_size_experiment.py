@@ -34,8 +34,9 @@ for i,(arm,lab,col) in enumerate(ARMS):
 axl.set_xticks(np.arange(len(DS))); axl.set_xticklabels([LBL[d] for d in DS],fontsize=8.5)
 axl.set_ylabel("Balanced accuracy (frozen linear probe)")
 axl.set_ylim(0.4,1.06)
-axl.set_title("Smaller patches HURT — hypothesis refuted",fontsize=11,loc="left")
-axl.legend(frameon=False,fontsize=8,loc="lower left")
+axl.set_title("Smaller patches HURT — hypothesis refuted",fontsize=11,loc="left",pad=20)
+# Above the axes: bars run to the axis floor, so an in-axes legend covers them.
+axl.legend(frameon=False,fontsize=7.6,loc="lower left",bbox_to_anchor=(0,1.0),ncol=3,columnspacing=1.0,handletextpad=0.45)
 axl.text(0.0,-0.235,"Mean Δ vs patch 1024: patch 256 −0.072, patch 128 −0.077 (0 of 5 wins).\n"
   "Reconstruction loss FELL as patches shrank (9.3e-5 → 5.6e-5 → 4.4e-5): a masked 128-point\n"
   "patch is interpolable from its neighbours, so the pretext task got easier, not more informative.\n"
@@ -59,8 +60,8 @@ for j,d in enumerate(DS):
              zorder=5,label="classical LogReg" if j==0 else None)
 axr.set_xticks(np.arange(len(DS))); axr.set_xticklabels([LBL[d] for d in DS],fontsize=8.5)
 axr.set_ylim(0.4,1.06)
-axr.set_title("The real win: position-preserving pooling",fontsize=11,loc="left")
-axr.legend(frameon=False,fontsize=8,loc="lower left")
+axr.set_title("The real win: position-preserving pooling",fontsize=11,loc="left",pad=20)
+axr.legend(frameon=False,fontsize=7.6,loc="lower left",bbox_to_anchor=(0,1.0),ncol=3,columnspacing=1.0,handletextpad=0.45)
 axr.text(0.0,-0.235,"Flatten beats mean-pool on all 5 targets (+0.030 to +0.129). Combined with the LogReg head this\n"
   "gains +0.078 mean over the originally reported DNN-head numbers, and flips Barth to an SSL win\n"
   "(0.806 vs classical 0.705) while tying MTBLS326 at 1.000. Dashed line = classical LogReg baseline.",
