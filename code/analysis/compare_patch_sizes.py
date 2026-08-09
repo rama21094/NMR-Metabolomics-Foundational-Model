@@ -123,7 +123,11 @@ def load_backbone(ckpt_path, spectrum_length, device, nhead_override=None):
     # Checkpoints written before that stamp existed simply lack the key, so
     # "missing" means UNKNOWN (warn), while an explicit False means UNFINISHED.
     if ck.get("finished") is False:
-        raise SystemExit(f"refusing to score an unfinished checkpoint: {ckpt_path}")
+        raise SystemExit(
+            f"refusing to score an UNFINISHED checkpoint (run was killed or is still "
+            f"training): {ckpt_path}\n"
+            f"  It was saved at epoch {ck.get('epoch')} and the run never reached its "
+            f"post-training stamp. Re-run that arm to completion before scoring it.")
     if "finished" not in ck:
         print(f"    NOTE: {Path(ckpt_path).name} predates the finished flag — "
               f"confirm 'Training completed after' in its log before trusting this row.",

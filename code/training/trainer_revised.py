@@ -10,7 +10,7 @@ from tqdm import tqdm
 import math
 import os
 import datetime
-import os
+import gc
 import sys
 
 # Global dataset split fractions (modifiable)
@@ -49,7 +49,12 @@ class NMRSpectrumDataset(Dataset):
         self.normalize_input = bool(normalize_input)
         if self.normalize_input:
             spectra = self._normalize_numpy(spectra)
-        self.spectra = torch.FloatTensor(spectra)
+        # from_numpy SHARES the float32 buffer instead of copying it. The model
+        # has always seen float32 here (torch.FloatTensor cast on the way in),
+        # so producing float32 upstream and sharing it is bit-identical -- both
+        # paths round the same float64 quotient to nearest float32 -- while
+        # avoiding a second full-corpus allocation.
+        self.spectra = torch.from_numpy(np.ascontiguousarray(spectra, dtype=np.float32))
         if not 0.0 < mask_ratio_min <= mask_ratio_max < 1.0:
             raise ValueError(
                 f"mask_ratio_min/max must satisfy 0 < min <= max < 1, got "
@@ -94,8 +99,14 @@ class NMRSpectrumDataset(Dataset):
             print("Data augmentation disabled")
     
     def _normalize_numpy(self, spectra):
-        """Normalize each spectrum to [0, 1] range"""
-        normalized = np.zeros_like(spectra)
+        """Normalize each spectrum to [0, 1] range.
+
+        Writes float32 directly. The arithmetic still happens in the input's
+        dtype (float64) and is rounded to float32 on store -- exactly what the
+        old float64-array-then-torch.FloatTensor path did -- so results are
+        bit-identical, at half the memory.
+        """
+        normalized = np.zeros(spectra.shape, dtype=np.float32)
         for i in range(len(spectra)):
             spectrum = spectra[i]
             min_val = spectrum.min()
@@ -790,6 +801,12 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                 best_model_name = f"{model_name_prefix}_bs{batch_size}_mr{mask_ratio_min:.2f}-{mask_ratio_max:.2f}_ps{patch_size}{arm_tag}_best.pth"
 
                 torch.save({
+                    # False until the training loop exits cleanly and the
+                    # post-loop stamp flips it. A run killed mid-training (OOM,
+                    # node reboot) therefore leaves an explicit False, which
+                    # evaluators refuse -- distinct from a legacy checkpoint,
+                    # which simply lacks the key. See docs §7b.
+                    'finished': False,
                     'epoch': epoch,
                     'model_state_dict': model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
@@ -1129,6 +1146,13 @@ def main():
             spectra = spectra_list[0]
         else:
             spectra = np.concatenate(spectra_list, axis=0)
+        # The corpus is float64 and ~10 GB; every surviving reference to an
+        # intermediate copy costs that again. Four concurrent trainings OOM-killed
+        # this host on 2026-08-09 holding ~37 GB each, so intermediates are now
+        # released as soon as they are dead. None of these dels changes a value.
+        spectra_list.clear()
+        del spectra_list
+        gc.collect()
         print(f"Loaded combined spectra shape: {spectra.shape}")
         
         print("Validating data...")
@@ -1147,7 +1171,11 @@ def main():
             spectra = spectra[~zero_std_mask]
         
         original_size = len(spectra)
+        # np.unique sorts and materialises a second full copy; release the input.
+        _pre_unique = spectra
         spectra = np.unique(spectra, axis=0)
+        del _pre_unique
+        gc.collect()
         print(f"Removed {original_size - len(spectra)} duplicate spectra")
         
         print(f"Final clean spectra shape: {spectra.shape}")
@@ -1194,14 +1222,23 @@ def main():
         )
     else:
         train_spectra = train_val_spectra
-        val_spectra = np.empty((0, spectra.shape[1]))
+        val_spectra = np.empty((0, train_val_spectra.shape[1]))
+
+    # train_val_spectra is now dead weight (another full-corpus float64 copy),
+    # as is the parent `spectra` once the splits exist. Releasing them here is
+    # what makes several concurrent trainings fit in RAM. Numerically inert.
+    n_points_for_empty = spectra.shape[1]
+    if VAL > 0:
+        del train_val_spectra
+    del spectra
+    gc.collect()
 
     print(f"Training set: {train_spectra.shape}")
     print(f"Validation set: {val_spectra.shape}")
     print(f"Test set: {test_spectra.shape}")
     
     # UPDATED PARAMETERS - Optimized for small dataset and peak learning
-    spectrum_length = spectra.shape[1]
+    spectrum_length = n_points_for_empty
     patch_size = CONFIG['patch_size']      # Even smaller patches for finer granularity
     mask_ratio_min = CONFIG['mask_ratio_min']
     mask_ratio_max = CONFIG['mask_ratio_max']
