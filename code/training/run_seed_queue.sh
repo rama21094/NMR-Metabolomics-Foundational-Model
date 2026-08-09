@@ -28,15 +28,41 @@ V4=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_row
 # covers the 26 other users on this shared host.
 MIN_FREE_GB=45
 
+# Hard cap on concurrent trainings. The RAM gate alone is NOT sufficient: it
+# checks availability at launch, but each admitted job then settles at ~28 GB
+# (memory-fixed) to ~37 GB (pre-fix) resident. On 2026-08-09 the gate correctly
+# saw 45 GB free and admitted a 4th job, after which the host sat at 172/188 GB
+# with swap fully exhausted -- the same state that had already OOM-killed two
+# runs earlier that day. Steady-state totals, not launch-time headroom, are what
+# bound concurrency here, so cap it explicitly.
+MAX_CONCURRENT=3
+
 # tag : gpu : seed : corpus
 QUEUE=(
   "v3_seed404:1:404:$V3"
   "v4_seed303:2:303:$V4"
-  "v4_seed404:1:404:$V4"
+  "v4_seed404:1:404:$V4"   # killed once at 43 epochs to relieve memory pressure
 )
 
 free_gb() { free -g | awk 'NR==2{print $7}'; }   # "available", not "free":
                                                  # excludes reclaimable cache
+
+# Count only parent training processes. Two things must be excluded:
+#   - forked DataLoader workers (16 per job), which would inflate the count ~17x
+#     -> skip any process whose parent is itself a trainer
+#   - pgrep -f SELF-MATCHES: any shell whose command line happens to contain the
+#     pattern (including the one running this check) is returned by pgrep
+#     -> require the executable itself to be python, which excludes bash
+running_trainings() {
+  local n=0 p ppid comm
+  for p in $(pgrep -f "trainer_revised.py --device" 2>/dev/null); do
+    comm=$(ps -o comm= -p "$p" 2>/dev/null)
+    case "$comm" in python*) ;; *) continue ;; esac
+    ppid=$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ')
+    ps -p "$ppid" -o cmd= 2>/dev/null | grep -q trainer_revised || n=$((n+1))
+  done
+  echo "$n"
+}
 
 for entry in "${QUEUE[@]}"; do
   IFS=: read -r tag gpu seed corpus <<< "$entry"
@@ -47,9 +73,35 @@ for entry in "${QUEUE[@]}"; do
     continue
   fi
 
-  # Wait for RAM headroom.
-  while [ "$(free_gb)" -lt "$MIN_FREE_GB" ]; do
-    echo "[queue] $tag waiting for RAM: $(free_gb)Gi available, need ${MIN_FREE_GB}Gi"
+  # Skip anything already in flight. Without this, restarting the queue after an
+  # interruption relaunches a DUPLICATE of every run still training (their logs
+  # have no "Training completed after" yet), doubling memory use -- exactly what
+  # this launcher exists to prevent. Match the exact seed AND corpus, requiring
+  # the executable to be python so a shell whose command line contains the
+  # pattern cannot self-match.
+  already_running=0
+  for rp in $(pgrep -f "trainer_revised.py --device" 2>/dev/null); do
+    rcomm=$(ps -o comm= -p "$rp" 2>/dev/null)
+    case "$rcomm" in python*) ;; *) continue ;; esac
+    rcmd=$(ps -o cmd= -p "$rp" 2>/dev/null)
+    case "$rcmd" in *"--seed $seed "*"$corpus"*) already_running=1 ;; esac
+  done
+  if [ "$already_running" -eq 1 ]; then
+    echo "[queue] $tag already running -- skipping"
+    continue
+  fi
+
+  # Wait for BOTH a free concurrency slot and RAM headroom.
+  while :; do
+    running=$(running_trainings)
+    avail=$(free_gb)
+    if [ "$running" -ge "$MAX_CONCURRENT" ]; then
+      echo "[queue] $tag waiting for a slot: $running/$MAX_CONCURRENT trainings running"
+    elif [ "$avail" -lt "$MIN_FREE_GB" ]; then
+      echo "[queue] $tag waiting for RAM: ${avail}Gi available, need ${MIN_FREE_GB}Gi"
+    else
+      break
+    fi
     sleep 120
   done
 
