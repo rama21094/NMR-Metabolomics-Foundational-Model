@@ -191,10 +191,15 @@ def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, s
 def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42,
                  pooling="native", nhead=None):
     # jigsaw pools natively as concat-of-per-bin-size-mean-pools (768-d). The
-    # alternative poolings are only evidenced for masking (experiment #4), and a
-    # flatten here would be ~184k features, so "native" is the only mode.
-    if pooling not in ("native", "mean_pool"):
-        raise ValueError(f"jigsaw supports pooling='native' only, got {pooling!r}")
+    # per-bin-size token sequence `e` is available before that mean, so the same
+    # frozen pool_tokens() transform that helped masking (experiment #4) applies
+    # per bin size, then concatenates across bin sizes exactly as native does.
+    # "native"/"mean_pool" are synonyms (G=1 per bin size); "flatten" concats
+    # every token (large -- e.g. 4 bin sizes x ~few hundred tokens x d_model);
+    # "regional:G" applies G groups within EACH bin size's tokens.
+    if pooling not in ("native", "mean_pool", "flatten") and not pooling.startswith("regional:"):
+        raise ValueError(f"unknown jigsaw pooling {pooling!r}")
+    pool_mode = "mean_pool" if pooling in ("native", "mean_pool") else pooling
     from train_jigsaw_spectra import JigsawNMRModel
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
@@ -223,7 +228,7 @@ def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, se
                 pos = torch.arange(e.shape[1], device=e.device)
                 e = e + model.slot_embedding(pos).unsqueeze(0)
                 e = model.transformer(e)
-                per_bin.append(e.mean(dim=1))
+                per_bin.append(pool_tokens(e, pool_mode))
             out.append(torch.cat(per_bin, dim=1).cpu().numpy())
     del model
     return np.vstack(out).astype(np.float32)
@@ -231,10 +236,15 @@ def embed_jigsaw(ckpt_path, spectra, device, batch_size=4, random_init=False, se
 
 def embed_joint(ckpt_path, spectra, device, batch_size=4, random_init=False, seed=42,
                 pooling="native", nhead=None):
-    # joint pools natively via encode_spectrum (960-d); see embed_jigsaw note.
-    if pooling not in ("native", "mean_pool"):
-        raise ValueError(f"joint supports pooling='native' only, got {pooling!r}")
-    from train_joint_ssl import build_joint_model_from_loaded_checkpoint
+    # joint's native path is model.encode_spectrum: per bin size (jigsaw task)
+    # plus the masked-reconstruction task at mask_bin_size, each mean-pooled
+    # and concatenated (960-d). Reimplemented here (rather than calling
+    # encode_spectrum) so pool_tokens() can be applied to encode_bins()'s
+    # per-token output before the pool, same pattern as embed_jigsaw.
+    if pooling not in ("native", "mean_pool", "flatten") and not pooling.startswith("regional:"):
+        raise ValueError(f"unknown joint pooling {pooling!r}")
+    pool_mode = "mean_pool" if pooling in ("native", "mean_pool") else pooling
+    from train_joint_ssl import build_joint_model_from_loaded_checkpoint, TASK_JIGSAW, TASK_MASKED
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     _maybe_seed(random_init, seed)
@@ -247,11 +257,25 @@ def embed_joint(ckpt_path, spectra, device, batch_size=4, random_init=False, see
         _reinit_all_parameters_(model, seed)
     model.eval()
     bin_sizes = [int(b) for b in ck.get("jigsaw_bin_sizes", model.jigsaw_bin_sizes)]
+    spectrum_length = model.spectrum_length
+    mask_bin_size = model.mask_bin_size
     out = []
     with torch.no_grad():
         for s in range(0, len(spectra), batch_size):
             x = torch.from_numpy(np.asarray(spectra[s:s + batch_size], dtype=np.float32)).to(device)
-            out.append(model.encode_spectrum(x, bin_sizes, include_masked_task=True).cpu().numpy())
+            x = x[:, :spectrum_length]
+            per_task = []
+            for bin_size in bin_sizes:
+                trimmed = (spectrum_length // bin_size) * bin_size
+                bins = x[:, :trimmed].reshape(x.shape[0], trimmed // bin_size, bin_size)
+                encoded = model.encode_bins(bins, bin_size, TASK_JIGSAW, None)
+                per_task.append(pool_tokens(encoded, pool_mode))
+            trimmed = (spectrum_length // mask_bin_size) * mask_bin_size
+            bins = x[:, :trimmed].reshape(x.shape[0], trimmed // mask_bin_size, mask_bin_size)
+            no_mask = torch.zeros(bins.shape[0], bins.shape[1], dtype=torch.bool, device=x.device)
+            encoded = model.encode_bins(bins, mask_bin_size, TASK_MASKED, no_mask)
+            per_task.append(pool_tokens(encoded, pool_mode))
+            out.append(torch.cat(per_task, dim=1).cpu().numpy())
     del model
     return np.vstack(out).astype(np.float32)
 

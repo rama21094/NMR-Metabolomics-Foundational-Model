@@ -36,6 +36,25 @@ This script builds the corpora needed to settle it by ablation:
                          smaller. Cheap insurance -- run it on a second GPU
                          concurrently, so it costs no extra wall-clock.
 
+RESULT of that ablation (docs §8): common9506 and the control landed within
+0.001 of each other on the held-out mean (0.837 vs 0.836) -- INDISTINGUISHABLE.
+Row content is refuted as the explanation. Both sit near v4 (0.820) and below
+v3 (0.888), suggestively pointing at corpus SIZE (9506 vs 9670, a 1.7% cut) --
+but that is unconfirmed on n=1 per arm, and a 1.7% cut producing a ~0.05 swing
+would be disproportionate next to every capacity experiment in this project
+(up to 2.9x more params moved accuracy <=0.02). Hence:
+
+  --mode size-sweep      v3 with `--frac` of ALL rows dropped uniformly at
+                         random (not restricted to the 164 differing rows --
+                         this tests size in general, decoupled from content).
+                         Sweep --frac over {0.01, 0.05, 0.10, ...} to see
+                         whether held-out accuracy degrades smoothly with
+                         corpus size. If it does, size is confirmed as (part
+                         of) the story; if 5-10% cuts don't reproduce anything
+                         near the 0.05 swing already seen at 1.7%, the original
+                         common9506/control runs were likely an unlucky n=1
+                         draw rather than a real size effect.
+
 Output dtype and normalisation are preserved exactly (float64, already row
 min-max normalised), because the comparison arms were trained that way and a
 dtype change would be a second uncontrolled difference.
@@ -74,39 +93,69 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--v3", default=DEFAULT_V3)
     ap.add_argument("--v4", default=DEFAULT_V4)
-    ap.add_argument("--mode", choices=["common", "random-control"], default="common")
+    ap.add_argument("--mode", choices=["common", "random-control", "size-sweep"], default="common")
+    ap.add_argument("--frac", type=float, default=None,
+                    help="--mode size-sweep only: fraction of ALL v3 rows to drop uniformly "
+                         "at random (e.g. 0.05 for 5%%), decoupled from the 164 differing rows.")
     ap.add_argument("--out", default=None, help="Output .npy. Default is derived from --mode.")
-    ap.add_argument("--seed", type=int, default=7, help="Seed for --mode random-control.")
+    ap.add_argument("--seed", type=int, default=7,
+                    help="Seed for --mode random-control / size-sweep.")
     ap.add_argument("--tol", type=float, default=1e-6,
                     help="Two rows count as identical if max|dv| <= tol.")
     ap.add_argument("--chunk", type=int, default=250,
                     help="Rows per I/O chunk. 250 keeps peak RAM near 0.5 GB.")
     ap.add_argument("--index-dir", default="results/analysis/corpus_v3_v4_diff")
+    ap.add_argument("--recompute-diff", action="store_true",
+                    help="Rescan v3 vs v4 for differing rows even if a cached "
+                         "differing_rows.csv already exists in --index-dir.")
     ap.add_argument("--dry-run", action="store_true",
                     help="Report what would be written, then stop before writing the .npy.")
     args = ap.parse_args()
 
+    if args.mode == "size-sweep" and args.frac is None:
+        raise SystemExit("--mode size-sweep requires --frac")
+
     v3 = np.load(args.v3, mmap_mode="r")
-    v4 = np.load(args.v4, mmap_mode="r")
-    if v3.shape != v4.shape:
-        raise SystemExit(f"shape mismatch: v3 {v3.shape} vs v4 {v4.shape} — not comparable")
     n, length = v3.shape
-    print(f"v3: {args.v3}\nv4: {args.v4}\nshape {v3.shape}  dtype {v3.dtype}\n")
-
-    print("Scanning for differing rows ...", flush=True)
-    diff_idx, diff_mag = find_differing_rows(v3, v4, args.tol, args.chunk)
-    n_diff = len(diff_idx)
-    print(f"  rows differing: {n_diff}/{n} ({100 * n_diff / n:.2f}%)")
-    if n_diff:
-        print(f"  max|dv| among them: median {np.median(diff_mag):.4f}  max {diff_mag.max():.4f}")
-
     index_dir = Path(args.index_dir)
     index_dir.mkdir(parents=True, exist_ok=True)
-    np.savetxt(index_dir / "differing_rows.csv", diff_idx, fmt="%d",
-               header="row_index", comments="")
+    cache = index_dir / "differing_rows.csv"
+
+    if args.mode == "size-sweep":
+        # Pure size question, decoupled from the 164 differing rows -- no need
+        # to load v4 or scan for the diff at all.
+        v4 = None
+        print(f"v3: {args.v3}\nshape {v3.shape}  dtype {v3.dtype}\n")
+        diff_idx = np.array([], dtype=np.int64)
+        n_diff = 0
+    else:
+        v4 = np.load(args.v4, mmap_mode="r")
+        if v3.shape != v4.shape:
+            raise SystemExit(f"shape mismatch: v3 {v3.shape} vs v4 {v4.shape} — not comparable")
+        print(f"v3: {args.v3}\nv4: {args.v4}\nshape {v3.shape}  dtype {v3.dtype}\n")
+
+        if cache.exists() and not args.recompute_diff:
+            diff_idx = np.loadtxt(cache, skiprows=1, dtype=np.int64).reshape(-1)
+            print(f"Using cached differing-row list: {cache} ({len(diff_idx)} rows). "
+                  f"Pass --recompute-diff to rescan.")
+        else:
+            print("Scanning for differing rows ...", flush=True)
+            diff_idx, diff_mag = find_differing_rows(v3, v4, args.tol, args.chunk)
+            if len(diff_idx):
+                print(f"  max|dv| among them: median {np.median(diff_mag):.4f}  max {diff_mag.max():.4f}")
+            np.savetxt(cache, diff_idx, fmt="%d", header="row_index", comments="")
+        n_diff = len(diff_idx)
+        print(f"  rows differing: {n_diff}/{n} ({100 * n_diff / n:.2f}%)")
 
     # Choose which rows to drop, and from which source corpus.
-    if args.mode == "common":
+    if args.mode == "size-sweep":
+        source, source_name = v3, "v3"
+        rng = np.random.default_rng(args.seed)
+        n_drop = int(round(args.frac * n))
+        drop = np.sort(rng.choice(n, size=n_drop, replace=False))
+        default_out = (f"data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_"
+                       f"Suppressed_rowMinMax_v3drop{round(args.frac * 100)}pct_seed{args.seed}.npy")
+    elif args.mode == "common":
         source, source_name = v3, "v3"
         drop = diff_idx
         # The kept rows are identical in both by construction, so either corpus
@@ -162,12 +211,13 @@ def main():
     meta = {
         "mode": args.mode,
         "source_corpus": source_name,
-        "v3": args.v3, "v4": args.v4,
+        "v3": args.v3, "v4": args.v4 if args.mode != "size-sweep" else None,
+        "frac": args.frac if args.mode == "size-sweep" else None,
         "n_total": int(n), "n_kept": int(len(keep)), "n_dropped": int(len(drop)),
         "n_differing_rows": int(n_diff),
         "dropped_row_indices": drop.tolist(),
         "tol": args.tol,
-        "seed": args.seed if args.mode == "random-control" else None,
+        "seed": args.seed if args.mode in ("random-control", "size-sweep") else None,
         "dtype": str(source.dtype),
         "output": str(out_path),
         "sha256_first_mb": hashlib.sha256(
