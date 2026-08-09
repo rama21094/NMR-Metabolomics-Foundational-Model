@@ -86,6 +86,17 @@ ARMS = [
     # nondeterminism from seed choice, so keep BOTH.
     ("exp7_v3_pk025_r1", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260730_053708_bs32_mr0.20-0.60_ps1024_pk0.25_seed101_best.pth", None),
     ("exp7_v3_pk025_r2", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260730_054128_bs32_mr0.20-0.60_ps1024_pk0.25_seed101_best.pth", None),
+    # EXPERIMENT #8 (docs corpus-subset ablation). Only 164/9670 corpus rows
+    # (1.7%) differ between v3 and v4, but each differs almost entirely because
+    # rows are min-max normalized -- changing a row's max rescales the whole
+    # row. Two arms isolate whether those 164 rows explain the 0.069 v3-vs-v4
+    # gap: `common` trains on the 9,506 rows identical in both corpora (verified
+    # max|dv|=0 across v3/v4 by build_corpus_subset.py); `v3rand_control` trains
+    # on v3 with 164 DIFFERENT (unchanged) rows dropped at random, matching
+    # `common`'s size exactly while keeping all 164 special rows, so it isolates
+    # corpus SIZE from corpus CONTENT as the explanation.
+    ("exp8_common9506", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_common9506_20260809_030216_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    ("exp8_v3rand9506_control", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3rand9506_seed7_20260809_030400_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
 ]
 
 

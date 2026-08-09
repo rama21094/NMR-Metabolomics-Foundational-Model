@@ -1,11 +1,16 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-07-29. Experiments **#1–#5 done, plus the ps2048 and capacity
-arms (§5d)**; #6, #7, #8 queued. **The backbone axis is exhausted** — five pretrained
-backbones, none beats the original 1.89M patch-1024 model. Remaining leverage is in the
-objective and the head, not scale.
+**Status:** updated 2026-08-09. Experiments **#1–#5, #7, #7b, #8 done**; #6, #9–#13 queued.
 Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is the
-correction of record. It also found the actual win (pooling).
+correction of record. It also found the actual win (pooling), which remains the only
+robust positive result in this document (§5c is a paired within-checkpoint comparison,
+unaffected by everything below). §5d's "backbone axis is exhausted" claim is **withdrawn**
+(§7b) — it compared v4 arms against a v3 reference. §7/§7b found both a new objective
+change (block masking, peak weighting) fails and, more importantly, that the pretraining
+**corpus version** (v3 vs v4) is worth 0.069 held-out — the largest effect in the document —
+with a measured noise floor of 0.020 (mean) / 0.035 (per-target) below which nothing here
+should be read as an effect. §8 tried to localize that 0.069 to the 1.7% of rows that
+differ between corpora and could not — see §8, currently the most important open question.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -702,6 +707,71 @@ that remains the only robust positive result in this document.
 effect.** Either run ≥3 replicates per arm, or restrict claims to paired within-checkpoint
 comparisons like §5c.
 
+### 🟡 #8 — RESULT: the 164 differing rows do not explain the corpus gap — and neither
+### hypothesis is confirmed
+
+§5f/§7b established the v3→v4 corpus swap costs 0.069 held-out, the largest effect in this
+document. A direct diff of the two corpora narrowed the search: only **164 of 9,670 rows
+(1.7%)** differ at all, but each differs almost entirely — 99.998% of its 131,072 points
+change, median max|Δ| = 0.34 — because rows are min-max normalized, so changing a row's
+maximum rescales the whole row. Row indices: `results/analysis/corpus_v3_v4_diff/differing_rows.csv`.
+
+The suspected mechanism (v4 leaves a residual EDTA artefact that compresses those 164
+spectra) was tested first and **refuted**: only 7/164 rows have their row-max inside the
+EDTA window in either version, and v4's rows are slightly *brighter* outside it (99.9th
+pct 0.969 vs 0.917) — less compressed, not more.
+
+**Ablation, built by `code/preprocessing/build_corpus_subset.py`:**
+
+| arm | construction | held-out mean |
+|---|---|---|
+| `common9506` | the 9,506 rows identical in v3 and v4 (164 dropped) — verified `max\|Δ\|=0` against both corpora | 0.837 |
+| `v3rand9506_control` | v3 with 164 **different**, always-unchanged rows dropped at random — same size, keeps all 164 special rows | 0.836 |
+| v3 reference | (unchanged) | 0.888 |
+| v4 (3-replicate mean) | (unchanged) | 0.820 |
+
+**The decisive comparison is common vs control, not common vs {v3, v4}.** If dropping an
+*arbitrary* 164 rows lands in the same place as dropping the *specific* 164 that differ
+between corpora, the content of those rows isn't shown to matter. It doesn't:
+
+| target | common | control | \|Δ\| |
+|---|---|---|---|
+| Barth | 0.691 | 0.713 | 0.022 |
+| MTBLS326 | 0.963 | 0.963 | 0.000 |
+| BrC-T2D cancer | 0.858 | 0.834 | 0.024 |
+| MTBLS563 | 0.591 | 0.618 | 0.028 |
+| BrC-T2D diabetes | 0.751 | 0.751 | 0.000 |
+| held-out mean | 0.837 | 0.836 | **0.001** |
+
+Every per-target gap is inside the 0.035 floor; the held-out-mean gap (0.001) is far inside
+the 0.020 floor. **Row content is refuted as the (sole) explanation.**
+
+Both arms instead sit close to the **v4** mean (Δ 0.018, inside the floor) and clearly
+below **v3** (Δ 0.051, outside it) — which looks like it points at corpus *size* (9,506 vs
+9,670, a 1.7% cut) as the driver. **That reading is not confirmed either.** A 1.7% size cut
+producing a ~0.05 held-out swing would be wildly disproportionate next to every capacity
+result in this document: scaling the backbone by up to 2.9× parameters moved accuracy by
+≤0.02 (§5d, and even that is now known to be within the floor). Treat "it's corpus size"
+as an open hypothesis, not a second established fact — n=1 per arm here, same as every
+number in §7/§7b before replication.
+
+```bash
+python code/preprocessing/build_corpus_subset.py --mode common
+python code/preprocessing/build_corpus_subset.py --mode random-control --seed 7
+V=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --seed 101 --data-path ${V}_common9506.npy
+python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --seed 101 --data-path ${V}_v3rand9506_seed7.npy
+python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp8_corpus_subset
+python code/analysis/summarize_exp8_corpus_subset.py
+python code/plotting/plot_exp8_corpus_subset.py
+```
+
+**Next**: ≥2 more replicates each of `common9506` and the control before either the
+row-content or corpus-size hypothesis is reported as established. If size is confirmed,
+the natural follow-up is a size sweep (drop 1%, 5%, 10% at random from v3) to see whether
+0.05 is really what a 1.7% cut costs, or whether these two single runs simply landed
+unluckily.
+
 <details><summary>Original design notes (kept for the record)</summary>
 This is now the top-ranked experiment, because §5b identified the *reason* the previous
 attempt failed and this attacks it directly. Two orthogonal changes, run as a 2×2
@@ -788,32 +858,41 @@ python code/analysis/summarize_exp7_replicates.py
 python code/plotting/plot_exp7_replicates.py
 ```
 
-### #8 — Hybrid features (CHEAP, worth a shot)
-Concatenate the SSL embedding with binned areas. They are partly complementary — on
-diabetes and Barth the embedding beats same-resolution binning — so the union may exceed
-both.
-
-### ⭐ #9 — Revert the pretraining corpus to v3 (CHEAP, HIGHEST VALUE)
+### ⭐ #9 — Revert the pretraining corpus to v3 (CHEAP, HIGHEST VALUE) — still the right call
 §5f established with three replicates that v3-pretrained backbones transfer **+0.069 better**
 than v4-pretrained ones at identical configuration — the largest and best-supported effect in
-this document, and it points the wrong way relative to the data-cleaning work. The v4 EDTA
-cutoff cap removes less artifact, and apparently that residual artifact was *useful* signal
-for the pretext task (or the harsher v3 suppression acted as a beneficial augmentation).
-Nothing needs training to start: **every v4-pretrained arm should be re-read against v3**, and
-all future pretraining should default to v3 until this is understood. Diagnosing *why* is the
-scientifically interesting part — compare what the two corpora look like in the EDTA window
-and whether v4's residual peaks correlate with the classes.
+this document. §8 tried to localize *why* to the 164 rows that differ and could not: the
+row-content hypothesis is refuted (common ≈ control), and the leading alternative (corpus
+size) is unconfirmed and looks disproportionate for a 1.7% cut. **This does not weaken the
+recommendation** — the +0.069 v3-vs-v4 gap itself is still 3.4× the noise floor and unexplained
+either way. Nothing needs training to start: **every v4-pretrained arm should be re-read
+against v3**, and all future pretraining should default to v3 until the mechanism is
+understood. §8's next step (a size sweep: drop 1%/5%/10% of v3 at random) is now the
+concrete way to make progress on *why*.
 
 ### #10 — Determinism, if any single-run number is ever to be trusted again (CHEAP)
 `--seed` alone is insufficient (§7b). Add an opt-in `--deterministic` that also sets
 `cudnn.benchmark = False`, `torch.use_deterministic_algorithms(True)` and requires
 `CUBLAS_WORKSPACE_CONFIG=:4096:8`. Slower, but it makes an arm's number an actual property of
-the arm. Without it, every future comparison needs ≥3 replicates.
+the arm. Without it, every future comparison needs ≥3 replicates — as §8 now does too.
 
 ### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
 Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
 n=42 is more likely a batch/run-order artifact than real biology. Until this is checked,
 MTBLS326 should not be counted as evidence for anything.
+
+### #12 — Hybrid features (CHEAP, worth a shot)
+Concatenate the SSL embedding with binned areas. They are partly complementary — on
+diabetes and Barth the embedding beats same-resolution binning — so the union may exceed
+both.
+
+### #13 — Corpus-size sweep (CHEAP, follows directly from §8)
+§8 could not distinguish "the 164 rows are special" from "corpus size matters" from "this is
+still just noise." Drop 1%, 5%, 10% of v3 at random (multiple seeds each) and pretrain. If
+held-out accuracy degrades smoothly with size, size is confirmed as at least part of the
+story; if 5–10% cuts don't reproduce anything close to 0.05, the two §8 single runs were
+probably an unlucky draw and ≥2 replicates of `common9506`/`control` should be run before
+concluding anything further.
 
 ---
 
@@ -839,8 +918,11 @@ MTBLS326 should not be counted as evidence for anything.
   `code/plotting/plot_exp7_factorial.py`,
   `code/analysis/summarize_exp7_replicates.py`,
   `code/plotting/plot_exp7_replicates.py`,
-  `code/tests/verify_top_peak_loss.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig13`.
+  `code/tests/verify_top_peak_loss.py`,
+  `code/preprocessing/build_corpus_subset.py`,
+  `code/analysis/summarize_exp8_corpus_subset.py`,
+  `code/plotting/plot_exp8_corpus_subset.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig14`.
 - **Reproducibility caveat (§7b):** GPU runs are not bit-reproducible even with `--seed`, because
   `cudnn.benchmark = True` and AMP vary kernel selection and reduction order between processes.
   Measured noise floor for a held-out-mean claim: **0.020**; for a single-target claim: **≈0.035**.
@@ -848,3 +930,8 @@ MTBLS326 should not be counted as evidence for anything.
 - **Corpus caveat (§5f):** v3-pretrained backbones transfer +0.069 better than v4-pretrained ones
   at identical configuration (3 replicates). Never compare a v3-pretrained checkpoint to a
   v4-pretrained one.
+- **Open question (§8):** that +0.069 does NOT localize to the 164/9670 rows (1.7%) that
+  actually differ between v3 and v4 — a same-size random-row-drop control lands in the same
+  place as dropping those specific rows (all gaps inside the noise floor). Corpus size is the
+  leading remaining hypothesis but is itself unconfirmed and looks disproportionate. Row
+  indices: `results/analysis/corpus_v3_v4_diff/differing_rows.csv`.
