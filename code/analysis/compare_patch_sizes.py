@@ -97,6 +97,17 @@ ARMS = [
     # corpus SIZE from corpus CONTENT as the explanation.
     ("exp8_common9506", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_common9506_20260809_030216_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
     ("exp8_v3rand9506_control", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3rand9506_seed7_20260809_030400_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    # EXPERIMENT #13 (docs corpus-size sweep, follow-up to #8). #8 could not
+    # distinguish "content of the 164 rows matters" (refuted -- common and its
+    # random-drop control landed within 0.001 of each other) from "corpus SIZE
+    # matters" (both sat near v4, suggestively, but on n=1 and disproportionate
+    # to every capacity result in this project). These three arms drop 1%/5%/10%
+    # of ALL v3 rows uniformly at random (decoupled from the 164 differing rows
+    # entirely -- build_corpus_subset.py --mode size-sweep) to see whether
+    # held-out accuracy degrades smoothly with size.
+    ("exp13_v3drop1pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop1pct_seed301_20260809_065059_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    ("exp13_v3drop5pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop5pct_seed301_20260809_065056_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    ("exp13_v3drop10pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop10pct_seed301_20260809_091113_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
 ]
 
 

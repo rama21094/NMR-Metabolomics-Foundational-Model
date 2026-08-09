@@ -1,16 +1,18 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-08-09. Experiments **#1–#5, #7, #7b, #8 done**; #6, #9–#13 queued.
-Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is the
-correction of record. It also found the actual win (pooling), which remains the only
-robust positive result in this document (§5c is a paired within-checkpoint comparison,
-unaffected by everything below). §5d's "backbone axis is exhausted" claim is **withdrawn**
-(§7b) — it compared v4 arms against a v3 reference. §7/§7b found both a new objective
-change (block masking, peak weighting) fails and, more importantly, that the pretraining
-**corpus version** (v3 vs v4) is worth 0.069 held-out — the largest effect in the document —
-with a measured noise floor of 0.020 (mean) / 0.035 (per-target) below which nothing here
-should be read as an effect. §8 tried to localize that 0.069 to the 1.7% of rows that
-differ between corpora and could not — see §8, currently the most important open question.
+**Status:** updated 2026-08-09. Experiments **#1–#5, #7, #7b, #8, #13, #14 done**; #6, #9–#12
+queued. Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
+the correction of record. It also found the actual win (pooling), which remains the only
+robust positive result in this document measured on masking (§5c is a paired
+within-checkpoint comparison, unaffected by everything below) — §14 now shows the same win,
+smaller, on jigsaw/joint. §5d's "backbone axis is exhausted" claim is **withdrawn** (§7b) —
+it compared v4 arms against a v3 reference. §7/§7b found both a new objective change (block
+masking, peak weighting) fails and, more importantly, that the pretraining **corpus
+version** (v3 vs v4) is worth 0.069 held-out — the largest effect in the document — with a
+measured noise floor of 0.020 (mean) / 0.035 (per-target) below which nothing here should be
+read as an effect. §8 and §13 both tried to localize that 0.069 (to row content, then to
+corpus size) and **both failed** — see §13, currently the most important open question:
+a real, well-supported effect with no confirmed mechanism.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -886,13 +888,98 @@ Concatenate the SSL embedding with binned areas. They are partly complementary �
 diabetes and Barth the embedding beats same-resolution binning — so the union may exceed
 both.
 
-### #13 — Corpus-size sweep (CHEAP, follows directly from §8)
-§8 could not distinguish "the 164 rows are special" from "corpus size matters" from "this is
-still just noise." Drop 1%, 5%, 10% of v3 at random (multiple seeds each) and pretrain. If
-held-out accuracy degrades smoothly with size, size is confirmed as at least part of the
-story; if 5–10% cuts don't reproduce anything close to 0.05, the two §8 single runs were
-probably an unlucky draw and ≥2 replicates of `common9506`/`control` should be run before
-concluding anything further.
+### 🟡 #13 — RESULT: corpus size is not supported either; the v3-vs-v4 cause remains open
+
+Three arms — `build_corpus_subset.py --mode size-sweep --frac {0.01, 0.05, 0.10} --seed 301`
+— drop that fraction of **all** v3 rows uniformly at random, decoupled entirely from the 164
+rows that differ from v4. Pretrained identically to every other arm in this line
+(ps1024, nhead4, seed 101). Read through the frozen probe against the existing v3 reference
+(0.888 held-out) and experiment #8's common9506/control pair (mean 0.837 at a 1.7% cut):
+
+| corpus | held-out mean |
+|---|---|
+| v3 (0% dropped) | 0.888 |
+| exp8 common+control mean (1.7% dropped, the 164 rows) | 0.837 |
+| **1% dropped (random)** | **0.814** |
+| **5% dropped (random)** | **0.807** |
+| **10% dropped (random)** | **0.859** |
+
+**Non-monotonic, and in the direction that argues against a size effect.** A genuine size
+effect predicts degradation that is monotone-or-flat as more rows are removed. Instead the
+5%→10% step *recovers* 0.052 — more than double the 0.020 mean floor — rather than getting
+worse. That is the signature of n=1-per-point sampling noise, not a real effect: each point
+here, like every arm in §8, is a single pretraining run.
+
+**Combined with §8 (row content refuted), neither live hypothesis for the v3-vs-v4 gap
+survives.** The +0.069 gap itself (§5f) remains real and well-supported — three replicates,
+3.4× the noise floor — but its *mechanism* is still open. Single-run size/subset ablations
+are not the right tool to find it; each one only adds another n=1 data point to a question
+that needs either many replicates per condition or a different kind of evidence entirely
+(e.g., characterizing what actually changed in the 164 rows beyond "the row maximum moved,"
+or a systematic look at what preprocessing step differs between v3 and v4 outside the EDTA
+window specifically).
+
+```bash
+python code/preprocessing/build_corpus_subset.py --mode size-sweep --frac 0.01 --seed 301
+python code/preprocessing/build_corpus_subset.py --mode size-sweep --frac 0.05 --seed 301
+python code/preprocessing/build_corpus_subset.py --mode size-sweep --frac 0.10 --seed 301
+V=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax
+for f in 1 5 10; do
+  python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --seed 101 \
+    --data-path ${V}_v3drop${f}pct_seed301.npy
+done
+python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp13_size_sweep
+python code/analysis/summarize_exp13_size_sweep.py
+python code/plotting/plot_exp13_size_sweep.py
+```
+
+**Next, if this is worth resolving further**: replicate at least one size point (e.g. 5%,
+multiple seeds) to get an actual noise estimate for a *dropped-corpus* arm rather than
+assuming it matches §7b's floor (measured on the full corpus, not a subset — subset
+training could plausibly be noisier). Absent that, do not spend more single-run ablations on
+this question.
+
+### #14 — RESULT: pooling helps jigsaw/joint too (modest); hybrid features refuted
+
+Both used **existing v3 checkpoints only** — no retraining.
+
+**Pooling.** `pool_tokens()` (§5c's frozen, position-preserving transform) extended to
+jigsaw and joint: each family already exposes per-token encodings before its internal
+mean-pool (jigsaw's per-bin-size transformer output; joint's `encode_bins`), so the same
+transform applies per bin size before concatenating across bin sizes, exactly as native
+pooling does at G=1. Regression-tested first: `pooling="native"` reproduces the committed
+BrC-T2D-cancer numbers exactly (jigsaw 0.7684210526315789, joint 0.7690789473684211) —
+confirms the refactor changed nothing about the existing path.
+
+| family | native (G=1) mean, all 5 targets | best-other-G mean | Δ |
+|---|---|---|---|
+| jigsaw | 0.678 | 0.758 | **+0.079** |
+| joint | 0.673 | 0.721 | **+0.049** |
+
+Same direction as masking's pooling win, smaller magnitude. Like §5c, this is a **paired
+within-checkpoint comparison** — same frozen features, only the pooling transform changes —
+so it does not carry the GPU-training noise from §7b/§13; it is not an n=1 claim in the same
+sense as everything above. `flatten`/`G=64` tend to top the sweep but at 49k–208k features
+against n=37–113, which is a real overfitting risk despite the good CV numbers; a moderate
+G (8–16) is the safer default pending a proper nested-CV pick, matching the reasoning that
+settled masking's default at G=16 over flatten in §5c. Script:
+`code/analysis/sweep_pooling_jigsaw_joint.py`.
+
+**Hybrid features — refuted.** Concatenating each family's best frozen embedding with the
+standard 1024-bin classical feature:
+
+| family | wins vs. max(solo embedding, classical alone) | mean Δ |
+|---|---|---|
+| masking | 0/5 | **−0.043** |
+| jigsaw | 1/5 | **−0.107** |
+| joint | 0/5 | **−0.115** |
+
+Consistently worse, not better, on nearly every target. The two feature sets are not
+complementary enough to outweigh the cost of concatenating 1k–17k extra features on
+n=37–113 samples — the earlier "partly complementary on Barth/diabetes" observation (§4b)
+does not survive contact with the full high-dimensional concatenation. Close this out;
+don't revisit without a dimensionality-reduction step first. Script:
+`code/analysis/hybrid_features.py`.
 
 ---
 
@@ -921,8 +1008,12 @@ concluding anything further.
   `code/tests/verify_top_peak_loss.py`,
   `code/preprocessing/build_corpus_subset.py`,
   `code/analysis/summarize_exp8_corpus_subset.py`,
-  `code/plotting/plot_exp8_corpus_subset.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig14`.
+  `code/plotting/plot_exp8_corpus_subset.py`,
+  `code/analysis/summarize_exp13_size_sweep.py`,
+  `code/plotting/plot_exp13_size_sweep.py`,
+  `code/analysis/sweep_pooling_jigsaw_joint.py`,
+  `code/analysis/hybrid_features.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig15`.
 - **Reproducibility caveat (§7b):** GPU runs are not bit-reproducible even with `--seed`, because
   `cudnn.benchmark = True` and AMP vary kernel selection and reduction order between processes.
   Measured noise floor for a held-out-mean claim: **0.020**; for a single-target claim: **≈0.035**.
@@ -930,8 +1021,14 @@ concluding anything further.
 - **Corpus caveat (§5f):** v3-pretrained backbones transfer +0.069 better than v4-pretrained ones
   at identical configuration (3 replicates). Never compare a v3-pretrained checkpoint to a
   v4-pretrained one.
-- **Open question (§8):** that +0.069 does NOT localize to the 164/9670 rows (1.7%) that
+- **Open question (§8, §13):** that +0.069 does NOT localize to the 164/9670 rows (1.7%) that
   actually differ between v3 and v4 — a same-size random-row-drop control lands in the same
-  place as dropping those specific rows (all gaps inside the noise floor). Corpus size is the
-  leading remaining hypothesis but is itself unconfirmed and looks disproportionate. Row
-  indices: `results/analysis/corpus_v3_v4_diff/differing_rows.csv`.
+  place as dropping those specific rows (§8, all gaps inside the noise floor). Corpus size
+  was the leading remaining hypothesis but is now also unsupported — a 1%/5%/10% size sweep
+  (§13) is non-monotonic in the direction that argues against a size effect (5%→10% recovers
+  accuracy rather than degrading it further). The +0.069 gap is real and well-supported; its
+  mechanism is unknown. Row indices: `results/analysis/corpus_v3_v4_diff/differing_rows.csv`.
+- **Pooling caveat (§14):** the position-preserving pooling win (§5c, masking-only) extends to
+  jigsaw (+0.079 mean) and joint (+0.049 mean), on existing checkpoints with no retraining.
+  Hybrid features (embedding + binned areas) are refuted — worse than the better solo feature
+  on nearly every target for every family.
