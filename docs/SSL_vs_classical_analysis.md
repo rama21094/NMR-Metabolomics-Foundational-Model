@@ -637,18 +637,33 @@ Factorial main effects (each averaged over both levels of the other factor):
 Three follow-up runs, `results/analysis/exp7_replicates/`, summarized by
 `code/analysis/summarize_exp7_replicates.py`, figure `fig13_exp7_replicates.png`.
 
-**(1) `--seed` does not make GPU training reproducible — a correction.** The v3 peak arm was
-launched twice with `--seed 101`, identical flags and corpus, and the two runs did **not**
-match: best epoch 724 vs 776, val loss 2.386e-4 vs 2.190e-4, **max|ΔW| = 5.3e-2**.
-`trainer_revised.py` sets `torch.backends.cudnn.benchmark = True`, which autotunes kernels by
-timing race, and AMP rescales dynamically; kernel choice and float reduction order therefore
-vary between processes no matter what the RNGs do. Seeding removes RNG variance only. The
-CPU verification that was used to sign off on `--seed` passed *because* it was CPU and could
-not speak to this. To get bit-reproducibility one would additionally need
-`cudnn.benchmark = False`, `torch.use_deterministic_algorithms(True)`, and
-`CUBLAS_WORKSPACE_CONFIG=:4096:8` — at a real throughput cost, and it has **not** been done.
-The accidental duplicate is useful though: r1 vs r2 is a **same-seed** pair, so it isolates
-pure implementation nondeterminism.
+**(1) ~~`--seed` does not make GPU training reproducible~~ — ⚠️ THIS CLAIM WAS WRONG, RETRACTED
+2026-08-09.**
+
+> The original claim: the v3 peak arm was launched twice with `--seed 101`, identical flags
+> and corpus, and the two runs appeared not to match — best epoch 724 vs 776, val loss
+> 2.386e-4 vs 2.190e-4, max|ΔW| = 5.3e-2 — which was attributed to `cudnn.benchmark = True`
+> autotuning kernels by timing race plus AMP's dynamic rescaling.
+>
+> **That comparison was made against a checkpoint that was still being written.** `r1` was at
+> epoch 724 *at the time of measurement* and went on to reach epoch 776. Its file mtime
+> (13:29) is later than `r2`'s (09:28) — which should have been checked and was not. With
+> both runs finished, the two checkpoints are **byte-identical**: same epoch (776), same val
+> loss (2.189681e-04), `torch.equal` True on every tensor, **max|ΔW| = 0.000e+00**.
+>
+> **`--seed` does make this training run reproducible.** Consequences:
+> - Queue item #10 (`--deterministic` mode) is **unnecessary**; dropped.
+> - The noise floor in (2) below is **unaffected** — it comes from three v4 runs with
+>   *different* seeds, which are genuine independent draws. But it is now attributable
+>   entirely to **seed/initialization**, not to hardware nondeterminism.
+> - The peak-weighting result in (3) below used the mid-training `r1` value (0.8525). With
+>   the final checkpoint it is 0.8461, moving the matched delta from −0.039 to **−0.042**.
+>   The conclusion (peak weighting loses) is unchanged and slightly strengthened.
+>
+> This is the third time a stale or mid-training checkpoint has produced a wrong number in
+> this project (see also the ps128 correction in §5b). **Guard needed:** write a
+> `finished: true` flag into the checkpoint at end-of-training and have the evaluators refuse
+> to score a checkpoint that lacks it.
 
 **(2) The noise floor.** Three independent v4 baseline runs (unseeded, seed 101, seed 202):
 
@@ -673,16 +688,18 @@ baseline (no corpus confound):
 
 | target | classical | v3 baseline | v3 + top-25% r1 | r2 |
 |---|---|---|---|---|
-| Barth | 0.705 | 0.8059 | 0.7484 | 0.6910 |
+| Barth | 0.705 | 0.8059 | 0.6910 | 0.6910 |
 | MTBLS326 | 1.000 | 1.0000 | 0.9630 | 0.9630 |
-| BrC-T2D cancer | 0.937 | 0.8592 | 0.8461 | 0.8842 |
-| MTBLS563 | 0.721 | 0.6176 | 0.5928 | 0.5949 |
+| BrC-T2D cancer | 0.937 | 0.8592 | 0.8842 | 0.8842 |
+| MTBLS563 | 0.721 | 0.6176 | 0.5949 | 0.5949 |
 | BrC-T2D diabetes | 0.829 | 0.7654 | **0.6237** | **0.6237** |
-| **held-out mean** | 0.8807 | **0.8884** | 0.8525 | 0.8461 |
-| selection mean | 0.7750 | 0.6915 | 0.6082 | 0.6093 |
+| **held-out mean** | 0.8807 | **0.8884** | 0.8461 | 0.8461 |
+| selection mean | 0.7750 | 0.6915 | 0.6093 | 0.6093 |
 
-**−0.039 held-out** (2.0× the floor) and **−0.083 on the selection subset**, driven by a
-−0.142 collapse on BrC-T2D diabetes. Arm B's +0.011 was an artifact of being measured
+**−0.042 held-out** (2.1× the floor) and **−0.082 on the selection subset**, driven by a
+−0.142 collapse on BrC-T2D diabetes. (r1 and r2 are the same seed and, as corrected in (1)
+above, the same final model — the columns are identical; both are shown only because the
+original write-up treated them as a pair.) Arm B's +0.011 was an artifact of being measured
 against a v4 baseline that the corpus had already depressed by 0.069. **Experiment #7 is now
 negative on both factors.**
 
@@ -692,7 +709,7 @@ negative on both factors.**
 |---|---|---|---|
 | §5f v3 vs v4 corpus | +0.069 | 3.4× | **survives** |
 | §5b patch 128 vs 1024 | −0.042 | 2.1× | **survives** |
-| §7b peak weighting (v3, matched) | −0.039 | 2.0× | survives (marginal) |
+| §7b peak weighting (v3, matched) | −0.042 | 2.1× | survives (marginal) |
 | §5b patch 256 vs 1024 | −0.034 | 1.7× | marginal |
 | §7 block masking | −0.030 | 1.5× | marginal |
 | §5d ps2048 vs ps1024 | +0.020 | 1.0× | **within noise** |
@@ -872,11 +889,30 @@ against v3**, and all future pretraining should default to v3 until the mechanis
 understood. §8's next step (a size sweep: drop 1%/5%/10% of v3 at random) is now the
 concrete way to make progress on *why*.
 
-### #10 — Determinism, if any single-run number is ever to be trusted again (CHEAP)
-`--seed` alone is insufficient (§7b). Add an opt-in `--deterministic` that also sets
-`cudnn.benchmark = False`, `torch.use_deterministic_algorithms(True)` and requires
-`CUBLAS_WORKSPACE_CONFIG=:4096:8`. Slower, but it makes an arm's number an actual property of
-the arm. Without it, every future comparison needs ≥3 replicates — as §8 now does too.
+### ~~#10 — Determinism~~ — DROPPED, not needed (2026-08-09)
+This item existed because §7b claimed `--seed` was insufficient on GPU. **That claim was
+wrong** (see the retraction in §7b): two same-seed runs are byte-identical once both finish,
+so `cudnn.benchmark = False` / `use_deterministic_algorithms(True)` / `CUBLAS_WORKSPACE_CONFIG`
+would buy nothing and cost throughput. Replaced by the cheaper, actually-needed fix:
+
+### ⭐ #10b — Stale-checkpoint guard (TRIVIAL, do this before any further evaluation)
+Three wrong numbers in this project have come from scoring a checkpoint whose training run had
+not finished (ps128 in §5b; the r1/r2 pair in §7b). Write `finished: true` into the checkpoint
+at end-of-training and have `compare_patch_sizes.py` / `ssl_linear_probe_eval.py` refuse to
+score a checkpoint that lacks it. Until then, manually confirm "Training completed after" in
+the run's log before scoring.
+
+### ⭐ #15 — Seed replicates: how much does a single run actually mean? (RUNNING)
+The v3 reference (0.888 held-out) that §5f's entire +0.069 corpus effect rests on is **n=1**,
+and it is the **highest of six comparable v3-family arms** (v3 full, ±1%/5%/10% size cuts, and
+the two §8 1.7% arms: sd 0.030, range 0.081, other five mean 0.831 — only +0.011 from v4's
+0.820). So the headline effect may be substantially one lucky draw measured against a
+well-estimated v4 mean. n=5 seeds per corpus (v3 needs 4 more, v4 needs 2 more; ~27 GPU-h)
+resolves it: with per-run sd ≈0.030, se(difference) ≈0.019, enough to see a real 0.069 at
+~3.6σ. Three outcomes: (a) v3 mean drops to ~0.83 and the corpus effect largely dissolves;
+(b) v3 stays ~0.88 and §8/§13's mechanism question genuinely matters; (c) both corpora show
+sd ≈0.03, in which case no single-run comparison in this document was ever interpretable and
+everything needs error bars before publication.
 
 ### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
 Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
@@ -1014,10 +1050,15 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/analysis/sweep_pooling_jigsaw_joint.py`,
   `code/analysis/hybrid_features.py`.
 - Figures: `results/plots/all_datasets_summary_v4/fig1..fig15`.
-- **Reproducibility caveat (§7b):** GPU runs are not bit-reproducible even with `--seed`, because
-  `cudnn.benchmark = True` and AMP vary kernel selection and reduction order between processes.
-  Measured noise floor for a held-out-mean claim: **0.020**; for a single-target claim: **≈0.035**.
-  Two same-seed runs of the same arm differed by max|ΔW| = 5.3e-2.
+- **Reproducibility (§7b, corrected 2026-08-09):** `--seed` DOES make training reproducible —
+  two same-seed runs of the same arm are byte-identical (max|ΔW| = 0.000e+00) once both have
+  finished. The earlier claim to the contrary compared against a mid-training checkpoint and is
+  retracted. Measured noise floor for a held-out-mean claim: **0.020**; for a single-target
+  claim: **≈0.035** — this comes from three *different*-seed runs and is unaffected by the
+  retraction, but is now attributable to seed/initialization rather than hardware nondeterminism.
+- **Stale-checkpoint hazard:** three wrong numbers in this project have come from scoring a
+  checkpoint whose training run had not finished (ps128 in §5b; the r1/r2 pair in §7b). Always
+  confirm "Training completed after" in the run's log before scoring its checkpoint.
 - **Corpus caveat (§5f):** v3-pretrained backbones transfer +0.069 better than v4-pretrained ones
   at identical configuration (3 replicates). Never compare a v3-pretrained checkpoint to a
   v4-pretrained one.

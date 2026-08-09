@@ -660,18 +660,19 @@ body.push(CALLOUT("Experiment #7 is negative on both factors", [
   "The apparent positive was an artifact of the corpus confound. This is why matched references matter more than large effect sizes.",
 ], "bad"));
 
-body.push(H2("7.4 A correction: --seed does not make GPU training reproducible"));
+body.push(H2("7.4 A correction, and then a correction to the correction"));
 
-body.push(P("A --seed flag was added specifically to make these replicates interpretable, and it was signed off on the basis that two seeded runs produced a bit-identical state dictionary. That verification was performed on CPU and could not speak to the GPU path."));
+body.push(P("A --seed flag was added specifically to make these replicates interpretable, and it was signed off on the basis that two seeded runs produced a bit-identical state dictionary — a verification performed on CPU. The v3 peak arm was then launched twice with the same seed, and the two runs appeared not to match, which was written up here as evidence that seeding is insufficient on GPU. That write-up was wrong."));
 
-body.push(P("The v3 peak arm was then launched twice with the same seed, identical flags and identical corpus — and the two runs did not match: best epoch 724 versus 776, validation loss 2.386e-4 versus 2.190e-4, maximum weight difference 5.3e-2. The trainer sets cudnn.benchmark = True, which selects kernels by timing race, and AMP rescales dynamically; kernel choice and floating-point reduction order therefore vary between processes regardless of RNG state. Seeding removes RNG variance only."));
+body.push(P("The apparent mismatch — best epoch 724 versus 776, validation loss 2.386e-4 versus 2.190e-4, maximum weight difference 5.3e-2 — was measured against a checkpoint that was still being written. The first run was at epoch 724 at the moment of measurement and went on to reach epoch 776; its file timestamp (13:29) is later than the second run's (09:28), which should have been checked and was not. With both runs finished, the two checkpoints are byte-identical: same epoch, same validation loss, and a maximum weight difference of exactly zero."));
 
-body.push(P("Bit-reproducibility would additionally require cudnn.benchmark = False, torch.use_deterministic_algorithms(True) and CUBLAS_WORKSPACE_CONFIG=:4096:8, at a real throughput cost. This has not been done. The accidental duplicate was useful, though — being a same-seed pair, it isolates pure implementation nondeterminism from seed choice."));
+body.push(P("So --seed does make this training reproducible, and the planned opt-in --deterministic mode (cudnn.benchmark = False plus deterministic algorithms, at a throughput cost) is unnecessary and has been dropped from the queue. The noise floor established in section 7.2 is unaffected: it comes from three runs with DIFFERENT seeds, which are genuine independent draws — but it is now attributable entirely to seed and initialisation rather than to hardware nondeterminism. The peak-weighting result in section 7.3 used the mid-training value; with the final checkpoint its matched delta moves from −0.039 to −0.042, and the conclusion is unchanged."));
 
-body.push(CALLOUT("Standing rule adopted", [
+body.push(CALLOUT("Standing rules adopted", [
   "No single-run comparison below 0.04 is reported as an effect.",
   "Either run at least three replicates per arm, or restrict the claim to a paired within-checkpoint comparison — as section 5.4's pooling result is, which is why it remains the most robust positive finding in this record.",
   "Never compare a v3-pretrained checkpoint against a v4-pretrained one.",
+  "Never score a checkpoint before confirming its training run finished. Three wrong numbers in this record came from scoring a partially-trained checkpoint — the patch-128 correction in section 5.3, and the same-seed pair above. A finished flag written into the checkpoint at end-of-training, with the evaluators refusing anything without it, would close this off for good.",
 ], "good"));
 
 body.push(RULE());
@@ -785,7 +786,7 @@ body.push(TBL(
   ["Priority", "Experiment", "Rationale"],
   [
     ["1", "Standardise on version 3; run a corpus-size sweep to localise the effect", "Version 3 still transfers +0.069 better and that recommendation stands regardless of mechanism. Section 8 refuted row content as the cause and left corpus size unconfirmed; dropping 1, 5 and 10 per cent of version 3 at random (multiple seeds) will show whether accuracy degrades smoothly with size or whether the two section-8 single runs were an unlucky draw."],
-    ["2", "Determinism, if any single-run number is to be trusted", "--seed alone is insufficient (section 7.4). An opt-in --deterministic setting cudnn.benchmark = False plus torch.use_deterministic_algorithms(True) would make an arm's score a property of the arm rather than of the run. Without it, every comparison in sections 7 and 8 needs at least three replicates, which is now the standing rule."],
+    ["2", "Seed replicates, and a stale-checkpoint guard", "The v3 reference that the whole corpus effect rests on is a single run, and it is the highest of six comparable v3-family arms (spread 0.081, the other five averaging only 0.011 above v4). Five seeds per corpus resolves whether that effect is real or one lucky draw. The determinism work originally planned here is dropped — seeding does work (section 7.4); what is actually needed is a finished flag on checkpoints so no run is ever scored mid-training again."],
     ["3", "Few-shot benchmark on v3", "Still the one place SSL's value proposition is untested. At n = 37–113 full-data CV is near the learnable ceiling; transfer is where pretraining should pay off."],
     ["4", "Learned attention pooling", "Pooling is the only axis that has ever produced a robust gain, and fixed regional groups are unlikely to be its ceiling. Has trainable parameters, so it must be fitted inside each training fold — a head, not a frozen transform."],
     ["5", "Hybrid features", "Concatenate SSL embedding with binned areas. They are partly complementary — on diabetes and Barth the embedding beats same-resolution binning."],
@@ -837,10 +838,11 @@ body.push(TBL(
   ],
   [4200, 5880], { boldFirstCol: true }));
 
-body.push(CALLOUT("Three rules that govern every number in this record", [
-  "Corpus: never compare a v3-pretrained checkpoint against a v4-pretrained one. The corpus version alone is worth 0.069 on the held-out mean (section 7.2).",
+body.push(CALLOUT("Four rules that govern every number in this record", [
+  "Corpus: never compare a v3-pretrained checkpoint against a v4-pretrained one. The corpus version alone is worth 0.069 on the held-out mean (section 7.2) — though note the v3 side of that comparison is a single run, which the seed study is now testing.",
   "Noise: a held-out-mean difference below 0.020 is not an effect, and a single-target difference below 0.035 is not an effect, unless supported by at least three replicates per arm or measured as a paired within-checkpoint comparison (section 7.2).",
-  "Mechanism: do not assume the corpus effect lives in the 164 rows that differ between versions 3 and 4 — section 8 tested that directly and it did not hold up. The cause is still open.",
+  "Mechanism: do not assume the corpus effect lives in the 164 rows that differ between versions 3 and 4 — section 8 tested that directly and it did not hold up, and section 8's follow-up size sweep did not support corpus size either. The cause is still open.",
+  "Provenance: never score a checkpoint before confirming its training run finished (section 7.4). Three wrong numbers here came from scoring one mid-training.",
 ], "bad"));
 
 body.push(H2("11.3 BrC-T2D label revision"));

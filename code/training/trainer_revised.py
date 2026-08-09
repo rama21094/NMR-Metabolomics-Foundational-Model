@@ -689,7 +689,12 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
     print(f"Training with warmup ({warmup_epochs} epochs) + cosine annealing")
     print(f"Initial LR: {lr}, Min LR: {min_lr}")
     print(f"Early stopping patience: {patience} epochs")
-    
+
+    # Only bound inside the "validation improved" branch below, so it stays None
+    # when there is no val set or nothing ever improved. The finished-flag stamp
+    # after the loop checks for that.
+    best_model_name = None
+
     for epoch in range(num_epochs):
         # Enable/disable data augmentation for this epoch
         if augment_enabled:
@@ -838,7 +843,29 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
     print(f"Training completed after {epoch+1} epochs")
     print(f"Best validation loss achieved: {best_val_loss:.4f}")
     print(f"{'='*60}\n")
-    
+
+    # Stamp the best checkpoint as complete.
+    #
+    # THREE wrong numbers in this project came from scoring a checkpoint whose
+    # run had not finished: the patch-128 arm (docs §5b) and the same-seed
+    # "r1 vs r2" pair that produced the retracted "--seed doesn't work on GPU"
+    # claim (docs §7b). In both cases the file existed, loaded fine, and gave a
+    # plausible-but-wrong answer -- there was nothing to notice.
+    #
+    # Re-open the best checkpoint and add finished=True + the final epoch count.
+    # Evaluation scripts should refuse to score a checkpoint without this flag.
+    # Checkpoints written before this existed simply lack the key, so readers
+    # must treat "missing" as "unknown", not as "unfinished".
+    if best_model_name is not None and os.path.exists(best_model_name):
+        try:
+            ck = torch.load(best_model_name, map_location="cpu", weights_only=False)
+            ck["finished"] = True
+            ck["final_epoch"] = int(epoch + 1)
+            torch.save(ck, best_model_name)
+            print(f"Marked checkpoint finished: {best_model_name}")
+        except Exception as exc:  # never lose a trained model to a bookkeeping error
+            print(f"WARNING: could not stamp finished flag on {best_model_name}: {exc}")
+
     return train_losses, val_losses
 
 def plot_training_curves(train_losses, val_losses=None, save_path='training_curves.png'):

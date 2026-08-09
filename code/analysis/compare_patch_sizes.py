@@ -116,6 +116,18 @@ def load_backbone(ckpt_path, spectrum_length, device, nhead_override=None):
     from barth_all_models_loocv import infer_mae_config
 
     ck = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    # Three wrong numbers in this project came from scoring a checkpoint whose
+    # training run was still going (docs §5b patch-128, §7b the r1/r2 pair). A
+    # mid-training checkpoint loads cleanly and answers plausibly, so nothing
+    # flags it. trainer_revised.py now stamps finished=True at end-of-training.
+    # Checkpoints written before that stamp existed simply lack the key, so
+    # "missing" means UNKNOWN (warn), while an explicit False means UNFINISHED.
+    if ck.get("finished") is False:
+        raise SystemExit(f"refusing to score an unfinished checkpoint: {ckpt_path}")
+    if "finished" not in ck:
+        print(f"    NOTE: {Path(ckpt_path).name} predates the finished flag — "
+              f"confirm 'Training completed after' in its log before trusting this row.",
+              flush=True)
     state = ck["model_state_dict"]
     hp = ck.get("hyperparameters", {})
     recorded = hp.get("nhead")
