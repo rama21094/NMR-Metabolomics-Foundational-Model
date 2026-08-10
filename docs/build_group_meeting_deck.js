@@ -318,17 +318,17 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     ["v4", "EDTA cutoff FIXED to the\nbaseline-to-peak midpoint", GREEN],
   ];
   vs.forEach(([tag, body, col], i) => {
-    const x = 0.55 + i * 3.13;
-    card(s, { x, y: 1.75, w: 2.92, h: 1.62, fill: TINT });
+    const x = 0.55 + i * 3.10;
+    card(s, { x, y: 1.75, w: 2.86, h: 1.62, fill: TINT });
     s.addText(tag, {
       x: x + 0.14, y: 1.9, w: 1.0, h: 0.44, fontFace: F, fontSize: 24, bold: true, color: col, margin: 0,
     });
     s.addText(body, {
-      x: x + 0.14, y: 2.38, w: 2.64, h: 0.88, fontFace: F, fontSize: 15, color: INK, margin: 0, lineSpacing: 18,
+      x: x + 0.14, y: 2.38, w: 2.58, h: 0.88, fontFace: F, fontSize: 14.5, color: INK, margin: 0, lineSpacing: 17.5,
     });
     if (i < 3) {
       s.addShape(pres.ShapeType.rightArrow, {
-        x: x + 2.95, y: 2.48, w: 0.15, h: 0.17, fill: { color: "B9C2CC" }, line: { type: "none" },
+        x: x + 2.89, y: 2.48, w: 0.15, h: 0.17, fill: { color: "B9C2CC" }, line: { type: "none" },
       });
     }
   });
@@ -344,14 +344,14 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   ], { x: 0.85, y: 4.18, w: 5.4, h: 2.0, fontFace: F, fontSize: 15.5, color: INK, margin: 0, paraSpaceAfter: 9, lineSpacing: 19 });
 
   card(s, { x: 6.8, y: 3.62, w: 5.95, h: 2.62, fill: TINT_BAD });
-  s.addText("…but the version does not matter downstream", {
+  s.addText("…but it does not matter downstream", {
     x: 7.1, y: 3.78, w: 5.4, h: 0.4, fontFace: F, fontSize: 18, bold: true, color: CORAL, margin: 0,
   });
   s.addText([
     { text: "We spent two whole experiments trying to explain a v3-vs-v4 downstream difference.", options: { bullet: true, breakLine: true } },
     { text: "With 5 seeds per corpus that difference is −0.014 ± 0.022 — indistinguishable from zero (slide 19).", options: { bullet: true, breakLine: true } },
     { text: "Lesson: fix the preprocessing because it is CORRECT, not because you measured a downstream gain from one run.", options: { bullet: true } },
-  ], { x: 7.1, y: 4.24, w: 5.4, h: 1.96, fontFace: F, fontSize: 15, color: INK, margin: 0, paraSpaceAfter: 8, lineSpacing: 18 });
+  ], { x: 7.1, y: 4.28, w: 5.4, h: 1.90, fontFace: F, fontSize: 15, color: INK, margin: 0, paraSpaceAfter: 8, lineSpacing: 18 });
   s.addNotes("Keep this short unless asked. The point is methodological: correctness and measurable "
     + "downstream benefit are different justifications, and we conflated them.");
 }
@@ -660,7 +660,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   });
   const ms = [
     ["A control that did not control", "we read an ablation backwards"],
-    ["A hypothesis that was backwards", "finer patches made the task EASIER"],
+    ["A backwards hypothesis", "finer patches = an easier task"],
     ["An effect that never existed", "and it was our headline result"],
   ];
   ms.forEach(([head, sub], i) => {
