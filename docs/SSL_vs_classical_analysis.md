@@ -8,11 +8,15 @@ within-checkpoint comparison, unaffected by everything below) — §14 now shows
 smaller, on jigsaw/joint. §5d's "backbone axis is exhausted" claim is **withdrawn** (§7b) —
 it compared v4 arms against a v3 reference. §7/§7b found both a new objective change (block
 masking, peak weighting) fails and, more importantly, that the pretraining **corpus
-version** (v3 vs v4) is worth 0.069 held-out — the largest effect in the document — with a
-measured noise floor of 0.020 (mean) / 0.035 (per-target) below which nothing here should be
-read as an effect. §8 and §13 both tried to localize that 0.069 (to row content, then to
-corpus size) and **both failed** — see §13, currently the most important open question:
-a real, well-supported effect with no confirmed mechanism.
+version** (v3 vs v4) *appeared* worth 0.069 held-out — which looked like the largest effect in
+the document, on an assumed noise floor of 0.020 (mean) / 0.035 (per-target). **Both figures
+were wrong**: the measured single-run sd is **0.045** (§15). §8 and §13 both tried to localize that 0.069 (to row content, then to
+corpus size) and both failed — and **§15 then showed why: there was no effect to localize.**
+With n=5 seeds per corpus the gap goes from +0.069 to −0.014 (0.6 se), with v4 marginally ahead.
+§5f is retracted. The measured single-run sd is **0.045**, more than double the 0.020 that
+was assumed, and against it only §6b survives among single-run claims. What still stands are
+the **paired within-checkpoint** results — §4b (head fix), §5c (pooling), §14 (jigsaw/joint
+pooling) — plus §6b (pretraining vs a random-init control).
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -335,7 +339,30 @@ the datasets used for reporting (see the note below).
 
 ---
 
-### 5f. ⚠️ The largest effect measured so far is the baseline itself
+### 5f. ~~The largest effect measured so far is the baseline itself~~ — ❌ FULLY RETRACTED
+
+> **RETRACTED 2026-08-09 by experiment #15 (§15). There is no corpus effect.**
+>
+> Everything below rests on comparing a v3 reference of **n=1** against a v4 mean of n=3.
+> Running both corpora at n=5 seeds dissolves it — and the point estimate ends up slightly favouring **v4**, the opposite of the claim:
+>
+> | | held-out mean |
+> |---|---|
+> | v3, n=5 | **0.8165 ± 0.0449** (0.8884, 0.8190, 0.8067, 0.8033, 0.7653) |
+> | v4, n=5 | **0.8305 ± 0.0206** (0.8667, 0.8272, 0.8232, 0.8199, 0.8158) |
+> | gap **as reported** (v3 n=1) | **+0.0687** |
+> | gap **with error bars on both sides** | **−0.0140, se 0.0221 → 0.6 se** |
+>
+> The 0.8884 reference ranks **1 of 5** and sits **+1.60 sd** above its own distribution. It
+> was a lucky draw. The gap does not shrink — it vanishes and marginally reverses.
+>
+> Consequences, all recorded in §15: §8 and §13 were hunting the mechanism of an effect that
+> does not exist; the single-run sd is **0.045**, not the 0.020 derived below; and the
+> instruction "never compare a v3-pretrained checkpoint to a v4-pretrained one" is void —
+> the two corpora are interchangeable.
+>
+> The text below is left in place as the record of what was believed, and of how a single
+> unreplicated reference produced two follow-up experiments and a headline slide.
 
 Experiment #7 required a v4-pretrained ps1024 baseline (arm D). Comparing it to the
 v3-pretrained ps1024 checkpoint that every earlier number was measured against — **same
@@ -632,7 +659,7 @@ Factorial main effects (each averaged over both levels of the other factor):
 
 **Do not pursue block masking further.** Resolve §5f before running any new arm.
 
-### ❌ #7b — RESULT: peak weighting also fails once the corpus is matched, and the noise floor is 0.020
+### ❌ #7b — RESULT: peak weighting also fails once the corpus is matched (noise floor here is ~~0.020~~ → **0.045**, see §15)
 
 Three follow-up runs, `results/analysis/exp7_replicates/`, summarized by
 `code/analysis/summarize_exp7_replicates.py`, figure `fig13_exp7_replicates.png`.
@@ -683,6 +710,13 @@ is 5.4× tighter because Barth *falls* while cancer *rises* across the three dra
 luck, not a property to rely on. **Use 0.020 as the floor for a held-out-mean claim and
 ≈0.035 for any single-target claim.**
 
+> **⚠️ CORRECTED by §15.** The 0.020 above was still too optimistic, and for the reason this
+> passage itself identifies: it was derived from a three-run cancellation that was flagged as
+> a fluke and then used as a floor anyway. Measured directly from five v3 seeds, the
+> single-run sd on the held-out mean is **0.045**, and per-target it reaches **0.076** (Barth).
+> Every "vs 0.020 floor" figure below understates the noise by more than 2×; the corrected
+> re-scoring is in §15.**
+
 **(3) Peak weighting, matched corpus — it loses.** Peak-weighted runs on v3, against the v3
 baseline (no corpus confound):
 
@@ -705,7 +739,10 @@ negative on both factors.**
 
 **(4) Recalibration — half of this document's claims do not clear the floor.**
 
-| claim | Δ | vs 0.020 floor | verdict |
+> ⚠️ **This table uses the 0.020 floor and is superseded.** The measured single-run sd is
+> 0.045 (§15), against which only §6b survives. The corrected table is in §15.
+
+| claim | Δ | vs 0.020 floor *(superseded)* | verdict *(superseded)* |
 |---|---|---|---|
 | §5f v3 vs v4 corpus | +0.069 | 3.4× | **survives** |
 | §5b patch 128 vs 1024 | −0.042 | 2.1× | **survives** |
@@ -726,8 +763,18 @@ that remains the only robust positive result in this document.
 effect.** Either run ≥3 replicates per arm, or restrict claims to paired within-checkpoint
 comparisons like §5c.
 
-### 🟡 #8 — RESULT: the 164 differing rows do not explain the corpus gap — and neither
-### hypothesis is confirmed
+### 🟡 #8 — RESULT: the 164 differing rows do not explain the corpus gap
+### ⚠️ SUPERSEDED by §15 — this experiment was looking for the mechanism of a non-effect
+
+> **§15 showed there is no corpus gap to explain.** With n=5 seeds per corpus the v3-vs-v4
+> difference is ≈−0.003 (inside one se), not +0.069. This experiment's finding — that
+> dropping the 164 differing rows is indistinguishable from dropping 164 arbitrary rows —
+> was *correct*, and now has an obvious reading it could not reach at the time: **both arms
+> are just draws from the same distribution, because the corpora are equivalent.**
+>
+> Note also that its central comparison (common vs control, |Δ| = 0.001) was judged against a
+> 0.020 floor. The real single-run sd is 0.045, so that comparison was even less able to
+> resolve a difference than stated. Kept for the record.
 
 §5f/§7b established the v3→v4 corpus swap costs 0.069 held-out, the largest effect in this
 document. A direct diff of the two corpora narrowed the search: only **164 of 9,670 rows
@@ -877,7 +924,11 @@ python code/analysis/summarize_exp7_replicates.py
 python code/plotting/plot_exp7_replicates.py
 ```
 
-### ⭐ #9 — Revert the pretraining corpus to v3 (CHEAP, HIGHEST VALUE) — still the right call
+### ~~#9 — Revert the pretraining corpus to v3~~ — ❌ VOID (§15): the corpora are equivalent
+
+> §15 measured both corpora at n=5 seeds: the difference is −0.014, inside one standard
+> error. There is nothing to revert to and nothing to diagnose. Text below kept as the record.
+
 §5f established with three replicates that v3-pretrained backbones transfer **+0.069 better**
 than v4-pretrained ones at identical configuration — the largest and best-supported effect in
 this document. §8 tried to localize *why* to the 164 rows that differ and could not: the
@@ -902,17 +953,70 @@ at end-of-training and have `compare_patch_sizes.py` / `ssl_linear_probe_eval.py
 score a checkpoint that lacks it. Until then, manually confirm "Training completed after" in
 the run's log before scoring.
 
-### ⭐ #15 — Seed replicates: how much does a single run actually mean? (RUNNING)
-The v3 reference (0.888 held-out) that §5f's entire +0.069 corpus effect rests on is **n=1**,
-and it is the **highest of six comparable v3-family arms** (v3 full, ±1%/5%/10% size cuts, and
-the two §8 1.7% arms: sd 0.030, range 0.081, other five mean 0.831 — only +0.011 from v4's
-0.820). So the headline effect may be substantially one lucky draw measured against a
-well-estimated v4 mean. n=5 seeds per corpus (v3 needs 4 more, v4 needs 2 more; ~27 GPU-h)
-resolves it: with per-run sd ≈0.030, se(difference) ≈0.019, enough to see a real 0.069 at
-~3.6σ. Three outcomes: (a) v3 mean drops to ~0.83 and the corpus effect largely dissolves;
-(b) v3 stays ~0.88 and §8/§13's mechanism question genuinely matters; (c) both corpora show
-sd ≈0.03, in which case no single-run comparison in this document was ever interpretable and
-everything needs error bars before publication.
+### ✅ #15 — RESULT: the corpus effect was a sampling artifact, and the noise floor is 0.045
+
+Ten pretraining runs, five per corpus, identical configuration differing only by seed.
+`results/analysis/exp15_seed_study/`, `code/analysis/summarize_exp15_seed_study.py`,
+figure `fig16_exp15_seed_study.png`.
+
+| v3 run | held-out mean | | v4 run | held-out mean |
+|---|---|---|---|---|
+| **original (unseeded)** | **0.8884** ← rank 1 of 5 | | original (unseeded) | 0.8199 |
+| seed 505 | 0.8190 | | seed 101 | 0.8232 |
+| seed 404 | 0.8067 | | seed 202 | 0.8158 |
+| seed 202 | 0.8033 | | seed 303 | 0.8667 |
+| seed 303 | 0.7653 | | seed 404 | 0.8272 |
+| **mean ± sd** | **0.8165 ± 0.0449** | | **mean ± sd** | **0.8305 ± 0.0206** |
+
+| the §5f comparison | value |
+|---|---|
+| as reported — v3 (n=1) vs v4 (n=3) | **+0.0687** |
+| with error bars on both sides — v3 (n=5) vs v4 (n=5) | **−0.0140, se 0.0221 → 0.6 se** |
+
+**The gap does not shrink; it vanishes and marginally reverses.** The 0.8884 reference sits
+**+1.60 sd** above its own distribution and is the highest of its five draws. §5f is retracted.
+
+**The measured single-run sd is 0.045** on the held-out mean — more than double the 0.020
+assumed since §7b — and per-target it is worse: **Barth 0.076**, MTBLS326 0.045, diabetes
+0.029, MTBLS563 0.030, cancer 0.019. The 0.020 came from three v4 runs whose per-target
+errors happened to cancel inside the mean; §7b explicitly called that cancellation a fluke
+and then adopted it as a floor anyway. That was the error which let §5f, §8 and §13 proceed.
+
+**Re-scoring every single-run claim against 0.045:**
+
+| claim | Δ | vs sd | verdict |
+|---|---|---|---|
+| §6b masked pretraining vs random-init | +0.117 | 2.6× | **survives** |
+| §5f v3 vs v4 corpus | +0.069 | 1.5× | **retracted — n=5 says ≈0** |
+| §7b peak weighting (v3, matched) | −0.042 | 0.9× | within noise |
+| §5b patch 128 vs 1024 | −0.042 | 0.9× | within noise |
+| §5b patch 256 vs 1024 | −0.034 | 0.7× | within noise |
+| §7 block masking | −0.030 | 0.7× | within noise |
+| §5d ps2048 vs ps1024 | +0.020 | 0.5× | within noise |
+| §7 peak weighting (v4, unmatched) | +0.011 | 0.2× | within noise |
+| §5d d256L6 vs ps1024 | +0.006 | 0.1× | within noise |
+
+**What survives the whole document:** §6b (pretraining beats a random-init control, the only
+single-run claim clearing 2 sd) plus the **paired within-checkpoint** results, which carry no
+training variance by construction because they compare transforms on a *fixed* checkpoint —
+§4b (head fix, +0.120), §5c (pooling, +0.03…+0.13) and §14 (jigsaw/joint pooling, +0.079 /
++0.049). Everything else that was reported as an effect is within noise.
+
+**Standing rule, replacing the one in §7b:** a single-run difference below **0.09** (2 sd) is
+not an effect. Report either ≥5 replicates per arm with a standard error, or a paired
+within-checkpoint comparison. At ~4.5 GPU-hours per run, a 5-replicate arm costs ~23 GPU-h —
+that is now the price of a reportable pretraining result, and it should be budgeted before an
+experiment is proposed, not discovered afterwards.
+
+```bash
+V3=data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy
+for s in 202 303 404 505; do
+  python -u code/training/trainer_revised.py --patch-size 1024 --nhead 4 --seed $s --data-path $V3
+done   # (and likewise for v4; see code/training/run_seed_queue.sh for the memory-gated launcher)
+python -u code/analysis/compare_patch_sizes.py --out-dir results/analysis/exp15_seed_study
+python code/analysis/summarize_exp15_seed_study.py
+python code/plotting/plot_exp15_seed_study.py
+```
 
 ### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
 Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
@@ -924,7 +1028,15 @@ Concatenate the SSL embedding with binned areas. They are partly complementary �
 diabetes and Barth the embedding beats same-resolution binning — so the union may exceed
 both.
 
-### 🟡 #13 — RESULT: corpus size is not supported either; the v3-vs-v4 cause remains open
+### 🟡 #13 — RESULT: corpus size is not supported either
+### ⚠️ SUPERSEDED by §15 — same reason as §8: there was no effect to explain
+
+> **§15 showed the v3-vs-v4 gap does not exist**, so the "cause" this sweep went looking for
+> was never there. Its own reading — non-monotonic, 5%→10% *recovering* accuracy, "the
+> signature of n=1-per-point sampling noise, not a real effect" — turns out to have been
+> exactly right, and to apply to the thing that motivated it as well as to the sweep itself.
+> That the sweep's own points scattered by 0.081 across a 1–10% cut was, in hindsight, the
+> noise floor announcing itself. Kept for the record.
 
 Three arms — `build_corpus_subset.py --mode size-sweep --frac {0.01, 0.05, 0.10} --seed 301`
 — drop that fraction of **all** v3 rows uniformly at random, decoupled entirely from the 164
@@ -1048,27 +1160,30 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/analysis/summarize_exp13_size_sweep.py`,
   `code/plotting/plot_exp13_size_sweep.py`,
   `code/analysis/sweep_pooling_jigsaw_joint.py`,
-  `code/analysis/hybrid_features.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig15`.
+  `code/analysis/hybrid_features.py`,
+  `code/training/run_seed_queue.sh`,
+  `code/analysis/summarize_exp15_seed_study.py`,
+  `code/plotting/plot_exp15_seed_study.py`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig16`.
 - **Reproducibility (§7b, corrected 2026-08-09):** `--seed` DOES make training reproducible —
   two same-seed runs of the same arm are byte-identical (max|ΔW| = 0.000e+00) once both have
   finished. The earlier claim to the contrary compared against a mid-training checkpoint and is
-  retracted. Measured noise floor for a held-out-mean claim: **0.020**; for a single-target
-  claim: **≈0.035** — this comes from three *different*-seed runs and is unaffected by the
-  retraction, but is now attributable to seed/initialization rather than hardware nondeterminism.
+  retracted. **Measured noise floor (§15, from 5 seeds): single-run sd = 0.045 on the held-out
+  mean, up to 0.076 per target (Barth).** The earlier 0.020/0.035 figures came from three runs
+  whose per-target errors cancelled and understate the noise by more than 2×. A single-run
+  difference below 0.09 (2 sd) is not an effect.
 - **Stale-checkpoint hazard:** three wrong numbers in this project have come from scoring a
   checkpoint whose training run had not finished (ps128 in §5b; the r1/r2 pair in §7b). Always
   confirm "Training completed after" in the run's log before scoring its checkpoint.
-- **Corpus caveat (§5f):** v3-pretrained backbones transfer +0.069 better than v4-pretrained ones
-  at identical configuration (3 replicates). Never compare a v3-pretrained checkpoint to a
-  v4-pretrained one.
-- **Open question (§8, §13):** that +0.069 does NOT localize to the 164/9670 rows (1.7%) that
-  actually differ between v3 and v4 — a same-size random-row-drop control lands in the same
-  place as dropping those specific rows (§8, all gaps inside the noise floor). Corpus size
-  was the leading remaining hypothesis but is now also unsupported — a 1%/5%/10% size sweep
-  (§13) is non-monotonic in the direction that argues against a size effect (5%→10% recovers
-  accuracy rather than degrading it further). The +0.069 gap is real and well-supported; its
-  mechanism is unknown. Row indices: `results/analysis/corpus_v3_v4_diff/differing_rows.csv`.
+- **~~Corpus caveat (§5f)~~ — VOID (§15):** the claimed +0.069 v3-vs-v4 advantage was a sampling
+  artifact of a single lucky v3 draw. At n=5 per corpus the difference is ≈−0.003, inside one
+  standard error. The two corpora are interchangeable; the "never mix v3 and v4 checkpoints"
+  rule is withdrawn.
+- **~~Open question (§8, §13)~~ — CLOSED (§15):** §8 and §13 could not find a mechanism for the
+  +0.069 gap because there was no gap. Both experiments were sound and both are kept for the
+  record; their inconclusive readings were correct. Row indices from the corpus diff remain at
+  `results/analysis/corpus_v3_v4_diff/differing_rows.csv` if the 164 rows are ever of interest
+  for another reason.
 - **Pooling caveat (§14):** the position-preserving pooling win (§5c, masking-only) extends to
   jigsaw (+0.079 mean) and joint (+0.049 mean), on existing checkpoints with no retraining.
   Hybrid features (embedding + binned areas) are refuted — worse than the better solo feature

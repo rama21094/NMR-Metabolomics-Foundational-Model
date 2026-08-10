@@ -53,13 +53,13 @@ for i, (vals, labs, col, name) in enumerate([
     axl.annotate(f"{vals.mean():.3f}\n±{vals.std(ddof=1):.3f}", xy=(i + 0.34, vals.mean()),
                  fontsize=8.5, color=col, va="center", fontweight="bold")
 # mark the original v3 reference as the outlier it is
-axl.annotate("the §5f reference\n(n=1, highest of 5)", xy=(0, orig3), xytext=(-0.62, orig3 + 0.012),
-             fontsize=8, color="#1b5e33",
+axl.annotate("the §5f reference\n(n=1, highest of 5)", xy=(0, orig3), xytext=(0.42, orig3 + 0.004),
+             fontsize=8, color="#1b5e33", va="center",
              arrowprops=dict(arrowstyle="->", color="#1b5e33", lw=1.2))
 axl.set_xticks([0, 1]); axl.set_xticklabels(["v3 corpus", "v4 corpus"], fontsize=10)
 axl.set_xlim(-0.85, 1.75)
 axl.set_ylabel("Held-out mean balanced accuracy (flatten)")
-axl.set_title("The two distributions overlap;\nthe reference was the top draw", fontsize=10.8, loc="left")
+axl.set_title("The two distributions overlap;\nthe reference was the top draw", fontsize=10.8, loc="left", pad=14)
 axl.grid(axis="y", alpha=.25)
 
 # ---------------- MIDDLE: the gap, before and after ----------------

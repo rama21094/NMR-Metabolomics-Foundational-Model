@@ -546,7 +546,7 @@ body.push(CALLOUT("Two conclusions — as written at the time", [
 ], "bad"));
 
 body.push(CALLOUT("Correction — conclusion 1 does not survive section 7", [
-  "The 0.888 reference used throughout this table is a v3-pretrained checkpoint, while all four comparison backbones were pretrained on v4. Section 7 shows that the corpus version alone is worth 0.069, so this table compares two things at once.",
+  "The 0.888 reference used throughout this table is a v3-pretrained checkpoint, while all four comparison backbones were pretrained on v4 — and 0.888 later turned out to be an unusually high single draw (section 8.1), not a representative v3 value. The corpus version itself does not matter; the reference being n = 1 does.",
   "Against a proper v4 baseline (0.820), patch 2048 is +0.020 and d256 L6 is +0.006 — but section 7 also establishes a noise floor of 0.020 for a claim of this kind. The honest statement is therefore that patch 1024, patch 2048 and d256 L6 are INDISTINGUISHABLE on one run each.",
   "\"The backbone axis is exhausted\" is not supported by the data. What survives is the narrower claim that shrinking the patch below 1024 hurts (patch 128 −0.042, patch 256 −0.034, both measured v4-against-v4), and conclusion 2, which is a paired within-checkpoint comparison and therefore immune to run-to-run noise.",
 ], "bad"));
@@ -629,7 +629,13 @@ body.push(TBL(
     ["**Held-out mean", "**0.8199", "**0.8232", "**0.8158", "**0.0037", "**0.8884"],
   ],
   [2700, 1600, 1600, 1600, 1200, 1380], { boldFirstCol: true }));
-body.push(CAPTION("Table 18. Three independent runs of the identical v4 configuration (unseeded, seed 101, seed 202). The v3 reference is above the entire v4 cluster, so the corpus gap is real."));
+body.push(CAPTION("Table 18. Three independent runs of the identical v4 configuration (unseeded, seed 101, seed 202). The v3 reference is above the entire v4 cluster — which, on this evidence, looked like a real corpus gap. Section 8.1 shows it was not."));
+
+body.push(CALLOUT("Retracted — there is no corpus gap (see section 8.1)", [
+  "Everything in this subsection compares a version-3 reference of n = 1 against a version-4 mean of n = 3. Running BOTH corpora at five seeds each dissolves the difference entirely: version 3 averages 0.8165 (sd 0.0449), version 4 averages 0.8305 (sd 0.0206), and the gap moves from +0.069 to −0.014 — 0.6 standard errors, with version 4 marginally ahead.",
+  "The 0.8884 reference was a lucky draw: it ranks first of its own five runs and sits 1.60 standard deviations above their mean.",
+  "The noise floor derived below (0.020) is also wrong, and for the reason the text itself gives — it came from a three-run cancellation that was called a fluke and then used as a floor anyway. The measured single-run standard deviation is 0.045.",
+], "bad"));
 
 body.push(CALLOUT("The 0.0037 is not precision — read the noise floor correctly", [
   "Per-target standard deviation averages 0.035, so a three-target mean should scatter by about 0.035/√3 = 0.020 if the targets were independent. The observed 0.0037 is 5.4× tighter only because Barth falls while cancer rises across the three draws (r = −0.92) and the errors cancel inside the mean.",
@@ -680,6 +686,10 @@ body.push(RULE());
 // ---------- 8. EXPERIMENT #8 ----------
 body.push(H1("8. Experiment #8: localising the corpus effect"));
 
+body.push(CALLOUT("Read section 8.1 first", [
+  "This entire section searches for the mechanism of an effect that section 8.1 shows does not exist. The work is sound and its finding — that dropping the 164 differing rows is indistinguishable from dropping 164 arbitrary rows — is correct. It is kept because the reason it came out inconclusive is itself the lesson.",
+], "bad"));
+
 body.push(P("Section 7.2 established that the v3-to-v4 corpus swap costs 0.069 held-out accuracy at identical configuration — the largest effect in this record — but left the mechanism open. A direct diff of the two corpora narrowed the search considerably: only 164 of 9,670 rows (1.7 per cent) differ between them at all, but each differing row differs almost entirely, because rows are min-max normalised and changing a row's maximum rescales the whole row (99.998 per cent of that row's 131,072 points change; median largest difference 0.34)."));
 
 body.push(P("The mechanism first suspected — that version 4 leaves a residual EDTA artefact that compresses those 164 spectra — was tested directly and refuted. Only 7 of the 164 rows have their row maximum inside the EDTA window in either version, and version 4's rows are if anything slightly brighter outside that window (99.9th percentile 0.969 versus 0.917) — less compressed, not more."));
@@ -726,6 +736,62 @@ body.push(CALLOUT("Verdict: row content is refuted; corpus size is unconfirmed",
 
 body.push(P("If a follow-up size sweep (dropping 1, 5 and 10 per cent of version 3 at random) shows accuracy degrading smoothly with corpus size, that would confirm size as at least part of the story. If cuts an order of magnitude larger than 1.7 per cent do not reproduce anything close to a 0.05 swing, the two single runs here were most likely an unlucky draw, and the honest position reverts to: the version 3 versus version 4 gap is real and large, but its cause remains open.", { italics: true, color: C.muted }));
 
+body.push(H2("8.1 Resolution: there was no effect to localise"));
+
+body.push(P("Sections 7.2, 8 and the size sweep all rest on one number: a version-3 reference of 0.8884, measured from a SINGLE pretraining run, compared against a version-4 mean of three runs. That asymmetry was visible in the data all along — among six comparable version-3 arms (the full corpus, the 1/5/10 per cent size cuts, and the two 1.7 per cent arms) the reference was the highest, and the other five averaged 0.831, only 0.011 above version 4."));
+
+body.push(P("Ten further pretraining runs settle it: five seeds per corpus, identical configuration, differing only by the seed."));
+
+body.push(TBL(
+  ["Version 3 run", "Held-out mean", "Version 4 run", "Held-out mean"],
+  [
+    ["**original (unseeded)", "**0.8884", "original (unseeded)", "0.8199"],
+    ["seed 505", "0.8190", "seed 101", "0.8232"],
+    ["seed 404", "0.8067", "seed 202", "0.8158"],
+    ["seed 202", "0.8033", "seed 303", "0.8667"],
+    ["seed 303", "0.7653", "seed 404", "0.8272"],
+    ["**mean ± sd", "**0.8165 ± 0.0449", "**mean ± sd", "**0.8305 ± 0.0206"],
+  ],
+  [2900, 2200, 2700, 2280], { boldFirstCol: true }));
+body.push(CAPTION("Table 25. Five seeds per corpus. The version-3 reference the whole corpus story rested on ranks first of its five runs and sits 1.60 standard deviations above their mean."));
+
+body.push(CALLOUT("The gap does not shrink — it vanishes", [
+  "As reported, version 3 (n = 1) minus version 4 (n = 3):  +0.0687",
+  "With error bars on both sides, version 3 (n = 5) minus version 4 (n = 5):  −0.0140, standard error 0.0221 — 0.6 standard errors, and the point estimate now slightly favours version 4, the opposite of the original claim.",
+  "Section 7.2 is retracted. Sections 8 and the size sweep were hunting the mechanism of a sampling artifact — which is exactly why neither could find one, and why the size sweep's own points scattered by 0.081 across a 1–10 per cent cut. That scatter was the noise floor announcing itself.",
+], "bad"));
+
+body.push(H3("What this does to the rest of the record"));
+
+body.push(P("The measured single-run standard deviation on the held-out mean is 0.045 — more than double the 0.020 used since section 7.2 — and per target it is worse still: 0.076 on Barth, 0.045 on MTBLS326. Re-scoring every single-run claim against it:"));
+
+body.push(TBL(
+  ["Claim", "Δ", "vs sd", "Verdict"],
+  [
+    ["Masked pretraining vs random init (6b)", "+0.117", "2.6×", "**survives"],
+    ["Corpus version 3 vs 4 (7.2)", "+0.069", "1.5×", "**retracted"],
+    ["Peak weighting, matched corpus (7.3)", "−0.042", "0.9×", "within noise"],
+    ["Patch 128 vs 1024 (5.3)", "−0.042", "0.9×", "within noise"],
+    ["Patch 256 vs 1024 (5.3)", "−0.034", "0.7×", "within noise"],
+    ["Block masking (7.1)", "−0.030", "0.7×", "within noise"],
+    ["Patch 2048 vs 1024 (6)", "+0.020", "0.5×", "within noise"],
+    ["Wider/deeper backbone (6)", "+0.006", "0.1×", "within noise"],
+  ],
+  [4200, 1700, 1600, 2580], { boldFirstCol: true }));
+body.push(CAPTION("Table 26. Only one single-run claim in this record clears two standard deviations."));
+
+body.push(CALLOUT("What survives", [
+  "The random-initialisation control (section 6b): masked pretraining beats an untrained backbone by 0.117, which is 2.6 standard deviations. This is the one single-run result that stands.",
+  "Every PAIRED within-checkpoint result, which carries no training variance by construction because it compares transforms on a FIXED checkpoint: the head fix (+0.120), pooling (+0.03 to +0.13), and the jigsaw/joint pooling extension (+0.079 and +0.049). These were never exposed to this problem.",
+  "Everything else previously reported as an effect — patch size, capacity, block masking, peak weighting, the corpus — is within noise.",
+], "good"));
+
+body.push(CALLOUT("Standing rule, replacing the one in section 7.4", [
+  "A single-run difference below 0.09 (two standard deviations) is not an effect.",
+  "Report either five or more replicates per arm with a standard error, or a paired within-checkpoint comparison.",
+  "At roughly 4.5 GPU-hours per run, a five-replicate arm costs about 23 GPU-hours. That is the price of a reportable pretraining result, and it should be budgeted when an experiment is proposed rather than discovered afterwards.",
+], "good"));
+
 body.push(RULE());
 
 // ---------- 9. INFRA BUGS ----------
@@ -741,7 +807,7 @@ body.push(TBL(
     ["GPU contention unnoticed", "A patch-2048 run shared a GPU with another user's job and ran 17× slower than benchmarked — 53 h projected versus 3.2 h.", "Moved to an idle GPU. Benchmarks are now taken with contention checked."],
   ],
   [2500, 4100, 3480], { boldFirstCol: true }));
-body.push(CAPTION("Table 20. Infrastructure defects. The nhead issue is the most dangerous class: it produces wrong numbers with no error and no warning."));
+body.push(CAPTION("Table 27. Infrastructure defects. The nhead issue is the most dangerous class: it produces wrong numbers with no error and no warning."));
 
 body.push(RULE());
 
@@ -759,7 +825,7 @@ body.push(TBL(
     ["MTBLS563", "0.558", "0.621", "**0.721", "−0.100"],
   ],
   [2500, 2100, 1900, 1600, 1980], { boldFirstCol: true }));
-body.push(CAPTION("Table 21. Current best position. Mean improvement of +0.078 over the originally reported numbers, achieved without retraining anything. The SSL-versus-classical record moves from 0 wins / 0 ties / 5 losses to 1 win / 1 tie / 3 losses."));
+body.push(CAPTION("Table 28. Current best position. Mean improvement of +0.078 over the originally reported numbers, achieved without retraining anything. The SSL-versus-classical record moves from 0 wins / 0 ties / 5 losses to 1 win / 1 tie / 3 losses."));
 
 body.push(H2("10.1 What is established"));
 body.push(BULLET("Masked pretraining genuinely works: +0.117 mean over a true random-initialisation control, positive on 5 of 5 targets — comfortably above the 0.020 noise floor."));
@@ -768,32 +834,32 @@ body.push(BULLET("The masking head was underfit by ~0.12 on every target. Fixed.
 body.push(BULLET("Mean pooling was discarding chemical-shift position, worth +0.03 to +0.13. Fixed. Also paired within-checkpoint — the single most reliable positive result in this record."));
 body.push(BULLET("Shrinking the patch below 1024 hurts: patch 128 −0.042 and patch 256 −0.034, both measured v4-against-v4."));
 body.push(BULLET("Reconstruction loss does not predict — and may anti-correlate with — downstream utility."));
-body.push(BULLET("The pretraining corpus version matters more than any architecture or objective change tried so far: v3-pretrained backbones transfer +0.069 better than v4-pretrained ones at identical configuration, established over three replicates."));
+body.push(BULLET("The pretraining corpus version does NOT matter: at five seeds per corpus the version-3 minus version-4 difference is −0.014, inside one standard error, with version 4 marginally ahead (section 8.1). The +0.069 previously reported here was a single lucky draw."));
 body.push(BULLET("Neither of experiment #7's objective changes helps. Block masking loses 0.030 despite provably making the task 41% harder; peak weighting loses 0.039 once judged against a matched corpus."));
 
 body.push(H2("10.2 Open caveats"));
 body.push(BULLET("GPU training is not reproducible even with a fixed seed (section 7.4), so any single-run number carries a per-target uncertainty of roughly 0.035. Several comparisons in sections 5 and 6 sit below that and are no longer reported as effects."));
 body.push(BULLET("Whether patch 1024, patch 2048 and d256 L6 differ at all is now UNKNOWN — the corrected same-corpus gaps (+0.020 and +0.006) are at or below the noise floor. Section 6's \"the backbone axis is exhausted\" was withdrawn."));
-body.push(BULLET("The version 3 versus version 4 corpus gap does NOT localise to the 1.7 per cent of rows that actually differ between them (section 8) — a same-size random-row-drop control lands in the same place as dropping those specific rows. Corpus size is the leading remaining hypothesis but is itself unconfirmed and looks disproportionate for a 1.7 per cent cut. Why the corpus version matters remains the single highest-value open question in this record."));
+body.push(BULLET("The measured single-run standard deviation is 0.045 on the held-out mean and up to 0.076 per target, more than double what was assumed for most of this record. Only one single-run claim in the whole document clears two standard deviations: masked pretraining versus a random-initialisation control."));
 body.push(BULLET("MTBLS326's perfect score clears its permutation null but permutation does not test batch confounding. Whether the label correlates with acquisition date, run order or instrument has not been checked, and should be before publication."));
 body.push(BULLET("Barth and MTBLS326 have no error bars (leave-one-out gives no fold variance); their gaps are within single-sample noise."));
 body.push(BULLET("Barth's classical result is marginal — its permutation null reaches 0.792 against an observed 0.705."));
 body.push(BULLET("Seven rows repository-wide retain a dominant EDTA-window peak (six in the corpus, one in MTBLS563): four exhaust the peak cap, three sit inside the edge margin."));
 
 body.push(H2("10.3 Next directions"));
-body.push(P("The priorities have changed again. Two objective changes have failed on top of four scaling failures, so the objective axis is not the obvious lever. The corpus-version effect is still the largest in the record, but section 8 showed it cannot yet be pinned on the rows that differ — so \"revert to version 3\" remains the right default, but \"and find out why\" is now a size-sweep experiment rather than a row-content one."));
+body.push(P("The priorities have changed again, and more sharply than before. The corpus effect that dominated the previous revision of this plan does not exist, so the work built on it — reverting the corpus, localising the effect, the size sweep — is all void. What remains is a measurement problem: with a single-run standard deviation of 0.045, most of the interventions tried so far were never resolvable, and the immediate need is to make results readable before running more of them."));
 body.push(TBL(
   ["Priority", "Experiment", "Rationale"],
   [
-    ["1", "Standardise on version 3; run a corpus-size sweep to localise the effect", "Version 3 still transfers +0.069 better and that recommendation stands regardless of mechanism. Section 8 refuted row content as the cause and left corpus size unconfirmed; dropping 1, 5 and 10 per cent of version 3 at random (multiple seeds) will show whether accuracy degrades smoothly with size or whether the two section-8 single runs were an unlucky draw."],
-    ["2", "Seed replicates, and a stale-checkpoint guard", "The v3 reference that the whole corpus effect rests on is a single run, and it is the highest of six comparable v3-family arms (spread 0.081, the other five averaging only 0.011 above v4). Five seeds per corpus resolves whether that effect is real or one lucky draw. The determinism work originally planned here is dropped — seeding does work (section 7.4); what is actually needed is a finished flag on checkpoints so no run is ever scored mid-training again."],
+    ["1", "Budget replicates into every future pretraining experiment", "Five seeds per arm, roughly 23 GPU-hours, is the price of a reportable result at a single-run standard deviation of 0.045. Everything single-run in sections 5 to 8 was below the resolution of the measurement. This is not optional overhead — it is what makes an experiment answerable at all."],
+    ["2", "Prefer paired within-checkpoint comparisons wherever the question allows", "The three results that survived — the head fix, pooling, and the jigsaw/joint pooling extension — are all paired: they vary a transform on a FIXED checkpoint and carry no training variance. Where a question can be posed that way, it costs no GPU time and is immune to the noise that invalidated everything else."],
     ["3", "Few-shot benchmark on v3", "Still the one place SSL's value proposition is untested. At n = 37–113 full-data CV is near the learnable ceiling; transfer is where pretraining should pay off."],
     ["4", "Learned attention pooling", "Pooling is the only axis that has ever produced a robust gain, and fixed regional groups are unlikely to be its ceiling. Has trainable parameters, so it must be fitted inside each training fold — a head, not a frozen transform."],
     ["5", "Hybrid features", "Concatenate SSL embedding with binned areas. They are partly complementary — on diabetes and Barth the embedding beats same-resolution binning."],
     ["—", "Batch-confound audit of MTBLS326", "Prerequisite for reporting the perfect score. Until done, MTBLS326 should not count as evidence for anything."],
   ],
   [1200, 3200, 5680], { boldFirstCol: true }));
-body.push(CAPTION("Table 22. Ranked next steps, revised after experiment #8. Row content is removed as a live hypothesis for the corpus effect; a size sweep replaces it."));
+body.push(CAPTION("Table 29. Ranked next steps, revised after the seed study. The corpus work that headed the previous revision is removed entirely — the effect it addressed does not exist."));
 
 body.push(CALLOUT("A framing worth considering", [
   "Classical logistic regression on 1024 binned features may simply be near-optimal at these sample sizes.",
@@ -839,9 +905,9 @@ body.push(TBL(
   [4200, 5880], { boldFirstCol: true }));
 
 body.push(CALLOUT("Four rules that govern every number in this record", [
-  "Corpus: never compare a v3-pretrained checkpoint against a v4-pretrained one. The corpus version alone is worth 0.069 on the held-out mean (section 7.2) — though note the v3 side of that comparison is a single run, which the seed study is now testing.",
-  "Noise: a held-out-mean difference below 0.020 is not an effect, and a single-target difference below 0.035 is not an effect, unless supported by at least three replicates per arm or measured as a paired within-checkpoint comparison (section 7.2).",
-  "Mechanism: do not assume the corpus effect lives in the 164 rows that differ between versions 3 and 4 — section 8 tested that directly and it did not hold up, and section 8's follow-up size sweep did not support corpus size either. The cause is still open.",
+  "Corpus: version 3 and version 4 are interchangeable. The 0.069 gap once claimed here was a sampling artifact and the rule against mixing them is withdrawn (section 8.1).",
+  "Noise: the measured single-run standard deviation is 0.045 on the held-out mean and up to 0.076 per target. A single-run difference below 0.09 is not an effect unless supported by five or more replicates or measured as a paired within-checkpoint comparison (section 8.1).",
+  "History: sections 7.2, 8 and the size sweep are kept but retracted. They document two follow-up experiments and a headline slide generated by one unreplicated reference run.",
   "Provenance: never score a checkpoint before confirming its training run finished (section 7.4). Three wrong numbers here came from scoring one mid-training.",
 ], "bad"));
 
@@ -856,7 +922,7 @@ body.push(TBL(
     ["KM70", "No Diabetes", "Diabetes"],
   ],
   [2600, 3740, 3740], { boldFirstCol: true }));
-body.push(CAPTION("Table 26. Genuine label changes. Extraction was verified by byte-comparing all 78 extracted spectra against the source array and independently cross-referencing every sample ID — zero mismatches."));
+body.push(CAPTION("Table 30. Genuine label changes. Extraction was verified by byte-comparing all 78 extracted spectra against the source array and independently cross-referencing every sample ID — zero mismatches."));
 
 body.push(SPACER(200));
 body.push(P("End of record. This document is intended to be extended as work continues; each new experiment should be added to section 5, 6 or 7 with its prediction, outcome, and any decision taken. Note the standing rule from section 7.4: no single-run comparison below 0.04 is reported as an effect.",

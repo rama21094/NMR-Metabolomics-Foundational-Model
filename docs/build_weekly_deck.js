@@ -21,6 +21,7 @@ const AR = {
   [`${V4}/fig11_backbone_scaling.png`]: 2.747,
   [`${V4}/fig12_exp7_factorial.png`]: 2.906,
   [`${V4}/fig13_exp7_replicates.png`]: 2.878,
+  [`${V4}/fig16_exp15_seed_study.png`]: 2.895,
   [SAT]: 3.36,
   "docs/figures/suppression_train_corpus.png": 0.69,
 };
@@ -601,51 +602,52 @@ s.addNotes("Emphasise block masking: the mechanism provably fired — validation
 // 15. EXPERIMENT #7b — HEADLINE
 // ============================================================
 s = pres.addSlide();
-titleBar(s, "The corpus matters more than the model", "PART 3 · EXPERIMENT #7b");
-y = figBlock(s, `${V4}/fig13_exp7_replicates.png`, {
+titleBar(s, "The biggest effect we found wasn't real", "PART 3 · EXPERIMENT #7b → #15");
+y = figBlock(s, `${V4}/fig16_exp15_seed_study.png`, {
   x: 1.0, y: 1.3, w: 11.3,
-  caption: "Left: three independent runs of one configuration. Middle: peak weighting judged against a matched corpus. Right: every claim in the record against the measured noise floor.",
+  caption: "Five seeds per corpus. Left: the two distributions overlap; the reference we built on was the top draw. Middle: the gap with error bars on both sides. Right: every single-run claim against the MEASURED sd.",
 });
 noteCard(s, {
   x: M, y, w: 3.9, h: FLOOR - y, fill: C.softBad, badge: "1", badgeColor: C.bad,
-  head: "v3 → v4 cost us 0.069",
-  body: "Three replicates on v4 land at 0.820 / 0.823 / 0.816. The v3 reference is 0.888 — above the whole cluster. Our EDTA “fix” hurt transfer.",
+  head: "It looked like v3 → v4 cost 0.069",
+  body: "Three v4 replicates land at 0.820 / 0.823 / 0.816 against a v3 reference of 0.888 — but that reference was a SINGLE run.",
   size: 11,
 });
 noteCard(s, {
   x: 4.65, y, w: 3.9, h: FLOOR - y, fill: C.softBad, badge: "2", badgeColor: C.bad,
-  head: "Peak weighting actually loses",
-  body: "Matched on v3 it scores −0.039 held-out and −0.142 on diabetes. Its +0.011 was an artefact of a corpus-depressed baseline.",
+  head: "…and so was almost everything else",
+  body: "Peak weighting, block masking, every patch size and capacity arm all sit inside 1 sd. They were never resolvable at n=1.",
   size: 11,
 });
 noteCard(s, {
   x: 8.75, y, w: 4.0, h: FLOOR - y, fill: C.cardWarm, badge: "3", badgeColor: C.warn,
-  head: "Noise floor: 0.020",
-  body: "Per-target run-to-run SD is 0.035. Seeding does not fix it — cuDNN autotuning and mixed precision make GPU training nondeterministic.",
+  head: "Then we ran 5 seeds per corpus",
+  body: "v3 = 0.8165 ± 0.0449, v4 = 0.8305 ± 0.0206. The 0.888 was the top draw of five (+1.6 sd). The gap becomes −0.014 (0.6 se) — v4 marginally AHEAD. No corpus effect.",
+  headColor: C.bad,
   size: 11,
 });
-s.addNotes("The most important slide. Three minutes. Two takeaways: our data-cleaning decision has a measurable cost and should be revisited; and we have been reading single-run differences smaller than our own measurement noise.");
+s.addNotes("Still the most important slide, but the lesson changed. Walk left to right: this is what a single unreplicated reference did. It generated two follow-up experiments (the 164-row ablation and the corpus-size sweep) and a headline recommendation, all chasing an effect that was not there. Be direct that this was caught by running the replicates, not by cleverness.");
 
 // ============================================================
 // 16. RECALIBRATION
 // ============================================================
 s = pres.addSlide();
 titleBar(s, "Re-reading every claim against the noise floor", "PART 3 · RECALIBRATION");
-tbl(s, ["Claim", "Effect", "vs 0.020 floor", "Status"], [
-  ["Pretraining corpus v3 vs v4", "+0.069", "3.4×", "survives"],
-  ["Patch 128 vs 1024", "−0.042", "2.1×", "survives"],
-  ["Peak weighting (matched corpus)", "−0.039", "2.0×", "survives"],
-  ["Patch 256 vs 1024", "−0.034", "1.7×", "marginal"],
-  ["Block masking", "−0.030", "1.5×", "marginal"],
-  ["Patch 2048 vs 1024", "+0.020", "1.0×", "within noise"],
-  ["Peak weighting (unmatched)", "+0.011", "0.5×", "within noise"],
-  ["Wider / deeper backbone", "+0.006", "0.3×", "within noise"],
+tbl(s, ["Claim", "Effect", "vs 0.045 sd", "Status"], [
+  ["Masked pretraining vs random init", "+0.117", "2.6×", "survives"],
+  ["Pretraining corpus v3 vs v4", "+0.069", "1.5×", "retracted"],
+  ["Peak weighting (matched corpus)", "−0.042", "0.9×", "within noise"],
+  ["Patch 128 vs 1024", "−0.042", "0.9×", "within noise"],
+  ["Patch 256 vs 1024", "−0.034", "0.7×", "within noise"],
+  ["Block masking", "−0.030", "0.7×", "within noise"],
+  ["Patch 2048 vs 1024", "+0.020", "0.5×", "within noise"],
+  ["Wider / deeper backbone", "+0.006", "0.1×", "within noise"],
 ], { x: M, y: 1.4, w: 7.9, colW: [3.5, 1.5, 1.4, 1.5], rowH: 0.335, fs: 11, tagCol: 3, colorize: true });
 
 noteCard(s, {
   x: 8.65, y: 1.4, w: 4.1, h: 1.72, fill: C.softBad, badge: "⟲", badgeColor: C.bad,
-  head: "What I have withdrawn",
-  body: "“Backbone scaling is exhausted” is not supported. Patch 1024, patch 2048 and the wider model are indistinguishable on one run each.",
+  head: "The floor was 2× worse than assumed",
+  body: "0.020 came from three runs whose per-target errors cancelled — flagged as a fluke, then used anyway. Measured from 5 seeds: 0.045 (Barth 0.076).",
   size: 11,
 });
 noteCard(s, {
@@ -657,7 +659,7 @@ noteCard(s, {
 noteCard(s, {
   x: 8.65, y: 5.16, w: 4.1, h: 1.72, fill: C.card, badge: "→", badgeColor: C.teal,
   head: "Standing rule adopted",
-  body: "No single-run difference below 0.04 is reported as an effect. Either three or more replicates per arm, or a paired comparison.",
+  body: "No single-run difference below 0.09 (2 sd) is an effect. Either ≥5 replicates per arm (~23 GPU-h), or a paired within-checkpoint comparison.",
   size: 11,
 });
 s.addNotes("The uncomfortable slide. Three of eight previously-reported effects are within noise. Better I find this than a reviewer. Note the two positive results survive because they are paired.");
@@ -799,10 +801,10 @@ s.addText("Ranked by evidence, not by novelty", {
   fontFace: HEAD, fontSize: 30, bold: true, color: C.white,
 });
 [
-  ["1", "Resolve the corpus regression", "Re-read every v4 arm against v3, and diagnose why the harsher v3 suppression pretrains better. Largest measured effect in the project, and it needs no new training.", C.good],
-  ["2", "Re-run peak saturation on v3, beyond 60 peaks", "Answers your “at all x” directly, and on the corpus we would actually pretrain on.", C.teal],
-  ["3", "Close the synthetic loop, with a criterion agreed first", "Generate, compare intensity distributions against experimental, then pretrain on real + synthetic and evaluate.", C.teal],
-  ["4", "Make single runs trustworthy", "Opt-in deterministic mode, plus three replicates as standard for any new arm. Without it every comparison needs triplicates anyway.", C.warn],
+  ["1", "Budget 5 replicates into every pretraining experiment", "~23 GPU-h per arm. At a single-run sd of 0.045, that is the price of a reportable result — most of what we ran was below the resolution of the measurement.", C.good],
+  ["2", "Prefer paired within-checkpoint comparisons", "The three results that survived are all paired: they vary a transform on a FIXED checkpoint, cost no GPU time, and carry no training variance.", C.good],
+  ["3", "Re-run peak saturation beyond 60 peaks", "Answers your “at all x” directly. Corpus version no longer matters, so either v3 or v4 will do.", C.teal],
+  ["4", "Close the synthetic loop, with a criterion agreed first", "Generate, compare intensity distributions against experimental, then pretrain on real + synthetic and evaluate. Needs ≥5 seeds to be readable.", C.teal],
 ].forEach((p, i) => {
   const yy = 1.62 + i * 1.06;
   s.addShape(pres.ShapeType.roundRect, {
@@ -836,12 +838,12 @@ s.addText("Three things I would like your view on", {
   fontFace: BODY, fontSize: 13, bold: true, color: C.white, lineSpacingMultiple: 0.95,
 });
 bullets(s, [
-  "Is v3 acceptable to standardise on, given it pretrains better but suppresses artefacts less thoroughly?",
+  "Most model-side results were unresolvable at n = 1. Do we re-run the promising ones with replicates, or go straight to the synthetic-data branch?",
   "What counts as “synthetic data helped” — downstream accuracy only, or distributional fidelity too?",
-  "With a 0.035 noise floor at n = 37–113, should we add a larger evaluation cohort before chasing further gains?",
+  "With a measured sd of 0.045 at n = 37–113, should a larger evaluation cohort come before any further model work?",
 ], { x: 9.58, y: 2.45, w: 2.95, h: 3.2, size: 10.5, gap: 10, color: C.onDark });
 
-s.addText("Bottom line: the model-side axes are close to exhausted and now honestly measured. The data-side branch of your tree is where the remaining leverage is — and most of its infrastructure already exists.", {
+s.addText("Bottom line: our measurement noise (sd 0.045) was larger than almost every effect we chased. One single-run result survives — pretraining beats random init — plus three paired comparisons. The synthetic-data branch is still the right target, but it is only answerable with replicates budgeted in.", {
   x: M, y: 6.1, w: 12.2, h: 0.8, margin: 0,
   fontFace: BODY, fontSize: 13, italic: true, color: C.onDark, lineSpacingMultiple: 1.05,
 });

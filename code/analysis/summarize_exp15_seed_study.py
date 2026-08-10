@@ -109,7 +109,7 @@ def main():
     v3v = np.array([v for _, _, v in v3])
     v4v = np.array([v for _, _, v in v4])
     orig3 = held("ps1024_nhead4_true")
-    rank = sorted(v3v)[::-1].tolist().index(orig3) + 1
+    rank = list(sorted(v3v)[::-1]).index(orig3) + 1
     z = (orig3 - v3v.mean()) / v3v.std(ddof=1)
 
     print(f"\n{'=' * 86}\n  The §5f comparison, then and now\n{'=' * 86}")
