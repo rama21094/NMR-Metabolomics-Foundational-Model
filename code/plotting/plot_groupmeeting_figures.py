@@ -197,8 +197,8 @@ def fig_seed_study():
         a1.text(i + 0.29, m, f"{m:.3f}\n± {sd:.3f}", ha="left", va="center",
                 fontsize=16, fontweight="bold", color=col)
     a1.scatter([0], [0.8884], s=300, facecolor="none", edgecolor=CORAL, lw=3.2, zorder=5)
-    a1.annotate("the ONE run every earlier\nnumber used — a lucky\ndraw at +1.6 sd",
-                xy=(0.055, 0.8884), xytext=(0.34, 0.8905), va="top",
+    a1.annotate("the ONE run every earlier\nnumber used (+1.6 sd)",
+                xy=(0.055, 0.8884), xytext=(0.30, 0.8925), va="top",
                 arrowprops=dict(arrowstyle="->", color=CORAL, lw=2.2),
                 fontsize=14.5, color=CORAL, fontweight="bold")
     a1.set_xticks([0, 1])
@@ -214,7 +214,7 @@ def fig_seed_study():
     a2.errorbar([1], [-0.0140], yerr=[0.0221], color="k", lw=2.4, capsize=9, capthick=2.4)
     a2.axhline(0, color="k", lw=1.6)
     a2.set_xticks([0, 1])
-    a2.set_xticklabels(["As reported\nv3(n=1) vs v4(n=3)", "With error bars\nv3(n=5) vs v4(n=5)"],
+    a2.set_xticklabels(["As reported\n(n=1 vs n=3)", "With error bars\n(n=5 vs n=5)"],
                        fontsize=15)
     # No y-label: between the panels it was struck through lengthwise by the
     # left panel's right spine. The title carries the quantity instead.
@@ -222,9 +222,9 @@ def fig_seed_study():
     a2.set_xlim(-0.72, 1.72)      # room for the annotations below
     a2.annotate("+0.069\nheadline claim", xy=(0, 0.0715), xytext=(0, 0.0775),
                 ha="center", fontsize=15.5, fontweight="bold", color=CORAL)
-    a2.annotate("−0.014 ± 0.022\n(0.6 se) → NO effect", xy=(1, -0.044), xytext=(1, -0.052),
+    a2.annotate("−0.014 ± 0.022\n(0.6 se) → NO effect", xy=(1, -0.052), xytext=(1, -0.062),
                 ha="center", fontsize=15, fontweight="bold", color=GREEN)
-    a2.set_ylim(-0.088, 0.112)
+    a2.set_ylim(-0.098, 0.112)
     a2.grid(axis="y", alpha=0.3, ls="--")
     a2.set_axisbelow(True)
     save(fig, "gm04_seed_study.png")
@@ -394,13 +394,10 @@ def fig_fewshot_paired():
     # a negative bar's label at its own end put "-0.039" on top of the
     # "MTBLS326" tick label.
     for yi, v in zip(y, vals):
-        if v < 0:
-            axr.text(0.010, yi, f"{v:+.3f}", va="center", ha="left",
-                     fontsize=15, fontweight="bold", color="0.25")
-        else:
-            axr.text(-0.010, yi, f"{v:+.3f}", va="center", ha="right",
-                     fontsize=15, fontweight="bold", color="0.25")
-    axr.set_xlim(-0.125, 0.105)
+        axr.text(0.160, yi, f"{v:+.3f}", va="center", ha="right",
+                 fontsize=15, fontweight="bold", color="0.25")
+    axr.set_xlim(-0.125, 0.163)
+    axr.set_xticks([-0.10, 0.0, 0.05])   # 4 ticks ran into each other
     axr.grid(axis="x", alpha=0.28, ls="--")
     axr.set_axisbelow(True)
     save(fig, "gm07_fewshot_paired.png")
