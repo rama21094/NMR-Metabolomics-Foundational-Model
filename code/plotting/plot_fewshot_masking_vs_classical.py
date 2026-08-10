@@ -30,7 +30,7 @@ OUT = ROOT / "results/plots/all_datasets_summary_v4"
 OUT.mkdir(parents=True, exist_ok=True)
 
 RUNS = [("Barth", "results/fewshot/barth_v2_repooled", 0.500, 0.705, 37),
-        ("MTBLS326", "results/fewshot/mtbls326_v2_coarse", 0.500, 1.000, 42),
+        ("MTBLS326", "results/fewshot/mtbls326_v2_coarse_pass1", 0.500, 1.000, 42),
         ("MTBLS563", "results/fewshot/mtbls563_v2_coarse", 1 / 3, 0.721, 113),
         ("BrC-T2D cancer", "results/fewshot/brc_t2d_cancer_v2_coarse", 0.500, 0.937, 78),
         ("BrC-T2D diabetes", "results/fewshot/brc_t2d_diabetes_v2_coarse", 0.500, 0.829, 78)]

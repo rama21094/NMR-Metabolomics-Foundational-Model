@@ -56,7 +56,7 @@ ROOT = Path(__file__).resolve().parents[2]
 # support values exist.
 RUNS = [
     ("Barth", "results/fewshot/barth_v2_repooled", 37),
-    ("MTBLS326", "results/fewshot/mtbls326_v2_coarse", 42),
+    ("MTBLS326", "results/fewshot/mtbls326_v2_coarse_pass1", 42),
     ("MTBLS563", "results/fewshot/mtbls563_v2_coarse", 113),
     ("BrC-T2D cancer", "results/fewshot/brc_t2d_cancer_v2_coarse", 78),
     ("BrC-T2D diabetes", "results/fewshot/brc_t2d_diabetes_v2_coarse", 78),
@@ -73,7 +73,19 @@ def load_episodes(path: Path) -> pd.DataFrame:
     bad = df[df.status != "ok"]
     if len(bad):
         print(f"  WARNING: {len(bad)} non-ok episodes in {path.name}; excluded")
-    return df[df.status == "ok"].copy()
+    df = df[df.status == "ok"].copy()
+    # fewshot_benchmark.py rebuilds all_rows from scratch and checkpoints after
+    # every family, so pointing a second run (e.g. jigsaw+joint) at a directory
+    # that already holds classical+masking OVERWRITES it. That silently reduced
+    # a dataset to NaN here once; fail loudly instead.
+    missing = {"classical", "masking"} - set(df.family.unique())
+    if missing:
+        raise SystemExit(
+            f"{path}/fewshot_episode_metrics.csv is missing family {sorted(missing)} "
+            f"(has {sorted(df.family.unique())}).\n"
+            f"  A later run with a different --families almost certainly overwrote it. "
+            f"Re-run pass 1 for this dataset into its OWN --output-dir.")
+    return df
 
 
 def paired_diff(df: pd.DataFrame, classical_model: str, masking_mode: str):
