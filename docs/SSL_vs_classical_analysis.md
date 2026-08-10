@@ -767,7 +767,7 @@ comparisons like §5c.
 ### ⚠️ SUPERSEDED by §15 — this experiment was looking for the mechanism of a non-effect
 
 > **§15 showed there is no corpus gap to explain.** With n=5 seeds per corpus the v3-vs-v4
-> difference is ≈−0.003 (inside one se), not +0.069. This experiment's finding — that
+> difference is −0.0140 (0.6 se), not +0.069. This experiment's finding — that
 > dropping the 164 differing rows is indistinguishable from dropping 164 arbitrary rows —
 > was *correct*, and now has an obvious reading it could not reach at the time: **both arms
 > are just draws from the same distribution, because the corpora are equivalent.**
@@ -1176,8 +1176,8 @@ don't revisit without a dimensionality-reduction step first. Script:
   checkpoint whose training run had not finished (ps128 in §5b; the r1/r2 pair in §7b). Always
   confirm "Training completed after" in the run's log before scoring its checkpoint.
 - **~~Corpus caveat (§5f)~~ — VOID (§15):** the claimed +0.069 v3-vs-v4 advantage was a sampling
-  artifact of a single lucky v3 draw. At n=5 per corpus the difference is ≈−0.003, inside one
-  standard error. The two corpora are interchangeable; the "never mix v3 and v4 checkpoints"
+  artifact of a single lucky v3 draw. At n=5 per corpus the difference is −0.0140, inside one
+  standard error (0.6 se). The two corpora are interchangeable; the "never mix v3 and v4 checkpoints"
   rule is withdrawn.
 - **~~Open question (§8, §13)~~ — CLOSED (§15):** §8 and §13 could not find a mechanism for the
   +0.069 gap because there was no gap. Both experiments were sound and both are kept for the
