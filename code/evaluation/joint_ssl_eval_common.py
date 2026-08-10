@@ -15,15 +15,19 @@ from torch.utils.data import DataLoader, TensorDataset
 
 ROOT = Path(__file__).resolve().parents[2]
 TRAINING_DIR = ROOT / "code" / "training"
-for path in (ROOT, TRAINING_DIR):
+ANALYSIS_DIR = ROOT / "code" / "analysis"
+for path in (ROOT, TRAINING_DIR, ANALYSIS_DIR):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
 from train_joint_ssl import (  # noqa: E402
+    TASK_JIGSAW,
+    TASK_MASKED,
     JointNMRSSLModel,
     build_joint_model_from_loaded_checkpoint,
     normalize_spectrum,
 )
+from linear_probe_frozen_embeddings import apply_pool, pooled_feature_dim  # noqa: E402
 
 
 FINE_TUNE_CHOICES = ("frozen", "unfreeze_last_1", "unfreeze_last_2", "unfreeze_last_3")
@@ -108,22 +112,55 @@ class JointSSLSoftmaxClassifier(nn.Module):
         n_classes: int,
         head_dropout: float,
         include_masked_task: bool = True,
+        pooling: str = "mean_pool",
     ):
         super().__init__()
         self.backbone = backbone
         self.bin_sizes = [int(b) for b in bin_sizes]
         self.include_masked_task = bool(include_masked_task)
-        pooled_count = len(self.bin_sizes) + (1 if self.include_masked_task else 0)
+        self.pooling = pooling
+        if pooling == "mean_pool":
+            pooled_count = len(self.bin_sizes) + (1 if self.include_masked_task else 0)
+            pooled_dim = backbone.d_model * pooled_count
+        else:
+            spectrum_length = backbone.spectrum_length
+            pooled_dim = sum(
+                pooled_feature_dim(pooling, spectrum_length // bs, backbone.d_model) for bs in self.bin_sizes
+            )
+            if self.include_masked_task:
+                pooled_dim += pooled_feature_dim(
+                    pooling, spectrum_length // backbone.mask_bin_size, backbone.d_model
+                )
         self.classifier = nn.Sequential(
-            nn.LayerNorm(backbone.d_model * pooled_count),
+            nn.LayerNorm(pooled_dim),
             nn.Dropout(head_dropout),
-            nn.Linear(backbone.d_model * pooled_count, n_classes),
+            nn.Linear(pooled_dim, n_classes),
         )
         self.softmax = nn.Softmax(dim=1)
         self.unfreeze_layers = 0
 
     def encode(self, x: torch.Tensor) -> torch.Tensor:
-        return self.backbone.encode_spectrum(x, self.bin_sizes, include_masked_task=self.include_masked_task)
+        if self.pooling == "mean_pool":
+            return self.backbone.encode_spectrum(x, self.bin_sizes, include_masked_task=self.include_masked_task)
+        # Position-preserving pooling (docs §14): mirrors encode_spectrum's bin
+        # construction exactly, but pools each component with apply_pool
+        # instead of the hardcoded encoded.mean(dim=1).
+        spectrum_length = self.backbone.spectrum_length
+        x = x[:, :spectrum_length]
+        pooled = []
+        for bin_size in self.bin_sizes:
+            trimmed = (spectrum_length // bin_size) * bin_size
+            bins = x[:, :trimmed].reshape(x.shape[0], trimmed // bin_size, bin_size)
+            encoded = self.backbone.encode_bins(bins, bin_size, TASK_JIGSAW, None)
+            pooled.append(apply_pool(encoded, self.pooling))
+        if self.include_masked_task:
+            mbs = self.backbone.mask_bin_size
+            trimmed = (spectrum_length // mbs) * mbs
+            bins = x[:, :trimmed].reshape(x.shape[0], trimmed // mbs, mbs)
+            no_mask = torch.zeros(bins.shape[0], bins.shape[1], dtype=torch.bool, device=x.device)
+            encoded = self.backbone.encode_bins(bins, mbs, TASK_MASKED, no_mask)
+            pooled.append(apply_pool(encoded, self.pooling))
+        return torch.cat(pooled, dim=1)
 
     def forward(self, x: torch.Tensor, return_logits: bool = False):
         logits = self.classifier(self.encode(x))
@@ -146,11 +183,15 @@ def build_joint_classifier(
     device: torch.device,
     include_masked_task: bool = True,
     reinit_unfrozen: bool = False,
+    pooling: str = "mean_pool",
 ):
     backbone = build_joint_model_from_loaded_checkpoint(checkpoint, device)
     normalize_input = resolve_normalize_mode(normalize_input_mode, spectra, checkpoint)
     bin_sizes = [int(b) for b in checkpoint.get("jigsaw_bin_sizes", backbone.jigsaw_bin_sizes)]
-    model = JointSSLSoftmaxClassifier(backbone, bin_sizes, n_classes, head_dropout, include_masked_task=include_masked_task)
+    model = JointSSLSoftmaxClassifier(
+        backbone, bin_sizes, n_classes, head_dropout,
+        include_masked_task=include_masked_task, pooling=(pooling or "mean_pool"),
+    )
 
     for parameter in model.backbone.parameters():
         parameter.requires_grad = False

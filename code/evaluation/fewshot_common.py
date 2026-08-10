@@ -277,6 +277,7 @@ def evaluate_jigsaw_fewshot(spectra, y, n_classes, label_names, checkpoint_path,
 def evaluate_joint_fewshot(spectra, y, n_classes, label_names, checkpoint_path, fine_tune_modes,
                             splits_by_size, args, device, model_label="joint_ssl_metabolights"):
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    pooling = getattr(args, "pooling", "mean_pool") or "mean_pool"
 
     # normalize_input is a fixed property of the checkpoint/mode, not of any
     # particular episode -- resolve it once via a throwaway frozen build.
@@ -289,6 +290,7 @@ def evaluate_joint_fewshot(spectra, y, n_classes, label_names, checkpoint_path, 
         unfreeze_layers=0,
         device=device,
         include_masked_task=args.joint_include_masked_task,
+        pooling=pooling,
     )
     del _throwaway
     normalized_spectra = maybe_normalize_eval_spectra(spectra, config["normalize_input"])
@@ -314,6 +316,7 @@ def evaluate_joint_fewshot(spectra, y, n_classes, label_names, checkpoint_path, 
                         device=device,
                         include_masked_task=args.joint_include_masked_task,
                         reinit_unfrozen=getattr(args, "reinit_unfrozen_xavier", False),
+                        pooling=pooling,
                     )
                     train_joint_one_fold(
                         model,

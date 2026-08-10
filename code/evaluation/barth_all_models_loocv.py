@@ -43,11 +43,12 @@ from sklearn.model_selection import LeaveOneOut
 from torch.utils.data import DataLoader, TensorDataset
 
 ROOT = Path(__file__).resolve().parents[2]
-for path in (ROOT, ROOT / "code" / "evaluation", ROOT / "code" / "training"):
+for path in (ROOT, ROOT / "code" / "evaluation", ROOT / "code" / "training", ROOT / "code" / "analysis"):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
 from brc_t2d_common import binned_abs_area, classical_models, probability_matrix  # noqa: E402
+from linear_probe_frozen_embeddings import apply_pool, pooled_feature_dim  # noqa: E402
 from joint_ssl_eval_common import (  # noqa: E402
     FINE_TUNE_CHOICES,
     build_joint_classifier,
@@ -277,20 +278,24 @@ def infer_mae_config(state, nhead: int, dropout: float):
 
 
 class MaskedMAEClassifier(nn.Module):
-    def __init__(self, backbone, d_model: int, n_classes: int, head_dropout: float):
+    def __init__(self, backbone, d_model: int, n_classes: int, head_dropout: float,
+                 pooling: str = "mean_pool", n_tokens: int | None = None):
         super().__init__()
         self.backbone = backbone
+        self.pooling = pooling
+        pooled_dim = d_model if pooling == "mean_pool" else pooled_feature_dim(pooling, n_tokens, d_model)
         self.classifier = nn.Sequential(
-            nn.LayerNorm(d_model),
+            nn.LayerNorm(pooled_dim),
             nn.Dropout(head_dropout),
-            nn.Linear(d_model, n_classes),
+            nn.Linear(pooled_dim, n_classes),
         )
         self.softmax = nn.Softmax(dim=1)
         self.unfreeze_layers = 0
 
     def forward(self, x, return_logits: bool = False):
         _, encoded = self.backbone(x, mask=None)
-        logits = self.classifier(encoded.mean(dim=1))
+        pooled = encoded.mean(dim=1) if self.pooling == "mean_pool" else apply_pool(encoded, self.pooling)
+        logits = self.classifier(pooled)
         return logits if return_logits else self.softmax(logits)
 
 
@@ -298,7 +303,11 @@ def build_masked_classifier(state, spectrum_length, n_classes, args, device, unf
     config = infer_mae_config(state, args.nhead, args.backbone_dropout)
     backbone = NMRMaskedAutoencoder(spectrum_length=spectrum_length, **config)
     backbone.load_state_dict(state, strict=True)
-    model = MaskedMAEClassifier(backbone, config["d_model"], n_classes, args.head_dropout)
+    pooling = getattr(args, "pooling", "mean_pool") or "mean_pool"
+    model = MaskedMAEClassifier(
+        backbone, config["d_model"], n_classes, args.head_dropout,
+        pooling=pooling, n_tokens=backbone.encoder.n_patches,
+    )
     for parameter in model.backbone.parameters():
         parameter.requires_grad = False
     layers = model.backbone.encoder.transformer.layers
@@ -527,15 +536,23 @@ def build_jigsaw_model_from_loaded_checkpoint(checkpoint: dict, device):
 
 
 class JigsawClassifier(nn.Module):
-    def __init__(self, backbone, bin_sizes, d_model, n_classes, head_dropout, normalize_input):
+    def __init__(self, backbone, bin_sizes, spectrum_length, d_model, n_classes, head_dropout, normalize_input,
+                 pooling: str = "mean_pool"):
         super().__init__()
         self.backbone = backbone
         self.bin_sizes = [int(b) for b in bin_sizes]
         self.normalize_input = bool(normalize_input)
+        self.pooling = pooling
+        if pooling == "mean_pool":
+            pooled_dim = d_model * len(self.bin_sizes)
+        else:
+            pooled_dim = sum(
+                pooled_feature_dim(pooling, spectrum_length // size, d_model) for size in self.bin_sizes
+            )
         self.classifier = nn.Sequential(
-            nn.LayerNorm(d_model * len(self.bin_sizes)),
+            nn.LayerNorm(pooled_dim),
             nn.Dropout(head_dropout),
-            nn.Linear(d_model * len(self.bin_sizes), n_classes),
+            nn.Linear(pooled_dim, n_classes),
         )
         self.softmax = nn.Softmax(dim=1)
         self.unfreeze_layers = 0
@@ -547,7 +564,7 @@ class JigsawClassifier(nn.Module):
         positions = torch.arange(encoded.shape[1], device=encoded.device)
         encoded = encoded + self.backbone.slot_embedding(positions).unsqueeze(0)
         encoded = self.backbone.transformer(encoded)
-        return encoded.mean(dim=1)
+        return encoded.mean(dim=1) if self.pooling == "mean_pool" else apply_pool(encoded, self.pooling)
 
     def encode(self, x):
         return torch.cat([self.encode_one_bin_size(x, size) for size in self.bin_sizes], dim=1)
@@ -562,13 +579,16 @@ def build_jigsaw_classifier(checkpoint, spectra, n_classes, args, device, unfree
     hp = checkpoint.get("hyperparameters", {})
     bin_sizes = [int(b) for b in checkpoint["bin_sizes"]]
     normalize_input = resolve_normalize_mode(args.normalize_input, spectra)
+    pooling = getattr(args, "pooling", "mean_pool") or "mean_pool"
     model = JigsawClassifier(
         backbone,
         bin_sizes,
+        int(checkpoint["spectrum_length"]),
         int(hp.get("d_model", 192)),
         n_classes,
         args.head_dropout,
         normalize_input,
+        pooling=pooling,
     )
     for parameter in model.backbone.parameters():
         parameter.requires_grad = False

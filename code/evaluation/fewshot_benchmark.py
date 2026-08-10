@@ -47,7 +47,7 @@ for path in (ROOT, ROOT / "code" / "evaluation", ROOT / "code" / "training"):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from brc_t2d_common import binned_abs_area  # noqa: E402
+from brc_t2d_common import binned_abs_area, load_brc_t2d  # noqa: E402
 from joint_ssl_eval_common import FINE_TUNE_CHOICES, choose_device, set_seed  # noqa: E402
 from barth_all_models_loocv import load_barth  # noqa: E402
 from mtbls326_loocv import load_mtbls326  # noqa: E402
@@ -63,30 +63,54 @@ from fewshot_common import (  # noqa: E402
 
 
 DATASET_DEFAULTS = {
+    # v4-suppressed data, matching every full-data-CV number in
+    # docs/SSL_vs_classical_analysis.md (§3), so the few-shot curve here is
+    # directly comparable to the reported full-data points at its top end.
     "barth": dict(
-        data="data/Barth/aligned_128K_Workbench_Barth_Syndrome.npy",
+        data="data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v4.npy",
         metadata="data/Barth/Workbench_Barth_Syndrome_metadata.csv",
         label_column="label",
         exclude_labels=["Pool"],
     ),
     "mtbls326": dict(
-        data="data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+        data="data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
         metadata="data/mtbls326/MTBLS326_metadata_mapping.csv",
         label_column=None,
         exclude_labels=[],
     ),
     "mtbls563": dict(
-        data="data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax.npy",
+        data="data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_rowMinMax_v4.npy",
         metadata="data/mtbls563/MTBLS563_metadata_mapping.csv",
         label_column="Factor Value[Diagnosis]",
         exclude_labels=["unknown"],
     ),
+    # BrC-T2D was previously unsupported here (§6 note) -- load_brc_t2d already
+    # returns the (spectra, labels, metadata, label_names) shape this script
+    # expects, so wiring it in is just two DATASET_DEFAULTS entries + a
+    # load_dataset branch, not a new loader.
+    "brc_t2d_cancer": dict(
+        data="data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v4.npy",
+        metadata="data/BrC_T2D/BC_T2D_newlabels_metadata_mapping.csv",
+        label_column="cancer_status",
+        exclude_labels=[],
+    ),
+    "brc_t2d_diabetes": dict(
+        data="data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_rowMinMax_v4.npy",
+        metadata="data/BrC_T2D/BC_T2D_newlabels_metadata_mapping.csv",
+        label_column="diabetes_status",
+        exclude_labels=[],
+    ),
 }
 
+# The same 2026-07-25 checkpoints every full-data number in the analysis doc
+# is read against (§9 provenance) -- NOT one of the exp15 seed replicates.
+# Cherry-picking a lucky seed for this run would just reintroduce the §15
+# sampling-artifact mistake one level up; use the one reference checkpoint
+# everything else in the document is comparable to.
 DEFAULT_CHECKPOINTS = dict(
-    masking="models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_20260708_085105_bs32_mr0.20-0.60_ps1024_best.pth",
-    jigsaw="models/jigsaw/multibin/20260708_070540/multibin_20260708_070540_best.pth",
-    joint_ssl="models/joint_ssl/joint_ssl_20260708_071714/joint_ssl_20260708_071714_best.pth",
+    masking="models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth",
+    jigsaw="models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth",
+    joint_ssl="models/joint_ssl/joint_ssl_20260725_085627/joint_ssl_20260725_085627_best.pth",
 )
 
 
@@ -97,6 +121,8 @@ def load_dataset(name: str, args):
         return load_mtbls326(args.data, args.metadata)
     if name == "mtbls563":
         return load_barth(args.data, args.metadata, args.label_column, args.exclude_labels)
+    if name in ("brc_t2d_cancer", "brc_t2d_diabetes"):
+        return load_brc_t2d(args.data, args.metadata, args.label_column)
     raise ValueError(f"Unknown dataset {name!r}")
 
 
@@ -132,6 +158,16 @@ def parse_args():
     parser.add_argument("--feature-bins", type=int, default=1024)
     parser.add_argument("--xgb-jobs", type=int, default=4)
 
+    parser.add_argument(
+        "--pooling", default="regional:16",
+        help="Position-preserving pooling (docs §5c/§14) applied in place of the SSL heads' "
+             "hardcoded mean-pool: 'mean_pool' (old behaviour), 'flatten', or 'regional:G'. "
+             "regional:G is clamped per-component to that component's own token count, so one "
+             "flag applies cleanly across masking/jigsaw/joint despite their different token "
+             "counts per bin size. Default matches the safer moderate-G default §14 settled on "
+             "over flatten for n=37..113; at the smallest few-shot support sizes even that may "
+             "be too high-dimensional -- watch for it in the learning curve, don't assume it away.",
+    )
     parser.add_argument("--masking-checkpoint", default=DEFAULT_CHECKPOINTS["masking"])
     parser.add_argument("--jigsaw-checkpoint", default=DEFAULT_CHECKPOINTS["jigsaw"])
     parser.add_argument("--joint-checkpoint", default=DEFAULT_CHECKPOINTS["joint_ssl"])

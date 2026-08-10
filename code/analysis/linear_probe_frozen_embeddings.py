@@ -156,6 +156,31 @@ def pool_tokens(enc: "torch.Tensor", pooling: str) -> "torch.Tensor":
     raise ValueError(f"unknown pooling {pooling!r}")
 
 
+def apply_pool(enc: "torch.Tensor", pooling: str) -> "torch.Tensor":
+    """`pool_tokens`, but clamps a `regional:G` request to the token count.
+
+    Used when a single `--pooling` flag is shared across families/bin sizes
+    whose token counts differ (e.g. jigsaw's four bin sizes) -- `regional:16`
+    should mean "16, or every token if there are fewer than 16" rather than
+    raising on the components that happen to have <16 tokens.
+    """
+    if pooling.startswith("regional:"):
+        groups = min(int(pooling.split(":", 1)[1]), enc.shape[1])
+        return pool_tokens(enc, f"regional:{groups}")
+    return pool_tokens(enc, pooling)
+
+
+def pooled_feature_dim(pooling: str, n_tokens: int, d_model: int) -> int:
+    """Output width of `apply_pool(enc, pooling)` for an (n_tokens, d_model) input, without needing the tensor."""
+    if pooling == "mean_pool":
+        return d_model
+    if pooling == "flatten":
+        return n_tokens * d_model
+    if pooling.startswith("regional:"):
+        return min(int(pooling.split(":", 1)[1]), n_tokens) * d_model
+    raise ValueError(f"unknown pooling {pooling!r}")
+
+
 def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, seed=42,
                   pooling="mean_pool", nhead=None):
     from trainer_revised import NMRMaskedAutoencoder
