@@ -108,6 +108,20 @@ ARMS = [
     ("exp13_v3drop1pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop1pct_seed301_20260809_065059_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
     ("exp13_v3drop5pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop5pct_seed301_20260809_065056_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
     ("exp13_v3drop10pct", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3drop10pct_seed301_20260809_091113_bs32_mr0.20-0.60_ps1024_seed101_best.pth", None),
+    # EXPERIMENT #15 (docs §15): seed replicates. The v3 reference that §5f's
+    # entire +0.069 corpus effect rests on -- ps1024_nhead4_true above -- is a
+    # SINGLE run, and it is the highest of six comparable v3-family arms (sd
+    # 0.030, range 0.081; the other five average 0.831 vs v4's 0.820). These
+    # arms give each corpus n=5 so the gap can be read with error bars instead
+    # of one draw against a well-estimated mean.
+    #   v3 n=5 = these four + ps1024_nhead4_true (the original unseeded run)
+    ("exp15_v3_seed202", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260809_141143_bs32_mr0.20-0.60_ps1024_seed202_best.pth", None),
+    ("exp15_v3_seed303", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260809_131731_bs32_mr0.20-0.60_ps1024_seed303_best.pth", None),
+    ("exp15_v3_seed404", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260809_161833_bs32_mr0.20-0.60_ps1024_seed404_best.pth", None),
+    ("exp15_v3_seed505", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260809_135837_bs32_mr0.20-0.60_ps1024_seed505_best.pth", None),
+    #   v4 n=5 = these two + exp7_D_baseline_v4 + exp7_D_v4_seed101 + exp7_D_v4_seed202
+    ("exp15_v4_seed303", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260809_190308_bs32_mr0.20-0.60_ps1024_seed303_best.pth", None),
+    ("exp15_v4_seed404", f"{BASE}/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4_20260809_193806_bs32_mr0.20-0.60_ps1024_seed404_best.pth", None),
 ]
 
 
