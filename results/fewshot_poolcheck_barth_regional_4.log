@@ -1,0 +1,11 @@
+Loaded (37, 131072); label mapping={0: 'Control', 1: 'Case'}; counts={'Control': 14, 'Case': 23}
+Support sizes: [2, 5] (x10 repeats each)
+Built shared episode splits (identical across all families).
+SSL device: cuda
+[masking/mask_metabolights/frozen] support=2 repeat=1/10 (1/20)[masking/mask_metabolights/frozen] support=2 repeat=2/10 (2/20)[masking/mask_metabolights/frozen] support=2 repeat=3/10 (3/20)[masking/mask_metabolights/frozen] support=2 repeat=4/10 (4/20)[masking/mask_metabolights/frozen] support=2 repeat=5/10 (5/20)[masking/mask_metabolights/frozen] support=2 repeat=6/10 (6/20)[masking/mask_metabolights/frozen] support=2 repeat=7/10 (7/20)[masking/mask_metabolights/frozen] support=2 repeat=8/10 (8/20)[masking/mask_metabolights/frozen] support=2 repeat=9/10 (9/20)[masking/mask_metabolights/frozen] support=2 repeat=10/10 (10/20)[masking/mask_metabolights/frozen] support=5 repeat=1/10 (11/20)[masking/mask_metabolights/frozen] support=5 repeat=2/10 (12/20)[masking/mask_metabolights/frozen] support=5 repeat=3/10 (13/20)[masking/mask_metabolights/frozen] support=5 repeat=4/10 (14/20)[masking/mask_metabolights/frozen] support=5 repeat=5/10 (15/20)[masking/mask_metabolights/frozen] support=5 repeat=6/10 (16/20)[masking/mask_metabolights/frozen] support=5 repeat=7/10 (17/20)[masking/mask_metabolights/frozen] support=5 repeat=8/10 (18/20)[masking/mask_metabolights/frozen] support=5 repeat=9/10 (19/20)[masking/mask_metabolights/frozen] support=5 repeat=10/10 (20/20)
+Masked-SSL done.
+
+Results written to results/fewshot/poolcheck_barth_regional_4/fewshot_summary.csv
+Per-episode metrics: results/fewshot/poolcheck_barth_regional_4/fewshot_episode_metrics.csv
+Plots:
+  - results/fewshot/poolcheck_barth_regional_4/plots/fewshot_balanced_accuracy_by_family.png
