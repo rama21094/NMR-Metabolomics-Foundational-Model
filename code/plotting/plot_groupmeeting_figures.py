@@ -187,7 +187,9 @@ def fig_seed_study():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.60),
                                  gridspec_kw={"width_ratios": [1.3, 1]})
     rng = np.random.default_rng(0)
+    XP = [0.0, 1.45]        # group centres, spread so captions do not collide
     for i, (vals, col) in enumerate([(v3, DEEP), (v4, TEAL)]):
+        i = XP[i]
         xs = i + rng.uniform(-0.07, 0.07, len(vals))
         a1.scatter(xs, vals, s=160, color=col, zorder=3, edgecolor="white", lw=1.8)
         m, sd = np.mean(vals), np.std(vals, ddof=1)
@@ -201,9 +203,9 @@ def fig_seed_study():
                 xy=(0.055, 0.8884), xytext=(0.30, 0.8925), va="top",
                 arrowprops=dict(arrowstyle="->", color=CORAL, lw=2.2),
                 fontsize=14.5, color=CORAL, fontweight="bold")
-    a1.set_xticks([0, 1])
+    a1.set_xticks(XP)
     a1.set_xticklabels(["v3 corpus\n(n=5 seeds)", "v4 corpus\n(n=5 seeds)"])
-    a1.set_xlim(-0.42, 2.20)
+    a1.set_xlim(-0.40, 2.42)
     a1.set_ylim(0.752, 0.918)
     a1.set_ylabel("Held-out mean\nbalanced accuracy")
     a1.set_title("10 pretraining runs, ~45 GPU-hours", fontweight="bold")

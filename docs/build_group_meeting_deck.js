@@ -1161,7 +1161,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     });
   });
   s.addText("Thank you — and thanks to Gayatree for the Tirupati TBI samples that started this off.", {
-    x: 1.0, y: 6.82, w: 11.3, h: 0.35, fontFace: F, fontSize: 15, color: "7FA8C4", margin: 0, italic: true,
+    x: 1.0, y: 6.70, w: 11.3, h: 0.32, fontFace: F, fontSize: 15, color: "7FA8C4", margin: 0, italic: true,
   });
   s.addNotes("Leave plenty of time here. The three questions are genuine — especially #2, since the "
     + "scaling answer depends on data we may not have.");
