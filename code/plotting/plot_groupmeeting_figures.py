@@ -413,6 +413,7 @@ if __name__ == "__main__":
     fig_recalibration()
     fig_fewshot_curves()
     fig_fewshot_paired()
+    fig_fewshot_paired_5panel()
     print("\nall deck figures written to", OUT)
 
 
@@ -505,3 +506,58 @@ def fig_reconstruction(n_eval=50):
     print(f"   [recon over n={n_eval} spectra]  whole-spectrum r = {r_whole.mean():.3f} "
           f"± {r_whole.std(ddof=1):.3f}   masked-only r = {r_mask.mean():.3f} "
           f"± {r_mask.std(ddof=1):.3f}  (range {r_mask.min():.2f}–{r_mask.max():.2f})")
+
+
+# ------------------- 9. paired deltas, one panel per target (de-congested) ---
+def fig_fewshot_paired_5panel():
+    """Slide 24's left panel replacement.
+
+    The single-axes overlay (5 lines + error bars sharing one plot, in
+    fig_fewshot_paired's axl) reads as congested -- overlapping error bars in
+    the -0.05..-0.10 band make it hard to tell whose line is whose. Same data,
+    laid out as 5 small multiples (matching fig_fewshot_curves' 2x3 grid) so
+    each target's curve and error bars stand alone.
+    """
+    runs = [("Barth", "results/fewshot/barth_v2_repooled"),
+            ("MTBLS326", "results/fewshot/mtbls326_v2_coarse_pass1"),
+            ("MTBLS563", "results/fewshot/mtbls563_v2_coarse"),
+            ("BrC-T2D cancer", "results/fewshot/brc_t2d_cancer_v2_coarse"),
+            ("BrC-T2D diabetes", "results/fewshot/brc_t2d_diabetes_v2_coarse")]
+    paired = pd.read_csv(ROOT / "results/analysis/fewshot_masking_vs_classical"
+                         / "fewshot_paired_masking_vs_classical.csv")
+    cmap = plt.get_cmap("tab10")
+
+    fig, axes = plt.subplots(2, 3, figsize=(FIGW, 4.62))
+    axf = axes.ravel()
+    YLIM = (-0.145, 0.075)   # shared across panels: same data range as before,
+                              # so panel heights are directly comparable
+    for i, (ax, (name, _rel)) in enumerate(zip(axf, runs)):
+        p = paired[paired.dataset == name].sort_values("support_per_class")
+        ax.axhspan(-0.02, 0.02, color="0.86", alpha=0.6, zorder=0)
+        ax.axhline(0, color="k", lw=1.6, zorder=1)
+        ax.errorbar(p.support_per_class, p.paired_diff, yerr=p.se, marker="o",
+                    ms=6.5, lw=2.3, capsize=4, capthick=1.7, color=cmap(i), zorder=3)
+        ax.set_title(name, fontsize=17, fontweight="bold")
+        ax.set_ylim(*YLIM)
+        ax.set_xlabel("labels per class", fontsize=15.5)
+        ax.grid(alpha=0.28, ls="--")
+        ax.set_axisbelow(True)
+        ax.tick_params(labelsize=14.5)
+    fig.supylabel("Paired Δ balanced accuracy\n(SSL − classical)", fontsize=16)
+
+    axf[5].axis("off")
+    axf[5].text(0.0, 0.92, "Grey band = paired noise floor (±0.02)",
+                fontsize=15.5, va="top", ha="left", color="0.35",
+                transform=axf[5].transAxes)
+    axf[5].text(0.0, 0.74, "Error bars = se across 10 shared episodes",
+                fontsize=15.5, va="top", ha="left", color="0.35",
+                transform=axf[5].transAxes)
+    axf[5].text(0.0, 0.50,
+                "Below zero: classical ahead.\n"
+                "Every target ends below zero\n"
+                "or inside the noise band —\n"
+                "none finish with SSL clearly\n"
+                "ahead.",
+                fontsize=16, va="top", ha="left", fontweight="bold", color=NAVY,
+                linespacing=1.5, transform=axf[5].transAxes)
+    save(fig, "gm07b_fewshot_paired_5panel.png")
