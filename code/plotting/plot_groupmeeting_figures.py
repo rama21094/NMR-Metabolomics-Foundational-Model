@@ -394,9 +394,9 @@ def fig_fewshot_paired():
     # a negative bar's label at its own end put "-0.039" on top of the
     # "MTBLS326" tick label.
     for yi, v in zip(y, vals):
-        axr.text(0.160, yi, f"{v:+.3f}", va="center", ha="right",
+        axr.text(0.182, yi, f"{v:+.3f}", va="center", ha="right",
                  fontsize=15, fontweight="bold", color="0.25")
-    axr.set_xlim(-0.125, 0.163)
+    axr.set_xlim(-0.125, 0.186)
     axr.set_xticks([-0.10, 0.0, 0.05])   # 4 ticks ran into each other
     axr.grid(axis="x", alpha=0.28, ls="--")
     axr.set_axisbelow(True)

@@ -758,7 +758,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       border: { type: "solid", color: "D8DEE4", pt: 0.75 }, fontFace: F, valign: "middle",
       margin: [0.04, 0.12, 0.04, 0.12],
     });
-  s.addText("Finer patches lost on 0 of 5 wins. Both arms were worse.", {
+  s.addText("Finer patches won 0 of 5 targets — both arms were worse.", {
     x: 0.55, y: 4.70, w: 12.2, h: 0.34, fontFace: F, fontSize: 16.5, bold: true, color: CORAL, align: "center", margin: 0,
   });
 
