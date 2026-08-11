@@ -1,7 +1,11 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-08-09. Experiments **#1–#5, #7, #7b, #8, #13, #14 done**; #6, #9–#12
-queued. Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
+**Status:** updated 2026-08-10. Experiments **#1–#8, #13, #14, #15 done**; #9–#12
+queued (#9 void). **#6 is the decisive one and it is negative:** masked SSL does not beat
+classical LogReg at any label budget on any of the five targets, and pooled at the smallest
+budget the difference is +0.0012 ± 0.0162 (p=0.74) — see §6.
+
+Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
 the correction of record. It also found the actual win (pooling), which remains the only
 robust positive result in this document measured on masking (§5c is a paired
 within-checkpoint comparison, unaffected by everything below) — §14 now shows the same win,
@@ -17,6 +21,11 @@ With n=5 seeds per corpus the gap goes from +0.069 to −0.014 (0.6 se), with v4
 was assumed, and against it only §6b survives among single-run claims. What still stands are
 the **paired within-checkpoint** results — §4b (head fix), §5c (pooling), §14 (jigsaw/joint
 pooling) — plus §6b (pretraining vs a random-init control).
+
+**§6 (2026-08-10) then tested the premise itself** — few-shot transfer on all five targets,
+paired on shared episodes — and found no advantage at any label budget, with the deficit
+*widening* as labels accumulate. The remaining untested explanation is corpus scale (9,670
+spectra); §13 only probed size downward.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
@@ -591,24 +600,92 @@ but lost in 7 (down to −0.077). With n=78 at 10-fold the inner CV selects C fr
 samples per inner fold, so tuning adds variance without reducing bias. **Use fixed
 `C=1`** at these sample sizes; the theoretically-cleaner option is empirically worse.
 
-### #6 — Re-run the few-shot benchmark on v4 (MEDIUM)
-The previous run used pre-cleaning data and 20260708 checkpoints, and its Barth default
-was the unsuppressed raw file — so it needs redoing regardless. This is also where SSL's
-*real* advantage should appear: with n=37–113 downstream samples, full-data CV is close to
-the ceiling of what is learnable, whereas transfer/few-shot is what pretraining buys.
-Pass all paths explicitly:
+### ❌ #6 — RESULT: the few-shot advantage does not exist
+
+The experiment the project's premise rests on. Every number in §3–§5 is measured with the
+full dataset, where n=37..113 is already near the ceiling of what is learnable — the worst
+regime in which to look for a transfer advantage. Transfer is supposed to pay off when
+labels are scarce, so this sweeps the label budget from 2 per class upwards on **all five
+targets** and asks where, if anywhere, the SSL curve sits above the classical one.
+
+Scripts: `code/evaluation/fewshot_benchmark.py`,
+`code/analysis/summarize_fewshot_masking_vs_classical.py`,
+`code/plotting/plot_fewshot_masking_vs_classical.py`. Data
+`results/analysis/fewshot_masking_vs_classical/`, figures `fig17`, `fig18`.
+
+**Three prerequisites had to be fixed before the run meant anything.** The fine-tuning
+classifiers still hardcoded `encoded.mean(dim=1)` — the exact pooling defect §5c fixed
+everywhere else — so left alone this would have handicapped SSL by 0.03..0.13 in the one
+experiment designed to favour it. The dataset defaults still pointed at pre-v4 files
+(including Barth's *unsuppressed* raw array). And BrC-T2D had no loader here at all, so
+only 3 of 5 targets were reachable. All three are now fixed; `--pooling` defaults to
+`regional:16`.
+
+**The comparison is PAIRED.** `build_shared_splits` generates the (support, query) episodes
+once per (seed, support size), independent of model, and every family consumes identical
+draws. So at a fixed (dataset, support, repeat) the classical and SSL rows saw the same
+support set and the same query set, and their difference removes the episode-draw variance —
+which is large here, sd 0.07..0.15 on a single episode, versus a paired se near 0.016. This
+is the §15 distinction applied prospectively rather than retrospectively.
+
+| target | Δ at smallest budget | Δ at largest | pooled Δ ± se | reading |
+|---|---|---|---|---|
+| Barth (n=37) | +0.060 @2 | −0.123 @12 | **−0.029 ± 0.012** | crossover |
+| MTBLS326 (n=42) | −0.039 @2 | +0.018 @13 | **−0.019 ± 0.013** | crossover |
+| MTBLS563 (n=113) | −0.061 @2 | −0.099 @24 | **−0.088 ± 0.009** | classical ahead everywhere |
+| BrC-T2D cancer (n=78) | +0.024 @2 | −0.050 @36 | **−0.059 ± 0.011** | crossover |
+| BrC-T2D diabetes (n=78) | +0.022 @2 | −0.087 @32 | **−0.047 ± 0.014** | crossover |
+
+**Masked SSL does not beat classical LogReg at any label budget on any target.** Three
+targets look positive at 2 labels/class, none individually significant, and **pooled across
+all five: +0.0012 ± 0.0162, p = 0.74** (Wilcoxon, n=50) — dead even. What looks like a
+low-shot edge is both methods sitting near chance where nothing is learnable yet.
+
+**The deficit widens as labels accumulate** — Spearman(support, Δ) is negative on 4 of 5
+(diabetes p=0.036). That is the opposite direction from the transfer premise, which predicts
+the SSL edge shrinking as labels arrive, not growing.
+
+**Fine-tuning the backbone adds nothing.** All four modes land within ~0.01 of each other on
+every target; `frozen` matches `unfreeze_last_3`. Consistent with §5e — the representation
+is being read out, not usefully adapted.
+
+Two checks that make this a result rather than a plumbing artifact:
+
+- **Validation gate.** The top of each curve lands just below that target's known full-data
+  value (Barth 0.782 vs 0.705, cancer 0.900 vs 0.937, MTBLS326 0.957 vs 1.000, MTBLS563
+  0.659 vs 0.721, diabetes 0.762 vs 0.829). The harness measures what §3 measures.
+- **Pooling sensitivity.** The obvious objection is that `regional:16` gives 2,048 features
+  against 4 samples at support=2, handicapping SSL precisely where the claim is made. It
+  does not: `regional:16` **won 6 of 6** low-support points against `mean_pool` (128 feat)
+  and `regional:4` (512 feat) on Barth / BrC cancer / MTBLS563. Even letting SSL pick its
+  best pooling post-hoc per point — which inflates SSL — the pooled estimate is
+  **−0.033 ± 0.014, p = 0.006**. Still negative.
+
+**What this closes.** §6 was the strongest remaining case for the backbone. Combined with
+§6b (masked pretraining does learn something real, +0.117 over random init) the picture is
+coherent rather than contradictory: the objective works, but it encodes less discriminative
+signal than 1,024-bin integrated areas already carry, and no axis we pushed (patch size §5b,
+capacity §5d, objective §7, corpus §15) moved it.
+
+**The most likely cause still untested is corpus scale**: 9,670 spectra is very small for a
+foundation model. §13 only probed corpus size *downward* (dropping 1–10%), which cannot
+detect an under-training regime. See the queue below.
+
 ```bash
-python -u code/evaluation/fewshot_benchmark.py --dataset barth \
-  --data data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_rowMinMax_v4.npy \
-  --metadata data/Barth/Workbench_Barth_Syndrome_metadata.csv \
-  --label-column label --exclude-labels Pool \
-  --masking-checkpoint models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth \
-  --jigsaw-checkpoint models/jigsaw/multibin/20260725_085608/multibin_20260725_085608_best.pth \
-  --joint-checkpoint models/joint_ssl/joint_ssl_20260725_085627/joint_ssl_20260725_085627_best.pth \
-  --output-dir results/fewshot/barth_v4 2>&1 | tee results/fewshot_barth_v4.log
+# pass 1 -- classical + masking, coarse support grid, 2 jobs per GPU
+python -u code/evaluation/fewshot_benchmark.py --dataset brc_t2d_cancer \
+  --families classical masking --support-sizes 2 5 10 15 20 25 30 36 --device cuda \
+  --output-dir results/fewshot/brc_t2d_cancer_v2_coarse
+# pass 2 -- jigsaw + joint. NOTE: a DEDICATED --output-dir per pass. The script
+# rebuilds all_rows from scratch and checkpoints after every family, so pointing
+# pass 2 at pass 1's directory overwrites it (this destroyed MTBLS326's pass-1
+# episodes once; load_episodes() now refuses a directory missing a family).
+python -u code/evaluation/fewshot_benchmark.py --dataset brc_t2d_cancer \
+  --families jigsaw joint_ssl --support-sizes 2 5 10 15 20 25 30 36 --device cuda \
+  --output-dir results/fewshot/brc_t2d_cancer_pass2
+python code/analysis/summarize_fewshot_masking_vs_classical.py
+python code/plotting/plot_fewshot_masking_vs_classical.py
 ```
-(and analogously for `--dataset mtbls326` / `mtbls563` with their v4 `_rowMinMax_v4.npy`
-paths; BrC-T2D is not yet supported by this script and would need a loader added.)
 
 ### ❌ #7 — RESULT: block masking fails, peak weighting is a wash
 
@@ -1018,6 +1095,20 @@ python code/analysis/summarize_exp15_seed_study.py
 python code/plotting/plot_exp15_seed_study.py
 ```
 
+### ⭐ #16 — Cross-cohort transfer (the strongest untested case for the backbone)
+Every evaluation so far is *within* a cohort. A foundation model's actual selling point is
+generalising across instruments, sites and batches — exactly where absolute binned
+intensities should degrade and a learned representation might not. Train the probe on one
+cohort, test on another; 4 cohorts are available and no retraining is needed, so this is
+cheap. If SSL wins anywhere it is here; if it loses here too, the backbone approach is closed
+at this data scale.
+
+### ⭐ #17 — Corpus scaling curve, upward
+Pretrain at 25 / 50 / 100% of available spectra and check whether downstream utility is still
+climbing at 9,670. Flat ⇒ the objective is the limit. Rising ⇒ the answer is "needs 10–100×
+more data". Either is actionable. Budget ≥5 seeds per point per §15's rule (~23 GPU-h each),
+so ~70 GPU-h for three points — decide the point count before starting.
+
 ### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
 Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
 n=42 is more likely a batch/run-order artifact than real biology. Until this is checked,
@@ -1161,10 +1252,14 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/plotting/plot_exp13_size_sweep.py`,
   `code/analysis/sweep_pooling_jigsaw_joint.py`,
   `code/analysis/hybrid_features.py`,
+  `code/evaluation/fewshot_benchmark.py`,
+  `code/analysis/summarize_fewshot_masking_vs_classical.py`,
+  `code/plotting/plot_fewshot_masking_vs_classical.py`,
+  `code/plotting/plot_groupmeeting_figures.py`,
   `code/training/run_seed_queue.sh`,
   `code/analysis/summarize_exp15_seed_study.py`,
   `code/plotting/plot_exp15_seed_study.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig16`.
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in `docs/gm_figures/`.
 - **Reproducibility (§7b, corrected 2026-08-09):** `--seed` DOES make training reproducible —
   two same-seed runs of the same arm are byte-identical (max|ΔW| = 0.000e+00) once both have
   finished. The earlier claim to the contrary compared against a mid-training checkpoint and is
