@@ -86,7 +86,7 @@ def fig_headline():
 
     x = np.arange(5)
     w = 0.2
-    fig, ax = plt.subplots(figsize=(FIGW, 4.75))
+    fig, ax = plt.subplots(figsize=(FIGW, 4.60))
     ax.bar(x - 1.5 * w, classical, w, label="Classical (LogReg, 1024 bins)", color=GOLD)
     ax.bar(x - 0.5 * w, masked, w, label="SSL — masked", color=DEEP)
     ax.bar(x + 0.5 * w, jigsaw, w, label="SSL — jigsaw", color=TEAL)
@@ -184,7 +184,7 @@ def fig_seed_study():
     """docs §15."""
     v3 = [0.8884, 0.8190, 0.8067, 0.8033, 0.7653]
     v4 = [0.8667, 0.8272, 0.8232, 0.8199, 0.8158]
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.9),
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.60),
                                  gridspec_kw={"width_ratios": [1.3, 1]})
     rng = np.random.default_rng(0)
     for i, (vals, col) in enumerate([(v3, DEEP), (v4, TEAL)]):
@@ -244,7 +244,7 @@ def fig_recalibration():
         ("Peak weighting (unmatched)", 0.011, False),
         ("Bigger model (d256, L6)", 0.006, False),
     ]
-    fig, ax = plt.subplots(figsize=(FIGW, 4.9))
+    fig, ax = plt.subplots(figsize=(FIGW, 4.60))
     y = np.arange(len(claims))[::-1]
     vals = [abs(c[1]) for c in claims]
     cols = [GREEN if c[2] else (CORAL if "RETRACTED" in c[0] else GREY) for c in claims]
@@ -306,7 +306,7 @@ def fig_fewshot_curves():
         ax.grid(alpha=0.28, ls="--")
         ax.set_axisbelow(True)
         ax.tick_params(labelsize=15)
-        ax.set_xlabel("labels per class", fontsize=15.5)   # every panel, not just some
+        ax.set_xlabel("labels per class", fontsize=16)   # every panel, not just some
         handles, labels = ax.get_legend_handles_labels()
     # One shared y-label: per-column labels on the top-left panel collided with
     # the panel title row and got clipped at the figure edge.
@@ -341,7 +341,7 @@ def fig_fewshot_paired():
             ("BrC-T2D diabetes", "results/fewshot/brc_t2d_diabetes_v2_coarse")]
     paired = pd.read_csv(ROOT / "results/analysis/fewshot_masking_vs_classical"
                          / "fewshot_paired_masking_vs_classical.csv")
-    fig, (axl, axr) = plt.subplots(1, 2, figsize=(FIGW, 4.85),
+    fig, (axl, axr) = plt.subplots(1, 2, figsize=(FIGW, 4.60),
                                    gridspec_kw={"width_ratios": [1.28, 1]})
     cmap = plt.get_cmap("tab10")
     for i, (name, _) in enumerate(runs):

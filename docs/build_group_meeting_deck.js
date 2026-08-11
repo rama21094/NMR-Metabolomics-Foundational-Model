@@ -30,13 +30,13 @@ pres.title = "Foundation Model for NMR Metabolomics — Group Meeting Aug 2026";
 // Recorded aspect ratios; any figure used here must be registered so a renamed
 // or re-rendered figure fails loudly instead of being silently stretched.
 const AR = {
-  "gm01_headline.png": 2.3158,
+  "gm01_headline.png": 2.3939,
   "gm02_free_wins.png": 2.3939,
   "gm03_pretraining_gain.png": 2.3939,
-  "gm04_seed_study.png": 2.2449,
-  "gm05_recalibration.png": 2.2449,
+  "gm04_seed_study.png": 2.3939,
+  "gm05_recalibration.png": 2.3939,
   "gm06_fewshot_curves.png": 2.3810,
-  "gm07_fewshot_paired.png": 2.2704,
+  "gm07_fewshot_paired.png": 2.3939,
   "gm08_reconstruction.png": 2.7160,
 };
 
@@ -183,7 +183,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     { text: "Three evaluation routes sketched: embeddings+ML, classification head, ML-only", options: { bullet: true } },
   ], {
     x: 0.85, y: 2.16, w: 5.4, h: 3.68, fontFace: F, fontSize: 15.5, color: INK,
-    margin: 0, paraSpaceAfter: 9, lineSpacing: 18.5,
+    margin: 0, paraSpaceAfter: 15, lineSpacing: 19,
   });
 
   card(s, { x: 6.8, y: 1.6, w: 5.95, h: 4.35, fill: TINT_BAD });
@@ -421,7 +421,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("The pretext task itself works very well",
     "Re-measured from February — and this is exactly where the trap was");
-  fig(s, "gm08_reconstruction.png", { x: 0.55, y: 1.52, w: 12.2, h: 4.05 });
+  fig(s, "gm08_reconstruction.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.05 });
   s.addText([
     { text: "Across 50 spectra:  ", options: { color: MUTED } },
     { text: "r = 0.940 ± 0.090", options: { bold: true, color: NAVY } },
@@ -429,10 +429,10 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     { text: "     (whole-spectrum r = 0.979 — but that includes the 75% of bins the model was given)",
       options: { color: MUTED, italic: true } },
   ], {
-    x: 0.55, y: 5.62, w: 12.2, h: 0.34, fontFace: F, fontSize: 15, align: "center", margin: 0,
+    x: 0.55, y: 5.62, w: 12.2, h: 0.32, fontFace: F, fontSize: 15, align: "center", margin: 0,
   });
 
-  card(s, { x: 0.55, y: 6.02, w: 12.2, h: 0.92, fill: TINT_BAD });
+  card(s, { x: 0.55, y: 6.06, w: 12.2, h: 0.94, fill: TINT_BAD });
   s.addText([
     { text: "The trap:  ", options: { bold: true, color: CORAL } },
     { text: "the pretext task is genuinely solved well — and it still tells you almost nothing. "
@@ -440,7 +440,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
         + "2.3×-better-reconstructing model transferred 0.06 worse. So we never select a checkpoint, "
         + "architecture or epoch on reconstruction loss.", options: { color: INK } },
   ], {
-    x: 0.85, y: 6.12, w: 11.6, h: 0.74, fontFace: F, fontSize: 15.5, margin: 0,
+    x: 0.85, y: 6.13, w: 11.6, h: 0.80, fontFace: F, fontSize: 15.5, margin: 0,
     valign: "middle", lineSpacing: 19,
   });
   s.addNotes("This is the single most transferable lesson for anyone else in the group doing SSL: a "
@@ -456,23 +456,23 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     ["Both classifiers linear", "Classical = StandardScaler → LogReg. SSL = frozen embedding → LogReg probe. So a difference is about the FEATURES, not the classifier."],
   ];
   left.forEach(([head, body], i) => {
-    const y = 1.66 + i * 1.44;
-    card(s, { x: 0.55, y, w: 7.4, h: 1.26 });
+    const y = 1.62 + i * 1.62;
+    card(s, { x: 0.55, y, w: 7.4, h: 1.44 });
     s.addText(head, {
-      x: 0.85, y: y + 0.12, w: 6.8, h: 0.36, fontFace: F, fontSize: 18, bold: true, color: DEEP, margin: 0,
+      x: 0.85, y: y + 0.14, w: 6.8, h: 0.36, fontFace: F, fontSize: 18, bold: true, color: DEEP, margin: 0,
     });
     s.addText(body, {
-      x: 0.85, y: y + 0.5, w: 6.85, h: 0.66, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 18.5,
+      x: 0.85, y: y + 0.54, w: 6.85, h: 0.82, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
     });
   });
 
-  card(s, { x: 8.25, y: 1.66, w: 4.5, h: 4.24, fill: TINT_OK });
+  card(s, { x: 8.25, y: 1.62, w: 4.5, h: 4.86, fill: TINT_OK });
   s.addText("The validation gate", {
-    x: 8.55, y: 1.84, w: 3.95, h: 0.38, fontFace: F, fontSize: 19, bold: true, color: GREEN, margin: 0,
+    x: 8.55, y: 1.80, w: 3.95, h: 0.38, fontFace: F, fontSize: 19, bold: true, color: GREEN, margin: 0,
   });
   s.addText("Before drawing any conclusion, the harness had to reproduce the committed classical "
     + "numbers to 6 decimal places on all five targets:", {
-    x: 8.55, y: 2.26, w: 3.95, h: 1.0, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
+    x: 8.55, y: 2.24, w: 3.95, h: 1.05, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
   });
   s.addText([
     { text: "BrC-T2D cancer", options: { breakLine: true } },
@@ -480,17 +480,17 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     { text: "MTBLS563", options: { breakLine: true } },
     { text: "MTBLS326", options: { breakLine: true } },
     { text: "Barth", options: {} },
-  ], { x: 8.55, y: 3.3, w: 2.3, h: 1.6, fontFace: F, fontSize: 15, color: NAVY, margin: 0, lineSpacing: 22 });
+  ], { x: 8.55, y: 3.42, w: 2.3, h: 1.75, fontFace: F, fontSize: 15, color: NAVY, margin: 0, lineSpacing: 24 });
   s.addText([
     { text: "0.936842", options: { breakLine: true } },
     { text: "0.828877", options: { breakLine: true } },
     { text: "0.720785", options: { breakLine: true } },
     { text: "1.000000", options: { breakLine: true } },
     { text: "0.704969", options: {} },
-  ], { x: 10.85, y: 3.3, w: 1.65, h: 1.6, fontFace: "Courier New", fontSize: 15,
+  ], { x: 10.85, y: 3.42, w: 1.65, h: 1.75, fontFace: "Courier New", fontSize: 15,
        color: NAVY, bold: true, align: "right", margin: 0, lineSpacing: 22 });
   s.addText("Without this, none of the comparisons would mean anything.", {
-    x: 8.55, y: 5.02, w: 3.95, h: 0.72, fontFace: F, fontSize: 15.5, bold: true, color: GREEN, margin: 0, lineSpacing: 19,
+    x: 8.55, y: 5.32, w: 3.95, h: 1.0, fontFace: F, fontSize: 15.5, bold: true, color: GREEN, margin: 0, lineSpacing: 19,
   });
   s.addNotes("The 6-decimal gate is worth emphasising — it is what lets us attribute differences to "
     + "the features rather than to a plumbing discrepancy.");
@@ -500,11 +500,11 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("Step 2 result — classical ML beat every SSL family",
     "Balanced accuracy, v4 data, best mode per family, identical folds");
-  fig(s, "gm01_headline.png", { x: 0.55, y: 1.55, w: 12.2, h: 4.75 });
-  card(s, { x: 0.55, y: 6.36, w: 12.2, h: 0.66, fill: TINT_BAD });
+  fig(s, "gm01_headline.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 12.2, h: 0.80, fill: TINT_BAD });
   s.addText("Consistent ordering: masked > jigsaw ≈ joint. Two of the gaps are large (0.14–0.18). "
     + "Barth and MTBLS326 are effectively ties — half a sample and one sample respectively.", {
-    x: 0.85, y: 6.42, w: 11.6, h: 0.56, fontFace: F, fontSize: 15, color: INK, margin: 0, valign: "middle", lineSpacing: 18,
+    x: 0.85, y: 6.28, w: 11.6, h: 0.66, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 18,
   });
   s.addNotes("This is the result that set the agenda for the next four months. Note it was measured "
     + "with the reported DNN head and mean-pooling — both of which turned out to be fixable.");
@@ -567,12 +567,12 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("Two fixes that cost zero GPU time",
     "Both are PAIRED comparisons — same frozen checkpoint, one thing changed. Both still stand today.");
-  fig(s, "gm02_free_wins.png", { x: 0.55, y: 1.5, w: 12.2, h: 4.59 });
-  card(s, { x: 0.55, y: 6.19, w: 12.2, h: 0.85, fill: TINT_OK });
+  fig(s, "gm02_free_wins.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 12.2, h: 0.80, fill: TINT_OK });
   s.addText("Why these two survived everything that came later: they vary a transform on a FIXED "
     + "checkpoint, so they carry no pretraining run-to-run variance at all. That distinction turns out "
     + "to be the whole story of this project.", {
-    x: 0.85, y: 6.27, w: 11.6, h: 0.70, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 20,
+    x: 0.85, y: 6.27, w: 11.6, h: 0.66, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 20,
   });
   s.addNotes("Pooling: the backbone makes 128 tokens, one per spectral region. Mean-pooling averages "
     + "them and throws away WHERE the signal was — but chemical shift position is the discriminative "
@@ -631,16 +631,16 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("The control we were missing in February",
     "Same architecture, NO pretrained weights anywhere, classifier held fixed — so any difference is the objective");
-  fig(s, "gm03_pretraining_gain.png", { x: 0.55, y: 1.5, w: 12.2, h: 4.59 });
-  card(s, { x: 0.55, y: 6.19, w: 5.95, h: 0.85, fill: TINT_OK });
+  fig(s, "gm03_pretraining_gain.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 5.95, h: 0.80, fill: TINT_OK });
   s.addText("Masked pretraining earns its keep: +0.117 mean, positive on 5 of 5. This is the ONLY "
     + "single-run result in the whole project that clears the noise floor.", {
-    x: 0.80, y: 6.25, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
+    x: 0.80, y: 6.26, w: 5.46, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
-  card(s, { x: 6.8, y: 6.19, w: 5.95, h: 0.85, fill: TINT_BAD });
+  card(s, { x: 6.8, y: 6.20, w: 5.95, h: 0.80, fill: TINT_BAD });
   s.addText("Jigsaw and joint add nothing over a RANDOM projection. A random transformer is a strong "
     + "baseline — so this means the objective, not the architecture, is the problem.", {
-    x: 7.05, y: 6.25, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
+    x: 7.05, y: 6.26, w: 5.46, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
   s.addNotes("Decision from this: concentrate on masking. We stopped developing jigsaw and joint. "
     + "If asked why random is strong — random-feature kernel methods are a real baseline.");
@@ -759,18 +759,18 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       margin: [0.04, 0.12, 0.04, 0.12],
     });
   s.addText("Finer patches lost on 0 of 5 wins. Both arms were worse.", {
-    x: 0.55, y: 4.66, w: 12.2, h: 0.34, fontFace: F, fontSize: 16.5, bold: true, color: CORAL, align: "center", margin: 0,
+    x: 0.55, y: 4.70, w: 12.2, h: 0.34, fontFace: F, fontSize: 16.5, bold: true, color: CORAL, align: "center", margin: 0,
   });
 
-  card(s, { x: 0.55, y: 5.12, w: 12.2, h: 1.66, fill: TINT_OK });
+  card(s, { x: 0.55, y: 5.22, w: 12.2, h: 1.58, fill: TINT_OK });
   s.addText("Why it failed — and this is the interesting part", {
-    x: 0.85, y: 5.24, w: 8.0, h: 0.34, fontFace: F, fontSize: 17.5, bold: true, color: GREEN, margin: 0,
+    x: 0.85, y: 5.32, w: 8.0, h: 0.34, fontFace: F, fontSize: 17.5, bold: true, color: GREEN, margin: 0,
   });
   s.addText("Validation reconstruction loss FELL as patches shrank: 9.3×10⁻⁵ → 5.6×10⁻⁵ → 4.4×10⁻⁵. A masked "
     + "128-point patch is largely interpolable from its neighbours, so shrinking the patch made the pretext "
     + "task EASIER, not more informative — the model can solve it by local smoothing without learning any "
     + "metabolite structure. Patch size and mask ratio jointly set task difficulty; we moved the wrong knob.", {
-    x: 0.85, y: 5.60, w: 11.6, h: 1.1, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
+    x: 0.85, y: 5.68, w: 11.6, h: 1.04, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
   });
   s.addNotes("Also a confound worth admitting: the small-patch models have ~3x fewer parameters, because "
     + "the patch embedding scales with patch size. The falling reconstruction loss is the independent "
@@ -798,7 +798,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       x: 4.25, y: y + 0.06, w: 8.25, h: 0.80, fontFace: F, fontSize: 15, color: INK, margin: 0, valign: "middle", lineSpacing: 18,
     });
   });
-  card(s, { x: 0.55, y: 6.26, w: 12.2, h: 0.70, fill: NAVY });
+  card(s, { x: 0.55, y: 6.24, w: 12.2, h: 0.72, fill: NAVY });
   s.addText("Nobody asked the obvious question: how much does the SAME configuration vary between two training runs?", {
     x: 0.85, y: 6.33, w: 11.6, h: 0.56, fontFace: F, fontSize: 16.5, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
   });
@@ -810,12 +810,12 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("Experiment #15 — so we finally measured the noise",
     "Ten pretraining runs, five per corpus, identical config differing only by random seed");
-  fig(s, "gm04_seed_study.png", { x: 0.55, y: 1.5, w: 12.2, h: 4.9 });
-  card(s, { x: 0.55, y: 6.48, w: 12.2, h: 0.72, fill: TINT_BAD });
+  fig(s, "gm04_seed_study.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 12.2, h: 0.80, fill: TINT_BAD });
   s.addText("The 0.888 reference was rank 1 of 5 and sits +1.6 sd above its own distribution. The gap does not "
     + "shrink — it vanishes and marginally reverses. §5f retracted; experiments #8 and #13 were hunting the "
     + "mechanism of a non-effect.", {
-    x: 0.85, y: 6.55, w: 11.6, h: 0.60, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
+    x: 0.85, y: 6.28, w: 11.6, h: 0.66, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
   s.addNotes("~45 GPU-hours to learn that our headline result was a sampling artifact. Cheapest "
     + "expensive lesson of the project. Emphasise: this was the student's own suggestion to run seeds.");
@@ -825,16 +825,16 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("The worse news — the noise floor was 2× what we assumed",
     "Every single-run claim in the project, re-scored against the measured spread");
-  fig(s, "gm05_recalibration.png", { x: 0.55, y: 1.5, w: 12.2, h: 4.9 });
-  card(s, { x: 0.55, y: 6.48, w: 6.05, h: 0.72, fill: TINT_BAD });
+  fig(s, "gm05_recalibration.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 6.05, h: 0.80, fill: TINT_BAD });
   s.addText("Measured sd = 0.045 on the held-out mean; per target up to 0.076 (Barth). We had been using 0.020 — "
     + "which came from three runs whose errors happened to cancel.", {
-    x: 0.80, y: 6.54, w: 5.55, h: 0.62, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
+    x: 0.80, y: 6.26, w: 5.55, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
-  card(s, { x: 6.9, y: 6.48, w: 5.85, h: 0.72, fill: TINT_OK });
+  card(s, { x: 6.9, y: 6.20, w: 5.85, h: 0.80, fill: TINT_OK });
   s.addText("New standing rule: no single-run difference below 0.09 is an effect. Either ≥5 replicates "
     + "(~23 GPU-h) or a paired comparison — budgeted up front.", {
-    x: 7.15, y: 6.54, w: 5.35, h: 0.62, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
+    x: 7.15, y: 6.26, w: 5.35, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
   s.addNotes("The 0.020 floor is the deeper error: we had explicitly noted at the time that the "
     + "three-run agreement looked like a fluke, called it a fluke in writing, and then adopted it as a "
@@ -920,10 +920,10 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   const s = newLight("Experiment #6 — few-shot benchmark, all 5 targets",
     "Every model sees the IDENTICAL support/query draws — 10 episodes per label budget");
   fig(s, "gm06_fewshot_curves.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.62 });
-  card(s, { x: 0.55, y: 6.22, w: 12.2, h: 0.82, fill: TINT_BAD });
+  card(s, { x: 0.55, y: 6.23, w: 12.2, h: 0.77, fill: TINT_BAD });
   s.addText("Masked SSL sits at or below classical in every panel, at every label budget. The premise was "
     + "that SSL wins on the LEFT of these plots — there is no regime where the pretrained backbone wins.", {
-    x: 0.85, y: 6.30, w: 11.6, h: 0.68, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 19,
+    x: 0.85, y: 6.30, w: 11.6, h: 0.64, fontFace: F, fontSize: 15.5, color: INK, margin: 0, valign: "middle", lineSpacing: 19,
   });
   s.addNotes("Note one methodological fix that mattered: the few-shot classifiers still had the OLD "
     + "hardcoded mean-pooling. Left alone, that would have handicapped SSL by 0.03-0.13 in exactly the "
@@ -934,16 +934,16 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("The same data, analysed as a PAIRED comparison",
     "Shared episodes mean the episode-draw variance cancels — far more power than comparing two error bars");
-  fig(s, "gm07_fewshot_paired.png", { x: 0.55, y: 1.5, w: 12.2, h: 4.84 });
-  card(s, { x: 0.55, y: 6.42, w: 6.05, h: 0.68, fill: TINT_BAD });
+  fig(s, "gm07_fewshot_paired.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.59 });
+  card(s, { x: 0.55, y: 6.20, w: 6.05, h: 0.80, fill: TINT_BAD });
   s.addText("Pooled across all five targets at 2 labels/class: +0.0012 ± 0.0162, p = 0.74. Dead even. What "
     + "looked like a low-shot edge is just both methods sitting near chance.", {
-    x: 0.80, y: 6.47, w: 5.55, h: 0.58, fontFace: F, fontSize: 14, color: INK, margin: 0, valign: "middle", lineSpacing: 16,
+    x: 0.80, y: 6.26, w: 5.55, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 17,
   });
-  card(s, { x: 6.9, y: 6.42, w: 5.85, h: 0.68, fill: TINT });
+  card(s, { x: 6.9, y: 6.20, w: 5.85, h: 0.80, fill: TINT });
   s.addText("And the deficit WIDENS with more labels (negative trend on 4 of 5) — the opposite of what "
     + "transfer learning predicts.", {
-    x: 7.15, y: 6.47, w: 5.35, h: 0.58, fontFace: F, fontSize: 14, color: INK, margin: 0, valign: "middle", lineSpacing: 16,
+    x: 7.15, y: 6.26, w: 5.35, h: 0.68, fontFace: F, fontSize: 14.5, color: INK, margin: 0, valign: "middle", lineSpacing: 16,
   });
   s.addNotes("Explain pairing plainly: for a fixed episode both models saw the same 4 training samples "
     + "and the same test samples, so their difference removes the luck of the draw. Single-episode std is "
