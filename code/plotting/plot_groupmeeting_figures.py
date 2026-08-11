@@ -194,7 +194,7 @@ def fig_seed_study():
         a1.hlines(m, i - 0.24, i + 0.24, color=col, lw=3.5, zorder=4)
         a1.add_patch(plt.Rectangle((i - 0.24, m - sd), 0.48, 2 * sd,
                                    color=col, alpha=0.16, zorder=1))
-        a1.text(i + 0.29, m, f"{m:.3f}\n± {sd:.3f}", ha="left", va="center",
+        a1.text(i + 0.345, m, f"{m:.3f}\n± {sd:.3f}", ha="left", va="center",
                 fontsize=16, fontweight="bold", color=col)
     a1.scatter([0], [0.8884], s=300, facecolor="none", edgecolor=CORAL, lw=3.2, zorder=5)
     a1.annotate("the ONE run every earlier\nnumber used (+1.6 sd)",
@@ -203,7 +203,7 @@ def fig_seed_study():
                 fontsize=14.5, color=CORAL, fontweight="bold")
     a1.set_xticks([0, 1])
     a1.set_xticklabels(["v3 corpus\n(n=5 seeds)", "v4 corpus\n(n=5 seeds)"])
-    a1.set_xlim(-0.42, 2.05)
+    a1.set_xlim(-0.42, 2.20)
     a1.set_ylim(0.752, 0.918)
     a1.set_ylabel("Held-out mean\nbalanced accuracy")
     a1.set_title("10 pretraining runs, ~45 GPU-hours", fontweight="bold")
@@ -482,7 +482,7 @@ def fig_reconstruction(n_eval=50):
     this_r = np.corrcoef(rec[sel], x[sel])[0, 1]
 
     lo, hi = 60000, 100000
-    fig, ax = plt.subplots(figsize=(FIGW, 4.05))
+    fig, ax = plt.subplots(figsize=(FIGW, 4.30))
     for i in np.flatnonzero(mask):
         a, b = i * ps, (i + 1) * ps
         if b > lo and a < hi:
@@ -495,7 +495,8 @@ def fig_reconstruction(n_eval=50):
     ax.set_ylabel("Normalised intensity")
     ax.set_title(f"25% of patches hidden (yellow bands) — a median example, "
                  f"r = {this_r:.2f} on hidden bins", fontweight="bold", fontsize=17)
-    ax.legend(loc="upper left", fontsize=16, framealpha=0.95)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.19), ncol=2,
+              fontsize=16, frameon=False, columnspacing=1.6, handlelength=1.8)
     ax.grid(alpha=0.25, ls="--")
     ax.set_axisbelow(True)
     save(fig, "gm08_reconstruction.png")

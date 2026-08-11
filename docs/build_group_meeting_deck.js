@@ -37,7 +37,7 @@ const AR = {
   "gm05_recalibration.png": 2.3939,
   "gm06_fewshot_curves.png": 2.3810,
   "gm07_fewshot_paired.png": 2.3939,
-  "gm08_reconstruction.png": 2.7160,
+  "gm08_reconstruction.png": 2.5581,
 };
 
 /** Place an image centred in a box, preserving aspect ratio. */
@@ -333,25 +333,25 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     }
   });
 
-  card(s, { x: 0.55, y: 3.62, w: 5.95, h: 2.62, fill: TINT_OK });
+  card(s, { x: 0.55, y: 3.58, w: 5.95, h: 2.78, fill: TINT_OK });
   s.addText("EDTA is a real contaminant problem", {
-    x: 0.85, y: 3.78, w: 5.4, h: 0.36, fontFace: F, fontSize: 18, bold: true, color: GREEN, margin: 0,
+    x: 0.85, y: 3.72, w: 5.4, h: 0.36, fontFace: F, fontSize: 18, bold: true, color: GREEN, margin: 0,
   });
   s.addText([
     { text: "Blood-collection tubes leave EDTA peaks that can dominate a spectrum and swamp the row normalisation.", options: { bullet: true, breakLine: true } },
     { text: "v3 → v4 fixed a genuine cutoff bug: the suppression was removing too much of the surrounding signal.", options: { bullet: true, breakLine: true } },
     { text: "7 rows repo-wide still retain a dominant EDTA peak — documented, not hidden.", options: { bullet: true } },
-  ], { x: 0.85, y: 4.18, w: 5.4, h: 2.0, fontFace: F, fontSize: 15.5, color: INK, margin: 0, paraSpaceAfter: 9, lineSpacing: 19 });
+  ], { x: 0.85, y: 4.14, w: 5.4, h: 2.06, fontFace: F, fontSize: 15, color: INK, margin: 0, paraSpaceAfter: 8, lineSpacing: 18 });
 
-  card(s, { x: 6.8, y: 3.62, w: 5.95, h: 2.62, fill: TINT_BAD });
+  card(s, { x: 6.8, y: 3.58, w: 5.95, h: 2.78, fill: TINT_BAD });
   s.addText("…but it does not matter downstream", {
-    x: 7.1, y: 3.78, w: 5.4, h: 0.4, fontFace: F, fontSize: 18, bold: true, color: CORAL, margin: 0,
+    x: 7.1, y: 3.72, w: 5.4, h: 0.4, fontFace: F, fontSize: 18, bold: true, color: CORAL, margin: 0,
   });
   s.addText([
     { text: "We spent two whole experiments trying to explain a v3-vs-v4 downstream difference.", options: { bullet: true, breakLine: true } },
     { text: "With 5 seeds per corpus that difference is −0.014 ± 0.022 — indistinguishable from zero (slide 19).", options: { bullet: true, breakLine: true } },
     { text: "Lesson: fix the preprocessing because it is CORRECT, not because you measured a downstream gain from one run.", options: { bullet: true } },
-  ], { x: 7.1, y: 4.28, w: 5.4, h: 1.90, fontFace: F, fontSize: 15, color: INK, margin: 0, paraSpaceAfter: 8, lineSpacing: 18 });
+  ], { x: 7.1, y: 4.14, w: 5.4, h: 2.06, fontFace: F, fontSize: 15, color: INK, margin: 0, paraSpaceAfter: 8, lineSpacing: 18 });
   s.addNotes("Keep this short unless asked. The point is methodological: correctness and measurable "
     + "downstream benefit are different justifications, and we conflated them.");
 }
@@ -421,28 +421,27 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 {
   const s = newLight("The pretext task itself works very well",
     "Re-measured from February — and this is exactly where the trap was");
-  fig(s, "gm08_reconstruction.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.05 });
+  fig(s, "gm08_reconstruction.png", { x: 0.55, y: 1.50, w: 12.2, h: 4.30 });
   s.addText([
     { text: "Across 50 spectra:  ", options: { color: MUTED } },
     { text: "r = 0.940 ± 0.090", options: { bold: true, color: NAVY } },
     { text: "  on the hidden bins only", options: { color: MUTED } },
-    { text: "     (whole-spectrum r = 0.979 — but that includes the 75% of bins the model was given)",
-      options: { color: MUTED, italic: true } },
   ], {
-    x: 0.55, y: 5.62, w: 12.2, h: 0.32, fontFace: F, fontSize: 15, align: "center", margin: 0,
+    x: 0.55, y: 5.84, w: 12.2, h: 0.30, fontFace: F, fontSize: 15, align: "center", margin: 0,
   });
 
-  card(s, { x: 0.55, y: 6.06, w: 12.2, h: 0.94, fill: TINT_BAD });
+  card(s, { x: 0.55, y: 6.20, w: 12.2, h: 0.80, fill: TINT_BAD });
   s.addText([
     { text: "The trap:  ", options: { bold: true, color: CORAL } },
     { text: "the pretext task is genuinely solved well — and it still tells you almost nothing. "
-        + "Across five backbones, BETTER reconstruction went with WORSE transfer; our "
-        + "2.3×-better-reconstructing model transferred 0.06 worse. So we never select a checkpoint, "
-        + "architecture or epoch on reconstruction loss.", options: { color: INK } },
+        + "(February's r = 0.999 was whole-spectrum, which includes the 75% of bins the model is handed.) "
+        + "Across five backbones BETTER reconstruction went with WORSE transfer, so we never select a "
+        + "checkpoint, architecture or epoch on reconstruction loss.", options: { color: INK } },
   ], {
-    x: 0.85, y: 6.13, w: 11.6, h: 0.80, fontFace: F, fontSize: 15.5, margin: 0,
-    valign: "middle", lineSpacing: 19,
+    x: 0.85, y: 6.24, w: 11.6, h: 0.72, fontFace: F, fontSize: 15, margin: 0,
+    valign: "middle", lineSpacing: 18,
   });
+
   s.addNotes("This is the single most transferable lesson for anyone else in the group doing SSL: a "
     + "beautiful reconstruction figure tells you almost nothing about whether the features are useful.");
 }
@@ -557,7 +556,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     });
   s.addText("Diabetes is 89% a head problem — the embedding already supports 0.810. Cancer and MTBLS563 are "
     + "mostly representation. Barth's embedding actually BEATS binned features (0.770 vs 0.705); the head was wasting it.", {
-    x: 0.55, y: 6.42, w: 12.2, h: 0.56, fontFace: F, fontSize: 15, color: INK, margin: 0, lineSpacing: 18,
+    x: 0.55, y: 6.52, w: 12.2, h: 0.52, fontFace: F, fontSize: 15, color: INK, margin: 0, lineSpacing: 18,
   });
   s.addNotes("The mixed picture is the useful part: there is no single fix, and for one target the "
     + "SSL representation was already better than the classical features.");
@@ -853,7 +852,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     + "real-looking number for a model that was still training. It happened three times — including once "
     + "when I claimed --seed was broken on GPU, because I compared a mid-training checkpoint against a "
     + "finished one.", {
-    x: 0.85, y: 2.18, w: 5.4, h: 1.45, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
+    x: 0.85, y: 2.14, w: 5.4, h: 1.50, fontFace: F, fontSize: 15, color: INK, margin: 0, lineSpacing: 18,
   });
   const guards = [
     ["Provenance stamp", "Checkpoints are written with finished: false and only flipped to true after the training loop exits cleanly."],
@@ -983,18 +982,18 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
         },
       })))),
     {
-      x: 6.8, y: 1.68, w: 5.95, colW: [1.65, 0.85, 1.15, 1.15, 1.15], rowH: 0.335,
+      x: 6.8, y: 1.68, w: 5.95, colW: [1.65, 0.85, 1.15, 1.15, 1.15], rowH: 0.315,
       border: { type: "solid", color: "D8DEE4", pt: 0.75 }, fontFace: F, valign: "middle",
       margin: [0.03, 0.05, 0.03, 0.05],
     });
-  card(s, { x: 0.55, y: 4.52, w: 12.2, h: 1.18, fill: TINT_OK });
+  card(s, { x: 0.55, y: 4.56, w: 12.2, h: 1.16, fill: TINT_OK });
   s.addText("The check resolves in favour of the conclusion — G=16 wins 6 of 6", {
-    x: 0.85, y: 4.63, w: 11.6, h: 0.34, fontFace: F, fontSize: 17.5, bold: true, color: GREEN, margin: 0,
+    x: 0.85, y: 4.66, w: 11.6, h: 0.34, fontFace: F, fontSize: 17.5, bold: true, color: GREEN, margin: 0,
   });
   s.addText("Lower-dimensional poolings are WORSE at every low-support point tested. Even letting SSL pick "
     + "its best pooling post-hoc per point — which inflates SSL — the pooled result is −0.033 ± 0.014, p = 0.006. "
     + "Still negative.", {
-    x: 0.85, y: 4.99, w: 11.6, h: 0.64, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
+    x: 0.85, y: 5.02, w: 11.6, h: 0.64, fontFace: F, fontSize: 15.5, color: INK, margin: 0, lineSpacing: 19,
   });
   card(s, { x: 0.55, y: 5.84, w: 12.2, h: 0.94, fill: TINT });
   s.addText("Also validated: the top of every few-shot curve lands just below that target's known full-data "
@@ -1053,7 +1052,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   card(s, { x: 0.55, y: 6.3, w: 12.2, h: 0.72, fill: NAVY });
   s.addText("The pattern: every surviving result is PAIRED — one fixed checkpoint, one thing varied. Every "
     + "retracted result compared two separately-trained networks.", {
-    x: 0.85, y: 6.38, w: 11.6, h: 0.56, fontFace: F, fontSize: 16.5, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+    x: 0.85, y: 6.30, w: 11.6, h: 0.72, fontFace: F, fontSize: 16, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
   });
   s.addNotes("If there is one slide to remember, it is this one. The methodological pattern is cleaner "
     + "than any individual result.");
@@ -1162,7 +1161,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     });
   });
   s.addText("Thank you — and thanks to Gayatree for the Tirupati TBI samples that started this off.", {
-    x: 1.0, y: 6.68, w: 11.3, h: 0.35, fontFace: F, fontSize: 15, color: "7FA8C4", margin: 0, italic: true,
+    x: 1.0, y: 6.82, w: 11.3, h: 0.35, fontFace: F, fontSize: 15, color: "7FA8C4", margin: 0, italic: true,
   });
   s.addNotes("Leave plenty of time here. The three questions are genuine — especially #2, since the "
     + "scaling answer depends on data we may not have.");
