@@ -158,6 +158,85 @@ Artifacts:
 `peak_saturation_v4_rowminmax/` (control), `peak_saturation_v4_unitarea/` (free-panel,
 retained only as the counter-example).
 
+### 5c. RESULT (2026-08-22): the joint distribution, measured
+
+Script: `code/analysis/joint_distribution.py` →
+`results/analysis/joint_distribution/`. 2,000 spectra, `unit_area`, binned to 4,096.
+
+**Across-spectra correlation does not decay within any feasible window.**
+
+| separation | 32 pts | 1,024 pts | 16,384 (1.5 ppm) | 65,536 (6 ppm) |
+|---|---|---|---|---|
+| across-spectra mean \|r\| | 0.946 | 0.727 | 0.568 | 0.450 |
+| within-spectrum autocorr | 0.792 | 0.122 | 0.050 | −0.022 |
+
+It first falls below 0.5 only at ~2.2 ppm, and **never reaches 0.3 anywhere inside the
+spectrum**. The within-spectrum autocorrelation (lineshape width) dies by ~1,000 points, so
+the two are completely different scales — conflating them would have suggested a ~1,000-point
+window suffices.
+
+**It is not one global factor.** Removing leading principal components barely dents it:
+\|r\| at 6 ppm goes 0.450 → 0.468 (1 PC) → 0.465 (2) → 0.374 (5), even though PC1 alone holds
+43% of variance. So this is genuinely distributed composition covariance — the metabolite
+coupling SS predicted, where all multiplets of a molecule move together.
+
+**Per-window structure is cheap.** Median PCs for 95% of a window's variance: 1 (128 pts),
+1 (512), **2 (1,024)**, 3 (2,048) — worst window 12. With 9,670 spectra that is ~1,000
+spectra per component. The local model is easy; the long-range model is the hard part.
+
+> **Consequence for route (b): no overlap setting makes window-stitching lossless.**
+> Beyond a 1,024-point window, mean \|r\| is still 0.597 and 99.8% of lags exceed 0.3.
+> Independent windows must break real structure. The cost is now a number, not an assumption.
+
+**Bug worth recording:** the first run reported "1 PC for 95%" at every window size. The
+spectrum midpoint (65,536) sits inside the zeroed water-suppression window, so the centre
+probe window was all zeros and the SVD degenerate. Windows are now tiled across the
+0.5–9.5 ppm signal region and degenerate windows are skipped.
+
+### 5d. RESULT: windowed synthesis built and validated
+
+Scripts: `code/analysis/synthesise_windowed.py`,
+`code/plotting/plot_synthetic_windowed.py` → `results/analysis/synthetic_windowed/`,
+`results/plots/synthetic_windowed/`. Window 2,048, hop 1,024 (50% overlap), Hann crossfade,
+600 donors, n=100 synthetic per method.
+
+| method | nn *r* to real | \|r\| @0.09 ppm | \|r\| @1.5 ppm | \|r\| @6 ppm | PCs 95% |
+|---|---|---|---|---|---|
+| **real corpus** (n=100 subsample) | — | 0.717 | 0.561 | 0.453 | **27** |
+| `quilted_base` | **0.982** | 0.770 | 0.540 | **0.401** | 18 |
+| `quilted` | 0.862 | 0.777 | 0.575 | **0.051** | 33 |
+| `independent` | **0.752** | **0.198** | **0.084** | **0.075** | 46 |
+
+- `independent` (a fresh random donor per window) destroys correlation at **every** scale —
+  0.198 vs 0.717 even at 0.09 ppm. Confirms SS's objection quantitatively.
+- `quilted` (donor chosen to match the overlap region) recovers local and mid-range structure
+  (0.777 / 0.575, essentially real) but **long-range collapses to 0.051**. Exactly the
+  predicted failure: metabolite coupling across the spectrum is not preserved.
+- `quilted_base` (donors restricted to a globally similar pool) is the only variant that
+  keeps long-range structure (0.401 vs 0.453 real) — but at nn *r* = **0.982**, i.e. it is
+  very nearly copying a real spectrum, so it adds little.
+
+> **The trade-off IS the finding: novelty and long-range fidelity pull directly against each
+> other under window sampling.** This follows from §5c — if correlation never decays, then
+> any recombination that is novel at long range is also wrong at long range. Route (b) alone
+> cannot produce spectra that are both new and chemically coherent.
+
+**Two measurement traps found and fixed**, both of which would have flattered the method:
+effective rank is capped at n−1, so the real corpus must be subsampled to the same n (at
+n=8 the first run showed "3 PCs vs 46" and looked like diversity collapse); and correlation
+estimates from n=8 are unstable, so validation now defaults to n=100.
+
+**Also worth saying plainly: all three variants look like plausible NMR spectra.** Even
+`independent`, whose statistics are destroyed, has sharp peaks, a flat baseline and peaks in
+the right ppm regions — because a 50% Hann crossfade hides the joins. **Visual inspection
+cannot validate a generator here**, which is precisely why the §8a acceptance test exists.
+
+**Implication for the plan.** This strengthens the case for route (c), LC of metabolite
+spectra: it is the only proposed route where long-range coupling is preserved *by
+construction* (a metabolite's multiplets scale together because they are one basis vector)
+while concentrations — hence diversity — are set freely. Route (b) is usable as local
+augmentation on top of a coherent base, not as a stand-alone generator.
+
 ### 5b. The gap that actually blocks the branch: marginals vs the joint distribution
 
 The outline asks whether the experimental y-distribution is defined **at all x**. What exists
