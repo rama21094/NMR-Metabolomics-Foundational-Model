@@ -121,15 +121,42 @@ Result over the 60 peaks (`saturation_summary.csv`):
 limiting.** Roughly 400 spectra pin the distribution shape; 9,670 is 10–25× more than
 needed. This is a real, already-earned answer to the outline's "is data limiting?" node.
 
-Two caveats that must be cleared before this drives the branch decision:
+### 5a-bis. Re-run on v4 under `unit_area` (2026-08-22) — the result replicates
 
-1. **It ran on the pre-v4 corpus.** `run_config.json` records
-   `combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax.npy` (unversioned),
-   whose contents differ from the `_v4` array now used everywhere else — i.e. it predates the
-   EDTA-cutoff fix. Re-run on v4 before quoting.
-2. **It ran on rowMinMax data**, so "intensity" here means *height relative to that
-   spectrum's tallest peak*. See §7.1 — the normaliser defines what the distribution is a
-   distribution *of*.
+Both caveats above are now cleared. Runs, all 60 peaks / 9,670 spectra / NW alignment:
+
+| run | median KS ratio | unsaturated /60 | median N* | mean detection |
+|---|---|---|---|---|
+| original: pre-v4 + rowMinMax, panel re-picked | 0.093 | 0 | 364 | 0.776 |
+| v4 + rowMinMax, panel re-picked | 0.093 | 0 | 364 | 0.776 |
+| v4 + `unit_area`, panel re-picked | **0.142** | **6** | 374 | **0.538** |
+| **v4 + `unit_area`, panel HELD FIXED** | **0.090** | **1** | **363** | **0.776** |
+
+**Conclusion: the marginal-saturation finding is robust.** On v4, under the measurement
+unit the PI's node actually needs, ~360 spectra pin each peak's distribution shape and
+9,670 is roughly 10× more than required. Data is **not** limiting for marginals.
+
+**But the third row is a trap worth recording,** because taken at face value it would have
+reversed the conclusion (6 peaks unsaturated, detection collapsing to 0.538). It is an
+artifact of the analysis, not of the unit:
+
+> The canonical panel is selected from prominences of the **median reference spectrum**, and
+> the normaliser changes which spectra dominate that median. Measured here, v4+`unit_area`
+> and v4+`rowminmax` share only **9 of 60** picked positions; even the *same* normaliser on
+> pre-v4 vs v4 shares only **14 of 60**. So re-picking per condition varies the panel and the
+> measurement unit simultaneously, and the comparison is meaningless.
+
+Fixed by adding **`--peaks-from`** to `peak_extraction.py`, which reuses a stored panel. With
+the panel held fixed, detection rate is *identical* (0.776 both) — confirming the SNR
+detection gate is scale-invariant as expected — and only the distribution values change.
+
+**Rule going forward: any comparison across normalisers, corpus versions or preprocessing
+must pass `--peaks-from`.** Otherwise the panel silently becomes a second variable.
+
+Artifacts:
+`results/analysis/peak_saturation_v4_unitarea_fixedpanel/` (the result to quote),
+`peak_saturation_v4_rowminmax/` (control), `peak_saturation_v4_unitarea/` (free-panel,
+retained only as the counter-example).
 
 ### 5b. The gap that actually blocks the branch: marginals vs the joint distribution
 

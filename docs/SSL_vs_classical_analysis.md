@@ -70,9 +70,14 @@ things in it matter for how this document is read.
    these tasks" is a fallback, admissible only after synthetic data and capacity are tried.
 2. **The live node is the distribution of peak intensities.** Partly done already:
    `code/analysis/peak_saturation.py` KS-saturated 60 canonical peak marginals and found
-   **data is not limiting for marginals** — median N* = 365 spectra, 0/60 peaks unsaturated,
-   9,670 is 10–25× more than needed. Two caveats: it ran on the **pre-v4** corpus and on
-   rowMinMax data. The real gap is the **joint** distribution, which §19/§20 show is
+   **data is not limiting for marginals**. Re-run 2026-08-22 on the **v4** corpus under
+   **`unit_area`** with the panel held fixed, it replicates: median KS saturation ratio
+   0.090, median N* = 363 spectra, 1/60 unsaturated, so 9,670 is ~10× more than needed.
+   A methodological trap was found in the process: the canonical panel is picked from the
+   median reference spectrum, which the normaliser changes — v4+`unit_area` and
+   v4+`rowminmax` share only 9 of 60 positions — so re-picking per condition varies the
+   panel and the unit at once and reverses the apparent conclusion. `peak_extraction.py`
+   now has `--peaks-from`; any cross-condition comparison must use it. The real gap is the **joint** distribution, which §19/§20 show is
    extremely narrow (86% of variance in 5 PCs, median nearest-neighbour r = 0.991) and does
    not cover the evaluation cohorts (r = 0.37–0.78). Marginals saturated, joint too thin.
 3. **rowMinMax: tested and KEPT.** `code/analysis/normaliser_comparison.py` compared it

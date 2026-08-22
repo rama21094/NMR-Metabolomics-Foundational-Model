@@ -61,9 +61,15 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from scipy.signal import find_peaks
 
 from peak_list_alignment import align_peak_lists, pick_spectrum_peaks
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+from corpus_normalisation import open_corpus  # noqa: E402
 
 
 DEFAULT_DATA = "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax.npy"
@@ -84,8 +90,9 @@ def excluded_mask(length: int, ranges: list[tuple[int, int]]) -> np.ndarray:
     return mask
 
 
-def build_reference(data_path: str, reference_n: int, seed: int) -> tuple[np.ndarray, np.ndarray, int]:
-    arr = np.load(data_path, mmap_mode="r")
+def build_reference(data_path: str, reference_n: int, seed: int,
+                   normalise: str = "none") -> tuple[np.ndarray, np.ndarray, int]:
+    arr = open_corpus(data_path, normalise)
     n, length = arr.shape
     rng = np.random.default_rng(seed)
     take = min(reference_n, n)
@@ -174,6 +181,7 @@ def estimate_local_shifts(
     seg_hi: int,
     max_shift: int,
     chunk_size: int,
+    normalise: str = "none",
 ):
     """Per-spectrum coarse local shift via cross-correlation against the
     reference, restricted to one segment of the spectrum.
@@ -185,7 +193,7 @@ def estimate_local_shifts(
     (verified beforehand via this same technique) before the small-window
     per-peak match in extract_matched_values.
     """
-    arr = np.load(data_path, mmap_mode="r")
+    arr = open_corpus(data_path, normalise)
     n, length = arr.shape
     ref_seg = reference[seg_lo:seg_hi]
 
@@ -211,6 +219,7 @@ def extract_matched_values(
     min_snr: float,
     chunk_size: int,
     row_shifts: np.ndarray | None = None,
+    normalise: str = "none",
 ):
     """For every spectrum and every canonical peak, search a small window
     (offset by that spectrum's coarse row_shifts[i], if given -- see
@@ -220,7 +229,7 @@ def extract_matched_values(
     actually used -- which is what the tolerance-adequacy diagnostics care
     about; row_shifts itself carries the coarse correction, if any.
     """
-    arr = np.load(data_path, mmap_mode="r")
+    arr = open_corpus(data_path, normalise)
     n, length = arr.shape
     n_peaks = len(peak_indices)
     values = np.full((n, n_peaks), np.nan, dtype=np.float64)
@@ -298,6 +307,7 @@ def extract_matched_values_nw(
     nw_min_prominence_snr: float,
     nw_margin: int,
     nw_max_query_peaks: int,
+    normalise: str = "none",
 ):
     """Like extract_matched_values, but instead of a fixed per-peak search
     window, each spectrum is independently peak-picked and its peak list is
@@ -313,7 +323,7 @@ def extract_matched_values_nw(
     save_canonical_peaks/plot_shift_diagnostics/peak_saturation.py pipeline
     unchanged; the last three are per-spectrum alignment diagnostics.
     """
-    arr = np.load(data_path, mmap_mode="r")
+    arr = open_corpus(data_path, normalise)
     n, length = arr.shape
     n_peaks = len(peak_indices)
     values = np.full((n, n_peaks), np.nan, dtype=np.float64)
@@ -514,6 +524,19 @@ def parse_args():
                          help="Cap on peaks picked per spectrum (keeps the most prominent), bounding "
                               "the O(R*Q) alignment cost for unusually noisy spectra.")
 
+    parser.add_argument("--peaks-from", default=None,
+                        help="Reuse the canonical peak panel from a previous run "
+                             "(its output dir, or a canonical_peaks.csv path) instead of "
+                             "re-picking. Required for any comparison ACROSS normalisers: "
+                             "the panel is picked from the median reference spectrum, which "
+                             "the normaliser changes, so re-picking would vary the panel and "
+                             "the measurement unit at the same time.")
+    parser.add_argument("--normalise", choices=["none", "rowminmax", "unit_area"],
+                        default="none",
+                        help="Per-spectrum normalisation applied lazily to the corpus. "
+                             "Use unit_area for intensity-distribution work; see "
+                             "docs/PI_outline.md section 7.1 for why rowminmax is the "
+                             "wrong unit for that purpose.")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     if len(args.extra_exclude_ranges) % 2 != 0:
@@ -530,7 +553,8 @@ def main():
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    reference, reference_idx, n_total = build_reference(args.data, args.reference_n, args.seed)
+    reference, reference_idx, n_total = build_reference(args.data, args.reference_n, args.seed,
+                                                       normalise=args.normalise)
     length = reference.shape[0]
 
     ranges = []
@@ -550,10 +574,36 @@ def main():
     exclude = excluded_mask(length, ranges)
     print(f"Excluded ranges from peak picking: {ranges}")
 
-    peak_indices, prominences, noise_sd, baseline = pick_canonical_peaks(
-        reference, exclude, args.n_peaks, args.min_peak_distance
-    )
-    print(f"Selected {len(peak_indices)} canonical peaks (reference noise_sd={noise_sd:.4g}).")
+    if args.peaks_from:
+        # Reuse a previously selected canonical panel instead of re-picking.
+        #
+        # WHY THIS MATTERS. The panel is chosen from prominences of the MEDIAN
+        # reference spectrum, and the normaliser changes which spectra dominate
+        # that median. Measured on this corpus, v4+unit_area and v4+rowminmax
+        # share only 9 of 60 picked positions. So re-picking per normaliser
+        # conflates two different things -- the measurement unit and the panel --
+        # and the resulting saturation numbers are not comparable. Fixing the
+        # panel makes the normaliser the only variable.
+        src = Path(args.peaks_from)
+        ref_csv = src if src.suffix == ".csv" else src / "canonical_peaks.csv"
+        prev = pd.read_csv(ref_csv)
+        peak_indices = prev["point_index"].to_numpy(dtype=np.int64)
+        prominences = (prev["reference_prominence"].to_numpy(dtype=np.float64)
+                       if "reference_prominence" in prev.columns
+                       else np.full(len(peak_indices), np.nan))
+        noise_sd, baseline = robust_noise_sd(reference)
+        bad = int(exclude[peak_indices].sum())
+        print(f"Reusing {len(peak_indices)} canonical peaks from {ref_csv} "
+              f"(reference noise_sd={noise_sd:.4g}).")
+        if bad:
+            print(f"  WARNING: {bad} reused peak(s) fall inside this run's excluded "
+                  f"ranges; they are kept so the panel stays identical, but check "
+                  f"that the exclusion settings match the source run.")
+    else:
+        peak_indices, prominences, noise_sd, baseline = pick_canonical_peaks(
+            reference, exclude, args.n_peaks, args.min_peak_distance
+        )
+        print(f"Selected {len(peak_indices)} canonical peaks (reference noise_sd={noise_sd:.4g}).")
 
     tolerances = effective_tolerances(peak_indices, args.tolerance_points)
     if np.any(tolerances < args.tolerance_points):
@@ -573,6 +623,7 @@ def main():
             args.area_halfwidth, args.value_mode, args.min_snr, args.chunk_size,
             args.nw_tolerance, args.nw_gap_penalty, args.nw_match_bonus,
             args.nw_min_peak_distance, args.nw_min_prominence_snr, args.nw_margin, args.nw_max_query_peaks,
+            normalise=args.normalise,
         )
         tolerances = np.full(len(peak_indices), args.nw_tolerance)
         np.save(out_dir / "nw_n_query_peaks.npy", n_query_peaks)
@@ -600,7 +651,8 @@ def main():
             print(f"Estimating per-spectrum coarse realignment shift from segment [{seg_lo}, {seg_hi}) "
                   f"(max shift +/-{args.realign_max_shift})...")
             row_shifts, sharpness = estimate_local_shifts(
-                args.data, reference, seg_lo, seg_hi, args.realign_max_shift, args.chunk_size
+                args.data, reference, seg_lo, seg_hi, args.realign_max_shift, args.chunk_size,
+                normalise=args.normalise,
             )
             np.save(out_dir / "spectrum_realignment_shift.npy", row_shifts)
             np.save(out_dir / "spectrum_realignment_sharpness.npy", sharpness)
@@ -612,7 +664,7 @@ def main():
         values, shifts, detected = extract_matched_values(
             args.data, peak_indices, tolerances, exclude,
             args.area_halfwidth, args.value_mode, args.min_snr, args.chunk_size,
-            row_shifts=row_shifts,
+            row_shifts=row_shifts, normalise=args.normalise,
         )
 
     np.save(out_dir / "peak_values.npy", values)
