@@ -60,13 +60,27 @@ paired on shared episodes — and found no advantage at any label budget, with t
 spectra); §13 only probed size downward.
 
 **Governing outline.** The project's scope and closure criteria come from the PI's
-whiteboard outline, transcribed in [`PI_outline.md`](PI_outline.md) (2026-08-22). Two things
-in it matter for how this document is read: (1) the framing is *"comparing foundational
-models with ML"*, so a well-evidenced negative comparison is a **completed deliverable**,
-and the tree has an explicit negative exit; (2) the live next node is **characterising the
-distribution of peak intensities** and how it converges with corpus size — which nothing in
-this document has done yet, and which supersedes #17's framing of corpus scaling. See
-§§5–8 of that file for the node-by-node status mapping.
+whiteboard outline, transcribed in [`PI_outline.md`](PI_outline.md) (2026-08-22). Three
+things in it matter for how this document is read.
+
+1. **The goal is to BUILD a foundational model.** The outline's "comparing … with ML" title
+   is incidental — the discussion happened after the model was built, so comparison was the
+   agenda item. So every negative result here (§6, §11, §18, §19, §20) is an **interim
+   finding that sets up the synthetic-data branch**, not the deliverable. "We hit a limit on
+   these tasks" is a fallback, admissible only after synthetic data and capacity are tried.
+2. **The live node is the distribution of peak intensities.** Partly done already:
+   `code/analysis/peak_saturation.py` KS-saturated 60 canonical peak marginals and found
+   **data is not limiting for marginals** — median N* = 365 spectra, 0/60 peaks unsaturated,
+   9,670 is 10–25× more than needed. Two caveats: it ran on the **pre-v4** corpus and on
+   rowMinMax data. The real gap is the **joint** distribution, which §19/§20 show is
+   extremely narrow (86% of variance in 5 PCs, median nearest-neighbour r = 0.991) and does
+   not cover the evaluation cohorts (r = 0.37–0.78). Marginals saturated, joint too thin.
+3. **rowMinMax: the principle is accepted, the operator is open.** Per-spectrum
+   normalisation is chemically necessary (NMR intensities are relative). But the pipeline
+   applies min–max, not reference-peak normalisation — the zero is the noise floor and the
+   unit is the tallest peak, which is why §11 sees an SNR-shaped leak. To be settled by
+   re-running the batch audit under min–max / reference-peak / PQN, not by argument. See
+   `PI_outline.md` §7.1.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
