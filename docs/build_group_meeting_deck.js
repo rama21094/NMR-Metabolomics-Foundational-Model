@@ -1203,31 +1203,60 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 
 /* ================== 28. NEXT STEPS ================== */
 {
-  const s = newLight("Proposed next steps", "Ranked by what would actually change the answer");
+  const s = newLight("Proposed next steps", "Re-ranked by what §18–§20 actually leave open");
   const items = [
-    ["1", GREEN, "Cross-cohort transfer — the strongest untested case",
-      "Every evaluation so far is WITHIN a cohort. A foundation model's real selling point is generalising across instruments, sites and batches — exactly where absolute binned intensities should break down and a learned representation might not. Train the probe on one cohort, test on another. Cheap; we have 4 cohorts. If SSL wins anywhere, it is here."],
-    ["2", DEEP, "Corpus scaling curve — upward this time",
-      "Pretrain at 25 / 50 / 100% of available spectra and see whether downstream utility is still climbing at 9,670. Flat ⇒ the objective is the problem. Rising ⇒ the answer is \"needs 10–100× more data\". Either is publishable and actionable. Needs ≥5 seeds per point (~23 GPU-h each)."],
+    ["1", GREEN, "Widen the pretraining corpus — it does not cover our cohorts",
+      "Not \"more data\" — DIFFERENT data. Within the corpus a spectrum's nearest neighbour sits at r = 0.99; for our evaluation cohorts the nearest corpus match is only r = 0.37–0.78. We pretrain on a narrow, 55%-redundant distribution and then test far outside it. Fold the eval-like cohorts (incl. the unused TBI Tirupati set) into pretraining, dedup near-duplicates, re-measure. Also confirms no leakage today — there is none."],
+    ["2", DEEP, "Change the objective — reconstruction is nearly free",
+      "Slide 9: copy-a-neighbour already scores 0.90 on hidden bins. A loss dominated by the 5 components holding 86% of variance cannot be forced to encode disease. Try variance-normalised or peak-weighted reconstruction, or a contrastive objective, and judge it by whether the pretext task is actually HARD (baseline-relative), not by r."],
     ["3", GOLD, "MTBLS326 batch-confound audit",
-      "Still outstanding, cheap, and MTBLS326 is one of only two targets where SSL is competitive. Its perfect 1.000 on n=42 is unverified as biology rather than run-order artifact."],
-    ["4", TEAL, "Finish jigsaw / joint few-shot arms",
-      "Running now. The random-init control already predicts they will be worse than masking, so this is completeness rather than discovery."],
+      "Still outstanding, still cheap, and MTBLS326 is now one of only two targets where SSL is even competitive. Its perfect 1.000 on n=42 remains unverified as biology rather than a run-order artifact."],
+    ["4", TEAL, "Corpus scaling curve — only after near-duplicate dedup",
+      "Demoted. 55% of rows have a neighbour at r > 0.99, so subsampling by row count does not subsample information: the curve would flatten for the wrong reason. Needs ≥5 seeds per point (~23 GPU-h each)."],
   ];
   items.forEach(([n, col, head, body], i) => {
-    const y = 1.55 + i * 1.33;
-    card(s, { x: 0.55, y, w: 12.2, h: 1.10, fill: i === 0 ? TINT_OK : TINT });
-    bubble(s, { x: 0.78, y: y + 0.3, d: 0.56, color: col, label: n, fontSize: 18 });
+    const y = 1.50 + i * 1.24;
+    card(s, { x: 0.55, y, w: 12.2, h: 1.06, fill: i === 0 ? TINT_OK : TINT });
+    bubble(s, { x: 0.78, y: y + 0.28, d: 0.52, color: col, label: n, fontSize: 17 });
     s.addText(head, {
-      x: 1.52, y: y + 0.08, w: 10.95, h: 0.36, fontFace: F, fontSize: 17.5, bold: true, color: col, margin: 0, valign: "middle",
+      x: 1.48, y: y + 0.06, w: 11.0, h: 0.32, fontFace: F, fontSize: 16.5, bold: true, color: col, margin: 0, valign: "middle",
     });
     s.addText(body, {
-      x: 1.52, y: y + 0.40, w: 10.95, h: 0.66, fontFace: F, fontSize: 14, color: INK, margin: 0, valign: "top", lineSpacing: 17,
+      x: 1.48, y: y + 0.36, w: 11.0, h: 0.66, fontFace: F, fontSize: 13, color: INK, margin: 0, valign: "top", lineSpacing: 15.5,
     });
   });
-  card(s, { x: 0.55, y: 6.82, w: 12.2, h: 0.001, fill: "FFFFFF" });
-  s.addNotes("Priority 1 is the one I most want feedback on — it is the last strong argument for the "
-    + "backbone, and it is cheap because it needs no retraining.");
+  card(s, { x: 0.55, y: 6.48, w: 12.2, h: 0.62, fill: TINT_BAD });
+  s.addText([
+    { text: "Dropped from this list:  ", options: { bold: true, color: CORAL } },
+    { text: "supervised cross-cohort transfer (train the probe on one cohort, test on another). "
+        + "All five targets are different diseases with no shared label space — it is not executable "
+        + "on the data we have, at any sample size.", options: { color: INK } },
+  ], {
+    x: 0.85, y: 6.51, w: 11.6, h: 0.56, fontFace: F, fontSize: 13.5, margin: 0, valign: "middle", lineSpacing: 16,
+  });
+
+  s.addNotes("This slide was reordered after the last group meeting's version — worth saying so.\n\n"
+    + "WHAT CHANGED AND WHY. The old priority 1 was 'cross-cohort transfer: train the probe on one "
+    + "cohort, test on another'. That was wrong on two counts and I am glad it was caught.\n"
+    + "(a) It conflated two different things. The 9,670-spectra pretraining is ALREADY unsupervised "
+    + "and already spans many cohorts — that part is done, and it is the sense in which the model is "
+    + "'foundational'.\n"
+    + "(b) Read literally as supervised label transfer, it is not executable: Barth syndrome, MTBLS326 "
+    + "IP3R expression, MTBLS563 3-class diagnosis, cancer status and diabetes status are five "
+    + "different tasks with no shared label space. And BrC-T2D cancer and diabetes are the same "
+    + "spectra, so there are only 4 independent cohorts, not 5.\n\n"
+    + "WHAT REPLACED IT (experiment #20). Measuring the pretrain/eval distribution gap directly. "
+    + "Two results:\n"
+    + "- No leakage. Zero evaluation spectra have a near-duplicate anywhere in the pretraining "
+    + "corpus, so 'held-out' is accurate. Good news, and it needed checking after §19 found the "
+    + "corpus contains near-duplicates of itself.\n"
+    + "- But coverage is poor. Within-corpus median best match is 0.994; for Barth it is 0.78, "
+    + "MTBLS563 0.77, MTBLS326 0.68, BrC-T2D 0.37. The corpus is narrow, not merely small. That is "
+    + "why 'more of the same spectra' (the old priority 2) is now priority 4.\n\n"
+    + "Caveat if pressed: TBI Tirupati's number is even lower but its array never went through the "
+    + "v4 rowMinMax pipeline, so that one mixes a real gap with a preprocessing difference.\n\n"
+    + "Priority 1 and 2 are the two I want feedback on. They are also the two that would change the "
+    + "answer rather than further document the negative result.");
 }
 
 /* ================== 29. DISCUSSION ================== */

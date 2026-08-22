@@ -1,7 +1,7 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-08-21. Experiments **#1–#8, #13, #14, #15, #18, #19 done**;
-#10b–#12, #16, #17 queued (#9 void). **#6 is the decisive one and it is negative:** masked
+**Status:** updated 2026-08-21. Experiments **#1–#8, #13, #14, #15, #18, #19, #20 done**;
+#10b–#12, #17 queued (#9 void, **#16 retired — see §16**). **#6 is the decisive one and it is negative:** masked
 SSL does not beat classical LogReg at any label budget on any of the five targets, and
 pooled at the smallest budget the difference is +0.0012 ± 0.0162 (p=0.74) — see §6.
 
@@ -15,7 +15,12 @@ is **nearly free**: copying the most similar other spectrum scores r = 0.900 on 
 bins at 60% masking versus the network's 0.921, because 86% of corpus variance sits in
 5 principal components and the median spectrum's nearest neighbour correlates at 0.991.
 That is the **mechanism** behind §5e, §6b and §6 alike — the pretext task cannot force
-the model to learn anything disease-discriminative.
+the model to learn anything disease-discriminative. **§20** then checked the train/eval
+boundary: there is **no leakage** (zero evaluation spectra have a near-duplicate in the
+corpus, so "held-out" is accurate), but **coverage is poor** — within the corpus a
+spectrum's nearest neighbour sits at r ≈ 0.99, while the evaluation cohorts' nearest
+corpus match is only r = 0.37–0.78. The corpus is **narrow, not merely small**, which
+retires #16 and demotes #17.
 
 Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
 the correction of record. It also found the actual win (pooling), which remains the only
@@ -1155,13 +1160,74 @@ python code/analysis/summarize_exp15_seed_study.py
 python code/plotting/plot_exp15_seed_study.py
 ```
 
-### ⭐ #16 — Cross-cohort transfer (the strongest untested case for the backbone)
-Every evaluation so far is *within* a cohort. A foundation model's actual selling point is
-generalising across instruments, sites and batches — exactly where absolute binned
-intensities should degrade and a learned representation might not. Train the probe on one
-cohort, test on another; 4 cohorts are available and no retraining is needed, so this is
-cheap. If SSL wins anywhere it is here; if it loses here too, the backbone approach is closed
-at this data scale.
+### ❌ #16 — RETIRED: supervised cross-cohort transfer is not executable on this data
+
+**Superseded by #20.** This experiment was queued as "train the probe on one cohort, test
+on another — if SSL wins anywhere, it is here", and it was the top-ranked next step on the
+group-meeting deck. It conflated two different things and one half of it cannot be run.
+
+1. **The unsupervised half is already done.** Pretraining on the 9,670-spectra corpus is
+   unsupervised and already spans many studies, instruments and sites. That is the sense in
+   which the backbone is "foundational", and #20 confirms the evaluation cohorts are
+   genuinely held out of it (zero near-duplicates). Nothing further to test.
+2. **The supervised half cannot be run.** The five targets are five *different tasks* with
+   no shared label space: Barth syndrome status, MTBLS326 IP3R expression, MTBLS563 3-class
+   diagnosis, BrC-T2D cancer status, BrC-T2D diabetes status. Training a probe on one
+   cohort's labels and testing on another's is undefined. There are also only **4
+   independent cohorts, not 5** — BrC-T2D cancer and diabetes are the same spectra with two
+   different label columns. Sample size (n=37–142) makes it hopeless even where a task
+   could be shared.
+
+What survives of the idea is the *distribution* question, which is answerable and is now
+#20: how far outside the pretraining distribution do the evaluation cohorts sit?
+
+### ✅ #20 — RESULT: no leakage, but the corpus does not cover the evaluation cohorts
+
+Script: `code/analysis/pretrain_eval_overlap.py` →
+`results/analysis/pretrain_eval_overlap/pretrain_eval_overlap.csv`
+
+**Why.** §19 found the corpus contains near-duplicates of *itself* (1.1% at r > 0.9999).
+That immediately raises two questions nothing in this document had checked: (Q1) are any
+*evaluation* spectra also in the pretraining corpus, which would make every downstream
+number optimistic; and (Q2) if not, how far outside the corpus do they sit? Method: bin to
+2048 points, mean-centre, L2-normalise, then take each evaluation spectrum's maximum cosine
+similarity against all 9,670 corpus rows.
+
+| cohort | n | median best-match r into corpus | r > 0.9999 | r > 0.99 |
+|---|---|---|---|---|
+| *(within-corpus reference)* | 1500 | **0.9944** | 57 | 1143 |
+| Barth | 40 | 0.776 | **0** | 0 |
+| MTBLS563 | 142 | 0.775 | **0** | 0 |
+| MTBLS326 | 42 | 0.679 | **0** | 0 |
+| BrC-T2D | 78 | 0.374 | **0** | 0 |
+| TBI Tirupati † | 231 | 0.292 | **0** | 0 |
+
+† not put through the v4 `rowMinMax` pipeline, so this row mixes a real distribution gap
+with a preprocessing difference — indicative only.
+
+**Q1 — no leakage.** Not one evaluation spectrum has a near-duplicate anywhere in the
+pretraining corpus. "Held-out" is accurate, and every §3–§6 number stands as a genuine
+transfer measurement. This needed checking and is a clean result.
+
+**Q2 — but coverage is poor, and this is the actionable finding.** Inside the corpus a
+spectrum's nearest neighbour sits at r ≈ 0.99. For the evaluation cohorts the nearest
+corpus spectrum is at r = 0.37–0.78. **The pretraining corpus is narrow, not merely
+small.** Combined with §19 (86% of its variance in 5 PCs, 55% of rows having a neighbour at
+r > 0.99), the picture is: we pretrain on a highly redundant, low-diversity distribution and
+then evaluate far outside it.
+
+**Consequence for the queue.** This reverses the priority of #17. "Pretrain on more of the
+same spectra" addresses corpus *size*, which is not the binding constraint; the near-
+duplicate rate means extra rows add little information, and the coverage gap means they add
+little *relevant* information. The higher-value move is to widen the corpus — fold the
+evaluation-like cohorts (including the unused TBI Tirupati set) into pretraining after
+near-duplicate dedup, and re-measure. Together with §19's finding that the objective is
+nearly free, these are the two directions that could still change the answer.
+
+Reproduce (~3 min):
+```bash
+python3 code/analysis/pretrain_eval_overlap.py
+```
 
 ### ⭐ #17 — Corpus scaling curve, upward
 Pretrain at 25 / 50 / 100% of available spectra and check whether downstream utility is still
@@ -1437,7 +1503,8 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/analysis/summarize_exp15_seed_study.py`,
   `code/plotting/plot_exp15_seed_study.py`,
   `code/analysis/summarize_barth_ssl_vs_classical_seeds.py` (§18),
-  `code/analysis/reconstruction_baselines.py` (§19).
+  `code/analysis/reconstruction_baselines.py` (§19),
+  `code/analysis/pretrain_eval_overlap.py` (§20).
 - Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in
   `docs/gm_figures/` (`gm09_barth_seeds.png` = §18, `gm10_recon_baselines.png` = §19).
 - **⚠️ nhead ambiguity (recorded 2026-08-21).** The v3 ps1024 checkpoint predates
