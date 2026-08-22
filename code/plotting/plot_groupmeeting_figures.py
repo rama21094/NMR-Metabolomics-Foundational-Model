@@ -112,15 +112,39 @@ def fig_headline():
 
 # ------------------------------------------------- 2. the two free wins
 def fig_free_wins():
-    """docs §4b (head) and §5c (pooling) -- both paired."""
+    """docs §4b (head) and §5c (pooling) -- both paired.
+
+    LEFT PANEL CORRECTION (2026-08-21). This panel used to plot the §4a probe
+    table: `ssl_head_best` (the best FINE-TUNED head) against the LogReg probe
+    on frozen features. That is not a paired comparison -- the two bars had
+    different backbones, because one of them had been fine-tuned -- and it made
+    the panel disagree with its own title: it came out +0.057 and 4 of 5, with
+    MTBLS326 negative, while the title claimed §4b's +0.120 and 5 of 5.
+
+    The panel now plots §4b's actual paired test from
+    results/analysis/linear_probe_frozen/linear_probe_results.csv:
+    `ssl_head_frozen` vs `linear_probe_bal_acc` -- identical backbone,
+    identical pooling, identical folds, only the fitting of the final linear
+    map differs. That is +0.120 mean, positive on 5 of 5, matching the title.
+
+    NHEAD CAVEAT. Both bars here read the v3 ps1024 checkpoint at nhead=8,
+    which is NOT the value it trained with (nhead=4); the checkpoint does not
+    record nhead and loads silently under either. The comparison stays valid
+    because it is paired -- both bars share the same (mis-read) backbone and
+    only the head differs -- but the absolute heights are not comparable with
+    the right panel, which reads the same checkpoint at the true nhead=4. This
+    is why the left panel's "after" is NOT the right panel's "before".
+    """
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.6))
     x = np.arange(5)
     w = 0.36
 
-    head_before = [0.691, 0.981, 0.558, 0.796, 0.653]
+    # §4b, masking family, TARGETS order. Frozen head vs LogReg probe on the
+    # identical frozen features -- the strictly paired test.
+    head_before = [0.655, 0.796, 0.530, 0.730, 0.653]
     head_after = [0.770, 0.944, 0.607, 0.833, 0.810]
-    a1.bar(x - w / 2, head_before, w, label="Trained DNN head", color=GREY)
-    a1.bar(x + w / 2, head_after, w, label="LogReg probe", color=DEEP)
+    a1.bar(x - w / 2, head_before, w, label="Trained DNN head (frozen backbone)", color=GREY)
+    a1.bar(x + w / 2, head_after, w, label="LogReg probe, same features", color=DEEP)
     for xi, (b, a) in enumerate(zip(head_before, head_after)):
         a1.annotate(f"{a - b:+.2f}", xy=(xi, max(a, b) + 0.015), ha="center",
                     fontsize=15.5, fontweight="bold", color=GREEN if a > b else CORAL)
@@ -136,6 +160,9 @@ def fig_free_wins():
                     fontsize=15.5, fontweight="bold", color=GREEN)
     a2.set_title("Win 2 — pooling discarded position\n+0.03…+0.13, 5 of 5 targets",
                  fontweight="bold")
+    # NOTE: the two panels are separate paired experiments read at different
+    # nhead (8 left, 4 right), so their bars deliberately do not chain --
+    # the left panel's "after" is NOT the right panel's "before".
 
     for ax in (a1, a2):
         ax.set_xticks(x)
@@ -405,6 +432,186 @@ def fig_fewshot_paired():
     save(fig, "gm07_fewshot_paired.png")
 
 
+# ------------------------------- 9. Barth: the one SSL win was a lucky seed
+def fig_barth_seeds():
+    """Experiment #18. Barth SSL across 5 v3 + 5 v4 seeds vs classical LogReg.
+
+    Data: results/analysis/barth_seeds_vs_classical/barth_seed_runs.csv, built
+    by code/analysis/summarize_barth_ssl_vs_classical_seeds.py.
+    """
+    from matplotlib.lines import Line2D
+
+    runs = pd.read_csv(ROOT / "results/analysis/barth_seeds_vs_classical/barth_seed_runs.csv")
+    groups = pd.read_csv(ROOT / "results/analysis/barth_seeds_vs_classical/barth_seed_groups.csv")
+    CLASSICAL = 0.704969
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.62),
+                                 gridspec_kw={"width_ratios": [1.32, 1.0]})
+
+    # ---------- left: every seed, flatten pooling (what the 0.806 was quoted at)
+    f = runs[runs.pooling == "flatten"]
+    a1.axhspan(CLASSICAL - 0.045, CLASSICAL + 0.045, color=NAVY, alpha=0.09, zorder=0)
+    a1.axhline(CLASSICAL, color=NAVY, lw=2.4, zorder=2)
+    centres, tick_labels = {}, []
+    for i, corpus in enumerate(("v3", "v4")):
+        g = f[f.corpus == corpus].reset_index(drop=True)
+        base = i * 1.50
+        xs = base + np.arange(len(g)) * 0.24
+        centres[corpus] = xs.mean()
+        col = DEEP if corpus == "v3" else TEAL
+        for x, (_, r) in zip(xs, g.iterrows()):
+            if r.is_quoted_arm:
+                a1.scatter([x], [r.balanced_accuracy], s=300, marker="*", color=CORAL,
+                           edgecolor="white", linewidth=1.3, zorder=5)
+            else:
+                a1.scatter([x], [r.balanced_accuracy], s=130, color=col, zorder=4)
+        gm = groups[(groups.pooling == "flatten") & (groups.corpus == corpus)].iloc[0]
+        a1.plot([xs[0] - 0.11, xs[-1] + 0.11], [gm["mean"]] * 2,
+                color=GOLD, lw=2.6, ls="--", zorder=3)
+        tick_labels.append(f"{corpus} corpus\nmean {gm['mean']:.3f}\n"
+                           f"{gm.n_beating_classical}/5 beat classical")
+
+    # label gutter on the right, so nothing sits on top of the lines
+    a1.text(2.66, 0.716, "classical LogReg\n0.705", fontsize=14, ha="left",
+            va="bottom", fontweight="bold", color=NAVY, linespacing=1.35)
+    a1.annotate("the single run every\nheadline was quoted from",
+                xy=(0.0, 0.806), xytext=(0.60, 0.845), fontsize=14,
+                fontweight="bold", color=CORAL, ha="left",
+                arrowprops=dict(arrowstyle="->", color=CORAL, lw=2.0))
+    a1.set_xlim(-0.30, 3.62)
+    a1.set_ylim(0.50, 0.885)
+    a1.set_xticks([centres["v3"], centres["v4"]])
+    a1.set_xticklabels(tick_labels, fontsize=12.5, linespacing=1.4)
+    a1.set_ylabel("Barth balanced accuracy")
+    a1.set_title("Barth, one point per pretraining seed (flatten pooling)",
+                 fontweight="bold", fontsize=16)
+    a1.legend(handles=[
+        Line2D([], [], marker="*", ls="none", ms=16, color=CORAL, label="quoted run"),
+        Line2D([], [], marker="o", ls="none", ms=8, color=DEEP, label="other seeds"),
+        Line2D([], [], ls="--", lw=2.2, color=GOLD, label="mean (n=5)"),
+    ], loc="lower right", fontsize=12.5, frameon=False, handletextpad=0.5,
+        borderaxespad=0.4, labelspacing=0.3)
+    a1.grid(axis="y", alpha=0.3, ls="--")
+    a1.set_axisbelow(True)
+
+    # ---------- right: group deltas vs classical, all four groups
+    order = [("flatten", "v4"), ("flatten", "v3"), ("mean_pool", "v4"), ("mean_pool", "v3")]
+    ys = np.arange(len(order))
+    vals, errs, names, wins = [], [], [], []
+    for pool, corpus in order:
+        g = groups[(groups.pooling == pool) & (groups.corpus == corpus)].iloc[0]
+        vals.append(g.delta_vs_classical)
+        errs.append(g.se)
+        names.append(f"{pool}\n{corpus}")
+        wins.append(f"{g.n_beating_classical}/5")
+    a2.axvspan(-0.045, 0.045, color="0.86", alpha=0.75, zorder=0)
+    a2.axvline(0, color="k", lw=1.8, zorder=2)
+    a2.barh(ys, vals, height=0.58, xerr=errs, capsize=6,
+            color=[GREEN if v > 0 else CORAL for v in vals],
+            error_kw=dict(elinewidth=1.9, capthick=1.7), zorder=3)
+    for y, w in zip(ys, wins):
+        a2.text(0.148, y, w, fontsize=15, fontweight="bold", va="center", ha="right")
+    a2.text(0.148, -0.62, "seeds >\nclassical", fontsize=12.5, ha="right",
+            va="center", color="0.35", linespacing=1.3)
+    a2.set_yticks(ys)
+    a2.set_yticklabels(names, fontsize=14)
+    a2.set_xlim(-0.135, 0.155)
+    a2.set_ylim(3.75, -1.05)
+    a2.set_xlabel("Δ vs classical LogReg")
+    a2.set_title("Every group sits inside\nthe noise band", fontweight="bold", fontsize=16)
+    a2.text(-0.130, 3.52, "grey band = ±0.045 noise floor (§15)",
+            fontsize=13, color="0.30", ha="left", va="center")
+    a2.grid(axis="x", alpha=0.3, ls="--")
+    a2.set_axisbelow(True)
+    for ax in (a1, a2):
+        ax.tick_params(labelsize=14.5)
+    save(fig, "gm09_barth_seeds.png")
+
+
+# ------------------------------ 10. reconstruction vs non-learned baselines
+def fig_recon_baselines():
+    """Experiment #19. Is masked reconstruction hard? Data from
+    code/analysis/reconstruction_baselines.py."""
+    from matplotlib.patches import Patch
+
+    summ = pd.read_csv(ROOT / "results/analysis/reconstruction_baselines/recon_baselines_summary.csv")
+    red = pd.read_csv(ROOT / "results/analysis/reconstruction_baselines/corpus_redundancy.csv")
+    rv = dict(zip(red.metric, red.value))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.62),
+                                 gridspec_kw={"width_ratios": [1.42, 1.0]})
+
+    preds = [("linear_interp", "linear\ninterp.", GREY),
+             ("corpus_mean", "corpus\nmean", GOLD),
+             ("pca50_from_visible", "PCA-50", TEAL),
+             ("nn_copy", "copy a\nneighbour", DEEP),
+             ("dnn", "trained\nDNN", CORAL)]
+    ratios = sorted(summ.mask_ratio.unique())
+    alphas = [0.42, 0.68, 1.0]
+    x = np.arange(len(preds))
+    w = 0.26
+    for i, ratio in enumerate(ratios):
+        g = summ[summ.mask_ratio == ratio].set_index("predictor")
+        vals = [g.loc[k, "r_masked_mean"] for k, _, _ in preds]
+        a1.bar(x + (i - 1) * w, vals, w, color=[c for _, _, c in preds],
+               alpha=alphas[i], edgecolor="white", linewidth=0.8, zorder=3)
+        if ratio == ratios[-1]:
+            for xi, v in zip(x, vals):
+                a1.text(xi + (i - 1) * w, v + 0.02, f"{v:.2f}", ha="center",
+                        fontsize=13.5, fontweight="bold")
+    a1.set_xticks(x)
+    a1.set_xticklabels([lab for _, lab, _ in preds], fontsize=14)
+    a1.set_ylabel("Pearson r on the hidden bins")
+    a1.set_ylim(0, 1.16)
+    a1.set_title("Copying another spectrum already scores 0.90",
+                 fontweight="bold", fontsize=16)
+    dnn60 = summ[(summ.mask_ratio == ratios[-1]) & (summ.predictor == "dnn")].r_masked_mean.iloc[0]
+    nn60 = summ[(summ.mask_ratio == ratios[-1]) & (summ.predictor == "nn_copy")].r_masked_mean.iloc[0]
+    a1.text(-0.42, 1.09, f"At {ratios[-1]:.0%} hidden, the network beats\n"
+            f"'copy a neighbour' by only {dnn60 - nn60:+.3f}",
+            fontsize=14.5, fontweight="bold", color=CORAL, va="top", ha="left",
+            linespacing=1.4)
+    a1.legend(handles=[Patch(facecolor=GREY, alpha=a, label=f"{r:.0%} hidden")
+                       for a, r in zip(alphas, ratios)],
+              loc="upper center", bbox_to_anchor=(0.5, -0.155), ncol=3,
+              fontsize=14, frameon=False, handlelength=1.6, columnspacing=1.6)
+    a1.grid(axis="y", alpha=0.3, ls="--")
+    a1.set_axisbelow(True)
+    a1.tick_params(labelsize=14)
+
+    # ---------- right: why it is easy
+    a2.axis("off")
+    T = a2.transAxes
+    a2.text(0.0, 1.0, "Why it is easy", fontsize=18, fontweight="bold",
+            color=NAVY, va="top", transform=T)
+    pc5 = rv["pca_cum_var_5pc"]
+    a2.text(0.0, 0.880, f"{100 * pc5:.0f}% of all corpus variance sits\nin just 5 principal components",
+            fontsize=15, va="top", transform=T, linespacing=1.45)
+    a2.text(0.0, 0.695,
+            f"20 PCs → {100 * rv['pca_cum_var_20pc']:.0f}%    "
+            f"50 PCs → {100 * rv['pca_cum_var_50pc']:.0f}%",
+            fontsize=14.5, va="top", color=DEEP, fontweight="bold", transform=T)
+    a2.text(0.0, 0.578, f"The median spectrum's nearest\nneighbour correlates at "
+            f"r = {rv['median_best_match_r']:.3f}",
+            fontsize=15, va="top", transform=T, linespacing=1.45)
+    a2.text(0.0, 0.408,
+            f"{100 * rv['frac_rows_with_neighbour_r_gt_0.95']:.0f}% of spectra have a neighbour\n"
+            f"at r > 0.95;  {100 * rv['frac_rows_with_neighbour_r_gt_0.9999']:.1f}% are near-duplicates",
+            fontsize=14.5, va="top", color=CORAL, fontweight="bold", transform=T,
+            linespacing=1.5)
+    a2.text(0.0, 0.228, "Every serum CPMG spectrum resembles\n"
+            "every other, so the hidden bins are\n"
+            "already implied by the visible ones. This\n"
+            "task cannot force the model to learn\n"
+            "anything disease-discriminative.",
+            fontsize=14.5, va="top", transform=T, linespacing=1.45, color="0.25")
+    save(fig, "gm10_recon_baselines.png")
+
+
+# ---------------------------------------------------------------------------
+# Every figure call lives here, at the END of the file. It used to sit in the
+# middle, which silently skipped every function defined below it -- gm08 and
+# gm07b were not being regenerated at all.
 if __name__ == "__main__":
     fig_headline()
     fig_free_wins()
@@ -414,150 +621,7 @@ if __name__ == "__main__":
     fig_fewshot_curves()
     fig_fewshot_paired()
     fig_fewshot_paired_5panel()
+    fig_reconstruction()
+    fig_barth_seeds()
+    fig_recon_baselines()
     print("\nall deck figures written to", OUT)
-
-
-# ------------------------- 8. masked reconstruction, regenerated -------------
-def fig_reconstruction(n_eval=50):
-    """Re-make February's masked-reconstruction demo with slide-legible type.
-
-    Two changes from the carried figure, both deliberate:
-
-    1. Authored at FIGW so the axes are readable next to text (the original was
-       built full-bleed and its ticks land near 8pt when scaled to fit).
-    2. Correlation is reported on the MASKED bins only, and over `n_eval`
-       spectra rather than one. February's "r = 0.999" was computed across the
-       whole spectrum -- which includes the ~75% of bins the model was handed
-       and simply copies, so it mostly measures the copy. On the bins the model
-       actually had to predict, r is materially lower and much more variable.
-       That gap is the whole point of the slide, so it should be measured
-       correctly rather than restated.
-    """
-    import sys
-    import torch
-    for sub in ("code/evaluation", "code/training"):
-        if str(ROOT / sub) not in sys.path:
-            sys.path.insert(0, str(ROOT / sub))
-    from trainer_revised import NMRMaskedAutoencoder
-    from barth_all_models_loocv import infer_mae_config
-
-    CKPT = ("models/masked_ssl/combine_unique_MetaboLights_Workbench_Water_EDTA_"
-            "Suppressed_rowMinMax_v3_20260725_085527_bs32_mr0.20-0.60_ps1024_best.pth")
-    ck = torch.load(ROOT / CKPT, map_location="cpu", weights_only=False)
-    state = ck["model_state_dict"]
-    corpus = np.load(ROOT / "data/combined/combine_unique_MetaboLights_Workbench_"
-                     "Water_EDTA_Suppressed_rowMinMax_v4.npy", mmap_mode="r")
-    L = corpus.shape[1]
-    model = NMRMaskedAutoencoder(spectrum_length=L, **infer_mae_config(state, 4, 0.0))
-    model.load_state_dict(state, strict=True)
-    model.eval()
-    ps = model.patch_size
-    npatch = L // ps
-
-    def run(row, seed):
-        x = np.asarray(corpus[row], dtype=np.float32)
-        rng = np.random.default_rng(seed)
-        mask = np.zeros(npatch, dtype=bool)
-        mask[rng.choice(npatch, size=int(0.25 * npatch), replace=False)] = True
-        masked = x.copy()
-        for i in np.flatnonzero(mask):
-            masked[i * ps:(i + 1) * ps] = 0.0
-        with torch.no_grad():
-            rec, _ = model(torch.from_numpy(masked).unsqueeze(0),
-                           mask=torch.from_numpy(mask).unsqueeze(0))
-        rec = rec.squeeze(0).numpy().reshape(-1)[:L]
-        sel = np.zeros(L, dtype=bool)
-        for i in np.flatnonzero(mask):
-            sel[i * ps:(i + 1) * ps] = True
-        return x, rec, mask, sel
-
-    rows = np.linspace(0, len(corpus) - 1, n_eval, dtype=int)
-    r_whole, r_mask = [], []
-    for j, row in enumerate(rows):
-        x, rec, _m, sel = run(int(row), 7 + j)
-        r_whole.append(np.corrcoef(rec, x)[0, 1])
-        r_mask.append(np.corrcoef(rec[sel], x[sel])[0, 1])
-    r_whole, r_mask = np.array(r_whole), np.array(r_mask)
-    # plot the spectrum whose masked-only r is closest to the median
-    pick = int(rows[np.argmin(np.abs(r_mask - np.median(r_mask)))])
-    pick_seed = 7 + int(np.argmin(np.abs(r_mask - np.median(r_mask))))
-    x, rec, mask, sel = run(pick, pick_seed)
-    this_r = np.corrcoef(rec[sel], x[sel])[0, 1]
-
-    lo, hi = 60000, 100000
-    fig, ax = plt.subplots(figsize=(FIGW, 4.30))
-    for i in np.flatnonzero(mask):
-        a, b = i * ps, (i + 1) * ps
-        if b > lo and a < hi:
-            ax.axvspan(max(a, lo), min(b, hi), color="#FFE9A8", zorder=0)
-    ax.plot(np.arange(lo, hi), x[lo:hi], lw=1.9, color=NAVY, label="Original", zorder=3)
-    ax.plot(np.arange(lo, hi), rec[lo:hi], lw=1.4, color=CORAL,
-            label="Reconstructed", zorder=4)
-    ax.set_xlim(lo, hi)
-    ax.set_xlabel("Spectral point")
-    ax.set_ylabel("Normalised intensity")
-    ax.set_title(f"25% of patches hidden (yellow bands) — a median example, "
-                 f"r = {this_r:.2f} on hidden bins", fontweight="bold", fontsize=17)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.19), ncol=2,
-              fontsize=16, frameon=False, columnspacing=1.6, handlelength=1.8)
-    ax.grid(alpha=0.25, ls="--")
-    ax.set_axisbelow(True)
-    save(fig, "gm08_reconstruction.png")
-    print(f"   [recon over n={n_eval} spectra]  whole-spectrum r = {r_whole.mean():.3f} "
-          f"± {r_whole.std(ddof=1):.3f}   masked-only r = {r_mask.mean():.3f} "
-          f"± {r_mask.std(ddof=1):.3f}  (range {r_mask.min():.2f}–{r_mask.max():.2f})")
-
-
-# ------------------- 9. paired deltas, one panel per target (de-congested) ---
-def fig_fewshot_paired_5panel():
-    """Slide 24's left panel replacement.
-
-    The single-axes overlay (5 lines + error bars sharing one plot, in
-    fig_fewshot_paired's axl) reads as congested -- overlapping error bars in
-    the -0.05..-0.10 band make it hard to tell whose line is whose. Same data,
-    laid out as 5 small multiples (matching fig_fewshot_curves' 2x3 grid) so
-    each target's curve and error bars stand alone.
-    """
-    runs = [("Barth", "results/fewshot/barth_v2_repooled"),
-            ("MTBLS326", "results/fewshot/mtbls326_v2_coarse_pass1"),
-            ("MTBLS563", "results/fewshot/mtbls563_v2_coarse"),
-            ("BrC-T2D cancer", "results/fewshot/brc_t2d_cancer_v2_coarse"),
-            ("BrC-T2D diabetes", "results/fewshot/brc_t2d_diabetes_v2_coarse")]
-    paired = pd.read_csv(ROOT / "results/analysis/fewshot_masking_vs_classical"
-                         / "fewshot_paired_masking_vs_classical.csv")
-    cmap = plt.get_cmap("tab10")
-
-    fig, axes = plt.subplots(2, 3, figsize=(FIGW, 4.62))
-    axf = axes.ravel()
-    YLIM = (-0.145, 0.075)   # shared across panels: same data range as before,
-                              # so panel heights are directly comparable
-    for i, (ax, (name, _rel)) in enumerate(zip(axf, runs)):
-        p = paired[paired.dataset == name].sort_values("support_per_class")
-        ax.axhspan(-0.02, 0.02, color="0.86", alpha=0.6, zorder=0)
-        ax.axhline(0, color="k", lw=1.6, zorder=1)
-        ax.errorbar(p.support_per_class, p.paired_diff, yerr=p.se, marker="o",
-                    ms=6.5, lw=2.3, capsize=4, capthick=1.7, color=cmap(i), zorder=3)
-        ax.set_title(name, fontsize=17, fontweight="bold")
-        ax.set_ylim(*YLIM)
-        ax.set_xlabel("labels per class", fontsize=15.5)
-        ax.grid(alpha=0.28, ls="--")
-        ax.set_axisbelow(True)
-        ax.tick_params(labelsize=14.5)
-    fig.supylabel("Paired Δ balanced accuracy\n(SSL − classical)", fontsize=16)
-
-    axf[5].axis("off")
-    axf[5].text(0.0, 0.92, "Grey band = paired noise floor (±0.02)",
-                fontsize=15.5, va="top", ha="left", color="0.35",
-                transform=axf[5].transAxes)
-    axf[5].text(0.0, 0.74, "Error bars = se across 10 shared episodes",
-                fontsize=15.5, va="top", ha="left", color="0.35",
-                transform=axf[5].transAxes)
-    axf[5].text(0.0, 0.50,
-                "Below zero: classical ahead.\n"
-                "Every target ends below zero\n"
-                "or inside the noise band —\n"
-                "none finish with SSL clearly\n"
-                "ahead.",
-                fontsize=16, va="top", ha="left", fontweight="bold", color=NAVY,
-                linespacing=1.5, transform=axf[5].transAxes)
-    save(fig, "gm07b_fewshot_paired_5panel.png")

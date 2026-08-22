@@ -1,9 +1,21 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-08-10. Experiments **#1–#8, #13, #14, #15 done**; #9–#12
-queued (#9 void). **#6 is the decisive one and it is negative:** masked SSL does not beat
-classical LogReg at any label budget on any of the five targets, and pooled at the smallest
-budget the difference is +0.0012 ± 0.0162 (p=0.74) — see §6.
+**Status:** updated 2026-08-21. Experiments **#1–#8, #13, #14, #15, #18, #19 done**;
+#10b–#12, #16, #17 queued (#9 void). **#6 is the decisive one and it is negative:** masked
+SSL does not beat classical LogReg at any label budget on any of the five targets, and
+pooled at the smallest budget the difference is +0.0012 ± 0.0162 (p=0.74) — see §6.
+
+**Two results added 2026-08-21 close the story.** **§18** re-reads the project's only
+claimed SSL win over classical (Barth, 0.806 vs 0.705) across the §15 seeds and retracts
+it: the 0.806 is the highest of five seeds, +1.5 sd above its own group mean, and only
+5 of 20 (corpus × pooling × seed) readings beat classical at all. The honest full-data
+record is **0 wins / 1 tie / 4 losses**, not 1 / 1 / 3. **§19** supplies the baselines
+every reconstruction claim in this document was missing and finds masked reconstruction
+is **nearly free**: copying the most similar other spectrum scores r = 0.900 on hidden
+bins at 60% masking versus the network's 0.921, because 86% of corpus variance sits in
+5 principal components and the median spectrum's nearest neighbour correlates at 0.991.
+That is the **mechanism** behind §5e, §6b and §6 alike — the pretext task cannot force
+the model to learn anything disease-discriminative.
 
 Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
 the correction of record. It also found the actual win (pooling), which remains the only
@@ -51,6 +63,19 @@ named in each section.
    intensity scalar explains far less.
 5. **A correction to an earlier claim:** the existing Xavier ablation does *not* test
    "pretrained vs random backbone." Read correctly, pretraining **helps**. See §6.
+6. **The pretext task is easy, and that explains everything else (§19).** Masked
+   reconstruction on this corpus is nearly solved by non-learned baselines — nearest-
+   neighbour copy reaches r = 0.900 at 60% masking against the network's 0.921. The corpus
+   is close to low-rank (86% of variance in 5 PCs; median nearest-neighbour r = 0.991), so
+   the objective is dominated by the population prior and disease signal sits roughly
+   orthogonal to it. Do not quote a reconstruction number without one of these baselines.
+7. **There is no SSL win over classical on full data (§18).** Barth, the sole exception,
+   was a single lucky pretraining seed. Record: 0 wins / 1 tie / 4 losses.
+8. **Two nhead readings are in circulation and must not be chained.** The v3 ps1024
+   checkpoint does not record `nhead` and loads silently at either 4 or 8. §4a/§4b read it
+   at 8; §5c and everything in `compare_patch_sizes.py` read it at the true 4. `flatten`
+   pooling is nearly nhead-invariant, `mean_pool` is not (Barth 0.677 vs 0.770). Paired
+   comparisons within one reading stay valid; absolute values across readings do not.
 
 ---
 
@@ -120,6 +145,28 @@ Running the **same** LogReg on the frozen masked-SSL embedding isolates the two 
 | MTBLS563 | 0.558 | 0.607 | 0.721 | 0.049 | **0.114** |
 | Barth | 0.691 | **0.770** | 0.705 | **0.079** | −0.065 (embedding *beats* bins) |
 | MTBLS326 | 0.981 | 0.944 | 1.000 | −0.037 | 0.056 |
+
+> ⚠️ **NHEAD CAVEAT (added 2026-08-21).** Every number in the table above is the v3
+> ps1024 checkpoint read at **nhead=8**, which is *not* the value it trained with
+> (nhead=4). The checkpoint predates architecture recording, and `in_proj_weight` is
+> `3·d_model × d_model` regardless of head count, so it loads silently under either
+> value and produces different embeddings. `compare_patch_sizes.py` reads the same
+> checkpoint at the true nhead=4 (arm `ps1024_nhead4_true`); this table's script
+> `probe_logreg_advantage.py` hardcodes 8 ([line 98](../code/analysis/probe_logreg_advantage.py)).
+> The **within-row** comparisons here remain valid — both columns share the same
+> mis-read backbone — but the absolute values are **not** comparable with §5c's.
+> Concretely, `mean_pool` is very sensitive to the mis-read while `flatten` is nearly
+> immune:
+>
+> | | nhead=4 (§5c) | nhead=8 (§4a) |
+> |---|---|---|
+> | Barth, mean_pool | 0.677 | 0.770 |
+> | Barth, flatten | 0.8059 | 0.8059 |
+> | diabetes, mean_pool | 0.687 | 0.810 |
+> | diabetes, flatten | 0.780 | 0.791 |
+>
+> So §4a's "LogReg on same embedding" column is **not** the same quantity as §5c's
+> "mean-pool" column, and the two must not be chained. See §5c's combining note.
 
 Reading:
 - **Diabetes is a head problem** (89% of the gap). The embedding already supports 0.810.
@@ -254,11 +301,24 @@ NMR, and mean-pooling discards it. Note this is a **pooling** fix, not a resolut
 the tokens always carried the position information; the head was throwing it away.
 
 Combining the two cheap wins (LogReg head from #2/#5 + flatten pooling) against the
-originally reported DNN-head numbers:
+originally reported DNN-head numbers.
+
+> ⚠️ **MIXED-READING CAVEAT (added 2026-08-21).** The "reported DNN head" column is
+> read at nhead=8 (that is what `barth_all_models_loocv.py` defaults to, `IDE_CONFIG`
+> `"nhead": 8`) while the "best probe + flatten" column is read at nhead=4. The table
+> therefore chains two different readings of the same checkpoint. It survives as an
+> honest statement of *"what the reported numbers were, versus the best we can now do
+> post-hoc"*, which is how it is used, but it is **not** a controlled two-step
+> decomposition and the +0.078 should not be split into a head part and a pooling
+> part. `flatten` is nearly nhead-invariant (see §4a's caveat), so the *right-hand*
+> column is trustworthy; the baseline column is the one carrying the mixed reading.
+>
+> The **Barth row of this table is also now retracted** — see §18. Its 0.806 comes
+> from a single pretraining seed and does not survive n=5.
 
 | dataset | reported DNN head | best probe + flatten | classical LogReg | vs classical |
 |---|---|---|---|---|
-| Barth | 0.691 | **0.806** | 0.705 | **+0.101 (SSL wins)** |
+| Barth | 0.691 | **0.806** | 0.705 | ~~**+0.101 (SSL wins)**~~ ❌ **seed artifact, see §18** |
 | MTBLS326 | 0.981 | **1.000** | 1.000 | 0.000 (tie) |
 | BrC-T2D cancer | 0.796 | 0.859 | **0.937** | −0.078 |
 | BrC-T2D diabetes | 0.653 | 0.783 | **0.829** | −0.046 |
@@ -1109,6 +1169,123 @@ climbing at 9,670. Flat ⇒ the objective is the limit. Rising ⇒ the answer is
 more data". Either is actionable. Budget ≥5 seeds per point per §15's rule (~23 GPU-h each),
 so ~70 GPU-h for three points — decide the point count before starting.
 
+> **PREREQUISITE added by §19:** dedup the corpus by *near*-duplicate before running this.
+> 55% of rows have a neighbour at r > 0.99 and 1.1% are near-duplicates at r > 0.9999, so
+> subsampling by row count does not subsample *information* proportionally — a flat curve
+> would be uninterpretable. Deduplicate at a stated r threshold and report the effective
+> corpus size at each point alongside the nominal one. §19 also lowers this experiment's
+> prior: if the pretext task is nearly solved by copying a neighbour, more near-identical
+> spectra are unlikely to make it more informative.
+
+### ❌ #18 — RESULT: the one SSL win over classical was a seed artifact
+
+Script: `code/analysis/summarize_barth_ssl_vs_classical_seeds.py` →
+`results/analysis/barth_seeds_vs_classical/{barth_seed_runs,barth_seed_groups}.csv`
+Figure: `docs/gm_figures/gm09_barth_seeds.png`
+
+**Why this had to be run.** Barth was the project's only claimed SSL win over classical
+ML (§5c: 0.806 vs 0.705, quoted as "+0.101 SSL WINS", and carried into the scorecard as
+"1 win / 1 tie / 3 losses"). That 0.806 is arm `ps1024_nhead4_true` — **the original
+unseeded run**, which is precisely the position §15 proved to be selection-biased upward
+when it retracted the v3-vs-v4 corpus effect. §15 built five seeds per corpus; those
+seeds cover Barth too, so the win could be re-read with error bars and had not been.
+
+**Result — it does not survive.** Barth, LOOCV, classical LogReg @1024 bins = 0.705:
+
+| pooling | corpus | mean ± sd (n=5) | Δ vs classical ± se | seeds beating classical | Wilcoxon p |
+|---|---|---|---|---|---|
+| flatten | v3 | 0.690 ± 0.076 | **−0.015 ± 0.034** | **1 / 5** | 0.44 |
+| flatten | v4 | 0.726 ± 0.052 | **+0.021 ± 0.023** | **2 / 5** | 0.75 |
+| mean_pool | v3 | 0.637 ± 0.052 | −0.068 ± 0.023 | **0 / 5** | 0.06 |
+| mean_pool | v4 | 0.700 ± 0.051 | −0.005 ± 0.023 | **2 / 5** | 0.81 |
+
+Across all 20 readings (2 corpora × 2 poolings × 5 seeds), masked SSL beats classical on
+Barth in **5**. The quoted arm sits **+1.52 sd above its own group mean** for flatten/v3;
+the other four v3 seeds score 0.598, 0.655, 0.691, 0.699 — *all below* classical's 0.705.
+The best group's advantage (+0.021) is less than half the 0.045 noise floor.
+
+**Consequences.**
+- The §5c "combining the two cheap wins" table's Barth row is retracted (annotated there).
+- The honest full-data record is **0 wins / 1 tie / 4 losses**, where the tie is MTBLS326
+  with both methods at ceiling. Not 1 / 1 / 3.
+- This *strengthens* §6. With no anomalous win to explain, the few-shot negative result
+  and the full-data result now say the same thing on all five targets.
+- The two surviving paired wins (§4b head, §5c pooling) are untouched — they are
+  within-checkpoint transforms and carry no pretraining variance, exactly the §15 pattern.
+
+Reproduce:
+```bash
+python3 code/analysis/summarize_barth_ssl_vs_classical_seeds.py
+```
+
+### ❌ #19 — RESULT: masked reconstruction is nearly free, and that is the mechanism
+
+Script: `code/analysis/reconstruction_baselines.py` →
+`results/analysis/reconstruction_baselines/{recon_baselines_summary,recon_baselines_per_spectrum,corpus_redundancy}.csv`
+Figure: `docs/gm_figures/gm10_recon_baselines.png`
+
+**Why this had to be run.** Every reconstruction claim in this project (February's
+"overall R² 0.98" and "r = 0.999", and the corrected "r = 0.940 ± 0.090 on masked bins")
+was reported **without a baseline** — the same error as quoting classifier accuracy with
+no majority-class rate. §5e already showed reconstruction loss does not predict
+downstream utility; this asks the prior question of whether the pretext task is hard at
+all.
+
+**Result.** Pearson r on the hidden bins, same 50 spectra and identical masks for every
+predictor, v3 ps1024 checkpoint read at its true nhead=4:
+
+| predictor | 25% hidden | 40% hidden | 60% hidden |
+|---|---|---|---|
+| linear interpolation from neighbours | 0.549 | 0.500 | 0.377 |
+| corpus mean spectrum | 0.587 | 0.591 | 0.558 |
+| PCA-50 fit to visible bins only | 0.871 | 0.831 | 0.825 |
+| **nearest-neighbour copy** | **0.918** | **0.916** | **0.900** |
+| **the trained DNN** | **0.940** | **0.928** | **0.921** |
+| *DNN margin over best baseline* | *+0.022* | *+0.011* | *+0.021* |
+
+**Finding the most similar other spectrum and copying its hidden bins scores 0.900 at
+60% masking; the trained transformer scores 0.921.** Restricting nn_copy to matches whose
+corpus row index is >500 away (a study-disjointness proxy) only drops it to 0.885, so the
+margin is real but small (~+0.02–0.04), not the gap the "r = 0.94" headline implies.
+
+**Why the task is easy — the corpus is nearly self-redundant** (2,000-row sample, 2048
+bins, `corpus_redundancy.csv`):
+
+| | |
+|---|---|
+| variance in first 5 PCs | **86%** |
+| variance in first 20 / 50 PCs | 95% / 99% |
+| median spectrum's nearest-neighbour r | **0.991** |
+| rows with a neighbour at r > 0.99 | 55% |
+| rows with a near-duplicate at r > 0.9999 | **1.1%** |
+
+A 131,072-point spectrum effectively occupies a ~5–20 dimensional manifold. At 60%
+masking the model still sees ~52,000 points to pin down ~20 effective degrees of freedom.
+
+**This is the missing mechanism for the whole project.** MSM on this corpus cannot force
+the model to learn metabolite structure, because the population prior already answers the
+question. The objective is dominated by the top few components; disease signal is a small
+perturbation roughly orthogonal to them. That is why §5e's reconstruction-vs-utility
+disconnect exists, why §6b's pretraining gain is modest, and why §6 found nothing in the
+few-shot regime — one cause, not three coincidences.
+
+**A prediction of ours that FAILED, recorded so it is not repeated.** We expected the
+headline r to be inflated by the many near-empty baseline bins. It is not: at 60% masking
+the DNN scores **0.879 on peak bins** (top 5% intensity) vs **0.855 on baseline bins**.
+The model genuinely reproduces peaks — it just does not need much skill to do so.
+
+**Side finding, actionable.** 1.1% of the corpus are near-duplicates at r > 0.9999 and
+55% have a neighbour at r > 0.99, despite the corpus being built through a
+`combine_unique` dedup step — which evidently removed exact but not near duplicates. The
+**effective** corpus is smaller than its nominal 9,670 rows. This directly affects #17
+(corpus scaling): a scaling curve on a corpus that is 55% near-duplicate at r > 0.99 will
+flatten for the wrong reason. Near-duplicate dedup should be a prerequisite for #17.
+
+Reproduce (~4 min):
+```bash
+python3 code/analysis/reconstruction_baselines.py
+```
+
 ### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
 Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
 n=42 is more likely a batch/run-order artifact than real biology. Until this is checked,
@@ -1258,8 +1435,25 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/plotting/plot_groupmeeting_figures.py`,
   `code/training/run_seed_queue.sh`,
   `code/analysis/summarize_exp15_seed_study.py`,
-  `code/plotting/plot_exp15_seed_study.py`.
-- Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in `docs/gm_figures/`.
+  `code/plotting/plot_exp15_seed_study.py`,
+  `code/analysis/summarize_barth_ssl_vs_classical_seeds.py` (§18),
+  `code/analysis/reconstruction_baselines.py` (§19).
+- Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in
+  `docs/gm_figures/` (`gm09_barth_seeds.png` = §18, `gm10_recon_baselines.png` = §19).
+- **⚠️ nhead ambiguity (recorded 2026-08-21).** The v3 ps1024 checkpoint predates
+  architecture recording and does not store `nhead`; `in_proj_weight` is
+  `3·d_model × d_model` regardless of head count, so it loads silently at either 4 or 8 and
+  produces different embeddings. `probe_logreg_advantage.py` hardcodes **8** (so §4a and
+  §4b are nhead=8); `barth_all_models_loocv.py` defaults to **8** via `IDE_CONFIG`;
+  `compare_patch_sizes.py` reads the true **4** (arm `ps1024_nhead4_true`, with
+  `ps1024_nhead8_legacy` kept for comparison). `flatten` pooling is nearly invariant to
+  this (Barth 0.8059 under both) but `mean_pool` is not (Barth 0.677 vs 0.770; diabetes
+  0.687 vs 0.810). **Paired comparisons inside one reading remain valid; never chain a
+  number from one reading to a number from the other.** See the caveats in §4a and §5c.
+- **⚠️ Corpus near-duplication (§19).** 1.1% of corpus rows have a near-duplicate at
+  r > 0.9999 and 55% have a neighbour at r > 0.99, so the `combine_unique` dedup removed
+  exact but not near duplicates. Effective corpus size is below the nominal 9,670 —
+  treat near-duplicate dedup as a prerequisite for #17 (corpus scaling).
 - **Reproducibility (§7b, corrected 2026-08-09):** `--seed` DOES make training reproducible —
   two same-seed runs of the same arm are byte-identical (max|ΔW| = 0.000e+00) once both have
   finished. The earlier claim to the contrary compared against a mid-training checkpoint and is

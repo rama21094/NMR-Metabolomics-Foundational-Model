@@ -38,6 +38,8 @@ const AR = {
   "gm06_fewshot_curves.png": 2.3810,
   "gm07_fewshot_paired.png": 2.3939,
   "gm08_reconstruction.png": 2.5581,
+  "gm09_barth_seeds.png": 2.3810,
+  "gm10_recon_baselines.png": 2.3810,
 };
 
 /** Place an image centred in a box, preserving aspect ratio. */
@@ -446,6 +448,49 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     + "beautiful reconstruction figure tells you almost nothing about whether the features are useful.");
 }
 
+/* ======== 8b. WHY RECONSTRUCTION WAS NEVER THE HARD PART (exp #19) ======== */
+{
+  const s = newLight("Why reconstruction was never the hard part",
+    "The number above has no baseline — so we built the baselines it was missing");
+  fig(s, "gm10_recon_baselines.png", { x: 0.55, y: 1.48, w: 12.2, h: 4.62 });
+
+  card(s, { x: 0.55, y: 6.22, w: 5.95, h: 0.82, fill: TINT_BAD });
+  s.addText([
+    { text: "No learning needed.  ", options: { bold: true, color: CORAL } },
+    { text: "Finding the most similar other spectrum and copying its hidden bins "
+        + "scores 0.90 at 60% masking. The trained network gets 0.92.", options: { color: INK } },
+  ], {
+    x: 0.80, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
+    valign: "middle", lineSpacing: 17,
+  });
+  card(s, { x: 6.80, y: 6.22, w: 5.95, h: 0.82, fill: TINT });
+  s.addText([
+    { text: "So the objective cannot bite.  ", options: { bold: true, color: DEEP } },
+    { text: "Disease signal is a small perturbation orthogonal to the few components "
+        + "that dominate the loss — which is why MSM never learned it.", options: { color: INK } },
+  ], {
+    x: 7.05, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
+    valign: "middle", lineSpacing: 17,
+  });
+
+  s.addNotes("This slide is the mechanism for the whole negative result, so do not rush it.\n\n"
+    + "The honest framing: masked reconstruction on this corpus is close to a solved linear-algebra "
+    + "problem before any deep learning is involved. 86% of all corpus variance sits in 5 principal "
+    + "components, and the median spectrum's nearest neighbour correlates at r = 0.991. At 60% masking "
+    + "the model still sees ~52,000 points to pin down ~20 effective degrees of freedom.\n\n"
+    + "Two honest caveats if pushed:\n"
+    + "(1) the network does still beat every non-learned baseline, by about +0.02. It is learning "
+    + "something real, just something that is nearly free and not disease-related.\n"
+    + "(2) nn_copy benefits from same-study neighbours. Excluding close row-neighbours it drops from "
+    + "0.90 to 0.885 — the conclusion does not change.\n\n"
+    + "Unexpected result worth mentioning: we predicted r was inflated by predicting empty baseline. "
+    + "It is not. Peak bins score 0.879 and baseline bins 0.855 at 60% masking, so the model really "
+    + "does reproduce peaks. It just does not need much skill to do so.\n\n"
+    + "Side finding: 1.1% of the corpus are near-duplicates at r > 0.9999 and 55% have a neighbour at "
+    + "r > 0.99, despite the corpus being built by a 'combine_unique' dedup step. Effective corpus size "
+    + "is smaller than 9,670. This matters for the corpus-scaling experiment on the next-steps slide.");
+}
+
 /* ======================== 9. EVALUATION PROTOCOL ======================== */
 {
   const s = newLight("How we compare now", "The protocol that made everything after this interpretable");
@@ -575,14 +620,25 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   });
   s.addNotes("Pooling: the backbone makes 128 tokens, one per spectral region. Mean-pooling averages "
     + "them and throws away WHERE the signal was — but chemical shift position is the discriminative "
-    + "information in NMR. Keeping position costs nothing.");
+    + "information in NMR. Keeping position costs nothing.\n\n"
+    + "IF SOMEONE ASKS WHY THE PANELS DO NOT CHAIN (a fair question — the left panel's 'after' is not "
+    + "the right panel's 'before'):\n"
+    + "They are two independent paired experiments on the same checkpoint, read at different nhead. "
+    + "That checkpoint does not record nhead and the attention weight shapes are identical either way, "
+    + "so it loads silently under both. The left panel is read at nhead=8, the right at the true "
+    + "nhead=4. Each panel is internally valid because each is paired; the absolute heights are not "
+    + "comparable across panels. flatten pooling is almost nhead-invariant (Barth 0.8059 either way) "
+    + "while mean_pool is very sensitive (0.677 vs 0.770), which is exactly why the baselines differ.\n\n"
+    + "LEFT PANEL is the strict paired test from experiment #2: LogReg vs the trained MLP head on "
+    + "IDENTICAL frozen features — same backbone, same pooling, same folds, only the fitting of the "
+    + "final linear map differs. +0.120 mean, positive on 5 of 5.");
 }
 
 /* ==================== 13. SCORECARD AFTER FREE FIXES ==================== */
 {
   const s = newLight("Where those two fixes left us", "SSL vs classical, after the head and pooling fixes — no retraining");
   const rows = [
-    ["Barth", "0.691", "0.806", "0.705", "+0.101", "SSL WINS", GREEN],
+    ["Barth", "0.691", "0.806", "0.705", "+0.101", "1 seed *", GOLD],
     ["MTBLS326", "0.981", "1.000", "1.000", "0.000", "tie", MUTED],
     ["BrC-T2D cancer", "0.796", "0.859", "0.937", "−0.078", "classical", GOLD],
     ["BrC-T2D diabetes", "0.653", "0.783", "0.829", "−0.046", "classical", GOLD],
@@ -606,7 +662,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 
   const stats = [
     ["+0.078", "mean improvement over the\nFebruary-style numbers", DEEP],
-    ["0 → 1", "wins against classical\n(was 0 wins / 5 losses)", GREEN],
+    ["0 → 1", "apparent win at the time\n— retracted later, see #18", GOLD],
     ["0 h", "GPU time spent —\nboth fixes are post-hoc", TEAL],
   ];
   stats.forEach(([big, lab, col], i) => {
@@ -619,11 +675,16 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       x: x + 0.15, y: 5.45, w: 3.33, h: 0.62, fontFace: F, fontSize: 14.5, color: INK, margin: 0, align: "center", lineSpacing: 18,
     });
   });
-  s.addText("Record moves from 0 wins / 0 ties / 5 losses  →  1 win / 1 tie / 3 losses.", {
-    x: 0.9, y: 6.28, w: 11.5, h: 0.4, fontFace: F, fontSize: 17.5, bold: true, color: NAVY, align: "center", margin: 0,
+  s.addText("* This is what we believed in June. The Barth win rests on ONE pretraining seed — "
+    + "it does not survive n=5. We come back to it.", {
+    x: 0.9, y: 6.28, w: 11.5, h: 0.4, fontFace: F, fontSize: 16, bold: true, color: CORAL, align: "center", margin: 0,
   });
-  s.addNotes("Good news slide. But note the two remaining large gaps are the two biggest cohorts — "
-    + "the ones with actual error bars.");
+  s.addNotes("Good news slide — but flag the asterisk as you show it, do not let it pass as a win.\n\n"
+    + "The two remaining large gaps are the two biggest cohorts, the ones with actual error bars. And "
+    + "the Barth 'win' is retracted later in the talk (experiment #18): 0.806 is the highest of five "
+    + "pretraining seeds and the group mean is 0.690, below classical's 0.705.\n\n"
+    + "The +0.078 mean improvement and the pooling win are both real and both survive; it is only the "
+    + "Barth-beats-classical claim that does not.");
 }
 
 /* ================= 14. DOES PRETRAINING HELP AT ALL? ================= */
@@ -840,6 +901,40 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     + "floor anyway. That is what let three claims through.");
 }
 
+/* ==== 20b. THE NOISE FLOOR CLAIMS THE ONE SSL WIN (experiment #18) ==== */
+{
+  const s = newLight("Applying that noise floor to our one win",
+    "Barth was the single target where SSL beat classical ML — so it had to be re-read the same way");
+  fig(s, "gm09_barth_seeds.png", { x: 0.55, y: 1.48, w: 12.2, h: 4.62 });
+
+  card(s, { x: 0.55, y: 6.22, w: 12.2, h: 0.82, fill: TINT_BAD });
+  s.addText([
+    { text: "The 0.806 was the highest of five seeds, 1.5 sd above its own group mean. ",
+      options: { bold: true, color: CORAL } },
+    { text: "Across all 20 readings (2 corpora × 2 poolings × 5 seeds) SSL beats classical on Barth "
+        + "in 5. Best group is +0.021 ± 0.023 — inside the noise floor. The scorecard goes to 0 wins.",
+      options: { color: INK } },
+  ], {
+    x: 0.85, y: 6.26, w: 11.6, h: 0.74, fontFace: F, fontSize: 15, margin: 0,
+    valign: "middle", lineSpacing: 18,
+  });
+
+  s.addNotes("Say this one plainly — it is the same mistake as the corpus effect, just applied to a "
+    + "claim we liked.\n\n"
+    + "The Barth 'SSL WINS +0.101' on the earlier scorecard came from arm ps1024_nhead4_true, which is "
+    + "the original unseeded run — exactly the position experiment #15 showed to be selection-biased "
+    + "upward. The other four v3 seeds score 0.598 to 0.699, all BELOW classical's 0.705.\n\n"
+    + "Left panel: one point per pretraining seed, flatten pooling. Star = the run every headline was "
+    + "quoted from. Gold dashed = group mean. Navy line = classical LogReg 0.705, shaded band = the "
+    + "0.045 noise floor.\n\n"
+    + "Right panel: all four (pooling x corpus) groups, delta vs classical with standard errors. Every "
+    + "one sits inside the grey noise band. The right-hand column counts how many of the 5 seeds beat "
+    + "classical.\n\n"
+    + "If asked 'so was Barth ever a win?' — no. Honest record is 0 wins, 1 tie (MTBLS326, where both "
+    + "are at ceiling), 4 losses. Importantly this STRENGTHENS the few-shot conclusion rather than "
+    + "weakening it: we no longer have one anomalous target to explain away.");
+}
+
 /* ============ 21. MISTAKE 4 — PROCESS, AND THE GUARDRAILS ============ */
 {
   const s = newLight("A fourth, more mundane failure — and the guardrails",
@@ -1020,6 +1115,8 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     ["Patch size 128 / 256 hurt", "−0.04", "within noise"],
     ["Block masking / peak weighting", "−0.03 / +0.01", "within noise"],
     ["\"SSL wins in few-shot\"", "+0.001", "p = 0.74 — refuted"],
+    ["\"SSL beats classical on Barth\"", "+0.101", "n=5 → +0.021 (0.9 se)"],
+    ["\"Reconstruction proves it learned\"", "r = 0.92", "copy-a-neighbour: 0.90"],
   ];
   s.addText("STILL STANDING", {
     x: 0.55, y: 1.62, w: 5.95, h: 0.4, fontFace: F, fontSize: 20, bold: true, color: GREEN, margin: 0,
@@ -1042,11 +1139,11 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     x: 6.8, y: 2.0, w: 5.95, h: 0.3, fontFace: F, fontSize: 15, color: MUTED, margin: 0, italic: true,
   });
   gone.forEach(([t, d, w], i) => {
-    const y = 2.4 + i * 0.755;
-    card(s, { x: 6.8, y, w: 5.95, h: 0.65, fill: TINT_BAD });
-    s.addText(t, { x: 7.05, y: y + 0.04, w: 3.9, h: 0.32, fontFace: F, fontSize: 15, color: INK, margin: 0, valign: "middle" });
-    s.addText(d, { x: 10.95, y: y + 0.04, w: 1.6, h: 0.32, fontFace: F, fontSize: 15, bold: true, color: CORAL, margin: 0, align: "right", valign: "middle" });
-    s.addText(w, { x: 7.05, y: y + 0.35, w: 5.5, h: 0.27, fontFace: F, fontSize: 13.5, color: MUTED, margin: 0 });
+    const y = 2.4 + i * 0.545;
+    card(s, { x: 6.8, y, w: 5.95, h: 0.48, fill: TINT_BAD });
+    s.addText(t, { x: 7.05, y: y + 0.01, w: 4.0, h: 0.27, fontFace: F, fontSize: 13.5, color: INK, margin: 0, valign: "middle" });
+    s.addText(d, { x: 11.05, y: y + 0.01, w: 1.5, h: 0.27, fontFace: F, fontSize: 13.5, bold: true, color: CORAL, margin: 0, align: "right", valign: "middle" });
+    s.addText(w, { x: 7.05, y: y + 0.25, w: 5.5, h: 0.24, fontFace: F, fontSize: 12, color: MUTED, margin: 0 });
   });
 
   card(s, { x: 0.55, y: 6.3, w: 12.2, h: 0.72, fill: NAVY });

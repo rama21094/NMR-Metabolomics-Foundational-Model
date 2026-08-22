@@ -1,0 +1,15 @@
+metric,value
+pca_cum_var_1pc,0.5103991031646729
+pca_cum_var_2pc,0.7525615692138672
+pca_cum_var_5pc,0.8576102256774902
+pca_cum_var_10pc,0.9143238067626953
+pca_cum_var_20pc,0.9536310434341431
+pca_cum_var_50pc,0.9882588386535645
+pca_cum_var_100pc,0.9977317452430725
+frac_rows_with_neighbour_r_gt_0.9999,0.011
+frac_rows_with_neighbour_r_gt_0.999,0.0175
+frac_rows_with_neighbour_r_gt_0.99,0.5545
+frac_rows_with_neighbour_r_gt_0.95,0.9555
+median_best_match_r,0.9911237955093384
+n_sampled,2000.0
+n_bins,2048.0
