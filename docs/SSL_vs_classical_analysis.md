@@ -59,6 +59,15 @@ paired on shared episodes — and found no advantage at any label budget, with t
 *widening* as labels accumulate. The remaining untested explanation is corpus scale (9,670
 spectra); §13 only probed size downward.
 
+**Governing outline.** The project's scope and closure criteria come from the PI's
+whiteboard outline, transcribed in [`PI_outline.md`](PI_outline.md) (2026-08-22). Two things
+in it matter for how this document is read: (1) the framing is *"comparing foundational
+models with ML"*, so a well-evidenced negative comparison is a **completed deliverable**,
+and the tree has an explicit negative exit; (2) the live next node is **characterising the
+distribution of peak intensities** and how it converges with corpus size — which nothing in
+this document has done yet, and which supersedes #17's framing of corpus scaling. See
+§§5–8 of that file for the node-by-node status mapping.
+
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
 diagnostics that established it, so each follow-up experiment can be run one at a time
@@ -1250,6 +1259,12 @@ climbing at 9,670. Flat ⇒ the objective is the limit. Rising ⇒ the answer is
 more data". Either is actionable. Budget ≥5 seeds per point per §15's rule (~23 GPU-h each),
 so ~70 GPU-h for three points — decide the point count before starting.
 
+> **REFRAMED by the PI outline (see [`PI_outline.md`](PI_outline.md) §8):** the outline asks
+> for the scaling curve on the **distribution of peak intensities**, not on downstream
+> accuracy. That is the better experiment: given the near-duplicate rate below, an accuracy
+> curve would flatten uninterpretably, whereas a distributional-convergence curve directly
+> answers "is data limiting?" and feeds the synthetic-data branch. Do that version first.
+>
 > **PREREQUISITE added by §19:** dedup the corpus by *near*-duplicate before running this.
 > 55% of rows have a neighbour at r > 0.99 and 1.1% are near-duplicates at r > 0.9999, so
 > subsampling by row count does not subsample *information* proportionally — a flat curve
