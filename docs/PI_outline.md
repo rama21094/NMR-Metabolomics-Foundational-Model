@@ -177,33 +177,92 @@ is a stronger convergence than it first appears:
 
 These are integrity fixes, not new science, but every downstream number inherits them.
 
-1. **Normalisation: the principle is right, the operator is the question.** SS's point
-   (2026-08-22) is correct and accepted: NMR intensities are relative, conventionally
-   referenced to a standard at 0 ppm, so **per-spectrum normalisation is necessary**. The open
-   issue is narrower. What the pipeline actually applies is not reference normalisation but
-   min–max — `code/preprocessing/row_minmax_normalize.py`:
+1. **Normalisation: RESOLVED 2026-08-22 — keep rowMinMax, with three narrow caveats.**
+   Script: `code/analysis/normaliser_comparison.py` →
+   `results/analysis/normaliser_comparison/normaliser_comparison.csv`.
 
-   ```python
-   normalized = (spectrum - spectrum.min()) / (spectrum.max() - spectrum.min())
-   ```
+   SS's position was that per-spectrum normalisation is chemically necessary and that
+   min–max is best suited to DNN training. **Tested on all five targets against `none`,
+   `unit_area` and `pqn`, that position holds.** My earlier framing — that rowMinMax is a
+   defect to be removed — was wrong, and is retracted here.
 
-   The zero point is therefore the spectrum's **noise-floor minimum** and the unit is its
-   **tallest peak**, whichever peak that happens to be — neither is a chemical reference. A
-   side effect is that noise amplitude becomes expressed as a fraction of peak height, i.e.
-   an SNR feature, and SNR is an acquisition property (scan count, receiver gain, probe
-   tuning). That is consistent with what §11 measured: metabolite-free regions became **more**
-   label-predictive after rowMinMax (MTBLS326 0.641 → 0.726; BrC-T2D diabetes 0.551 → 0.640).
+   Signal-free accuracy (metabolite-free regions; *lower* = less non-biological signal) and
+   full-spectrum classical accuracy (must not degrade):
 
-   Reference-peak normalisation (divide by the 0 ppm standard's integral) and PQN both keep
-   relative quantification without anchoring the scale to the noise floor and the max peak.
-   Neither is implemented today; no PQN or reference-peak normaliser exists in
-   `code/preprocessing/`.
+   | cohort | signal-free: none / rowminmax / unit_area / pqn | full-spectrum: none / rowminmax / unit_area / pqn |
+   |---|---|---|
+   | Barth | 0.259 / **0.497** / 0.311 / 0.231 | 0.814 / **0.705** / 0.748 / 0.820 |
+   | MTBLS326 | 0.641 / **0.726*** / **0.763*** / **0.763*** | 0.930 / 1.000 / 0.981 / 0.981 |
+   | MTBLS563 | 0.380 / 0.376 / 0.312 / 0.385* | 0.609 / **0.687** / 0.647 / **0.365** |
+   | BrC-T2D cancer | **0.605*** / 0.574 / 0.562 / 0.524 | 0.911 / **0.949** / 0.923 / 0.923 |
+   | BrC-T2D diabetes | 0.551 / **0.640*** / 0.582 / 0.564 | 0.754 / 0.803 / **0.814** / 0.785 |
+   | **leaks (p<0.05)** | 1/5 / **2/5** / 1/5 / 1/5 | — |
+   | **mean accuracy** | — | 0.803 / **0.829** / 0.823 / 0.775 |
 
-   **Settle it by measurement, not argument:** re-run `batch_confound_audit.py` under
-   min–max, reference-peak and PQN. If the metabolite-free-region leak disappears under the
-   latter two and persists under min–max, that is decisive. This matters most for the live
-   node, because the normaliser defines what "distribution of peak intensities" is a
-   distribution *of*.
+   \* = signal-free p < 0.05.
+
+   **Four findings, two of which go against my earlier claim.**
+
+   a. **Changing the normaliser does not remove the leaks.** MTBLS326 leaks under *every*
+      normaliser, and **worse** under `unit_area`/`pqn` (0.763) than under rowMinMax (0.726).
+      That is exactly what §11 concluded on other grounds: MTBLS326 is confounded **by
+      design**, and no preprocessing choice can fix a design confound. My implication that a
+      normaliser change would clean this up was wrong.
+
+   b. **rowMinMax has the best mean classical accuracy (0.829)** of the four, and by a clear
+      margin over `pqn` (0.775). SS's preference is not merely a convenience argument.
+
+   c. **`pqn` is not viable as implemented.** It destroys MTBLS563 (0.687 → **0.365**, near
+      chance on a 3-class task) and its raw range is
+      [−2.4e8, 4.1e7] — the median-quotient denominator goes near zero. Dropped.
+
+   d. **The one leak that IS normaliser-specific is BrC-T2D diabetes**: 0.640 (p < 0.001)
+      under rowMinMax versus 0.551 (p = 0.17) `none`, 0.582 (p = 0.14) `unit_area`, 0.564
+      (p = 0.20) `pqn`. So the SNR mechanism is real, but it is confined to one target rather
+      than being a pipeline-wide defect.
+
+   **On DNN training, SS is right and the margin is large.** Numeric range after each
+   normaliser plus one global scale factor:
+
+   | normaliser | range after global scale | fraction > 1 |
+   |---|---|---|
+   | rowminmax | **[0.00, 1.15]** | 0.10% |
+   | unit_area | [−1.02, 6.41] | 0.10% |
+   | none | [−0.64, 1.89] | 0.10% |
+   | pqn | [−87.2, 14.7] | 0.10% |
+
+   Note also that the *input* scale matters less than it appears: `trainer_revised.py` puts
+   `nn.LayerNorm(d_model)` immediately after the patch embedding and uses `norm_first=True`,
+   so input scale is normalised away in the first block. The genuine exposure is the **MSE
+   target**, which is computed on raw values — and there rowMinMax's bounded [0,1] range is a
+   real advantage, since unbounded heavy-tailed targets would let the tallest peaks dominate
+   the gradient.
+
+   **Decision.**
+   - **Keep rowMinMax for pretraining and for the reported evaluation.** Best accuracy, best
+     conditioned targets, and the leak it causes is confined to one target.
+   - **Caveat 1 — Barth's classical baseline is understated.** rowMinMax gives 0.705 (the
+     §3 reported number, reproduced exactly here), but `none` gives 0.814 and `pqn` 0.820.
+     Barth is the target where the SSL-vs-classical margin was closest, so this **widens** the
+     gap against SSL rather than narrowing it. Report the range.
+   - **Caveat 2 — treat BrC-T2D diabetes' signal-free result as a rowMinMax artifact** and
+     re-check that target under `unit_area`, where it does not leak.
+   - **Caveat 3 — do NOT use rowMinMax for the intensity-distribution work (§5, §9).** Under
+     min–max, "intensity" means *fraction of this spectrum's tallest peak*, and the
+     diagnostics show that peak is **21 distinct chemical positions across 400 spectra**, and
+     lies below 0.5 ppm — where no metabolite resonates — in **19%** of them. As a unit for a
+     distribution of peak intensities that is not well defined. Use `unit_area` there.
+   - **There is no 0 ppm reference resonance in this corpus** (0 ppm window holds a median
+     0.7% of each spectrum's global max; 0% of spectra exceed 5%), so reference-peak
+     normalisation — the convention rowMinMax is sometimes assumed to stand in for — is not
+     implementable here at all.
+
+   **Implementation gotcha if any alternative normaliser is ever used:**
+   `NMRSpectraDataset(..., normalize_input=True)` applies per-spectrum min–max *again* at
+   training time (`trainer_revised.py` line ~50). That is idempotent on already-min–maxed
+   data, which is why it has been harmless, but it would silently undo `unit_area` or `pqn`.
+   Set `normalize_input=False` when feeding anything else.
+
 2. **MTBLS326 is inadmissible (§11)** — confounded by design, cases = samples 1–27,
    controls = 101–130. Exclude from all reported comparisons.
 3. **Barth's SSL win is retracted (§18)** — a single lucky pretraining seed.
@@ -271,10 +330,11 @@ looks.
 
 ## 9. Implied work plan, in the outline's own order
 
-0. **Settle the normaliser** (§7.1) — three-way batch audit under min–max / reference-peak /
-   PQN. Cheap, and it defines what every intensity distribution below is measured on.
-1. **Re-run `peak_saturation.py` on the v4 corpus** under the chosen normaliser. The existing
-   result is on the pre-v4 array (§5a caveat 1) and should not carry the branch decision.
+0. ~~Settle the normaliser~~ — **DONE (§7.1): keep rowMinMax, use `unit_area` for the
+   intensity-distribution work only.**
+1. **Re-run `peak_saturation.py` on the v4 corpus under `unit_area`.** The existing result is
+   on the pre-v4 array *and* on rowMinMax, whose unit is not a well-defined chemical quantity
+   (§7.1 caveat 3). This is now the first live task.
 2. **Extend from 60 marginals to the joint structure** (§5b) — this is the actual gap. Two
    concrete pieces: per-window joint distributions at the window size route (b) will sample
    (so the estimate matches the generator), and the correlation-length structure of the

@@ -75,12 +75,22 @@ things in it matter for how this document is read.
    rowMinMax data. The real gap is the **joint** distribution, which §19/§20 show is
    extremely narrow (86% of variance in 5 PCs, median nearest-neighbour r = 0.991) and does
    not cover the evaluation cohorts (r = 0.37–0.78). Marginals saturated, joint too thin.
-3. **rowMinMax: the principle is accepted, the operator is open.** Per-spectrum
-   normalisation is chemically necessary (NMR intensities are relative). But the pipeline
-   applies min–max, not reference-peak normalisation — the zero is the noise floor and the
-   unit is the tallest peak, which is why §11 sees an SNR-shaped leak. To be settled by
-   re-running the batch audit under min–max / reference-peak / PQN, not by argument. See
-   `PI_outline.md` §7.1.
+3. **rowMinMax: tested and KEPT.** `code/analysis/normaliser_comparison.py` compared it
+   against `none`, `unit_area` and `pqn` on all five targets. rowMinMax has the **best mean
+   classical accuracy** (0.829 vs 0.823 / 0.803 / 0.775) and by far the best-conditioned
+   range for an MSE target ([0, 1.15] after one global scale, vs pqn's [−87, 15]).
+   Crucially, **switching normaliser does not remove the leaks** — MTBLS326 leaks under all
+   four and *worse* under `unit_area`/`pqn` (0.763) than rowMinMax (0.726), confirming §11's
+   verdict that it is confounded by **design**, not by preprocessing. My earlier framing of
+   rowMinMax as a defect to be removed is **retracted**. Three caveats survive: Barth's
+   classical baseline is understated by rowMinMax (0.705 vs 0.814 un-normalised — this
+   *widens* the gap against SSL); BrC-T2D diabetes' signal-free leak is rowMinMax-specific
+   (0.640 vs 0.551–0.582 elsewhere) and should be re-checked under `unit_area`; and the
+   intensity-distribution work must **not** use rowMinMax, because its unit is "this
+   spectrum's tallest peak", which is 21 distinct chemical positions across 400 spectra and
+   lies below 0.5 ppm — where no metabolite resonates — in 19% of them. There is also **no
+   0 ppm reference resonance in this corpus** (median 0.7% of global max), so reference-peak
+   normalisation is not implementable. See `PI_outline.md` §7.1.
 
 **Purpose of this document.** The v4 benchmark showed logistic regression beating all
 three SSL families on all five dataset/label targets. This records *why*, with the
