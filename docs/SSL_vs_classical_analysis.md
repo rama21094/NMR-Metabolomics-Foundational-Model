@@ -1,7 +1,7 @@
 # Why classical ML outperforms the SSL backbones — analysis and experiment queue
 
-**Status:** updated 2026-08-21. Experiments **#1–#8, #13, #14, #15, #18, #19, #20 done**;
-#10b–#12, #17 queued (#9 void, **#16 retired — see §16**). **#6 is the decisive one and it is negative:** masked
+**Status:** updated 2026-08-21. Experiments **#1–#8, #11, #13, #14, #15, #18, #19, #20
+done**; #10b, #12, #17 queued (#9 void, **#16 retired — see §16**). **#6 is the decisive one and it is negative:** masked
 SSL does not beat classical LogReg at any label budget on any of the five targets, and
 pooled at the smallest budget the difference is +0.0012 ± 0.0162 (p=0.74) — see §6.
 
@@ -21,6 +21,16 @@ corpus, so "held-out" is accurate), but **coverage is poor** — within the corp
 spectrum's nearest neighbour sits at r ≈ 0.99, while the evaluation cohorts' nearest
 corpus match is only r = 0.37–0.78. The corpus is **narrow, not merely small**, which
 retires #16 and demotes #17.
+
+**§11 (the batch audit, finally run) removes MTBLS326 from the evidence base.** Its
+perfect 1.000 is **confounded by design**: cases are samples 1–27 and controls are
+101–130 — disjoint, contiguous acquisition blocks — so every run-order variable is
+perfectly collinear with the label. And the confound is measurable, not just possible:
+spectral regions containing **no metabolite resonances** classify the label at 0.726
+(p < 0.005) on the very array the evaluation used, while the same features cannot predict
+acquisition order *within* the case block (p = 0.29) — the signature of two separate
+acquisition sessions. With §18 and §11 together, the trustworthy full-data record is
+**0 wins / 3 losses** on MTBLS563 and the two BrC-T2D targets.
 
 Experiment #4 **refuted** the patch-resolution hypothesis of §5 — see §5b, which is
 the correction of record. It also found the actual win (pooling), which remains the only
@@ -1352,10 +1362,86 @@ Reproduce (~4 min):
 python3 code/analysis/reconstruction_baselines.py
 ```
 
-### #11 — Batch-confound audit of MTBLS326 (PREREQUISITE, still outstanding)
-Classical LR scores a perfect 1.000 and several SSL arms reach 0.963–1.000. A perfect score on
-n=42 is more likely a batch/run-order artifact than real biology. Until this is checked,
-MTBLS326 should not be counted as evidence for anything.
+### ❌ #11 — RESULT: MTBLS326 is confounded by design. Its 1.000 is not biology.
+
+Script: `code/analysis/mtbls326_batch_confound_audit.py` →
+`results/analysis/mtbls326_batch_audit/{design_audit,signal_free_classification}.csv`
+
+**Why this mattered.** MTBLS326 is the only target where classical LogReg reaches a
+perfect **1.000** (n=42, LOOCV), and after §18 it is one of only two targets where SSL is
+even competitive. §6's permutation null **cannot** detect a batch effect: permuting labels
+destroys the batch structure and the biology together, so a fully confounded dataset still
+passes it with p ≤ 0.02. The audit had been queued as a prerequisite since the start.
+
+**Test 1 — design audit. Confounded by construction.** The trailing integer of each
+`folder_name` is the original sample/experiment number:
+
+| label | n | sample_no range | npy_row range |
+|---|---|---|---|
+| Yes (cancer) | 27 | **1 … 27** | 0 … 26 |
+| No (control) | 15 | **101 … 130** | 27 … 41 |
+
+Cases are samples 1–27; controls are 101–130. **Disjoint, contiguous blocks, zero
+overlap, not interleaved.** Sample number alone separates the classes perfectly, so
+instrument drift, shim quality, tube lot, storage time and reagent batch are *all*
+perfectly collinear with the label. Biology and batch are **not statistically separable in
+this dataset by any method at any sample size.** This is a property of the experiment, not
+of the analysis.
+
+**Test 2 — classify from signal-free regions only.** Serum CPMG has no metabolite
+resonances above 9.5 ppm or below −0.5 ppm (21,846 points, 16.7% of the spectrum). A
+*biological* difference cannot be visible there. 32 abs-area bins, LOOCV, 200-permutation
+null:
+
+| array | features | balanced acc | null p95 | p |
+|---|---|---|---|---|
+| rowMinMax v4 *(as evaluated)* | **noise regions only** | **0.726** | 0.626 | **<0.005** |
+| rowMinMax v4 | signal region only | 0.704 | 0.659 | 0.010 |
+| un-normalised v4 | noise regions only | 0.641 | 0.644 | 0.075 |
+| un-normalised v4 | signal region only | 0.819 | 0.627 | <0.005 |
+| *control:* rowMinMax v4 | early-vs-late **within cases**, from noise | 0.555 | — | 0.285 |
+| *control:* un-normalised v4 | early-vs-late **within cases**, from noise | 0.624 | — | 0.145 |
+
+**The confound is real, not merely possible.** On the exact array the reported evaluation
+used, regions containing no metabolite signal classify the label at **0.726 (p < 0.005)**,
+well past the null's 95th percentile. There is no biological route to that number.
+
+**The control is the informative part.** The same noise features *cannot* predict
+early-vs-late acquisition *within* the case block (0.555, p = 0.29). So the noise is not
+encoding a smooth run-order drift — it separates the two **blocks** specifically. That is
+the signature of **two distinct acquisition sessions**, not gradual instrument drift.
+
+Note also that `rowMinMax` **amplifies** the artifact in the noise region (0.726 vs 0.641
+un-normalised, significant vs not). Per-row min–max rescaling turns an absolute intensity
+offset into a relative noise-to-peak ratio, i.e. an SNR feature — which is precisely a
+technical quantity. The preprocessing chosen for the SSL pipeline makes the confound *more*
+learnable.
+
+**Consequences.**
+- **MTBLS326 must be dropped from every headline claim**, including "the one target where
+  SSL is competitive" and the 1/1/3-style scorecards. Its 1.000 is evidence about
+  acquisition batches, not about metabolomics or representations.
+- Combined with §18 (Barth's win retracted), the full-data record over the remaining
+  trustworthy targets — MTBLS563, BrC-T2D cancer, BrC-T2D diabetes — is **0 wins, 3
+  losses**, all three losses large and on the biggest cohorts.
+- This does **not** weaken §6. The few-shot conclusion was negative on all five targets
+  including MTBLS326; removing a confounded target removes a *reason SSL looked better than
+  it was*.
+- The same audit should be run on the remaining cohorts before any of them is quoted.
+  Barth, MTBLS563 and BrC-T2D have not been checked, and only BrC-T2D's metadata is
+  obviously rich enough to do it well.
+
+**What was not available.** The definitive run-order signal is the `##$DATE` stamp in each
+sample's Bruker `acqus` file. The raw MTBLS326 folders (`folder_path` →
+`MetabolightsCPMGSingleFolder/...`) are not retained on this machine, so sample-number
+ordering was used as the proxy. If the raw archive is restored, prefer the timestamps and
+re-run — though test 1's verdict cannot change, since the sample numbering is already
+disjoint.
+
+Reproduce (~5 min):
+```bash
+python3 code/analysis/mtbls326_batch_confound_audit.py
+```
 
 ### #12 — Hybrid features (CHEAP, worth a shot)
 Concatenate the SSL embedding with binned areas. They are partly complementary — on
@@ -1504,7 +1590,8 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/plotting/plot_exp15_seed_study.py`,
   `code/analysis/summarize_barth_ssl_vs_classical_seeds.py` (§18),
   `code/analysis/reconstruction_baselines.py` (§19),
-  `code/analysis/pretrain_eval_overlap.py` (§20).
+  `code/analysis/pretrain_eval_overlap.py` (§20),
+  `code/analysis/mtbls326_batch_confound_audit.py` (§11).
 - Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in
   `docs/gm_figures/` (`gm09_barth_seeds.png` = §18, `gm10_recon_baselines.png` = §19).
 - **⚠️ nhead ambiguity (recorded 2026-08-21).** The v3 ps1024 checkpoint predates

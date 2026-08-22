@@ -1,0 +1,7 @@
+array,features,n_bins,balanced_accuracy,null_p95,null_max,p_value
+rowMinMax_v4 (as evaluated),noise regions only,32,0.7259259259259259,0.6262962962962962,0.7037037037037037,0.0
+rowMinMax_v4 (as evaluated),signal region only,32,0.7037037037037037,0.6594444444444444,0.7370370370370369,0.01
+rowMinMax_v4 (as evaluated),[control] acq-order within cases (noise),32,0.554945054945055,0.6622252747252747,0.7472527472527473,0.285
+un-normalised v4,noise regions only,32,0.6407407407407407,0.6444444444444444,0.6925925925925926,0.075
+un-normalised v4,signal region only,32,0.8185185185185185,0.6266666666666665,0.762962962962963,0.0
+un-normalised v4,[control] acq-order within cases (noise),32,0.6236263736263736,0.6622252747252747,0.7802197802197802,0.145

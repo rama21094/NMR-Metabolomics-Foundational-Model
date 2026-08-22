@@ -40,6 +40,7 @@ const AR = {
   "gm08_reconstruction.png": 2.5581,
   "gm09_barth_seeds.png": 2.3810,
   "gm10_recon_baselines.png": 2.3810,
+  "gm11_batch_audit.png": 2.3810,
 };
 
 /** Place an image centred in a box, preserving aspect ratio. */
@@ -303,7 +304,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   });
   s.addText([
     { text: "Barth and MTBLS326 use LOOCV, so they have NO fold variance — no error bars. Differences of 0.02 there are one sample.", options: { bullet: true, breakLine: true } },
-    { text: "MTBLS326's classical score is a perfect 1.000 on n=42. It clears a permutation null, but we have not yet checked run-order / batch confounding. Until we do, it should not count as evidence.", options: { bullet: true } },
+    { text: "MTBLS326's classical score is a perfect 1.000 on n=42. It clears a permutation null — but we have now run the batch audit and it is CONFOUNDED BY DESIGN. Cases are samples 1–27, controls 101–130: separate acquisition blocks. Slide 23.", options: { bullet: true } },
   ], { x: 0.85, y: 5.00, w: 11.6, h: 1.26, fontFace: F, fontSize: 15.5, color: INK, margin: 0, paraSpaceAfter: 7, lineSpacing: 18.5 });
   s.addNotes("Corpus is still small for a foundation model — 9,670 is orders of magnitude below "
     + "where masked pretraining usually starts to pay. That becomes one of my proposed next steps.");
@@ -639,7 +640,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   const s = newLight("Where those two fixes left us", "SSL vs classical, after the head and pooling fixes — no retraining");
   const rows = [
     ["Barth", "0.691", "0.806", "0.705", "+0.101", "1 seed *", GOLD],
-    ["MTBLS326", "0.981", "1.000", "1.000", "0.000", "tie", MUTED],
+    ["MTBLS326", "0.981", "1.000", "1.000", "0.000", "confounded †", CORAL],
     ["BrC-T2D cancer", "0.796", "0.859", "0.937", "−0.078", "classical", GOLD],
     ["BrC-T2D diabetes", "0.653", "0.783", "0.829", "−0.046", "classical", GOLD],
     ["MTBLS563", "0.558", "0.621", "0.721", "−0.100", "classical", GOLD],
@@ -675,8 +676,8 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       x: x + 0.15, y: 5.45, w: 3.33, h: 0.62, fontFace: F, fontSize: 14.5, color: INK, margin: 0, align: "center", lineSpacing: 18,
     });
   });
-  s.addText("* This is what we believed in June. The Barth win rests on ONE pretraining seed — "
-    + "it does not survive n=5. We come back to it.", {
+  s.addText("* Barth's win rests on ONE pretraining seed — it does not survive n=5 (slide 22).   "
+    + "† MTBLS326 is confounded by acquisition batch (slide 23). Neither target survives.", {
     x: 0.9, y: 6.28, w: 11.5, h: 0.4, fontFace: F, fontSize: 16, bold: true, color: CORAL, align: "center", margin: 0,
   });
   s.addNotes("Good news slide — but flag the asterisk as you show it, do not let it pass as a win.\n\n"
@@ -935,6 +936,64 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     + "weakening it: we no longer have one anomalous target to explain away.");
 }
 
+/* ==== 20c. MTBLS326 IS CONFOUNDED BY DESIGN (experiment #11) ==== */
+{
+  const s = newLight("And the other \"good\" target is confounded",
+    "The batch audit we had been deferring since February — MTBLS326's perfect 1.000");
+  fig(s, "gm11_batch_audit.png", { x: 0.55, y: 1.48, w: 12.2, h: 4.62 });
+
+  card(s, { x: 0.55, y: 6.22, w: 5.95, h: 0.82, fill: TINT_BAD });
+  s.addText([
+    { text: "Confounded by design.  ", options: { bold: true, color: CORAL } },
+    { text: "Cases are samples 1–27, controls 101–130. Separate acquisition blocks, "
+        + "so every run-order variable predicts the label perfectly.", options: { color: INK } },
+  ], {
+    x: 0.80, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
+    valign: "middle", lineSpacing: 17,
+  });
+  card(s, { x: 6.80, y: 6.22, w: 5.95, h: 0.82, fill: TINT_BAD });
+  s.addText([
+    { text: "And measurable.  ", options: { bold: true, color: CORAL } },
+    { text: "Spectral regions holding NO metabolites classify it at 0.726, p < 0.005. "
+        + "There is no biological route to that.", options: { color: INK } },
+  ], {
+    x: 7.05, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
+    valign: "middle", lineSpacing: 17,
+  });
+
+  s.addNotes("This closes the loop on the caveat from slide 5 — I flagged it as unverified, and it "
+    + "turned out badly.\n\n"
+    + "WHY THE PERMUTATION NULL MISSED IT. MTBLS326 clears a label-permutation null at p <= 0.02, "
+    + "and that is worthless here: permuting the labels destroys the batch structure and the biology "
+    + "at the same time. A fully confounded dataset passes that test. This is the single most "
+    + "important methodological point on the slide.\n\n"
+    + "TEST 1, the design. The trailing number in each sample folder is the original experiment "
+    + "number. Cancer = 1 to 27, control = 101 to 130. Disjoint and contiguous, zero overlap. So "
+    + "instrument drift, shim quality, tube lot, storage time and reagent batch are ALL perfectly "
+    + "collinear with the label. Biology and batch are not separable in this dataset by any method "
+    + "at any sample size. That is a fact about the experiment, not about our analysis.\n\n"
+    + "TEST 2, the measurement. Serum CPMG has no metabolite resonances above 9.5 ppm or below "
+    + "-0.5 ppm. Using ONLY those regions — 17% of the spectrum, pure noise and baseline — a LogReg "
+    + "classifies the label at 0.726 with p < 0.005 against a 200-permutation null. Biology cannot "
+    + "be visible there.\n\n"
+    + "THE CONTROL IS THE CLEVER BIT. The same noise features CANNOT predict early-versus-late "
+    + "acquisition within the cancer block (0.555, p = 0.28). So this is not smooth instrument "
+    + "drift — the noise separates the two BLOCKS specifically. Signature of two distinct "
+    + "acquisition sessions.\n\n"
+    + "One uncomfortable detail worth admitting: rowMinMax normalisation makes it WORSE. 0.726 "
+    + "normalised vs 0.641 un-normalised. Per-row min-max turns an absolute intensity offset into a "
+    + "noise-to-peak ratio, i.e. an SNR feature, which is exactly a technical quantity. Our own "
+    + "preprocessing made the confound more learnable.\n\n"
+    + "WHAT I DID NOT HAVE: the Bruker acqus DATE stamps, which would be definitive. The raw "
+    + "MTBLS326 folders are not on this machine. But test 1's verdict cannot change — the sample "
+    + "numbering is already disjoint.\n\n"
+    + "BOTTOM LINE, combining with the previous slide: Barth's win was a seed, MTBLS326 is "
+    + "confounded. On the three targets that remain admissible — MTBLS563 and the two BrC-T2D "
+    + "labels — the record is 0 wins, 3 losses, and those are the biggest cohorts with real error "
+    + "bars. This does NOT weaken the few-shot result; it removes a target that was making SSL look "
+    + "better than it is.");
+}
+
 /* ============ 21. MISTAKE 4 — PROCESS, AND THE GUARDRAILS ============ */
 {
   const s = newLight("A fourth, more mundane failure — and the guardrails",
@@ -1117,6 +1176,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     ["\"SSL wins in few-shot\"", "+0.001", "p = 0.74 — refuted"],
     ["\"SSL beats classical on Barth\"", "+0.101", "n=5 → +0.021 (0.9 se)"],
     ["\"Reconstruction proves it learned\"", "r = 0.92", "copy-a-neighbour: 0.90"],
+    ["MTBLS326's perfect 1.000", "1.000", "confounded by batch"],
   ];
   s.addText("STILL STANDING", {
     x: 0.55, y: 1.62, w: 5.95, h: 0.4, fontFace: F, fontSize: 20, bold: true, color: GREEN, margin: 0,
@@ -1139,11 +1199,11 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     x: 6.8, y: 2.0, w: 5.95, h: 0.3, fontFace: F, fontSize: 15, color: MUTED, margin: 0, italic: true,
   });
   gone.forEach(([t, d, w], i) => {
-    const y = 2.4 + i * 0.545;
-    card(s, { x: 6.8, y, w: 5.95, h: 0.48, fill: TINT_BAD });
+    const y = 2.4 + i * 0.495;
+    card(s, { x: 6.8, y, w: 5.95, h: 0.44, fill: TINT_BAD });
     s.addText(t, { x: 7.05, y: y + 0.01, w: 4.0, h: 0.27, fontFace: F, fontSize: 13.5, color: INK, margin: 0, valign: "middle" });
     s.addText(d, { x: 11.05, y: y + 0.01, w: 1.5, h: 0.27, fontFace: F, fontSize: 13.5, bold: true, color: CORAL, margin: 0, align: "right", valign: "middle" });
-    s.addText(w, { x: 7.05, y: y + 0.25, w: 5.5, h: 0.24, fontFace: F, fontSize: 12, color: MUTED, margin: 0 });
+    s.addText(w, { x: 7.05, y: y + 0.23, w: 5.5, h: 0.22, fontFace: F, fontSize: 11.5, color: MUTED, margin: 0 });
   });
 
   card(s, { x: 0.55, y: 6.3, w: 12.2, h: 0.72, fill: NAVY });
@@ -1209,8 +1269,8 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       "Not \"more data\" — DIFFERENT data. Within the corpus a spectrum's nearest neighbour sits at r = 0.99; for our evaluation cohorts the nearest corpus match is only r = 0.37–0.78. We pretrain on a narrow, 55%-redundant distribution and then test far outside it. Fold the eval-like cohorts (incl. the unused TBI Tirupati set) into pretraining, dedup near-duplicates, re-measure. Also confirms no leakage today — there is none."],
     ["2", DEEP, "Change the objective — reconstruction is nearly free",
       "Slide 9: copy-a-neighbour already scores 0.90 on hidden bins. A loss dominated by the 5 components holding 86% of variance cannot be forced to encode disease. Try variance-normalised or peak-weighted reconstruction, or a contrastive objective, and judge it by whether the pretext task is actually HARD (baseline-relative), not by r."],
-    ["3", GOLD, "MTBLS326 batch-confound audit",
-      "Still outstanding, still cheap, and MTBLS326 is now one of only two targets where SSL is even competitive. Its perfect 1.000 on n=42 remains unverified as biology rather than a run-order artifact."],
+    ["3", GOLD, "Audit the OTHER three cohorts the same way",
+      "MTBLS326 is done and it failed (slide 23) — cases and controls sat in separate acquisition blocks, and signal-free spectral regions classify the label at 0.726, p < 0.005. Barth, MTBLS563 and BrC-T2D have never been checked. Cheap, and it decides which targets are admissible evidence at all."],
     ["4", TEAL, "Corpus scaling curve — only after near-duplicate dedup",
       "Demoted. 55% of rows have a neighbour at r > 0.99, so subsampling by row count does not subsample information: the curve would flatten for the wrong reason. Needs ≥5 seeds per point (~23 GPU-h each)."],
   ];
