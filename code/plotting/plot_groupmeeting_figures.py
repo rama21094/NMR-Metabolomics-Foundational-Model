@@ -608,72 +608,68 @@ def fig_recon_baselines():
     save(fig, "gm10_recon_baselines.png")
 
 
-# ------------------------------- 11. MTBLS326 batch-confound audit
+# ------------------------------- 11. batch-confound audit, all five targets
 def fig_batch_audit():
-    """Experiment #11. Data from code/analysis/mtbls326_batch_confound_audit.py."""
-    res = pd.read_csv(ROOT / "results/analysis/mtbls326_batch_audit/signal_free_classification.csv")
-    meta = pd.read_csv(ROOT / "data/mtbls326/MTBLS326_metadata_mapping.csv")
-    meta["sample_no"] = meta.folder_name.str.extract(r"_(\d+)$").astype(int)
+    """Experiment #11, all cohorts. Data from code/analysis/batch_confound_audit.py."""
+    D = ROOT / "results/analysis/batch_confound_audit"
+    design = pd.read_csv(D / "design_audit.csv")
+    noise = pd.read_csv(D / "noise_tests_holm.csv")
+    summ = pd.read_csv(D / "summary.csv")
+
+    order = ["Barth", "MTBLS563", "BrC-T2D cancer", "BrC-T2D diabetes", "MTBLS326"]
+    design = design.set_index("cohort").loc[order].reset_index()
+    summ = summ.set_index("cohort").loc[order].reset_index()
 
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(FIGW, 4.62),
-                                 gridspec_kw={"width_ratios": [1.0, 1.15]})
+                                 gridspec_kw={"width_ratios": [1.0, 1.12]})
+    y = np.arange(len(order))
+    COL = {"clean": GREEN, "caveat (order)": GOLD,
+           "AMBIGUOUS (SNR)": TEAL, "CONFOUNDED": CORAL}
+    cols = [COL.get(v, GREY) for v in summ.verdict]
 
-    # ---- left: the design. sample number vs label
-    for lab, col, name, yv in (("Yes", CORAL, "cancer (n=27)", 1), ("No", DEEP, "control (n=15)", 0)):
-        g = meta[meta.label == lab]
-        a1.scatter(g.sample_no, np.full(len(g), yv), s=95, color=col, zorder=3,
-                   label=name, clip_on=False)
-    a1.axvspan(0, 30, color=CORAL, alpha=0.10, zorder=0)
-    a1.axvspan(98, 133, color=DEEP, alpha=0.10, zorder=0)
-    a1.set_yticks([0, 1])
-    a1.set_yticklabels(["control", "cancer"], fontsize=15)
-    a1.set_ylim(-0.55, 1.55)
-    a1.set_xlim(-6, 139)
-    a1.set_xlabel("original sample / experiment number", fontsize=15.5)
-    a1.set_title("The design: two separate acquisition blocks",
-                 fontweight="bold", fontsize=16)
-    a1.annotate("samples 1–27", xy=(14, 1.28), fontsize=15, color=CORAL,
-                fontweight="bold", ha="center")
-    a1.annotate("samples 101–130", xy=(115, -0.30), fontsize=15, color=DEEP,
-                fontweight="bold", ha="center")
-    a1.text(69, 0.5, "no\noverlap", fontsize=15, color="0.30", ha="center",
-            va="center", fontweight="bold", linespacing=1.4)
+    # ---- left: does acquisition order alone predict the label?
+    a1.axvspan(0.5, 0.75, color="0.90", alpha=0.8, zorder=0)
+    a1.axvline(0.5, color="k", lw=1.7, zorder=2)
+    a1.barh(y, design.order_alone_auc, height=0.6, color=cols, zorder=3)
+    for yi, v in zip(y, design.order_alone_auc):
+        a1.text(v + 0.012, yi, f"{v:.2f}", va="center", fontsize=14.5, fontweight="bold")
+    a1.set_yticks(y)
+    a1.set_yticklabels(order, fontsize=14)
+    a1.set_xlim(0.42, 1.16)
+    a1.set_ylim(4.6, -0.6)
+    a1.set_xlabel("AUC of acquisition order alone\n"
+                  "0.5 = interleaved   ·   1.0 = separate blocks", fontsize=14)
+    a1.set_title("Test 1 — is the design balanced?", fontweight="bold", fontsize=16)
     a1.grid(axis="x", alpha=0.3, ls="--")
     a1.set_axisbelow(True)
     a1.tick_params(labelsize=14.5)
 
-    # ---- right: what classifies the label
-    arr = "rowMinMax_v4 (as evaluated)"
-    r = res[res["array"] == arr].set_index("features")
-    ctrl = float(r.loc["[control] acq-order within cases (noise)", "balanced_accuracy"])
-    ctrl_p = float(r.loc["[control] acq-order within cases (noise)", "p_value"])
-    bars = [
-        ("full spectrum\n(the reported result)", 1.000, None, NAVY),
-        ("signal region\n0.5–9.5 ppm", float(r.loc["signal region only", "balanced_accuracy"]),
-         float(r.loc["signal region only", "p_value"]), TEAL),
-        ("SIGNAL-FREE regions\n>9.5 or <−0.5 ppm",
-         float(r.loc["noise regions only", "balanced_accuracy"]),
-         float(r.loc["noise regions only", "p_value"]), CORAL),
-        ("control: acq. order\nWITHIN cases", ctrl, ctrl_p, GREY),
-    ]
-    y = np.arange(len(bars))
+    # ---- right: can metabolite-free regions classify the label?
     a2.axvline(0.5, color="k", lw=1.7, ls="--", zorder=2)
-    a2.text(0.5, -0.62, "chance", fontsize=13.5, color="0.30", ha="center", va="center")
-    a2.barh(y, [b[1] for b in bars], height=0.6, color=[b[3] for b in bars], zorder=3)
-    for yi, (_lab, v, pv, _c) in zip(y, bars):
-        txt = f"{v:.3f}" + ("" if pv is None else
-                            ("  p<0.005" if pv < 0.005 else f"  p={pv:.2f}"))
-        a2.text(v + 0.015, yi, txt, va="center", fontsize=14.5, fontweight="bold")
+    for i, coh in enumerate(order):
+        g = noise[noise.cohort == coh]
+        for _, r in g.iterrows():
+            rm = "rowMinMax" in str(r["array"])
+            off = -0.17 if rm else 0.17
+            sig = r.p_holm < 0.05
+            a2.barh(i + off, r.balanced_accuracy, height=0.30,
+                    color=cols[i] if sig else "0.78",
+                    hatch="" if rm else "///", edgecolor="white", zorder=3)
+            a2.text(r.balanced_accuracy + 0.012, i + off,
+                    f"{r.balanced_accuracy:.2f}" + ("*" if sig else ""),
+                    va="center", fontsize=13, fontweight="bold" if sig else "normal")
     a2.set_yticks(y)
-    a2.set_yticklabels([b[0] for b in bars], fontsize=13.5, linespacing=1.35)
-    a2.set_xlim(0, 1.30)
-    a2.set_ylim(3.7, -1.0)
-    a2.set_xlabel("balanced accuracy (LOOCV)", fontsize=15.5)
-    a2.set_title("Regions with NO metabolites classify it",
-                 fontweight="bold", fontsize=16)
+    a2.set_yticklabels(order, fontsize=14)
+    a2.set_xlim(0.20, 0.92)
+    a2.set_ylim(4.6, -0.6)
+    a2.set_xlabel("balanced accuracy, metabolite-free regions\n"
+                  "upper = rowMinMax  ·  lower = un-normalised\n"
+                  "dashed = chance  ·  * survives Holm (m=10)", fontsize=12.5)
+    a2.set_title("Test 2 — can noise alone classify it?", fontweight="bold", fontsize=16)
     a2.grid(axis="x", alpha=0.3, ls="--")
     a2.set_axisbelow(True)
     a2.tick_params(labelsize=14.5)
+
     save(fig, "gm11_batch_audit.png")
 
 

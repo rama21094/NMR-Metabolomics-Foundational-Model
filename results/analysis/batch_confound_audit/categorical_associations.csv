@@ -1,0 +1,2 @@
+cohort,variable,test,p_value,odds_ratio,table
+Barth,Anticoagulant,fisher_exact,0.14191838897721248,6.0,"{0: {'EDTA': 3, 'Heparin': 11}, 1: {'EDTA': 1, 'Heparin': 22}}"

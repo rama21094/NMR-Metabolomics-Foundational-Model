@@ -304,7 +304,7 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
   });
   s.addText([
     { text: "Barth and MTBLS326 use LOOCV, so they have NO fold variance — no error bars. Differences of 0.02 there are one sample.", options: { bullet: true, breakLine: true } },
-    { text: "MTBLS326's classical score is a perfect 1.000 on n=42. It clears a permutation null — but we have now run the batch audit and it is CONFOUNDED BY DESIGN. Cases are samples 1–27, controls 101–130: separate acquisition blocks. Slide 23.", options: { bullet: true } },
+    { text: "MTBLS326's classical score is a perfect 1.000 on n=42. It clears a permutation null — but the batch audit (slide 23) shows it is CONFOUNDED BY DESIGN: cases are samples 1–27, controls 101–130, separate acquisition blocks. Barth passes the same audit cleanly.", options: { bullet: true } },
   ], { x: 0.85, y: 5.00, w: 11.6, h: 1.26, fontFace: F, fontSize: 15.5, color: INK, margin: 0, paraSpaceAfter: 7, lineSpacing: 18.5 });
   s.addNotes("Corpus is still small for a foundation model — 9,670 is orders of magnitude below "
     + "where masked pretraining usually starts to pay. That becomes one of my proposed next steps.");
@@ -938,27 +938,25 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
 
 /* ==== 20c. MTBLS326 IS CONFOUNDED BY DESIGN (experiment #11) ==== */
 {
-  const s = newLight("And the other \"good\" target is confounded",
-    "The batch audit we had been deferring since February — MTBLS326's perfect 1.000");
+  const s = newLight("We audited all five targets for batch confounds",
+    "The check we had been deferring since February — one target fails outright");
   fig(s, "gm11_batch_audit.png", { x: 0.55, y: 1.48, w: 12.2, h: 4.62 });
 
-  card(s, { x: 0.55, y: 6.22, w: 5.95, h: 0.82, fill: TINT_BAD });
-  s.addText([
-    { text: "Confounded by design.  ", options: { bold: true, color: CORAL } },
-    { text: "Cases are samples 1–27, controls 101–130. Separate acquisition blocks, "
-        + "so every run-order variable predicts the label perfectly.", options: { color: INK } },
-  ], {
-    x: 0.80, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
-    valign: "middle", lineSpacing: 17,
-  });
-  card(s, { x: 6.80, y: 6.22, w: 5.95, h: 0.82, fill: TINT_BAD });
-  s.addText([
-    { text: "And measurable.  ", options: { bold: true, color: CORAL } },
-    { text: "Spectral regions holding NO metabolites classify it at 0.726, p < 0.005. "
-        + "There is no biological route to that.", options: { color: INK } },
-  ], {
-    x: 7.05, y: 6.26, w: 5.46, h: 0.74, fontFace: F, fontSize: 14.5, margin: 0,
-    valign: "middle", lineSpacing: 17,
+  const verdicts = [
+    ["MTBLS326", "UNUSABLE", "cases = samples 1–27, controls = 101–130", CORAL, TINT_BAD],
+    ["Barth", "clean", "interleaved; noise at exactly chance (0.497)", GREEN, TINT_OK],
+    ["BrC-T2D diabetes", "ambiguous", "0.640 from noise — but only after rowMinMax", TEAL, TINT],
+    ["563 / BrC cancer", "order caveat", "AUC 0.76–0.78; no surviving noise signal", GOLD, TINT],
+  ];
+  verdicts.forEach(([t, v, d, col, fill], i) => {
+    const x = 0.55 + i * 3.09;
+    card(s, { x, y: 6.20, w: 2.92, h: 0.84, fill });
+    s.addText(t, { x: x + 0.13, y: 6.23, w: 2.66, h: 0.24, fontFace: F, fontSize: 13,
+      bold: true, color: INK, margin: 0, valign: "middle" });
+    s.addText(v, { x: x + 0.13, y: 6.45, w: 2.66, h: 0.22, fontFace: F, fontSize: 13.5,
+      bold: true, color: col, margin: 0, valign: "middle" });
+    s.addText(d, { x: x + 0.13, y: 6.66, w: 2.66, h: 0.34, fontFace: F, fontSize: 10.5,
+      color: MUTED, margin: 0, valign: "top", lineSpacing: 12 });
   });
 
   s.addNotes("This closes the loop on the caveat from slide 5 — I flagged it as unverified, and it "
@@ -987,6 +985,26 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
     + "WHAT I DID NOT HAVE: the Bruker acqus DATE stamps, which would be definitive. The raw "
     + "MTBLS326 folders are not on this machine. But test 1's verdict cannot change — the sample "
     + "numbering is already disjoint.\n\n"
+    + "THE OTHER FOUR COHORTS, audited the same way:\n"
+    + "- Barth is CLEAN. Order AUC 0.58, and metabolite-free regions score exactly chance "
+    + "(0.497). The one target that passes both tests outright. Its metadata does show an "
+    + "anticoagulant imbalance (Fisher p = 0.14, OR 6) — underpowered rather than clean, worth "
+    + "noting since EDTA gives large NMR peaks.\n"
+    + "- MTBLS563 and BrC-T2D cancer: order caveat only. Order AUC 0.76 and 0.78, so classes are "
+    + "partly blocked in acquisition, but no signal-free effect survives Holm correction. "
+    + "BrC-T2D cancer's 0.605 has raw p = 0.045 and Holm p = 0.36 — one marginal hit out of ten "
+    + "tests is what chance looks like. Say 'not balanced', not 'confounded'.\n"
+    + "- BrC-T2D diabetes: ambiguous, and be honest about it. Design is fine, but noise regions "
+    + "predict diabetes at 0.640 — ONLY after rowMinMax (un-normalised: 0.551, p = 0.22). That "
+    + "pattern says SNR effect, not technical offset: per-row min-max makes noise bins encode "
+    + "noise-to-peak ratio, which tracks overall metabolite concentration, which can be real "
+    + "biology. Needs a normalisation-invariant re-check before calling it either way.\n\n"
+    + "MULTIPLE COMPARISONS. Ten signal-free tests (5 targets x 2 arrays), so one raw p < 0.05 is "
+    + "expected by chance. Everything above is Holm-corrected over that family. Do not let anyone "
+    + "catch you quoting the uncorrected number.\n\n"
+    + "A DEFECT IN OUR OWN PIPELINE. rowMinMax amplified a spurious signal on two of five targets "
+    + "(MTBLS326 0.641 to 0.726; diabetes 0.551 to 0.640). Per-row min-max converts absolute "
+    + "intensity into SNR, exactly the feature that leaks batch. Worth reconsidering.\n\n"
     + "BOTTOM LINE, combining with the previous slide: Barth's win was a seed, MTBLS326 is "
     + "confounded. On the three targets that remain admissible — MTBLS563 and the two BrC-T2D "
     + "labels — the record is 0 wins, 3 losses, and those are the biggest cohorts with real error "
@@ -1269,8 +1287,8 @@ function bubble(slide, { x, y, d, color, label, fontSize }) {
       "Not \"more data\" — DIFFERENT data. Within the corpus a spectrum's nearest neighbour sits at r = 0.99; for our evaluation cohorts the nearest corpus match is only r = 0.37–0.78. We pretrain on a narrow, 55%-redundant distribution and then test far outside it. Fold the eval-like cohorts (incl. the unused TBI Tirupati set) into pretraining, dedup near-duplicates, re-measure. Also confirms no leakage today — there is none."],
     ["2", DEEP, "Change the objective — reconstruction is nearly free",
       "Slide 9: copy-a-neighbour already scores 0.90 on hidden bins. A loss dominated by the 5 components holding 86% of variance cannot be forced to encode disease. Try variance-normalised or peak-weighted reconstruction, or a contrastive objective, and judge it by whether the pretext task is actually HARD (baseline-relative), not by r."],
-    ["3", GOLD, "Audit the OTHER three cohorts the same way",
-      "MTBLS326 is done and it failed (slide 23) — cases and controls sat in separate acquisition blocks, and signal-free spectral regions classify the label at 0.726, p < 0.005. Barth, MTBLS563 and BrC-T2D have never been checked. Cheap, and it decides which targets are admissible evidence at all."],
+    ["3", GOLD, "Reconsider rowMinMax, and settle the diabetes ambiguity",
+      "The audit (slide 23) found our own normalisation amplifies spurious signal on 2 of 5 targets: per-row min–max turns absolute intensity into an SNR feature, exactly what leaks batch. Re-run the pipeline under a normalisation-invariant scheme (PQN or unit-area) and re-check BrC-T2D diabetes, whose 0.640-from-noise appears only after rowMinMax."],
     ["4", TEAL, "Corpus scaling curve — only after near-duplicate dedup",
       "Demoted. 55% of rows have a neighbour at r > 0.99, so subsampling by row count does not subsample information: the curve would flatten for the wrong reason. Needs ≥5 seeds per point (~23 GPU-h each)."],
   ];

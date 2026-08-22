@@ -22,7 +22,12 @@ spectrum's nearest neighbour sits at r ≈ 0.99, while the evaluation cohorts' n
 corpus match is only r = 0.37–0.78. The corpus is **narrow, not merely small**, which
 retires #16 and demotes #17.
 
-**§11 (the batch audit, finally run) removes MTBLS326 from the evidence base.** Its
+**§11 (the batch audit, now run on all five targets) removes MTBLS326 from the evidence
+base and flags two more.** Barth is **clean** (order AUC 0.58, signal-free regions at
+chance); MTBLS563 and BrC-T2D cancer carry **order caveats** (AUC 0.76–0.78) but no
+surviving technical signal; BrC-T2D diabetes is **ambiguous** — metabolite-free regions
+predict it at 0.640, but only after `rowMinMax`, which is the signature of an SNR/global-
+concentration effect rather than an artifact. MTBLS326 fails outright. Its
 perfect 1.000 is **confounded by design**: cases are samples 1–27 and controls are
 101–130 — disjoint, contiguous acquisition blocks — so every run-order variable is
 perfectly collinear with the label. And the confound is measurable, not just possible:
@@ -1362,85 +1367,99 @@ Reproduce (~4 min):
 python3 code/analysis/reconstruction_baselines.py
 ```
 
-### ❌ #11 — RESULT: MTBLS326 is confounded by design. Its 1.000 is not biology.
+### ❌ #11 — RESULT: batch audit of all five targets. MTBLS326 is unusable.
 
-Script: `code/analysis/mtbls326_batch_confound_audit.py` →
-`results/analysis/mtbls326_batch_audit/{design_audit,signal_free_classification}.csv`
+Script: `code/analysis/batch_confound_audit.py` →
+`results/analysis/batch_confound_audit/{design_audit,signal_free_classification,noise_tests_holm,summary}.csv`
+Figure: `docs/gm_figures/gm11_batch_audit.png`
 
-**Why this mattered.** MTBLS326 is the only target where classical LogReg reaches a
-perfect **1.000** (n=42, LOOCV), and after §18 it is one of only two targets where SSL is
-even competitive. §6's permutation null **cannot** detect a batch effect: permuting labels
-destroys the batch structure and the biology together, so a fully confounded dataset still
-passes it with p ≤ 0.02. The audit had been queued as a prerequisite since the start.
+**Why.** §6's label-permutation nulls (p ≤ 0.02 everywhere) **cannot** detect a batch
+effect: permuting labels destroys the batch structure and the biology together, so a fully
+confounded dataset passes. MTBLS326's perfect 1.000 on n=42 was the obvious suspect, and
+once it failed, every other target had to be checked on the same footing.
 
-**Test 1 — design audit. Confounded by construction.** The trailing integer of each
-`folder_name` is the original sample/experiment number:
+**Three tests per cohort.** (1) *Design* — recover an acquisition-order proxy from the
+sample identifiers and measure how well order **alone** predicts the label (one-feature
+AUC). (2) *Signal-free classification* — classify the label using only spectral regions
+with no metabolite resonances (>9.5 ppm or <−0.5 ppm; 21,846 pts, 16.7% of the spectrum).
+Biology cannot appear there. (3) *Control* — predict early-vs-late acquisition **within**
+the majority class from the same noise features, to distinguish discrete blocks from smooth
+drift. Both the rowMinMax array (as evaluated) and the un-normalised array are tested.
 
-| label | n | sample_no range | npy_row range |
-|---|---|---|---|
-| Yes (cancer) | 27 | **1 … 27** | 0 … 26 |
-| No (control) | 15 | **101 … 130** | 27 … 41 |
-
-Cases are samples 1–27; controls are 101–130. **Disjoint, contiguous blocks, zero
-overlap, not interleaved.** Sample number alone separates the classes perfectly, so
-instrument drift, shim quality, tube lot, storage time and reagent batch are *all*
-perfectly collinear with the label. Biology and batch are **not statistically separable in
-this dataset by any method at any sample size.** This is a property of the experiment, not
-of the analysis.
-
-**Test 2 — classify from signal-free regions only.** Serum CPMG has no metabolite
-resonances above 9.5 ppm or below −0.5 ppm (21,846 points, 16.7% of the spectrum). A
-*biological* difference cannot be visible there. 32 abs-area bins, LOOCV, 200-permutation
-null:
-
-| array | features | balanced acc | null p95 | p |
+| cohort | order-alone AUC | design | worst signal-free test | verdict |
 |---|---|---|---|---|
-| rowMinMax v4 *(as evaluated)* | **noise regions only** | **0.726** | 0.626 | **<0.005** |
-| rowMinMax v4 | signal region only | 0.704 | 0.659 | 0.010 |
-| un-normalised v4 | noise regions only | 0.641 | 0.644 | 0.075 |
-| un-normalised v4 | signal region only | 0.819 | 0.627 | <0.005 |
-| *control:* rowMinMax v4 | early-vs-late **within cases**, from noise | 0.555 | — | 0.285 |
-| *control:* un-normalised v4 | early-vs-late **within cases**, from noise | 0.624 | — | 0.145 |
+| **Barth** | 0.582 | interleaved | 0.497 (p = 0.59) | ✅ **clean** |
+| **MTBLS563** | 0.757 | suspicious | 0.380 (p = 0.22) | 🟡 caveat (order) |
+| **BrC-T2D cancer** | 0.782 | suspicious | 0.605 (p = 0.045, **holm 0.36**) | 🟡 caveat (order) |
+| **BrC-T2D diabetes** | 0.570 | interleaved | **0.640 (p < 0.005, holm < 0.05)** | 🟠 ambiguous (SNR) |
+| **MTBLS326** | **1.000** | **CONFOUNDED** | **0.726 (p < 0.005, holm < 0.05)** | ❌ **unusable** |
 
-**The confound is real, not merely possible.** On the exact array the reported evaluation
-used, regions containing no metabolite signal classify the label at **0.726 (p < 0.005)**,
-well past the null's 95th percentile. There is no biological route to that number.
+Ten signal-free tests were run (5 targets × 2 arrays), so raw p < 0.05 is expected to fire
+once by chance; the table reports **Holm-corrected** p over exactly that family.
 
-**The control is the informative part.** The same noise features *cannot* predict
-early-vs-late acquisition *within* the case block (0.555, p = 0.29). So the noise is not
-encoding a smooth run-order drift — it separates the two **blocks** specifically. That is
-the signature of **two distinct acquisition sessions**, not gradual instrument drift.
+**MTBLS326 — unusable.** Cases are samples 1–27, controls 101–130: disjoint, contiguous
+acquisition blocks, order-alone AUC = **1.000**. Every run-order variable (drift, shim, tube
+lot, storage time, reagent batch) is perfectly collinear with the label, so biology and
+batch are **not separable by any method at any sample size** — a property of the experiment,
+not the analysis. And it is measurable, not hypothetical: metabolite-free regions classify
+the label at **0.726** on the exact array the evaluation used. The control is diagnostic —
+the same features **cannot** predict early-vs-late acquisition *within* the case block
+(0.555, p = 0.29), so this is two discrete sessions, not gradual drift. **Drop MTBLS326
+from every claim.**
 
-Note also that `rowMinMax` **amplifies** the artifact in the noise region (0.726 vs 0.641
-un-normalised, significant vs not). Per-row min–max rescaling turns an absolute intensity
-offset into a relative noise-to-peak ratio, i.e. an SNR feature — which is precisely a
-technical quantity. The preprocessing chosen for the SSL pipeline makes the confound *more*
-learnable.
+**Barth — clean, and this matters.** Order-alone AUC 0.582 (Mann-Whitney p = 0.42),
+interleaved accessions, and signal-free regions at **exactly chance** (0.497). Barth is the
+one target that passes both tests outright. Its metadata does show an anticoagulant
+imbalance (1/23 cases vs 3/14 controls on EDTA, Fisher **p = 0.14**, OR 6.0) — not
+significant, but underpowered rather than clean, and EDTA produces large NMR peaks. Worth
+recording, not currently disqualifying. Note §18 separately retracted Barth's *SSL win* as
+a seed artifact; that is orthogonal to this audit — Barth's **data** is sound, its
+**SSL-beats-classical claim** was not.
 
-**Consequences.**
-- **MTBLS326 must be dropped from every headline claim**, including "the one target where
-  SSL is competitive" and the 1/1/3-style scorecards. Its 1.000 is evidence about
-  acquisition batches, not about metabolomics or representations.
-- Combined with §18 (Barth's win retracted), the full-data record over the remaining
-  trustworthy targets — MTBLS563, BrC-T2D cancer, BrC-T2D diabetes — is **0 wins, 3
-  losses**, all three losses large and on the biggest cohorts.
-- This does **not** weaken §6. The few-shot conclusion was negative on all five targets
-  including MTBLS326; removing a confounded target removes a *reason SSL looked better than
-  it was*.
-- The same audit should be run on the remaining cohorts before any of them is quoted.
-  Barth, MTBLS563 and BrC-T2D have not been checked, and only BrC-T2D's metadata is
-  obviously rich enough to do it well.
+**BrC-T2D diabetes — ambiguous, and honestly so.** The design is fine (AUC 0.570), yet
+signal-free regions classify diabetes status at **0.640 (Holm-significant)** — but *only*
+on the rowMinMax array (un-normalised: 0.551, p = 0.22). That pattern is the signature of
+an **SNR effect rather than a technical offset**: per-row min–max rescaling makes the
+"noise" bins encode noise-relative-to-peak-height, which moves with overall metabolite
+concentration, which can be **biological**. So this is not evidence of an artifact; it is
+evidence that our own preprocessing leaks a global-intensity feature into regions we
+assumed were inert. Needs a normalisation-invariant re-check before being called either
+way. (§6's dilution control is related but tested total area, not noise-relative area.)
 
-**What was not available.** The definitive run-order signal is the `##$DATE` stamp in each
-sample's Bruker `acqus` file. The raw MTBLS326 folders (`folder_path` →
-`MetabolightsCPMGSingleFolder/...`) are not retained on this machine, so sample-number
-ordering was used as the proxy. If the raw archive is restored, prefer the timestamps and
-re-run — though test 1's verdict cannot change, since the sample numbering is already
-disjoint.
+**MTBLS563 and BrC-T2D cancer — order caveats only.** Neither shows a Holm-surviving
+signal-free effect (BrC-T2D cancer's 0.605 has raw p = 0.045 but Holm 0.36 — one marginal
+hit out of ten is what chance looks like). But both have order-alone AUC ≈ 0.76–0.78 with
+Mann-Whitney p < 0.0005, i.e. classes are **partly** blocked in acquisition order. Not
+fatal, and not separable-by-construction the way MTBLS326 is, but the designs are not
+balanced and that should be stated wherever those numbers are quoted.
 
-Reproduce (~5 min):
+**Bottom line for the evidence base.**
+- **MTBLS326 is out.** Combined with §18 (Barth's win retracted as a seed artifact), the two
+  targets that made SSL look competitive are both gone.
+- The remaining record on **Barth, MTBLS563, BrC-T2D cancer, BrC-T2D diabetes** is
+  **0 SSL wins**, with the two large-cohort losses (cancer −0.078, MTBLS563 −0.100)
+  carrying order caveats and diabetes carrying the SNR question.
+- This does **not** weaken §6. Removing a confounded target removes a reason SSL looked
+  better than it was.
+- **New actionable defect:** `rowMinMax` amplified a spurious signal on two of five targets
+  (MTBLS326 0.641→0.726; BrC-T2D diabetes 0.551→0.640). Per-row min–max normalisation
+  should be reconsidered for this pipeline — it converts absolute intensity into SNR, which
+  is exactly the kind of feature that leaks batch.
+
+**Limitation.** The definitive run-order signal is the `##$DATE` stamp in each Bruker
+`acqus` file. No raw archive is on this machine, so every cohort uses an identifier-derived
+proxy (Barth: SVCM accession; MTBLS326/563: original experiment number; BrC-T2D: SM sample
+code). A proxy can only **under**-detect — where it already shows separation, that is real.
+Restoring the raw archives would sharpen MTBLS563 and BrC-T2D cancer specifically.
+
+**Data-handling note.** `data/BrC_T2D/BC_T2D_newlabels_metadata_mapping.csv` contains
+**patient names** in its `sample_name` column. This script deliberately reads only the `ID`
+and label columns so no identifying information reaches any output. That file should be
+de-identified before this repository is shared.
+
+Reproduce (~12 min):
 ```bash
-python3 code/analysis/mtbls326_batch_confound_audit.py
+python3 code/analysis/batch_confound_audit.py
 ```
 
 ### #12 — Hybrid features (CHEAP, worth a shot)
@@ -1591,7 +1610,7 @@ don't revisit without a dimensionality-reduction step first. Script:
   `code/analysis/summarize_barth_ssl_vs_classical_seeds.py` (§18),
   `code/analysis/reconstruction_baselines.py` (§19),
   `code/analysis/pretrain_eval_overlap.py` (§20),
-  `code/analysis/mtbls326_batch_confound_audit.py` (§11).
+  `code/analysis/batch_confound_audit.py` (§11).
 - Figures: `results/plots/all_datasets_summary_v4/fig1..fig18`; deck figures in
   `docs/gm_figures/` (`gm09_barth_seeds.png` = §18, `gm10_recon_baselines.png` = §19).
 - **⚠️ nhead ambiguity (recorded 2026-08-21).** The v3 ps1024 checkpoint predates

@@ -1,0 +1,31 @@
+cohort,array,features,balanced_accuracy,p_value,null_p95
+Barth,rowMinMax_v4 (as evaluated),noise regions only,0.49689440993788814,0.585,0.6614906832298137
+Barth,rowMinMax_v4 (as evaluated),signal region only,0.6692546583850931,0.03,0.6475155279503106
+Barth,rowMinMax_v4 (as evaluated),[control] order within class 1,0.21969696969696967,0.945,0.6553030303030303
+Barth,un-normalised v4,noise regions only,0.2593167701863354,0.97,0.6832298136645962
+Barth,un-normalised v4,signal region only,0.8493788819875776,0.0,0.65527950310559
+Barth,un-normalised v4,[control] order within class 1,0.5681818181818181,0.3,0.696969696969697
+MTBLS326,rowMinMax_v4 (as evaluated),noise regions only,0.7259259259259259,0.0,0.6262962962962962
+MTBLS326,rowMinMax_v4 (as evaluated),signal region only,0.7037037037037037,0.01,0.6594444444444444
+MTBLS326,rowMinMax_v4 (as evaluated),[control] order within class 1,0.554945054945055,0.285,0.6622252747252747
+MTBLS326,un-normalised v4,noise regions only,0.6407407407407407,0.075,0.6444444444444444
+MTBLS326,un-normalised v4,signal region only,0.8185185185185185,0.0,0.6266666666666665
+MTBLS326,un-normalised v4,[control] order within class 1,0.6236263736263736,0.145,0.6622252747252747
+MTBLS563,rowMinMax_v4 (as evaluated),noise regions only,0.3755464965142385,0.23,0.418278092874867
+MTBLS563,rowMinMax_v4 (as evaluated),signal region only,0.5466146756469338,0.0,0.4170300129977549
+MTBLS563,rowMinMax_v4 (as evaluated),[control] order within class 0,0.5714285714285714,0.275,0.625
+MTBLS563,un-normalised v4,noise regions only,0.3804354247902635,0.215,0.4273602741344676
+MTBLS563,un-normalised v4,signal region only,0.537206073496396,0.0,0.4356419118515892
+MTBLS563,un-normalised v4,[control] order within class 0,0.6071428571428572,0.105,0.625
+BrC-T2D cancer,rowMinMax_v4 (as evaluated),noise regions only,0.5743421052631579,0.135,0.5949013157894737
+BrC-T2D cancer,rowMinMax_v4 (as evaluated),signal region only,0.8592105263157894,0.0,0.6138157894736842
+BrC-T2D cancer,rowMinMax_v4 (as evaluated),[control] order within class 0,0.6000000000000001,0.135,0.6262499999999995
+BrC-T2D cancer,un-normalised v4,noise regions only,0.6052631578947368,0.045,0.6039802631578948
+BrC-T2D cancer,un-normalised v4,signal region only,0.8335526315789473,0.0,0.6296381578947369
+BrC-T2D cancer,un-normalised v4,[control] order within class 0,0.475,0.665,0.65
+BrC-T2D diabetes,rowMinMax_v4 (as evaluated),noise regions only,0.6403743315508021,0.0,0.6017045454545453
+BrC-T2D diabetes,rowMinMax_v4 (as evaluated),signal region only,0.7312834224598931,0.0,0.6089572192513368
+BrC-T2D diabetes,rowMinMax_v4 (as evaluated),[control] order within class 0,0.4772727272727273,0.695,0.6147727272727269
+BrC-T2D diabetes,un-normalised v4,noise regions only,0.5508021390374331,0.22,0.5998997326203208
+BrC-T2D diabetes,un-normalised v4,signal region only,0.661096256684492,0.005,0.6173128342245988
+BrC-T2D diabetes,un-normalised v4,[control] order within class 0,0.4772727272727273,0.67,0.6590909090909091

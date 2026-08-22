@@ -1,0 +1,11 @@
+cohort,array,features,balanced_accuracy,p_value,null_p95,p_holm
+Barth,rowMinMax_v4 (as evaluated),noise regions only,0.49689440993788814,0.585,0.6614906832298137,1.0
+Barth,un-normalised v4,noise regions only,0.2593167701863354,0.97,0.6832298136645962,1.0
+MTBLS326,rowMinMax_v4 (as evaluated),noise regions only,0.7259259259259259,0.0,0.6262962962962962,0.0
+MTBLS326,un-normalised v4,noise regions only,0.6407407407407407,0.075,0.6444444444444444,0.525
+MTBLS563,rowMinMax_v4 (as evaluated),noise regions only,0.3755464965142385,0.23,0.418278092874867,1.0
+MTBLS563,un-normalised v4,noise regions only,0.3804354247902635,0.215,0.4273602741344676,1.0
+BrC-T2D cancer,rowMinMax_v4 (as evaluated),noise regions only,0.5743421052631579,0.135,0.5949013157894737,0.81
+BrC-T2D cancer,un-normalised v4,noise regions only,0.6052631578947368,0.045,0.6039802631578948,0.36
+BrC-T2D diabetes,rowMinMax_v4 (as evaluated),noise regions only,0.6403743315508021,0.0,0.6017045454545453,0.0
+BrC-T2D diabetes,un-normalised v4,noise regions only,0.5508021390374331,0.22,0.5998997326203208,1.0

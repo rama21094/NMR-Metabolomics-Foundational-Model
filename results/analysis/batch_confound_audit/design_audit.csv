@@ -1,0 +1,6 @@
+cohort,n,order_proxy,order_alone_auc,mannwhitney_p,disjoint_blocks,design_verdict
+Barth,37,SVCM accession number,0.5822981366459627,0.41543333564892937,False,interleaved (ok)
+MTBLS326,42,original experiment number,1.0,1.1423070786537421e-07,True,CONFOUNDED BY DESIGN
+MTBLS563,113,original experiment number,0.7572055137844611,2.455579939554348e-06,False,suspicious
+BrC-T2D cancer,78,SM sample code,0.7822368421052632,1.8369235266964987e-05,False,suspicious
+BrC-T2D diabetes,78,SM sample code,0.5701871657754011,0.2923113651483761,False,interleaved (ok)

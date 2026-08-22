@@ -1,0 +1,6 @@
+cohort,order_alone_auc,design_verdict,worst_noise_test,verdict
+Barth,0.5822981366459627,interleaved (ok),0.497 p=0.585 holm=1.000,clean
+MTBLS326,1.0,CONFOUNDED BY DESIGN,0.726 p=0.000 holm=0.000,CONFOUNDED
+MTBLS563,0.7572055137844611,suspicious,0.380 p=0.215 holm=1.000,caveat (order)
+BrC-T2D cancer,0.7822368421052632,suspicious,0.605 p=0.045 holm=0.360,caveat (order)
+BrC-T2D diabetes,0.5701871657754011,interleaved (ok),0.640 p=0.000 holm=0.000,AMBIGUOUS (SNR)
