@@ -434,6 +434,67 @@ machinery, which is already written:
 A generator that fails all three cannot help downstream, regardless of how real its output
 looks.
 
+### 5e. STAGE 0 IMPLEMENTED (2026-09-02): GISSMO basis built; the fit gate does NOT pass
+
+Field strength confirmed by SS: **600 MHz**, which GISSMO ships directly.
+
+**Stage 0a — library catalogued.** `code/synthesis/gissmo_index.py` →
+`results/synthesis/gissmo_catalogue.csv`. GISSMO is **already installed on NMRbox** at
+`/reboxitory/2023/12/GISSMO` (no download needed, contrary to an earlier note here).
+661 entries have a spin-system XML *and* `B0s/sim_600MHz.csv`, so **no spin simulation is
+required** — GISSMO pre-simulates at 19 field strengths. 557 distinct InChI skeletons;
+445 entries measured within 0.5 pH of serum 7.4; median temperature 298 K.
+
+**Stage 0b — basis built and validated.** `code/synthesis/serum_panel.py` (43 metabolites,
+each pinned to an explicit `bmse` ID) and `code/synthesis/build_basis.py` →
+`results/synthesis/basis_600MHz.npy`.
+- Name matching is unsafe and the panel is hard-coded because of it: "leucine" hits
+  L-isoleucine, "glutamate" hits N-carbamyl-L-glutamate, "acetone" hits dihydroxyacetone.
+  Formula matching alone is also unsafe — C6H12O6 covers glucose and all four inositols,
+  C3H7NO2 covers L-alanine, β-alanine, D-alanine and sarcosine. `build_basis.py`
+  re-verifies every molecular formula so a library update cannot silently substitute a
+  compound.
+- **Chemistry validated:** of 21 metabolites with confident literature shifts, 19 match the
+  GISSMO tallest peak to within 0.03 ppm. The 2 apparent misses (glucose 3.82,
+  myo-inositol 3.61) are cases where the literature value quoted a *different peak of the
+  same multiplet set* — GISSMO is right.
+- **Condition number 6.9**, worst pairwise collinearity 0.41 (L-glutamine vs L-methionine).
+  The basis is well conditioned; collinearity is not the problem.
+- Not in GISSMO at all: acetone, urea, mannose, hippurate, malate, 2-oxoglutarate,
+  phosphocholine, glycerophosphocholine, methylhistidine.
+
+**Stage 0c — the gate, and it does not pass.** `code/synthesis/fit_gate.py`. The
+solver-independent figure is the **unconstrained upper bound, median R² ≈ 0.45–0.47** —
+computed with plain `lstsq`, so it does not depend on the bounded-solver problems below.
+**That is well under the 0.90 bar: the forward model as specified cannot reproduce real
+serum spectra.**
+
+The *constrained* numbers are not yet trustworthy and are not quoted as results. The
+metabolite and envelope blocks are partially degenerate and the bounded solver returned
+R² = −2.7e7 (unbounded polynomials), then −22 (bounded), then 0.11 with a metabolite
+signal fraction of 0.004 (ridge over-shrunk). Fixing that is bookkeeping, not science.
+
+**Three causes, and the first two are limitations of the FIT, not of the route:**
+
+1. **No per-spectrum or per-metabolite shift freedom — the biggest gap.** This corpus has
+   no usable 0 ppm reference (§7.1) and was aligned to its own rightmost peak, so absolute
+   ppm is arbitrary and differs between the pooled source studies. The global-offset search
+   lands anywhere from −0.29 to +0.15 ppm depending on the probe set, which is itself the
+   symptom. BATMAN, rDolphin and Chenomx all fit per-peak shifts for exactly this reason.
+   **Implementing per-peak shift is the highest-value next step.**
+2. **Missing components.** Residuals concentrate at 1.0, 1.6–1.7, 2.1–2.5, 2.9, 3.2–3.6 ppm.
+   The 0.8–1.3 region is the lipoprotein CH₂/CH₃ envelope and the panel has **no lipid
+   components at all**; 43 metabolites is well short of the ~100 detectable in serum.
+3. **Linewidth.** 2–4 Hz Lorentzian broadening is physical and helps; apparent gains beyond
+   ~8 Hz are the basis degenerating into smooth blobs that duplicate the envelope block.
+
+**A finding of independent value.** The global-offset search quantifies something no earlier
+experiment had: the corpus's ppm axis carries an **arbitrary absolute offset of order
+0.15–0.3 ppm**, because February's alignment referenced the rightmost peak rather than a
+chemical standard. That is invisible to every within-corpus analysis done so far — all of
+§3–§20 are internally consistent — but it blocks any comparison against an external
+reference library, and it is a further reason to want the raw Bruker archive.
+
 ## 9. Implied work plan, in the outline's own order
 
 0. ~~Settle the normaliser~~ — **DONE (§7.1): keep rowMinMax, use `unit_area` for the
