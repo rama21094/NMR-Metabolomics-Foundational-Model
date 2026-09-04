@@ -495,6 +495,62 @@ chemical standard. That is invisible to every within-corpus analysis done so far
 §3–§20 are internally consistent — but it blocks any comparison against an external
 reference library, and it is a further reason to want the raw Bruker archive.
 
+### 5f. Empirical lipid basis added (2026-09-03): solver fixed, ceiling unchanged
+
+`code/synthesis/lipid_basis.py` → `results/synthesis/lipid_basis.npy`.
+
+GISSMO holds small molecules only, so the lipoprotein/protein envelope had to come from
+the corpus. Two design points matter: peaks are **masked out before smoothing** (otherwise
+the envelope absorbs metabolite intensity and then competes with the GISSMO block), and the
+components are the leading PCs of the resulting per-spectrum envelopes, clipped
+non-negative so they enter the fit under the same constraint as the metabolites.
+
+- The envelope accounts for a **median 37.5% of |signal|** (IQR 34.7–44.1%). That is the
+  share the metabolite basis was never going to reach, and it confirms cause 2.
+- Mean collinearity with the GISSMO basis is **0.070** (worst 0.512, glycerol vs PC5),
+  against the badly degenerate Gaussian-bump block it replaces.
+- PC4 peaks at **1.01 ppm** with 32% of its area below 1.5 ppm — the lipoprotein CH₃/CH₂
+  region, which is what it was built to supply.
+
+**Effect on the gate, and the distinction that matters:**
+
+| | Gaussian bumps | empirical lipid basis |
+|---|---|---|
+| R² full (constrained) | 0.112 | **0.445** |
+| R² metabolites + baseline | 0.095 | 0.294 |
+| metabolite signal fraction | 0.004 (over-shrunk) | **0.289** |
+| metabolites used | 43/43 (all, always) | 38/43, several in only 65–80% of spectra |
+| **R² unconstrained ceiling** | 0.472 | **0.506** |
+
+**The solver problem is fixed** — the constrained fit is now stable, sits close to its own
+ceiling (0.445 vs 0.506), and shows real selectivity rather than switching every metabolite
+on in every spectrum. **But the ceiling barely moved.** Adding lipids cured the degeneracy;
+it did not raise what the design can explain.
+
+That isolates the remaining bottleneck by elimination: **the ~0.5 ceiling is alignment**.
+Misplaced peaks cannot be fitted by adding more basis components, however good they are.
+Per-spectrum and per-metabolite chemical-shift freedom is now the only untried cause, and
+it depends on proper referencing — i.e. on the Bruker import (§7.6).
+
+### 5g. Getting the Bruker parameters without moving the archive
+
+`code/preprocessing/extract_bruker_params.py` — standard-library Python 3, run on the
+machine holding the disk. An `acqus` is ~9 KB against ~1 MB for a single 128K-point `fid`,
+so the parameters are a few MB where the archive is tens of GB. Verified against GISSMO's
+own Bruker trees, where it correctly recovered 500/600 MHz, `zgcppr`/`zgesgp`, and the
+acquisition timestamps.
+
+What it unblocks, all currently open:
+
+| field | resolves |
+|---|---|
+| `SFO1` / `BF1` | field strength **per experiment** — whether the corpus is mixed-field, which would make one 600 MHz basis wrong for part of it |
+| `SF` / `OFFSET` / `SR_hz` | true spectral referencing → **the ppm-offset problem and hence §5f's ceiling** |
+| `DATE` | real acquisition timestamps → upgrades §11's batch audit from an identifier proxy to the gold standard, and could settle MTBLS563 and BrC-T2D cancer |
+| `PULPROG` | CPMG vs NOESY per experiment rather than by folder naming |
+| `NS` / `RG` | scans and receiver gain → lets the SNR-leak hypothesis of §7.1 be tested directly rather than inferred |
+| `PROBHD` / `INSTRUM` | probe and instrument identity — a genuine batch variable |
+
 ## 9. Implied work plan, in the outline's own order
 
 0. ~~Settle the normaliser~~ — **DONE (§7.1): keep rowMinMax, use `unit_area` for the

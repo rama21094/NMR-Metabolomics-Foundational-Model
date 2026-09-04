@@ -143,7 +143,14 @@ def main():
                          "reference (there is no usable reference resonance in it), so its "
                          "ppm labels carry an arbitrary absolute offset.")
     ap.add_argument("--shift-steps", type=int, default=25)
-    ap.add_argument("--ridge", type=float, default=1e-3,
+    ap.add_argument("--envelope", choices=["bumps", "lipid", "both"], default="lipid",
+                    help="'bumps' = generic Gaussians tiled across the spectrum (the "
+                         "original, heavily degenerate with the metabolite block); "
+                         "'lipid' = the empirical envelope basis from lipid_basis.py, "
+                         "which is derived from what the metabolite basis CANNOT explain "
+                         "and is therefore far less collinear with it "
+                         "(mean |cos| 0.07 vs the bumps).")
+    ap.add_argument("--ridge", type=float, default=1e-6,
                     help="Tikhonov penalty, as a fraction of the design's largest "
                          "singular value. The metabolite and envelope blocks are "
                          "partially degenerate -- a broadened multiplet and a smooth "
@@ -181,7 +188,17 @@ def main():
     print(f"fit region: {int(fitmask.sum())} points "
           f"({SIGNAL_LO}-{SIGNAL_HI} ppm, water window excluded)")
 
-    M, centres = macromolecule_basis(ppm_b, args.mm_width_ppm, args.mm_spacing_ppm)
+    blocks = []
+    if args.envelope in ("bumps", "both"):
+        Mb, _ = macromolecule_basis(ppm_b, args.mm_width_ppm, args.mm_spacing_ppm)
+        blocks.append(Mb)
+    if args.envelope in ("lipid", "both"):
+        lp = ROOT / "results/synthesis/lipid_basis.npy"
+        if not lp.exists():
+            raise SystemExit(f"{lp} missing -- run code/synthesis/lipid_basis.py first")
+        blocks.append(bin_rows(np.load(lp).astype(np.float64), fold))
+    M = np.vstack(blocks)
+    print(f"envelope block: {args.envelope} -> {len(M)} components")
     xs = np.linspace(-1, 1, len(ppm_b))
     P = np.stack([legendre.Legendre.basis(k)(xs) for k in range(args.poly_order + 1)])
     nB, nM, nP = len(Bb), len(M), len(P)
