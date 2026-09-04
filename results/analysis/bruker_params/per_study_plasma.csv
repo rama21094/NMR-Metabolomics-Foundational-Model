@@ -1,0 +1,8 @@
+study,n,field_mhz,pulprog,sr_mean_hz,sr_sd_hz,ns_med
+MTBLS798,4866,600,cpmgpr1d.comp,-81.296,1.498,128.0
+MTBLS147,979,600,cpmgpr1d.comp,6.142,1.363,64.0
+MTBLS540,728,600,cpmgpr1d/jresgpprqf/noesygppr1d,1.789,4.712,64.0
+MTBLS974,358,600/700,cpmgpr1d/cpmgpr1d.comp/jresgpprqf,0.831,4.109,64.0
+MTBLS2387,99,700,cpmgpr1d,17.712,8.663,32.0
+MTBLS2336,76,600,cpmgpr1d,14.177,0.414,272.0
+MTBLS46,10,600,cpmgpr1d.comp,5.574,1.213,64.0

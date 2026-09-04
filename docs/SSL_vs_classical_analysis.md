@@ -1614,6 +1614,65 @@ don't revisit without a dimensionality-reduction step first. Script:
 
 ---
 
+## 21. Exp #21 — the pretraining corpus carries multiple chemical-shift axes (2026-09-04)
+
+**Scripts.** [`code/analysis/bruker_param_audit.py`](../code/analysis/bruker_param_audit.py),
+[`code/analysis/corpus_axis_misalignment.py`](../code/analysis/corpus_axis_misalignment.py),
+figure via [`code/plotting/plot_axis_misalignment.py`](../code/plotting/plot_axis_misalignment.py).
+
+**Why this was run.** To supply field strength and referencing for the metabolite basis
+in the synthetic-data work (PI_outline §5e). It turned into a corpus-quality finding.
+
+**Provenance recovered.** The Bruker export's `relpath` carries MTBLS accessions, so the
+corpus's 11 source studies are now known — information the repo never recorded. The
+corpus is **97.8% 600 MHz** and **99.7% CPMG** (`cpmgpr*`), which is good news for the
+basis and settles two open questions in one pass.
+
+**The finding.** `align_spectra_to_longest()` in `code/preprocessing/alignSpectra.py`
+interpolates every spectrum to a common **point count** without ever reading a ppm axis.
+Studies acquired with different `(proc_OFFSET, proc_SW_p, proc_SF)` therefore place the
+same metabolite at different indices. A 1.2 Hz linewidth at 600 MHz is **13 points** at
+this resolution. Measured by cross-correlating 1,200 rows against the corpus median
+(points 72,000–84,000, clear of the zeroed water window):
+
+| displaced from the modal axis by | share of rows |
+|---|---|
+| > 1 linewidth (13 pts) | 63.3% |
+| > 10 linewidths (131 pts) | 47.7% |
+| > 50 linewidths (655 pts) | 41.1% |
+
+Lag modes: **0 pts (51.5%)**, **−750/−800 pts (28.0%)**, +7,000 pts (1.4%). The
+metadata predicts 0 / −720…−900 / +5,100…+8,000 at shares 54% / 42% / 4% — a
+quantitative match derived independently of the spectra.
+
+**A correction to my own first pass.** I initially diagnosed this through
+`SR = (SF − BF1)·1e6` and concluded referencing varied per spectrum. That is wrong:
+`proc_OFFSET` is post-referencing, so each row's ppm axis already absorbs its SR.
+MTBLS798 has SR = −81 Hz against MTBLS147's +6 Hz, yet their OFFSETs differ by only
+0.11 ppm rather than the 0.14 ppm SR implies. SR spread is not evidence of
+misalignment; the verdict logic was rewritten around the axis geometry instead.
+
+**Bearing on §19 and §5.** §19 established that the corpus is low-rank (86% of variance
+in 5 PCs), that median nearest-neighbour r = 0.991, and that copy-a-neighbour (0.900)
+essentially matches the network (0.921) at 60% masking. Under a ~800-point offset,
+cross-study rows *cannot* correlate highly — so that near-duplicate structure is very
+likely **within-study**. The corpus is more fragmented, and effectively smaller, than
+9,670 rows suggests.
+
+This does **not** overturn the headline negative result. Copy-a-neighbour still matches
+the network, the few-shot record is still 0 wins / 3 losses (§18, §11), and the noise
+floor (§15) is unchanged. If anything it sharpens the mechanism: the pretext task is
+easy because near-duplicates exist *within* studies, and transfer fails partly because
+the representation was learned over a corpus that is internally inconsistent in the one
+coordinate that carries chemical meaning.
+
+**Status: a defect to fix, not a result to report.** The repair is deterministic —
+re-interpolate onto one ppm grid from the processing parameters, no free parameters. It
+requires re-deriving the corpus from the raw archive, because the row → study mapping
+was never recorded and cannot be recovered from the `.npy` files. Whether re-pretraining
+on a properly aligned corpus changes the transfer conclusion is now an **open question**,
+and the most important one in the queue.
+
 ## 9. Provenance
 
 - Data: v4 (`*_v4.npy`), built by `code/preprocessing/build_clean_datasets.py` after the

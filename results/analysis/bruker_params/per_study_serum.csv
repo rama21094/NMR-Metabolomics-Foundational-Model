@@ -1,0 +1,6 @@
+study,n,field_mhz,pulprog,sr_mean_hz,sr_sd_hz,ns_med
+MTBLS395,978,600,cpmgpr1d.comp,15.111,0.53,64.0
+MTBLS424,699,600,cpmgpr1d,14.442,1.327,32.0
+MTBLS2387,99,700,cpmgpr1d,18.578,0.586,32.0
+MTBLS10958,93,600,cpmgpr1d,-69.021,1.763,128.0
+MTBLS11188,93,600,cpmgpr1d,-68.733,7.273,128.0

@@ -551,6 +551,96 @@ What it unblocks, all currently open:
 | `NS` / `RG` | scans and receiver gain → lets the SNR-leak hypothesis of §7.1 be tested directly rather than inferred |
 | `PROBHD` / `INSTRUM` | probe and instrument identity — a genuine batch variable |
 
+### 5h. RESULT (2026-09-04): the fit-gate ceiling is explained — the corpus has multiple chemical-shift axes
+
+The Bruker parameter export arrived (§5g), covering both source pulls:
+
+| CSV | rows | corresponds to | corpus share |
+|---|---|---|---|
+| `data/bruker_params_PlasmaNMRData.csv` | 7,116 | `aligned_128K_Plasma_NoSuppress.npy` | 70% |
+| `data/bruker_params_SerumNMRData.csv` | 1,962 | `aligned_nmr_spectra_128K_WSNoise.npy` | 22% |
+
+`relpath` carries **MTBLS accessions**, which recovers study-level provenance that the
+repo itself never recorded. The corpus draws on **11 MetaboLights studies**.
+
+Audited by [`code/analysis/bruker_param_audit.py`](../code/analysis/bruker_param_audit.py).
+
+**Two of the three worries are cleared.**
+
+- **Field strength.** 600 MHz covers **97.8%** of rows (700 MHz: 2.2%, one study
+  in each pull). The single-field GISSMO basis in §5e is appropriate, and field is
+  *not* a contributor to the fit-gate ceiling.
+- **Pulse programme.** `cpmgpr*` covers **99.7%** of rows. The corpus is homogeneously
+  CPMG, so broad macromolecule signal is suppressed corpus-wide and the empirical
+  lipid basis of §5f is a well-defined object rather than an average of two regimes.
+
+**The third worry is the answer, and my first reading of it was wrong.**
+
+I initially tested alignment via `SR = (SF − BF1)·1e6` and found a large spread
+(pooled sd 45 Hz), concluding that referencing varied. That reasoning is invalid:
+`proc_OFFSET` is reported *after* referencing, so each spectrum's ppm axis already
+absorbs its own SR. MTBLS798 makes it concrete — SR = −81 Hz vs +6 Hz for MTBLS147,
+yet their OFFSETs are 14.82 vs 14.71 ppm, nothing like the 0.14 ppm SR would imply.
+**SR spread is not evidence of misalignment.** The script's verdict logic has been
+rewritten around the correct quantity.
+
+The real defect is in our own preprocessing. `align_spectra_to_longest()` in
+[`alignSpectra.py`](../code/preprocessing/alignSpectra.py) interpolates every row to a
+common **point count** and never reads a ppm axis at all. So a metabolite lands at an
+index set by that row's own `(proc_OFFSET, proc_SW_p, proc_SF)`, and studies with
+different acquisition windows put the same peak at different indices.
+
+Scale reference: a 1.2 Hz linewidth at 600 MHz is 0.002 ppm — **13 points** at
+131,072 points over 20 ppm.
+
+Predicted displacement at 3 ppm, relative to the largest study:
+
+| studies | rows | displacement | in linewidths |
+|---|---|---|---|
+| MTBLS798 | 4,866 | 0 | 0 |
+| MTBLS147, 395, 424, 2336, 46 | 2,742 | −790 to −900 pts | ~60 |
+| MTBLS540, 974 | 1,083 | −720 to −730 pts | ~55 |
+| MTBLS2387, 10958, 11188 | 383 | +5,100 to +8,000 pts, **stretched 1.54–1.67×** | 400–600 |
+
+**Confirmed in the spectra, without using any metadata.**
+[`code/analysis/corpus_axis_misalignment.py`](../code/analysis/corpus_axis_misalignment.py)
+cross-correlates 1,200 sampled rows against the corpus median over points
+72,000–84,000 (clear of the zeroed water window) and reads off the lag:
+
+| | predicted from metadata | measured by cross-correlation |
+|---|---|---|
+| modal axis (0 pts) | ~54% | **50.8%** |
+| −600 to −1000 pts | ~42% | **32.9%** (modes at −750, −800) |
+| beyond +3000 pts | ~4% | **6.2%** |
+
+Displaced by more than one linewidth: **63.3%** of rows. By more than 50
+linewidths: **41.1%**. Figure: `results/figures/fig_axis_misalignment.png`.
+
+**Consequences.**
+
+1. **The §5e/§5f fit gate is explained.** A ppm-referenced simulated basis cannot
+   match peaks sitting ~800 points away in roughly 40% of the corpus. The ~0.45–0.51
+   ceiling was never a solver problem and never a basis-completeness problem; my
+   three rounds of ridge and bounds tuning in §5f were treating a symptom. The
+   unconstrained upper bound of 0.506 is exactly what a design should achieve when it
+   fits the majority axis and misses the rest.
+2. **It bears on §5b/§5c.** The joint-distribution correlation lengths and the
+   per-window PC counts were measured on a corpus where ~40% of rows are offset from
+   the other 60%. Cross-study rows *cannot* resemble each other under that offset, so
+   the "corpus is low-rank / near-duplicate-heavy" mechanism (SSL doc §19) is likely
+   **within-study** structure. This does not overturn the negative SSL result — a
+   copy-a-neighbour baseline still matched the network — but it does mean the corpus
+   is effectively smaller and more fragmented than 9,670 suggests.
+3. **The fix is deterministic, not statistical.** Re-interpolate every spectrum onto
+   one ppm grid from `(proc_OFFSET, proc_SW_p, proc_SF)`. No fitting, no free
+   parameters. But it **requires re-deriving the corpus from the raw HDD**, because
+   the row → study mapping was never recorded and cannot be recovered from the `.npy`
+   files. Cross-correlation can assign rows to axis groups approximately, and that is
+   worth doing as an interim measure, but it is a repair, not a rebuild.
+4. **Real shift variation is still untested.** Once the axes agree, the residual
+   pH / ionic-strength / protein-binding shifts remain, and *those* need per-spectrum
+   fitting. We simply cannot see them yet under a defect 60× larger.
+
 ## 9. Implied work plan, in the outline's own order
 
 0. ~~Settle the normaliser~~ — **DONE (§7.1): keep rowMinMax, use `unit_area` for the
