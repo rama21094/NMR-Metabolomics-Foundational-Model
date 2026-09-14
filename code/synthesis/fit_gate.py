@@ -104,6 +104,59 @@ def bin_rows(A, fold):
     return A[..., :n].reshape(*A.shape[:-1], n // fold, fold).mean(axis=-1)
 
 
+
+def shift_rows(B, shifts):
+    """Translate each basis row by its own shift, in bins, with zero fill."""
+    out = np.zeros_like(B)
+    for k, sv in enumerate(shifts):
+        sv = int(sv)
+        if sv == 0:
+            out[k] = B[k]
+        elif sv > 0:
+            out[k, sv:] = B[k, :-sv]
+        else:
+            out[k, :sv] = B[k, -sv:]
+    return out
+
+
+def refine_shifts(Bb, fitmask, y_full, coef, shifts, max_shift, min_coef=1e-10):
+    """One coordinate-descent sweep: re-place each metabolite on the residual.
+
+    For metabolite j, the PARTIAL residual is the spectrum minus every OTHER
+    fitted component. The best position for j is then the lag maximising the
+    cross-correlation of its basis vector with that partial residual, searched
+    only within +/- max_shift bins -- a narrow window is what keeps this a
+    physical pH/binding correction rather than a licence to fit noise.
+
+    This is the standard treatment in NMR quantification (BATMAN puts a prior on
+    each multiplet's shift; Chenomx and rDolphin allow a per-compound tolerance).
+    A metabolite whose fitted concentration is essentially zero is left alone,
+    since its partial residual carries no information about where it belongs.
+    """
+    nB = Bb.shape[0]
+    L = Bb.shape[1]
+    nfft = 1 << (2 * L - 1).bit_length()
+    Bs = shift_rows(Bb, shifts)
+    model = coef @ Bs
+    new = shifts.copy()
+    for j in range(nB):
+        if coef[j] <= min_coef:
+            continue
+        partial = y_full - (model - coef[j] * Bs[j])
+        pm = partial * fitmask
+        bj = Bb[j] * 1.0
+        if not np.any(bj):
+            continue
+        cc = np.fft.irfft(np.fft.rfft(pm, nfft) * np.fft.rfft(bj[::-1], nfft),
+                          nfft)[:2 * L - 1]
+        lags = np.arange(-(L - 1), L)
+        ok = np.abs(lags) <= max_shift
+        cand = np.where(ok)[0]
+        best = cand[np.argmax(cc[cand])]
+        new[j] = lags[best]
+    return new
+
+
 def unconstrained_r2(A, y):
     """Upper bound on what a design can explain, ignoring sign constraints.
 
@@ -196,6 +249,25 @@ def main():
                     help="directory holding basis_600MHz.npy and its meta CSV; "
                          "point at results/synthesis_expanded for the 87-entry "
                          "panel")
+    ap.add_argument("--per-metabolite-shift", action="store_true",
+                    help="Let each metabolite find its own position within "
+                         "--shift-tol-ppm. Real chemical shifts move with pH, "
+                         "ionic strength and protein binding, and they move by a "
+                         "DIFFERENT amount per molecule, so no rigid basis can "
+                         "represent them. code/analysis/inspect_residual_shifts.py "
+                         "measured that effect directly in this corpus.")
+    ap.add_argument("--shift-tol-ppm", type=float, default=0.03,
+                    help="half-width of the per-metabolite search. 0.02-0.05 ppm "
+                         "is the range quantification packages allow; wider stops "
+                         "being a pH correction and starts fitting noise.")
+    ap.add_argument("--shift-rounds", type=int, default=4)
+    ap.add_argument("--shift-null", action="store_true",
+                    help="THE CONTROL. Give each metabolite a RANDOM shift in the "
+                         "same tolerance instead of a fitted one. 87 extra free "
+                         "parameters will improve any fit somewhat, so the "
+                         "fitted-shift gain is only meaningful to the extent it "
+                         "exceeds this. If the null matches it, the gain is "
+                         "flexibility, not chemistry.")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out-dir", default="results/synthesis/fit_gate")
     args = ap.parse_args()
@@ -338,8 +410,33 @@ def main():
     hi_mm = np.concatenate([np.full(nM, np.inf), np.full(nP, plim)])
     unc = []
 
+    ppm_per_bin = (ppm.max() - ppm.min()) / len(ppm_b)
+    max_shift_bins = int(round(args.shift_tol_ppm / ppm_per_bin))
+    if args.per_metabolite_shift:
+        print(f"per-metabolite shift: +/-{max_shift_bins} bins "
+              f"(+/-{args.shift_tol_ppm} ppm), {args.shift_rounds} rounds")
+    shift_log = []
+
     for i, y in enumerate(Yb):
         yf = y[fitmask]
+        if args.per_metabolite_shift:
+            # Alternate: concentrations given positions, then positions given
+            # concentrations. Converges quickly because each block is optimal
+            # given the other; it is not guaranteed globally optimal and is not
+            # claimed to be.
+            sh = np.zeros(nB, dtype=np.int64)
+            if args.shift_null:
+                sh = rng.integers(-max_shift_bins, max_shift_bins + 1, size=nB)
+            for _ in range(0 if args.shift_null else args.shift_rounds):
+                Bs = shift_rows(Bb, sh)
+                A_it = np.vstack([Bs, M, P])[:, fitmask].T
+                x_it, _ = fit(A_it, lo, hi, yf)
+                sh = refine_shifts(Bb, fitmask.astype(float), y,
+                                   x_it[:nB], sh, max_shift_bins)
+            Bs = shift_rows(Bb, sh)
+            A_full = np.vstack([Bs, M, P])[:, fitmask].T
+            A_met = np.vstack([Bs, P])[:, fitmask].T
+            shift_log.append(sh * ppm_per_bin)
         x_all, res_all = fit(A_full, lo, hi, yf)
         x_met, res_met = fit(A_met, lo_met, hi_met, yf)
         x_mm, res_mm = fit(A_mm, lo_mm, hi_mm, yf)
@@ -359,6 +456,17 @@ def main():
             print(f"  {i+1}/{len(Yb)}  R2 full={recs[-1]['r2_full']:.3f} "
                   f"met-only={recs[-1]['r2_metabolites_only']:.3f} "
                   f"env-only={recs[-1]['r2_envelope_only']:.3f}")
+
+    if args.per_metabolite_shift and shift_log:
+        S = np.stack(shift_log)
+        np.save(out_dir / "fitted_shifts_ppm.npy", S)
+        used = S[np.stack([c > 1e-12 for c in coefs])]
+        print(f"\n  fitted per-metabolite shifts, ppm: "
+              f"median |shift| {np.median(np.abs(used)):.4f}  "
+              f"p95 {np.percentile(np.abs(used), 95):.4f}  "
+              f"at bound {100 * np.mean(np.abs(used) >= args.shift_tol_ppm - 1e-9):.1f}%")
+        print("  (a high 'at bound' fraction means the tolerance is binding and "
+              "the result should not be read as converged)")
 
     df = pd.DataFrame(recs)
     C = np.stack(coefs)
