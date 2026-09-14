@@ -648,12 +648,35 @@ A real serum resonance here is **35 points, 3.2 Hz** (§5k). So:
 **What I am NOT doing.** Picking, per cohort, whichever anchor maximises the
 overlap score. That optimises the metric being reported and would be circular.
 
-**Recommended next step**, for a decision rather than for me to choose: redefine
-the canonical zero using the cohorts that have a genuine standard (MTBLS326,
-BrC-T2D), shift the corpus by the corresponding ~877 points, and re-audit. That
-puts every dataset on one absolute axis rather than on the corpus's arbitrary
-one. Barth and TBI show broad features (134 and similar FWHM) so they may have no
-real standard either, and would still need cross-correlation.
+**The ~877 point offset is NOT confirmed, and the proposal below it fails.**
+Scanning each cohort's shift against the corpus and asking where its genuine
+standard lands:
+
+| cohort | best shift | corr | implied corpus zero | offset from 97032 |
+|---|---|---|---|---|
+| MTBLS326 | +320 | 0.662 | idx 96475 | +557 pts (+0.085 ppm) |
+| BrC-T2D | −4113 | **0.395** | idx 94771 | +2261 pts (+0.345 ppm) |
+
+The two disagree by **1,704 points (0.26 ppm)**, and neither is the 877 I
+inferred from MTBLS326 alone. BrC-T2D's best-shift correlation is only 0.395, so
+its estimate carries little weight — but MTBLS326's 0.662 is not strong enough to
+override it either.
+
+**Conclusion: the corpus's absolute chemical-shift axis cannot be recovered from
+these cohorts by cross-correlation.** The cohorts are too dissimilar to the
+corpus for the optimum to be sharp, so "shift until it matches best" has no
+well-defined answer. Redefining the canonical zero this way would be picking a
+number from two contradictory estimates.
+
+What would settle it is an independent absolute reference: Bruker `proc_OFFSET`
+for the cohorts, as we have for the corpus's own source studies (§5h). We do not
+have parameter files for any cohort. Until then the honest position is that the
+corpus and cohorts are each *internally* consistent and their *relative* offsets
+are not established.
+
+Visual confirmation: `results/figures/fig_corpus_and_cohorts.png` puts the corpus
+and all five cohorts on one image, as stored and after the 0 ppm anchor. The
+corpus band is tight after anchoring; the cohort bands are not brought onto it.
 
 ## 6. Where our findings and the outline converge
 
