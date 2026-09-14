@@ -518,6 +518,78 @@ distinguish is now distinguished.
   spectra, so the next diagnostic should ask what distinguishes the 3 that pass
   from the 50 that do not.
 
+### 5m. RESULT (2026-09-14): cohort axes, and why only 3 of 60 spectra fit
+
+**(a) The evaluation cohorts were on a different axis from the corpus — by a lot.**
+
+Re-referenced with the same script
+([`rereference_zero_ppm.py`](../code/preprocessing/rereference_zero_ppm.py),
+generalised with `--corpus`/`--no-fallback`):
+
+| cohort | singlet found | shift needed to reach the corpus axis |
+|---|---|---|
+| Barth | 95.0% | **+1,599 pts** |
+| BrC-T2D | 94.9% | **−1,753 pts** |
+| MTBLS326 | 100% | +882 pts |
+| TBI | 85.7% | +1,937 pts |
+| MTBLS563 | **0.7%** | — no reference peak, left unshifted |
+
+The cohorts span **3,690 points**, roughly 105 measured linewidths, and every one
+of them sat 900–1,950 points away from the pretraining corpus.
+
+**This is a confound specific to SSL, and it runs in SSL's disfavour.** Classical
+logistic regression is fitted on the cohort and never sees the corpus, so an axis
+mismatch costs it nothing. The pretrained network encodes cohort spectra with
+weights learned on a corpus displaced by 26–56 linewidths — features computed far
+outside their training distribution. Every few-shot result in
+[`SSL_vs_classical_analysis.md`](SSL_vs_classical_analysis.md) carries this.
+
+It does **not** overturn the negative result — the corpus-internal argument (§19,
+copy-a-neighbour matching the network) is untouched. But "0 wins, 3 losses" was
+measured under a handicap that only one of the two methods bore, and it now has
+to be re-measured. This raises my expectation that retraining could change the
+headline, from unlikely to genuinely open.
+
+MTBLS563 needs a different anchor; 0.7% detection means it has no usable
+reference and must be aligned by cross-correlation to the corpus median instead.
+
+**(b) What distinguishes the 3 spectra that clear the 0.90 bar.**
+
+[`why_some_spectra_fit.py`](../code/analysis/why_some_spectra_fit.py) correlates
+nine measurable properties against fit quality.
+
+I expected the passers to be envelope-dominated — a "false pass" of the kind the
+fit_gate docstring warns about. **They are not.** For all three the metabolite
+block does essentially all the work (R² metabolites-only 0.911–0.938; envelope-
+only 0.077–0.139), and corpus-wide R² correlates with the metabolite block at
+0.734 against 0.188 for the envelope. The basis is genuinely fitting chemistry.
+
+The discriminator is `metabolite_signal_frac` — the summed absolute fitted
+metabolite signal over the spectrum's own. **Above 1 it means the fitted
+components are cancelling each other**: large positive coefficients offset by
+others, which is a degenerate fit rather than a physical one.
+
+| metabolite_signal_frac | n | median R² | reach 0.90 |
+|---|---|---|---|
+| < 0.6 (well conditioned) | 6 | **0.828** | **3** |
+| 0.6–1.0 | 19 | 0.732 | 0 |
+| 1.0–1.5 | 34 | 0.633 | 0 |
+| > 1.5 (badly cancelling) | 1 | 0.622 | 0 |
+
+**58% of spectra fit with cancelling components.** Spearman ρ = −0.748, the
+strongest of the nine.
+
+**So the remaining barrier is basis conditioning, not missing chemistry.** That
+is the problem the fit_gate docstring flagged on 2026-09-02 and I never fixed —
+the metabolite and envelope blocks are partially degenerate, and the bounded
+solver was observed returning R² of −2.7e7, −22 and 0.11 depending on
+regularisation. Expanding the panel 43 → 87 will have made the degeneracy worse,
+not better, which may be why that change bought only +0.026.
+
+Next, in order: per-block ridge or explicit orthogonalisation of the envelope
+against the metabolite block; then prune the panel on the evidence
+`fit_gate.py` already emits; only then judge whether chemistry is still missing.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the

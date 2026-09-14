@@ -126,13 +126,34 @@ def main() -> None:
                     help="points. Measured: metabolite peaks 35, the 0 ppm "
                          "feature 98, macromolecule humps >500.")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--corpus", default=CORPUS,
+                    help="input .npy; the evaluation cohorts must be put on the "
+                         "SAME canonical axis as the pretraining corpus or any "
+                         "transfer result measures the axis mismatch instead of "
+                         "the representation")
+    ap.add_argument("--lags", default=LAGS,
+                    help="per-row cross-correlation displacements used as the "
+                         "fallback where no 0 ppm singlet is found. Omit with "
+                         "--no-fallback for cohorts that have none computed.")
+    ap.add_argument("--no-fallback", action="store_true",
+                    help="leave undetected spectra unshifted rather than falling "
+                         "back, and record them as such")
+    ap.add_argument("--tag", default="",
+                    help="label for the report files, so cohorts do not overwrite "
+                         "each other")
     ap.add_argument("--out", default=OUT_NPY)
     args = ap.parse_args()
 
     REPORT.mkdir(parents=True, exist_ok=True)
-    X = np.load(ROOT / CORPUS, mmap_mode="r")
+    X = np.load(ROOT / args.corpus, mmap_mode="r")
     n = X.shape[0]
-    lag = np.load(ROOT / LAGS)
+    if args.no_fallback:
+        lag = np.zeros(n, dtype=np.int64)
+    else:
+        lag = np.load(ROOT / args.lags)
+        if len(lag) != n:
+            raise SystemExit(f"lag file has {len(lag)} rows, corpus has {n}; "
+                             "pass --no-fallback or the right --lags")
     half = int(round(args.search_ppm / PPM_PER_PT))
     lo, hi = ZERO_IDX - half, ZERO_IDX + half
     print(f"corpus {n:,} x {X.shape[1]:,}")
@@ -154,7 +175,7 @@ def main() -> None:
             row = i + k
             if r is None or r[1] / gmax[k] < args.min_height:
                 shift[row] = -int(lag[row])      # fallback, same sign convention
-                method[row] = "xcorr_fallback"
+                method[row] = "unshifted" if args.no_fallback else "xcorr_fallback"
                 continue
             apex, h, w = r
             shift[row] = int(round(ZERO_IDX - (lo + apex)))
@@ -166,7 +187,8 @@ def main() -> None:
 
     ok = method == "zero_peak"
     print(f"\n  reference singlet found: {ok.sum():,}/{n:,} ({100 * ok.mean():.1f}%)")
-    print(f"  cross-correlation fallback: {(~ok).sum():,} ({100 * (~ok).mean():.1f}%)")
+    print(f"  no singlet found: {(~ok).sum():,} ({100 * (~ok).mean():.1f}%)"
+          f"  [{'left unshifted' if args.no_fallback else 'xcorr fallback'}]")
     print(f"  singlet height, fraction of global max: median {np.median(height[ok]):.4f}")
     print(f"  singlet FWHM, points: median {int(np.median(width[ok]))}")
     q = np.percentile(shift, [5, 25, 50, 75, 95])
@@ -177,12 +199,13 @@ def main() -> None:
     print(f"  |shift| > 1500 (the stretched studies; translation cannot fix "
           f"these): {stretched.sum():,}")
 
+    tag = ("_" + args.tag) if args.tag else ""
     pd.DataFrame({"row": np.arange(n), "shift": shift, "method": method,
                   "peak_height_frac": height, "peak_fwhm_pts": width,
                   "xcorr_lag": lag,
                   "stretched_flag": stretched}).to_csv(
-        REPORT / "rereference_per_spectrum.csv", index=False)
-    (REPORT / "summary.json").write_text(json.dumps({
+        REPORT / f"rereference_per_spectrum{tag}.csv", index=False)
+    (REPORT / f"summary{tag}.json").write_text(json.dumps({
         "n": int(n), "zero_idx": ZERO_IDX,
         "found_pct": float(100 * ok.mean()),
         "median_height_frac": float(np.median(height[ok])),
