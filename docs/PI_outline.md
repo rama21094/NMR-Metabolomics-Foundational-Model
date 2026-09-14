@@ -330,6 +330,62 @@ expansion second. The alignment repair is still worth doing — it is a genuine
 defect and the corpus should not be published in its current state — but it
 should no longer be sold as the thing that unblocks synthesis.
 
+### 5j. RESULT (2026-09-14): there IS a 0 ppm reference peak, and we aligned on noise instead
+
+Prompted by the PI asking to look at the 0 ppm region directly. The answer
+overturns a premise this project has been carrying since §5h, and it hands us a
+much cheaper repair than the rebuild.
+
+Script: [`code/analysis/reference_peak_check.py`](../code/analysis/reference_peak_check.py).
+Figure: `results/figures/fig_reference_peak_check.png`.
+
+| | |
+|---|---|
+| spectra with a detectable sharp singlet within ±0.4 ppm of 0 | **97.5%** |
+| its median height, as a fraction of each spectrum's own global max | **8.4%** (p90 16.6%) |
+| median height at the far right edge, where `alignSpectra.py` anchored | **0.03%** |
+
+**The reference peak is there.** §5h and the co-PI report both stated that the
+public datasets carry no reference standard. **That was wrong.** The claim came
+from `normaliser_comparison.py` reporting a median 0.67% of global maximum at
+0 ppm — but that sampled *one fixed index* on a corpus that is itself misaligned,
+so for roughly half the rows it measured a point 800 places away from the peak.
+Searching a window instead gives 8.4%, twelve times higher, in 97.5% of spectra.
+
+**Its position is bimodal, and the gap is exactly the defect:**
+
+| position | share |
+|---|---|
+| 0.00 ppm | 49.1% |
+| +0.11 to +0.13 ppm | ~35% |
+
+0.12 ppm is 800 points. The whole-spectrum cross-correlation of §5h and this
+single sharp landmark agree to within a few percent, which is a strong mutual
+check — one uses the entire aliphatic region, the other one peak.
+
+**And the far right edge is noise.** Median 0.03% of global maximum, nothing
+above 5% in any spectrum. `align_spectra_to_longest`'s anchor was not a weak
+reference peak; it was the noise floor. The pipeline aligned the corpus on noise
+while a perfectly serviceable reference sat about 5 ppm away.
+
+**Why this changes the plan.** §5h concluded the repair needs the raw archive,
+because the row → study mapping was never recorded. That is no longer true. The
+reference singlet is *in the spectra*, so each one can be re-referenced from its
+own data: locate the singlet, shift it to 0 ppm, done. No instrument files, no
+re-derivation from raw, and it works for the 778 Workbench spectra that have no
+parameter export at all.
+
+Caveats, stated rather than buried:
+
+- ~2.5% of spectra show no detectable singlet and will need another rule.
+- The stretched studies still need resampling, not shifting (§5h).
+- Identity is inferred from position and sharpness, not confirmed; DSS and TSP
+  both sit at 0.00 ppm and either would serve. Worth one check against a study's
+  own MetaboLights protocol before this goes in a paper.
+- **This does not revive §5i.** Alignment has been measured, in a paired test, not
+  to be the fit-gate bottleneck. A better alignment method does not change that
+  result; it makes the corpus correct, which is worth doing for its own sake.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the

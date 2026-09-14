@@ -316,11 +316,19 @@ P("The original instrument parameter files have since been recovered, and they i
 Rich([{ t: "NMR spectra must be placed on a common chemical-shift axis before they can be "
      + "compared, and this is normally done by reference to a standard compound added to every "
      + "sample, which produces a marker peak at a known position. ", },
-  { t: "The public datasets we assembled do not contain that standard. ", b: true },
-  { t: "Our pipeline instead anchored each spectrum by its own rightmost detectable feature, "
-     + "which is a reasonable substitute only if the marker peak is present. It is not: the "
-     + "measured intensity where the marker should be is under 1% of the spectrum's own "
-     + "maximum, and every spectrum extends well past that position into empty noise." }]),
+  { t: "Our pipeline instead anchored each spectrum by its own rightmost detectable feature. "
+     + "That is a reasonable substitute only if the rightmost feature IS the marker peak, and "
+     + "it is not: these spectra extend about five parts per million beyond the marker "
+     + "position, into a region containing nothing but noise. The pipeline therefore aligned "
+     + "the collection on its noise floor." }]),
+Rich([{ t: "The marker peak itself is present after all. ", b: true },
+  { t: "We had previously concluded it was absent, from a measurement that sampled a single "
+     + "fixed position; because the collection is itself misaligned, that position missed the "
+     + "peak in about half the spectra. Searching a window instead finds a sharp marker in "
+     + "97.5% of spectra. Its position is split between two values 0.12 ppm apart \u2014 which is "
+     + "precisely the displacement measured independently across the whole spectrum. This is "
+     + "good news: the collection can be re-referenced from the spectra themselves, without "
+     + "returning to the original instrument archive." }]),
 P("The consequence is systematic. The eleven contributing studies recorded slightly different "
   + "spectral windows \u2014 almost the same width, but shifted by about 0.13 ppm. Anchoring on "
   + "the edge therefore forced that shift onto the chemistry: roughly 40% of the corpus sits "
