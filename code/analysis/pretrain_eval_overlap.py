@@ -87,8 +87,9 @@ def main():
 
     corpus_path, cohorts = CORPUS, COHORTS
     if args.aligned:
-        corpus_path = ("data/combined/combine_unique_MetaboLights_Workbench_"
-                       "Water_EDTA_Suppressed_ref0ppm_clean.npy")
+        # v4 lineage, so this is comparable with the original (v4) run: the
+        # only difference is the 0 ppm referencing and the 47 dropped failures.
+        corpus_path = "data/combined/corpus_v4_ref0ppm_clean.npy"
         cohorts = [
             ("Barth", "data/Barth/Barth_EDTASuppressed_v4_ref0ppm.npy", True),
             ("MTBLS326", "data/mtbls326/MTBLS326_EDTASuppressed_v4_ref0ppm.npy", True),

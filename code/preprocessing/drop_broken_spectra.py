@@ -45,9 +45,12 @@ def main() -> None:
     ap.add_argument("--min-votes", type=int, default=2)
     ap.add_argument("--src", default=SRC)
     ap.add_argument("--dst", default=DST)
+    ap.add_argument("--scores", default=SCORES,
+                    help="atypicality CSV matching --src; a mismatched file "
+                         "would drop rows by index against a different corpus")
     args = ap.parse_args()
 
-    d = pd.read_csv(ROOT / SCORES)
+    d = pd.read_csv(ROOT / args.scores)
     drop = np.sort(d.loc[d["votes"] >= args.min_votes, "row"].to_numpy())
     X = np.load(ROOT / args.src, mmap_mode="r")
     n = X.shape[0]

@@ -92,11 +92,15 @@ def main() -> None:
     ap.add_argument("--contamination", type=float, default=0.02)
     ap.add_argument("--n-components", type=int, default=30)
     ap.add_argument("--n-show", type=int, default=8)
+    ap.add_argument("--corpus-override", default=None,
+                    help="corpus .npy to score instead of the default")
+    ap.add_argument("--out-tag", default="",
+                    help="suffix for the output files so runs do not collide")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
     OUT.mkdir(parents=True, exist_ok=True)
-    X = np.load(ROOT / REF, mmap_mode="r")
+    X = np.load(ROOT / (args.corpus_override or REF), mmap_mode="r")
     n = X.shape[0]
 
     cols = np.linspace(SIGNAL[0], SIGNAL[1] - 1, NFEAT).astype(int)
@@ -138,7 +142,7 @@ def main() -> None:
                        "pca_resid": s_pca, "iso_score": s_iso}
                       ).sort_values(["votes", "pca_resid"],
                                     ascending=[False, False])
-    df.to_csv(OUT / "atypical_scores.csv", index=False)
+    df.to_csv(OUT / f"atypical_scores{args.out_tag}.csv", index=False)
 
     # Sanity check on the case that prompted this.
     r6200 = int(votes[6200]) if n > 6200 else -1
@@ -178,10 +182,10 @@ def main() -> None:
     fig.suptitle("Spectra flagged as atypical by >=2 of 3 independent methods — "
                  "for inspection, NOT automatic removal", fontsize=12, y=0.999)
     fig.tight_layout()
-    p = FIGS / "fig_atypical_spectra.png"
+    p = FIGS / f"fig_atypical_spectra{args.out_tag}.png"
     fig.savefig(p, dpi=150, bbox_inches="tight")
     print(f"\n  wrote {p}")
-    print(f"  wrote {(OUT / 'atypical_scores.csv').relative_to(ROOT)}")
+    print(f"  wrote {(OUT / ('atypical_scores' + args.out_tag + '.csv')).relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

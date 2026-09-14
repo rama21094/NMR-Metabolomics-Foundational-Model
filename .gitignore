@@ -24,3 +24,5 @@ __pycache__/
 #   python code/preprocessing/rereference_zero_ppm.py
 data/combined/*_ref0ppm.npy
 data/combined/*_ref0ppm_clean.npy
+data/combined/corpus_v4_ref0ppm*.npy
+data/*/*_ref0ppm.npy
