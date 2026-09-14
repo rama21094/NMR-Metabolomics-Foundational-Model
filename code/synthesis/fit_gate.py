@@ -189,6 +189,9 @@ def main():
                          "exactly the same spectra, over exactly the same mask, "
                          "with the correction withheld, so the only difference "
                          "between the two runs is the correction itself.")
+    ap.add_argument("--corpus", default=CORPUS,
+                    help="corpus .npy to fit; point at the 0 ppm re-referenced "
+                         "file to test whether correct referencing moves the gate")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out-dir", default="results/synthesis/fit_gate")
     args = ap.parse_args()
@@ -199,7 +202,7 @@ def main():
     B = np.load(ROOT / "results/synthesis/basis_600MHz.npy").astype(np.float64)
     meta = pd.read_csv(ROOT / "results/synthesis/basis_600MHz_meta.csv")
 
-    corpus = cn.open_corpus(ROOT / CORPUS, "unit_area", verbose=True)
+    corpus = cn.open_corpus(ROOT / args.corpus, "unit_area", verbose=True)
     n_total, length = corpus.shape
     rng = np.random.default_rng(args.seed)
     pool = np.arange(n_total)

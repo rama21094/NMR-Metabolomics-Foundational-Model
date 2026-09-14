@@ -171,47 +171,59 @@ def fig_heatmap(X, lag, lo, hi, path):
 
 
 def fig_overlay(X, lag, path, centre=78000, half=3000, n_per=60, seed=0):
-    """The Bruker/Sparky view: overlay group medians, before and after correction.
+    """Bruker/Sparky overlay of displacement groups, before and after correction.
 
-    Deliberately restricted to the two dominant SHIFTED groups. The stretched
-    minority (studies acquired over a narrower spectral window) cannot be fixed
-    by a translation at all -- they need resampling -- so including them here
-    would misrepresent what the correction achieves. They are reported in the
-    heatmap and counted in the summary instead.
+    The bins below PARTITION the corpus -- their counts sum to n, and the legend
+    states every count including the ones a translation cannot fix. An earlier
+    version plotted only two bins and silently omitted 846 rows; a figure that
+    does not account for its own population invites exactly that mistake.
+
+    The stretched groups are drawn dashed and are NOT shift-corrected in the
+    lower panel, because a translation cannot correct a scale difference.
     """
     rng = np.random.default_rng(seed)
-    groups = [(-400, 400, "aligned group", INK),
-              (-1500, -400, "displaced group", ACC)]
+    bins = [(-400, 400, "aligned (+/-400 pts)", INK, False),
+            (-1500, -400, "-1500..-400", ACC, False),
+            (400, 1500, "+400..+1500", "#7a5195", False),
+            (-10 ** 9, -1500, "< -1500 (stretched)", WARN, True),
+            (1500, 10 ** 9, "> +1500 (stretched)", "#ef7a3a", True)]
 
     lo, hi = centre - half, centre + half
     x = ppm_of(np.arange(lo, hi))
+    n = len(lag)
 
-    fig, (a, b) = plt.subplots(2, 1, figsize=(12.5, 6.6), sharex=True)
-    for e0, e1, lab, c in groups:
+    fig, (a, b) = plt.subplots(2, 1, figsize=(12.5, 7.0), sharex=True)
+    counted = 0
+    for e0, e1, lab, c, stretched in bins:
         idx = np.where((lag >= e0) & (lag < e1))[0]
+        counted += len(idx)
+        if len(idx) < 3:
+            a.plot([], [], color=c, lw=1.4,
+                   label=f"{lab}  (n={len(idx):,}, too few to plot)")
+            continue
         pick = np.sort(rng.choice(idx, min(n_per, len(idx)), replace=False))
+        ls = "--" if stretched else "-"
 
         raw = np.array(X[pick, lo:hi], dtype=np.float64)
         raw /= raw.max(axis=1, keepdims=True) + 1e-12
-        a.plot(x, np.median(raw, axis=0), lw=1.4, color=c,
-               label=f"{lab}  (n={len(idx):,}, median shift "
-                     f"{int(np.median(lag[idx])):+d} pts)")
+        a.plot(x, np.median(raw, axis=0), lw=1.4, color=c, ls=ls,
+               label=f"{lab}  (n={len(idx):,}, median {int(np.median(lag[idx])):+d} pts)")
 
-        # Sign convention: a spectrum measured at lag `sh` has its features at
-        # index (true + sh), so reading the window at (lo + sh) undoes it.
-        # Verified empirically -- the wrong sign gives corr -0.01, this gives 0.71.
+        if stretched:
+            b.plot(x, np.median(raw, axis=0), lw=1.4, color=c, ls=ls)
+            continue
         sh = int(np.median(lag[idx]))
         cor = np.array(X[pick, lo + sh:hi + sh], dtype=np.float64)
         cor /= cor.max(axis=1, keepdims=True) + 1e-12
         b.plot(x, np.median(cor, axis=0), lw=1.4, color=c)
 
-    a.set_title("AS STORED — the two largest groups overlaid. Every peak is "
-                "doubled: the same metabolite, at two different positions.",
-                fontsize=11, loc="left", color=WARN)
-    a.legend(fontsize=9, frameon=False)
-    b.set_title("AFTER applying each group's measured shift — the peaks now "
-                "coincide (median correlation 0.71, from -0.05). Residual "
-                "differences are real biology and processing, not misalignment.",
+    assert counted == n, f"bins cover {counted} of {n} rows"
+
+    a.set_title(f"AS STORED — every one of the {n:,} spectra falls in one of "
+                "these bins", fontsize=11, loc="left", color=WARN)
+    a.legend(fontsize=8.5, frameon=False, ncol=2)
+    b.set_title("AFTER each group's median shift. Dashed = stretched studies, "
+                "shown uncorrected: a translation cannot fix a scale difference.",
                 fontsize=11, loc="left", color=ACC)
     b.set_xlabel("chemical shift (ppm)")
     for ax in (a, b):
