@@ -1,6 +1,6 @@
 const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType,
         Table, TableRow, TableCell, WidthType, ShadingType, BorderStyle,
-        PageBreak, Footer, PageNumber } = require("docx");
+        PageBreak, Footer, PageNumber, ImageRun } = require("docx");
 const fs = require("fs");
 
 const NAVY = "21295C", CORAL = "C1435B", GREEN = "1A7A3C", MUTED = "5A6068";
@@ -68,6 +68,28 @@ const table = (header, rows, widths) => new Table({
   ],
 });
 
+// Content width is 7.0 in (Letter, 0.75 in margins) = 672 px at 96 dpi.
+// Figures are sized to 640 px so they sit inside the text block with a little air.
+const FIGW = 640;
+const figure = (relPath, arWidthOverHeight, caption, o = {}) => ([
+  new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: o.before === undefined ? 200 : o.before, after: 60 },
+    children: [new ImageRun({
+      data: fs.readFileSync(relPath),
+      type: "png",
+      transformation: { width: o.w || FIGW,
+                        height: Math.round((o.w || FIGW) / arWidthOverHeight) },
+    })],
+  }),
+  new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { after: o.after === undefined ? 220 : o.after, line: 240 },
+    children: caption.map(r => new TextRun({ text: r.t, font: F, size: PT(9),
+      bold: r.b, italics: r.i === undefined ? true : r.i, color: r.c || MUTED })),
+  }),
+]);
+
 const doc = new Document({
   creator: "Shankararama Sharma",
   title: "A foundation model for NMR metabolomics — progress report",
@@ -126,6 +148,15 @@ Rich([{ t: "It does not. ", b: true },
      + "neural network. The clearest test paired the two methods on identical data splits, so "
      + "that sampling variation cancels: at the smallest labelled-sample budget the difference "
      + "was +0.001 ± 0.016 in balanced accuracy (p = 0.74) — indistinguishable from zero." }]),
+...figure("docs/gm_figures/gm07b_fewshot_paired_5panel.png", 2.381, [
+  { t: "Figure 1. ", b: true, i: false },
+  { t: "The head-to-head comparison, on all five clinical questions. Each point is the "
+     + "difference in balanced accuracy between the pretrained network and classical logistic "
+     + "regression, trained and tested on exactly the same patients. Zero means the two methods "
+     + "tie; below zero means classical is ahead. The grey band is the measurement noise of the "
+     + "training procedure itself — differences inside it are not real. As the number of "
+     + "labelled patients grows (left to right), every curve moves downward: the more data "
+     + "available, the further ahead the simple method gets." }]),
 P("Two results that initially appeared to favour the neural approach did not survive scrutiny, "
   + "and both failures are instructive:"),
 BulRich([{ t: "A single cohort (Barth syndrome) showed the network beating classical machine "
@@ -159,6 +190,15 @@ table(
    ["The trained neural network", "0.92"]],
   [7000, 2360]),
 P("", { after: 100 }),
+...figure("docs/gm_figures/gm10_recon_baselines.png", 2.381, [
+  { t: "Figure 2. ", b: true, i: false },
+  { t: "How hard is the pretraining puzzle really? Bars show how accurately each method can "
+     + "fill in hidden regions of a spectrum, at three difficulty levels (25%, 40% and 60% of "
+     + "the spectrum hidden). The neural network is the rightmost bar in each group. The "
+     + "decisive comparison is with the bar immediately to its left: simply finding the most "
+     + "similar other patient in the corpus and copying their values. It nearly matches the "
+     + "network at every difficulty — so the puzzle can be solved without learning any "
+     + "chemistry." }]),
 Rich([{ t: "Simply copying another patient's spectrum performs almost as well as the network. ",
   b: true },
   { t: "The reason is that the corpus is far more homogeneous than its size suggests: 86% of "
@@ -182,6 +222,24 @@ P("Because one dataset proved to be confounded, we audited all four cohorts on t
   + "instrument sessions, and whether spectral regions containing no metabolite signal can "
   + "nevertheless predict the diagnosis — which would only be possible if a technical "
   + "difference tracks the clinical groups."),
+Rich([{ t: "Design balance, in plain terms. ", b: true },
+  { t: "Samples are measured on the spectrometer one after another, over hours or days, and "
+     + "the instrument drifts slightly during that time. A ", },
+  { t: "balanced", i: true },
+  { t: " (interleaved) study alternates patients and controls throughout the run, so any drift "
+     + "affects both groups equally and cancels out. A ", },
+  { t: "blocked", i: true },
+  { t: " study measures all the patients first and all the controls afterwards. Then the drift "
+     + "itself separates the two groups, and a classifier can score well by detecting when a "
+     + "sample was run rather than what is in it — a machine artefact wearing the costume of a "
+     + "biological discovery." }]),
+...figure("docs/gm_figures/gm11_batch_audit.png", 2.381, [
+  { t: "Figure 3. ", b: true, i: false },
+  { t: "The two audit tests. Left: can the position of a sample in the measurement queue, on "
+     + "its own, predict the diagnosis? 0.5 means no (properly interleaved); 1.0 means the two "
+     + "groups were run as completely separate blocks. Right: can spectral regions that contain "
+     + "no metabolite signal — only noise — predict the diagnosis? The dashed line is chance. "
+     + "MTBLS326 fails both decisively, which is why it was excluded." }]),
 table(
   ["Cohort", "Design balance", "Verdict"],
   [["Barth syndrome", "Interleaved", "Clean — passes both tests"],
@@ -244,12 +302,57 @@ Rich([{ t: "Before generating anything, we imposed a gate: can this model reprod
      + "component substantially improved the model's behaviour without raising this ceiling, "
      + "which isolates the remaining problem as one of peak alignment rather than missing "
      + "chemistry." }]),
-P("The cause has been identified. Our spectra were aligned to each other using an internal "
-  + "reference peak rather than to an absolute chemical standard, so the chemical-shift axis "
-  + "carries an arbitrary offset of roughly 0.15–0.3 ppm. This is invisible in any analysis "
-  + "confined to our own data — all previous results remain internally consistent — but it "
-  + "prevents comparison against an external reference library. The correction requires the "
-  + "original instrument parameter files, which are being retrieved."),
+...figure("results/figures/fig_gissmo_demo.png", 1.675, [
+  { t: "Figure 4. ", b: true, i: false },
+  { t: "Two synthetic serum spectra built from the metabolite library (top, blue), with a real "
+     + "patient spectrum beneath for comparison (black). The synthetic traces are chemically "
+     + "coherent by construction. They are shown to illustrate that the library is assembled "
+     + "and usable \u2014 they are not yet validated training data, for the reason given below." }]),
+
+// ---------------- 5.3 ----------------
+H2("5.3 The alignment problem, now diagnosed"),
+P("The original instrument parameter files have since been recovered, and they identify the "
+  + "cause precisely. It lies in our own processing, not in the reference library."),
+Rich([{ t: "NMR spectra must be placed on a common chemical-shift axis before they can be "
+     + "compared, and this is normally done by reference to a standard compound added to every "
+     + "sample, which produces a marker peak at a known position. ", },
+  { t: "The public datasets we assembled do not contain that standard. ", b: true },
+  { t: "Our pipeline instead anchored each spectrum by its own rightmost detectable feature, "
+     + "which is a reasonable substitute only if the marker peak is present. It is not: the "
+     + "measured intensity where the marker should be is under 1% of the spectrum's own "
+     + "maximum, and every spectrum extends well past that position into empty noise." }]),
+P("The consequence is systematic. The eleven contributing studies recorded slightly different "
+  + "spectral windows \u2014 almost the same width, but shifted by about 0.13 ppm. Anchoring on "
+  + "the edge therefore forced that shift onto the chemistry: roughly 40% of the corpus sits "
+  + "about 800 data points away from the rest. For scale, a single NMR peak is about 13 data "
+  + "points wide, so the affected spectra are displaced by some sixty peak widths. The same "
+  + "metabolite appears in a completely different place depending on which study a sample came "
+  + "from."),
+...figure("results/figures/fig_axis_misalignment.png", 2.645, [
+  { t: "Figure 5. ", b: true, i: false },
+  { t: "The misalignment, established two independent ways. Left: measured directly from the "
+     + "spectra, with no reference to instrument records \u2014 most spectra agree with each other "
+     + "(the spike at zero), but a large group sits about 800 data points away, and a small "
+     + "group very much further. Right: the displacement predicted for each contributing study "
+     + "from its instrument settings alone, without examining any spectrum. The two agree, "
+     + "which is why we regard the diagnosis as settled." }]),
+Rich([{ t: "This explains the failed gate, and it is repairable. ", b: true },
+  { t: "A reference library is defined on a true chemical-shift axis, so it can fit the "
+     + "majority of the corpus and must miss the rest \u2014 which is precisely the 50% ceiling we "
+     + "observed. The correction is arithmetic rather than statistical: each spectrum's own "
+     + "instrument file records the exact window it was acquired over, so every spectrum can be "
+     + "placed on one common axis with no fitting and no free parameters. It does, however, "
+     + "require rebuilding the dataset from the original archive." }]),
+Rich([{ t: "What this does and does not affect. ", b: true },
+  { t: "The comparison in Section 2 is unaffected: both methods were trained and tested on the "
+     + "same spectra, so a defect they share cannot explain the gap between them. What it does "
+     + "revise is the explanation in Section 3. Spectra from different studies cannot closely "
+     + "resemble one another while displaced by sixty peak widths, so the near-duplication that "
+     + "makes the pretraining puzzle easy must occur ", },
+  { t: "within", i: true },
+  { t: " studies. The corpus is more fragmented, and effectively smaller, than its 9,670 "
+     + "spectra suggest. Whether pretraining on a correctly aligned corpus would change the "
+     + "conclusion is now an open question, and the most important one before us." }]),
 
 // ---------------- 6 ----------------
 H1("6. Status and next steps"),
@@ -259,15 +362,21 @@ table(
    ["Why not?", "Answered: the pretraining task is nearly trivial on this corpus"],
    ["Is the amount of data the limitation?", "No — the diversity of the data is"],
    ["Are the evaluation datasets sound?", "Audited; one excluded, two flagged"],
-   ["Can synthetic data supply the missing diversity?", "In progress"]],
+   ["Can synthetic data supply the missing diversity?", "In progress"],
+   ["Is the assembled corpus itself sound?", "No \u2014 a correctable alignment defect found"]],
   [5400, 3960]),
 P("", { after: 100 }),
-P("Immediate priorities are, first, to recover the original instrument parameters, which will "
-  + "resolve the alignment problem and simultaneously allow the data-quality audit to be "
-  + "repeated against true acquisition timestamps rather than a proxy; and second, to extend "
-  + "the spectral fitting to allow each metabolite's peak positions to shift slightly, as "
-  + "established quantification software does. Should the synthetic-data route succeed, the "
-  + "pretraining will be repeated on the enlarged corpus and the entire evaluation rerun."),
+P("The immediate priority is the alignment repair of Section 5.3, which now gates everything "
+  + "downstream. Rebuilding the corpus on a common chemical-shift axis would settle whether the "
+  + "negative result survives a technically sound dataset, unblock the synthetic-data gate, and "
+  + "allow the data-quality audit to be repeated against true acquisition timestamps rather "
+  + "than a proxy. A faster interim option exists \u2014 estimating each spectrum's displacement "
+  + "from the data and correcting it in place \u2014 which would answer the scientific question in "
+  + "days rather than weeks, though it would not produce a dataset we would want to publish "
+  + "from. Beyond that, the spectral fitting needs to allow each metabolite's peak positions to "
+  + "shift slightly, as established quantification software does. Should the synthetic-data "
+  + "route then succeed, pretraining will be repeated on the enlarged corpus and the entire "
+  + "evaluation rerun."),
 Rich([{ t: "A note on how this work has been conducted. ", b: true },
   { t: "Several of the findings above are retractions of our own earlier conclusions. Early in "
      + "the project we measured the run-to-run variability of the training procedure and found "
