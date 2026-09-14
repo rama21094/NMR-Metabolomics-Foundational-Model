@@ -73,6 +73,11 @@ def main():
     ap.add_argument("--n-bins", type=int, default=2048)
     ap.add_argument("--corpus-sample", type=int, default=1500,
                     help="rows used for the within-corpus reference")
+    ap.add_argument("--aligned", action="store_true",
+                    help="Use the 0 ppm re-referenced corpus AND cohorts. The "
+                         "original run compared a corpus and cohorts sitting up "
+                         "to 1,950 points apart (docs/PI_outline.md 5m), so its "
+                         "coverage figures partly measured that mismatch.")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--out-dir", default="results/analysis/pretrain_eval_overlap")
     args = ap.parse_args()
@@ -80,7 +85,20 @@ def main():
     out_dir = ROOT / args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    corpus = np.load(ROOT / CORPUS, mmap_mode="r")
+    corpus_path, cohorts = CORPUS, COHORTS
+    if args.aligned:
+        corpus_path = ("data/combined/combine_unique_MetaboLights_Workbench_"
+                       "Water_EDTA_Suppressed_ref0ppm_clean.npy")
+        cohorts = [
+            ("Barth", "data/Barth/Barth_EDTASuppressed_v4_ref0ppm.npy", True),
+            ("MTBLS326", "data/mtbls326/MTBLS326_EDTASuppressed_v4_ref0ppm.npy", True),
+            ("MTBLS563", "data/mtbls563/MTBLS563_EDTASuppressed_v4_ref0ppm.npy", True),
+            ("BrC-T2D", "data/BrC_T2D/BC_T2D_newlabels_EDTASuppressed_v4_ref0ppm.npy", True),
+            ("TBI Tirupati", "data/tbi_tirupati/TBI_Tirupati_ref0ppm.npy", False),
+        ]
+        print("ALIGNED MODE: re-referenced corpus and cohorts\n")
+
+    corpus = np.load(ROOT / corpus_path, mmap_mode="r")
     print(f"pretraining corpus: {corpus.shape[0]} x {corpus.shape[1]}")
     cz = normalise(corpus, args.n_bins)
 
@@ -101,7 +119,7 @@ def main():
     print(f"  {'(within-corpus reference)':<26} {len(idx):5d}  {np.median(ref):13.4f}  "
           f"{(ref > 0.9999).sum():8d}  {(ref > 0.99).sum():6d}")
 
-    for name, rel, comparable in COHORTS:
+    for name, rel, comparable in cohorts:
         path = ROOT / rel
         if not path.exists():
             print(f"  {name:<26} MISSING: {rel}")

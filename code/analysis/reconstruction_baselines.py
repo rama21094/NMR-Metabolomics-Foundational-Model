@@ -139,6 +139,15 @@ def main():
                          "flagged as possibly same-study")
     ap.add_argument("--peak-quantile", type=float, default=0.95)
     ap.add_argument("--redundancy-sample", type=int, default=2000)
+    ap.add_argument("--corpus", default=CORPUS)
+    ap.add_argument("--no-dnn", action="store_true",
+                    help="Score only the non-learned baselines. REQUIRED when "
+                         "running on the 0 ppm re-referenced corpus: the "
+                         "checkpoint was pretrained on the OLD axis, so scoring "
+                         "it on re-referenced spectra measures the axis change, "
+                         "not the model. The diagnostic question -- is the "
+                         "pretext task still nearly free? -- is answered by "
+                         "nn_copy alone and needs no network.")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out-dir", default="results/analysis/reconstruction_baselines")
     args = ap.parse_args()
@@ -146,10 +155,16 @@ def main():
     out_dir = ROOT / args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    corpus = np.load(ROOT / CORPUS, mmap_mode="r")
+    corpus = np.load(ROOT / args.corpus, mmap_mode="r")
     n, length = corpus.shape
-    model = load_model(length)
-    patch = model.patch_size
+    if args.no_dnn:
+        model = None
+        patch = 1024          # the patch size the checkpoints use; masking
+                              # geometry must stay identical for comparability
+        print("--no-dnn: scoring non-learned baselines only")
+    else:
+        model = load_model(length)
+        patch = model.patch_size
     n_tokens = length // patch
     print(f"corpus {n} x {length}; patch {patch} -> {n_tokens} tokens")
 
@@ -180,22 +195,25 @@ def main():
 
             fed = x.copy()
             fed[hid] = 0.0
-            with torch.no_grad():
-                rec, _ = model(torch.from_numpy(fed).unsqueeze(0),
-                               mask=torch.from_numpy(tok).unsqueeze(0))
-            rec = rec.squeeze(0).numpy().reshape(-1)[:length]
+            rec = None
+            if not args.no_dnn:
+                with torch.no_grad():
+                    r_, _ = model(torch.from_numpy(fed).unsqueeze(0),
+                                  mask=torch.from_numpy(tok).unsqueeze(0))
+                rec = r_.squeeze(0).numpy().reshape(-1)[:length]
 
             coef, *_ = np.linalg.lstsq(basis[:, vis].T, (x - mu)[vis], rcond=None)
             nn_i = int(np.argmin(((train[:, vis] - x[vis]) ** 2).sum(1)))
             row_gap = abs(int(train_rows[nn_i]) - int(row))
 
             preds = {
-                "dnn": rec,
                 "corpus_mean": mu,
                 "linear_interp": np.interp(grid, grid[vis], x[vis]),
                 pca_name: mu + coef @ basis,
                 "nn_copy": train[nn_i],
             }
+            if not args.no_dnn:
+                preds["dnn"] = rec
             thr = np.quantile(x[hid], args.peak_quantile)
             peak, base = hid & (x > thr), hid & (x <= thr)
             for name, p in preds.items():
@@ -235,6 +253,18 @@ def main():
     print(red.to_string(index=False))
 
     print("\n" + "=" * 74)
+    if args.no_dnn:
+        print("  BEST NON-LEARNED BASELINE (no network scored)")
+        print("=" * 74)
+        for ratio, g in sum_df.groupby("mask_ratio"):
+            best = g.loc[g.r_masked_mean.idxmax()]
+            print(f"  mask {ratio:.0%}:  {best.predictor} {best.r_masked_mean:.3f}")
+        print("\n  The diagnostic question is whether the pretext task is still")
+        print("  nearly free. If nn_copy -- copy the most similar other spectrum --")
+        print("  still scores ~0.9, it is, and a retrained network has little room")
+        print("  to show that it learned anything a lookup could not.")
+        print(f"\nWrote {out_dir}/recon_baselines_summary.csv")
+        return
     print("  DNN margin over the best non-learned baseline")
     print("=" * 74)
     for ratio, g in sum_df.groupby("mask_ratio"):
