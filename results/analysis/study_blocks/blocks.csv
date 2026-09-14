@@ -1,0 +1,30 @@
+block,n,median_lag,lag_spread,study,size_ratio
+45,4849,4,39,MTBLS798,0.997
+12,1790,-773,93,AMBIGUOUS: MTBLS147,1.828
+34,1755,-761,249,AMBIGUOUS: MTBLS395,1.794
+10,216,6987,242,unassigned,
+0,120,2568,215,unassigned,
+11,99,-2878,88,unassigned,
+29,85,4542,35,unassigned,
+8,74,4300,113,unassigned,
+53,72,469,143,unassigned,
+16,64,5502,75,unassigned,
+101,48,6214,18,unassigned,
+7,39,1452,99,unassigned,
+128,37,2001,47,unassigned,
+65,27,-267,31,unassigned,
+62,20,-820,5,MTBLS46,2.0
+46,20,552,43,unassigned,
+50,18,-236,21,unassigned,
+2,16,6991,132,unassigned,
+126,11,1393,45,unassigned,
+121,11,-2940,58,unassigned,
+5,11,-2966,64,unassigned,
+71,10,-3590,15,unassigned,
+68,10,-830,5,MTBLS2336,0.132
+124,9,-57,11,unassigned,
+4,9,3335,82,unassigned,
+104,8,7066,8,unassigned,
+127,8,6823,47,unassigned,
+63,8,-3257,14,unassigned,
+32,8,-1607,10,unassigned,

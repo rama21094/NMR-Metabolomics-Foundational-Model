@@ -99,48 +99,57 @@ def measure_all(X, lo, hi, chunk=400, seed=0):
     return lag, peak
 
 
-def fig_heatmap(X, lag, lo, hi, path, max_rows=2400):
+def fig_heatmap(X, lag, lo, hi, path):
     """All spectra as one image, sorted by measured displacement.
 
-    A heatmap is the only honest way to put ~10^4 spectra on one page: each
-    spectrum is one pixel row, intensity is colour. A misaligned subpopulation
-    appears as a horizontal band whose peaks are visibly offset from the rest --
-    the vertical peak ridges simply step sideways.
+    Every one of the N spectra enters the image -- no rows are dropped. Note the
+    distinction the title now makes explicitly: the raster is ~2,400 pixels tall,
+    so roughly four spectra share a pixel row and the renderer averages them.
+    That is fine for seeing WHERE the population sits, and it is not the same as
+    "one pixel per spectrum". An earlier version of this figure both subsampled
+    to 2,400 rows AND claimed one row per spectrum; the subsampling is gone and
+    the claim is corrected.
+
+    Columns are subsampled too, which is harmless here because we are looking at
+    peak POSITION, not lineshape.
     """
     n = X.shape[0]
     order = np.argsort(lag)
-    if n > max_rows:                      # row-subsample for a legible image
-        order = order[np.linspace(0, n - 1, max_rows).astype(int)]
-
-    # Column-subsample the band so the image is a sane width.
     cols = np.linspace(lo, hi - 1, 1600).astype(int)
-    M = np.array(X[np.sort(order)][:, cols], dtype=np.float64)
-    M = M[np.argsort(np.argsort(lag[order]))] if False else M
-    # re-sort explicitly by lag (fancy-index above returns sorted-row order)
-    srt = np.argsort(lag[np.sort(order)])
-    M = M[srt]
-    lag_sorted = lag[np.sort(order)][srt]
+
+    # Row-chunked to bound memory. Fancy-indexing a memmap needs ascending
+    # row order, so each chunk is read sorted and then put back into lag order.
+    M = np.empty((n, len(cols)), dtype=np.float32)
+    blk = 500
+    for i in range(0, n, blk):
+        j = min(i + blk, n)
+        rows = order[i:j]
+        srt = np.argsort(rows)
+        M[i:j] = np.array(X[rows[srt]][:, cols], dtype=np.float32)[np.argsort(srt)]
 
     M -= np.median(M, axis=1, keepdims=True)
     sc = np.percentile(np.abs(M), 99.5, axis=1, keepdims=True) + 1e-12
     M = np.clip(M / sc, 0, 1)
+    lag_sorted = lag[order]
 
+    h = max(7.0, n / 620.0)                        # ~1 pixel row per spectrum
     fig, (a, b) = plt.subplots(
-        1, 2, figsize=(13, 7.2), gridspec_kw={"width_ratios": [4.2, 1]})
+        1, 2, figsize=(13, h), gridspec_kw={"width_ratios": [4.2, 1]})
     a.imshow(M, aspect="auto", cmap="magma_r", norm=PowerNorm(0.45),
-             extent=[ppm_of(cols[0]), ppm_of(cols[-1]), len(M), 0],
+             extent=[ppm_of(cols[0]), ppm_of(cols[-1]), n, 0],
              interpolation="nearest")
     a.set_xlabel("chemical shift (ppm)")
     a.set_ylabel("spectra, sorted by measured displacement")
-    a.set_title(f"All {n:,} spectra, one pixel row each\n"
+    a.set_title(f"All {n:,} spectra, none omitted "
+                f"(~{n / 2400:.0f} per pixel row)\n"
                 "vertical ridges = the same metabolite; a sideways step = misalignment",
                 fontsize=11, loc="left")
     a.invert_xaxis()
 
-    b.plot(lag_sorted, np.arange(len(lag_sorted)), lw=1.2, color=ACC)
+    b.plot(lag_sorted, np.arange(n), lw=1.2, color=ACC)
     b.axvline(0, color=INK, lw=1, ls="--")
     b.axvspan(-LINEWIDTH_PTS, LINEWIDTH_PTS, color=INK, alpha=0.20)
-    b.set_ylim(len(lag_sorted), 0)
+    b.set_ylim(n, 0)
     b.set_xlabel("displacement (points)")
     b.set_title("1 linewidth = 13 pts", fontsize=10, loc="left", color=MUTED)
     b.set_yticks([])
@@ -150,7 +159,7 @@ def fig_heatmap(X, lag, lo, hi, path, max_rows=2400):
     fig.tight_layout()
     fig.savefig(path, dpi=155, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {path}")
+    print(f"wrote {path}  ({n} rows, {h:.1f} in tall)")
 
 
 def fig_overlay(X, lag, path, centre=78000, half=3000, n_per=60, seed=0):
@@ -252,7 +261,7 @@ def main() -> None:
         "n_flagged": int(flag.sum()),
     }, indent=2))
 
-    fig_heatmap(X, lag, *BAND, FIGS / "fig_alignment_heatmap.png")
+    fig_heatmap(X, lag, *BAND, path=FIGS / "fig_alignment_heatmap.png")
     fig_overlay(X, lag, FIGS / "fig_alignment_overlay.png")
     print(f"\nper-spectrum lags: {lag_p.relative_to(ROOT)}")
     print("inspect flagged rows with:  streamlit run code/analysis/spectra_viewer_app.py")
