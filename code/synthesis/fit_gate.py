@@ -192,6 +192,10 @@ def main():
     ap.add_argument("--corpus", default=CORPUS,
                     help="corpus .npy to fit; point at the 0 ppm re-referenced "
                          "file to test whether correct referencing moves the gate")
+    ap.add_argument("--basis-dir", default="results/synthesis",
+                    help="directory holding basis_600MHz.npy and its meta CSV; "
+                         "point at results/synthesis_expanded for the 87-entry "
+                         "panel")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out-dir", default="results/synthesis/fit_gate")
     args = ap.parse_args()
@@ -199,8 +203,10 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     ppm = np.load(ROOT / PPM_AXIS)
-    B = np.load(ROOT / "results/synthesis/basis_600MHz.npy").astype(np.float64)
-    meta = pd.read_csv(ROOT / "results/synthesis/basis_600MHz_meta.csv")
+    bdir = ROOT / args.basis_dir
+    B = np.load(bdir / "basis_600MHz.npy").astype(np.float64)
+    meta = pd.read_csv(bdir / "basis_600MHz_meta.csv")
+    print(f"basis: {B.shape[0]} metabolites from {args.basis_dir}")
 
     corpus = cn.open_corpus(ROOT / args.corpus, "unit_area", verbose=True)
     n_total, length = corpus.shape

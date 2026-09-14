@@ -23,3 +23,4 @@ __pycache__/
 # Re-referenced corpus: 10 GB, regenerate with
 #   python code/preprocessing/rereference_zero_ppm.py
 data/combined/*_ref0ppm.npy
+data/combined/*_ref0ppm_clean.npy

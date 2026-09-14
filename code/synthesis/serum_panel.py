@@ -73,8 +73,70 @@ PANEL = [
     ("L-citrulline",        "bmse000032", "C6H13N3O3"),
     ("L-carnitine",         "bmse000211", "C7H15NO3"),
     ("glutathione",         "bmse000185", "C10H17N3O6S"),
+
+    # ---- EXPANSION 2026-09-14 ----------------------------------------
+    # The 43-entry panel above covers roughly the metabolites a routine
+    # serum assay quantifies; human serum holds closer to 100 that are
+    # 1H-NMR detectable. fit_gate.py plateaus near R2 0.41 with alignment
+    # now ruled out as the cause (docs/PI_outline.md 5i), leaving missing
+    # chemistry as the leading candidate. These 44 are the serum-plausible
+    # GISSMO entries near pH 7.4 that the panel did not already contain.
+    #
+    # NOTE -- the docstring above claimed hippurate, 2-oxoglutarate,
+    # methylhistidine and malate were ABSENT from GISSMO. They are not.
+    # That check searched for the names used in the metabolomics
+    # literature; GISSMO files them as Hippuric-acid,
+    # Alpha-ketoglutaric-acid, Ntau-Methyl-L-histidine and L-malic-acid.
+    # Only acetone, urea, mannose, phosphocholine and
+    # glycerophosphocholine are genuinely absent.
+    ("hippurate",             "bmse000408", "C9H9NO3"),
+    ("2-oxoglutarate",        "bmse000064", "C5H6O5"),
+    ("3-methylhistidine",     "bmse000449", "C7H11N3O2"),
+    ("L-malate",              "bmse000238", "C4H6O5"),
+    ("succinate",             "bmse000968", "C4H6O4"),
+    ("fumarate",              "bmse000083", "C4H4O4"),
+    ("2-oxobutyrate",         "bmse000325", "C4H6O3"),
+    ("acetyl-l-carnitine",    "bmse000464", "C9H17NO4"),
+    ("uracil",                "bmse000187", "C4H4N2O2"),
+    ("uridine",               "bmse000158", "C9H12N2O6"),
+    ("inosine",               "bmse000978", "C10H12N4O5"),
+    ("adenosine",             "bmse000061", "C10H13N5O4"),
+    ("allantoin",             "bmse000437", "C4H6N4O3"),
+    ("beta-alanine",          "bmse000967", "C3H7NO2"),
+    ("GABA",                  "bmse000871", "C4H9NO2"),
+    ("l-carnosine",           "bmse000246", "C9H14N4O3"),
+    ("l-anserine",            "bmse000776", "C10H16N4O3"),
+    ("l-cysteine",            "bmse000034", "C3H7NO2S"),
+    ("l-kynurenine",          "bmse000172", "C10H12N2O3"),
+    ("l-homoserine",          "bmse000040", "C4H9NO3"),
+    ("2-aminobutyrate",       "bmse000390", "C4H9NO2"),
+    ("trans-4-hydroxy-l-proline", "bmse000123", "C5H9NO3"),
+    ("hypotaurine",           "bmse000452", "C2H7NO2S"),
+    ("homoarginine",          "bmse000745", "C7H16N4O2"),
+    ("guanidineacetic-acid",  "bmse000384", "C3H7N3O2"),
+    ("n-acetyl-l-aspartic-acid", "bmse000423", "C6H9NO5"),
+    ("ketoleucine",           "bmse000383", "C6H10O3"),
+    ("2-hydroxy-3-methylbutyric-acid", "bmse000570", "C5H10O3"),
+    ("propionate",            "bmse000179", "C3H6O2"),
+    ("butyrate",              "bmse000402", "C4H8O2"),
+    ("isobutyrate",           "bmse000439", "C4H8O2"),
+    ("isovalerate",           "bmse000373", "C5H10O2"),
+    ("valerate",              "bmse000345", "C5H10O2"),
+    ("phenylacetylglycine",   "bmse000658", "C10H11NO3"),
+    ("3-hydroxyphenylacetic-acid", "bmse000339", "C8H8O3"),
+    ("4-hydroxyphenylacetic-acid", "bmse000455", "C8H8O3"),
+    ("indole-3-acetic-acid",  "bmse000177", "C10H9NO2"),
+    ("phenylacetate",         "bmse000220", "C8H8O2"),
+    ("benzoate",              "bmse000300", "C7H6O2"),
+    ("kynurenic-acid",        "bmse000410", "C10H7NO3"),
+    ("5-hydroxyindoleacetate", "bmse000364", "C10H9NO3"),
+    ("pantothenate",          "bmse000287", "C9H17NO5"),
+    ("scyllo-inositol",       "bmse000113", "C6H12O6"),
+    ("L-ascorbate",           "bmse000182", "C6H8O6"),
 ]
 
-MISSING_FROM_GISSMO = ["acetone", "urea", "mannose", "hippurate", "malate",
-                       "2-oxoglutarate", "phosphocholine", "glycerophosphocholine",
-                       "methylhistidine"]
+# CORRECTED 2026-09-14: hippurate, malate, 2-oxoglutarate and methylhistidine
+# were on this list in error -- they are in GISSMO under their acid names and are
+# now in PANEL. These five are genuinely absent, verified by name and formula.
+MISSING_FROM_GISSMO = ["acetone", "urea", "mannose", "phosphocholine",
+                       "glycerophosphocholine"]
