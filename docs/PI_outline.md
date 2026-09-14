@@ -451,13 +451,30 @@ maximising cross-correlation with that residual, searched only within
 
 All arms paired on the same 20 spectra, 87-metabolite basis, cleaned corpus:
 
-| arm | R² full | vs no-shift |
-|---|---|---|
-| no shift | 0.417 | — |
-| **random** shift, ±0.03 ppm (NULL) | 0.402 | −0.015 (p = 0.11) |
-| fitted shift, ±0.03 ppm | **0.683** | +0.240 (p = 2e-6, **100% of spectra**) |
-| **random** shift, ±0.05 ppm (NULL) | 0.381 | −0.036 |
-| fitted shift, ±0.05 ppm | **0.758** | **+0.341** |
+**n = 60 (definitive; all three arms paired on the same 60 spectra):**
+
+| arm | R² full | IQR | vs no-shift |
+|---|---|---|---|
+| no shift | 0.422 | 0.327–0.579 | — |
+| **random** shift ±0.05 ppm (NULL) | 0.439 | 0.349–0.548 | −0.016 (p = 0.97) |
+| fitted shift ±0.05 ppm | **0.668** | 0.617–0.732 | **+0.219** (p = 2e-11, **100% of spectra**) |
+
+Fitted beats the null by **+0.234 ± 0.013**, winning on every one of the 60.
+
+**The n = 20 figure was optimistic by 0.090** — it reported 0.758 where n = 60
+gives 0.668. That is the ordinary small-sample effect the project has been caught
+by before (§15), and is why the earlier entry carried an explicit "needs
+re-running at full size" caveat. 0.668 is the number to quote.
+
+n = 20 arms, retained for the tolerance comparison only:
+
+| arm | R² full |
+|---|---|
+| no shift | 0.417 |
+| random ±0.03 (NULL) | 0.402 |
+| fitted ±0.03 | 0.683 |
+| random ±0.05 (NULL) | 0.381 |
+| fitted ±0.05 | 0.758 |
 
 **The null is the result.** 87 extra free parameters improve any fit somewhat,
 so `--shift-null` hands each metabolite a *random* shift within the same window.
@@ -470,15 +487,18 @@ can give.
 At ±0.05 ppm the bound is no longer binding: **0.0% of shifts sit at the limit**,
 against 25.9% at ±0.03. Median fitted |shift| is 0.033 ppm, p95 0.050.
 
-**Where this leaves the gate.** 0.758 against a 0.90 bar. Still not passed, but
-the remaining gap is **0.14**, from 0.48 before today's work. Ranked by effect:
+**Where this leaves the gate.** 0.668 against a 0.90 bar — still **FAIL**. The
+remaining gap is **0.23**, down from 0.48. Only 3 of 60 spectra reach 0.90; 10
+of 60 reach 0.75. Ranked by effect, all paired at n = 60:
 
 | intervention | ΔR² |
 |---|---|
-| per-metabolite shift (±0.05) | **+0.34** |
+| per-metabolite shift (±0.05) | **+0.219** |
 | panel 43 → 87 | +0.026 |
 | 0 ppm re-referencing | −0.028 |
 | whole-spectrum lag correction | +0.017 (n.s.) |
+
+Per-metabolite shift is worth roughly **eight times** everything else combined.
 
 This also settles the §5i question properly. Alignment *was* the bottleneck —
 but per-*metabolite* alignment, not per-*spectrum*. The retraction in §5i stands
@@ -493,8 +513,10 @@ distinguish is now distinguished.
   lineshape and phase error rather than chemistry. The null makes over-fitting
   an unlikely explanation, but "not over-fitting" is not the same as
   "physically justified per metabolite".
-- n = 20. The earlier arms used n = 60. This needs re-running at full size
-  before it goes in a paper.
+- The median hides a wide spread: IQR 0.617–0.732, and only 3 of 60 spectra
+  actually reach the bar. Whatever still limits the model is not uniform across
+  spectra, so the next diagnostic should ask what distinguishes the 3 that pass
+  from the 50 that do not.
 
 ## 6. Where our findings and the outline converge
 
