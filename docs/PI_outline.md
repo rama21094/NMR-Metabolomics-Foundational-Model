@@ -258,6 +258,78 @@ So the two halves of the picture point in opposite directions, and both are true
 
 That combination is what determines whether each synthetic-data route can help — see §8.
 
+### 5i. RETRACTION (2026-09-14): alignment is NOT the fit-gate bottleneck
+
+§5h claimed, as its first consequence, that the misalignment "explains" the
+§5e/§5f fit-gate ceiling. **That claim was wrong and is retracted.** It was a
+plausible inference from elimination, never a measurement; it has now been
+measured and it fails.
+
+**The test.** `code/analysis/alignment_qc.py` measures a displacement for every
+corpus row. `code/synthesis/fit_gate.py` gained `--lag-correct` (roll each
+spectrum by its own measured lag), `--max-abs-lag` (drop the stretched studies,
+which a translation cannot fix in any case) and `--lag-select-only` (the control
+arm: same rows, same mask, correction withheld). Both arms fit the **same 60
+spectra** under the **same mask**, so the comparison is paired and the only
+difference is the correction.
+
+A `--water-pad` argument was added because the first attempt was confounded: the
+corpus has a hard-zeroed water block at 62500–68000, rolling a spectrum moves
+that block while the fit mask stays fixed, and the leaked zeros depressed R² for
+purely mechanical reasons. That first run showed 0.418 → 0.348 and is void. Both
+arms below are padded by 1,600 points.
+
+| quantity | control | lag-corrected | paired Δ | p |
+|---|---|---|---|---|
+| R² full model | 0.486 | 0.493 | +0.017 ± 0.016 | **0.97** |
+| R² metabolites only | 0.350 | 0.367 | +0.040 ± 0.018 | 0.12 |
+| R² envelope only | 0.377 | 0.335 | −0.026 ± 0.004 | <0.001 |
+| R² unconstrained bound | 0.523 | 0.543 | +0.027 ± 0.013 | 0.15 |
+
+Correcting the alignment improves the full model by 0.017, with p = 0.97 and the
+correction winning on only 37% of spectra. That is nothing.
+
+**And the decisive detail points the wrong way.** Splitting by whether a spectrum
+was actually displaced:
+
+| | n | Δ R² full |
+|---|---|---|
+| actually displaced (\|lag\| > 400) | 30 | **−0.042** |
+| already aligned (\|lag\| ≤ 400) | 30 | **+0.076** |
+
+The spectra the correction was supposed to rescue got **worse**; the ones that
+needed nothing got better, which is the global-offset search landing at a
+different optimum (−511 vs −409 bins), not the correction working. If
+misalignment were the binding constraint this table would read the other way
+round. It does not.
+
+**What survives and what does not.**
+
+- **The misalignment itself stands.** It is measured two independent ways (§5h)
+  and is a real defect in our preprocessing. Nothing here softens that.
+- **Its claimed consequence does not.** The ~0.45–0.51 ceiling is *not* caused by
+  between-study misalignment. §5h consequence 1 is withdrawn.
+- **§5h consequence 2 is now doubtful too.** The argument that near-duplication
+  must be within-study rested on the same "spectra 800 points apart cannot
+  resemble each other" reasoning. That reasoning is not wrong in itself, but it
+  clearly does not control the fit, so its force elsewhere should be re-checked
+  rather than assumed.
+
+**What this leaves.** The fit_gate docstring lists three causes. My lag
+correction addresses a *global per-spectrum* offset — which is **not** what that
+docstring's cause (1) proposes. Real NMR shifts are per-metabolite and
+pH-dependent: lysine moves while glucose does not. A single roll of the whole
+spectrum cannot represent that, so cause (1) remains **untested**, not refuted.
+Cause (2), missing chemistry, is now the more likely candidate on its face: 43
+metabolites against the ~100 detectable in serum, with acetone, urea and mannose
+absent from GISSMO entirely, and no lipid *species* in the panel at all.
+
+**Order of work, revised.** Per-metabolite shift fitting first, because it is
+cheap and it is the one the quantification literature says matters. Panel
+expansion second. The alignment repair is still worth doing — it is a genuine
+defect and the corpus should not be published in its current state — but it
+should no longer be sold as the thing that unblocks synthesis.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the

@@ -336,13 +336,20 @@ P("The consequence is systematic. The eleven contributing studies recorded sligh
      + "group very much further. Right: the displacement predicted for each contributing study "
      + "from its instrument settings alone, without examining any spectrum. The two agree, "
      + "which is why we regard the diagnosis as settled." }]),
-Rich([{ t: "This explains the failed gate, and it is repairable. ", b: true },
-  { t: "A reference library is defined on a true chemical-shift axis, so it can fit the "
-     + "majority of the corpus and must miss the rest \u2014 which is precisely the 50% ceiling we "
-     + "observed. The correction is arithmetic rather than statistical: each spectrum's own "
-     + "instrument file records the exact window it was acquired over, so every spectrum can be "
-     + "placed on one common axis with no fitting and no free parameters. It does, however, "
-     + "require rebuilding the dataset from the original archive." }]),
+Rich([{ t: "It is repairable, and the repair is arithmetic rather than statistical. ", b: true },
+  { t: "Each spectrum's own instrument file records the exact window it was acquired over, so "
+     + "every spectrum can be placed on one common axis with no fitting and no free parameters. "
+     + "It does, however, require rebuilding the dataset from the original archive." }]),
+Rich([{ t: "We expected this to explain the 50% ceiling of Section 5.2. It does not. ", b: true },
+  { t: "Correcting the displacement and re-running the same test on the same spectra moves the "
+     + "figure from 0.486 to 0.493 \u2014 a difference indistinguishable from zero (p = 0.97). More "
+     + "tellingly, the spectra that were actually displaced got slightly worse, while those "
+     + "already aligned got better; had misalignment been the binding constraint, the result "
+     + "would have been the reverse. The misalignment is a genuine defect and will be repaired, "
+     + "but it is not what limits the synthetic-spectrum model. The likelier explanation is now "
+     + "the simpler one: the library contains 43 metabolites where serum holds roughly a "
+     + "hundred, and it allows no freedom for individual metabolite peaks to shift with sample "
+     + "pH, which established quantification software does allow." }]),
 Rich([{ t: "What this does and does not affect. ", b: true },
   { t: "The comparison in Section 2 is unaffected: both methods were trained and tested on the "
      + "same spectra, so a defect they share cannot explain the gap between them. What it does "

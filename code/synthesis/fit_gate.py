@@ -158,6 +158,37 @@ def main():
                          "returns huge opposing amplitudes (observed R2 = -22 with "
                          "bounds, -2.7e7 without). A small ridge removes that null "
                          "space without materially biasing the fit.")
+    ap.add_argument("--lag-correct", default=None, metavar="LAG_NPY",
+                    help="Path to per-row displacements from "
+                         "code/analysis/alignment_qc.py (lag_all.npy). Each "
+                         "spectrum is rolled by its own measured lag before "
+                         "fitting, which removes the BETWEEN-spectrum "
+                         "disagreement documented in PI_outline 5h. It does not "
+                         "place the corpus on an absolute ppm axis -- the "
+                         "reference is the corpus median, whose own position is "
+                         "arbitrary -- so --shift-search-ppm still supplies the "
+                         "single global offset onto the GISSMO axis. The two "
+                         "corrections are independent and both are needed.")
+    ap.add_argument("--water-pad", type=int, default=0,
+                    help="Widen the excluded water window by this many points on "
+                         "each side. REQUIRED when comparing lag-corrected "
+                         "against uncorrected fits: the corpus has a hard-zeroed "
+                         "water block at 62500-68000, and rolling a spectrum "
+                         "moves that block while the fit mask stays fixed, so "
+                         "zeros leak into the fit region and depress R2 for "
+                         "purely mechanical reasons. Pad both arms identically "
+                         "by at least the largest shift applied.")
+    ap.add_argument("--max-abs-lag", type=int, default=None,
+                    help="Restrict to spectra whose measured |lag| is below this. "
+                         "Use to exclude the stretched studies, which a pure "
+                         "translation cannot correct in any case, and to keep "
+                         "--water-pad to a sane width.")
+    ap.add_argument("--lag-select-only", action="store_true",
+                    help="Use the lag file for row selection and padding but do "
+                         "NOT roll the spectra. This is the control arm: it fits "
+                         "exactly the same spectra, over exactly the same mask, "
+                         "with the correction withheld, so the only difference "
+                         "between the two runs is the correction itself.")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out-dir", default="results/synthesis/fit_gate")
     args = ap.parse_args()
@@ -171,8 +202,33 @@ def main():
     corpus = cn.open_corpus(ROOT / CORPUS, "unit_area", verbose=True)
     n_total, length = corpus.shape
     rng = np.random.default_rng(args.seed)
-    rows = np.sort(rng.choice(n_total, args.n_spectra, replace=False))
+    pool = np.arange(n_total)
+    if args.max_abs_lag is not None:
+        if not args.lag_correct:
+            raise SystemExit("--max-abs-lag needs --lag-correct to know the lags")
+        _lag = np.load(ROOT / args.lag_correct)
+        pool = pool[np.abs(_lag) <= args.max_abs_lag]
+        print(f"row pool restricted to |lag| <= {args.max_abs_lag}: "
+              f"{len(pool)}/{n_total} spectra")
+    rows = np.sort(rng.choice(pool, args.n_spectra, replace=False))
     Y = np.asarray(corpus[rows], dtype=np.float64)
+
+    if args.lag_correct and not args.lag_select_only:
+        lag = np.load(ROOT / args.lag_correct)
+        if len(lag) != n_total:
+            raise SystemExit(f"lag file has {len(lag)} rows, corpus has {n_total}")
+        sh = lag[rows].astype(int)
+        # A spectrum measured at lag s has its features at index (true + s), so
+        # rolling by -s puts them back. Sign verified in alignment_qc.py: the
+        # opposite sign gives group correlation -0.01 against 0.71 for this one.
+        for i, sv in enumerate(sh):
+            if sv:
+                Y[i] = np.roll(Y[i], -int(sv))
+        print(f"lag-corrected {int((sh != 0).sum())}/{len(sh)} spectra "
+              f"(median |shift| {int(np.median(np.abs(sh)))} pts, "
+              f"max {int(np.abs(sh).max())})")
+    elif args.lag_select_only:
+        print("CONTROL ARM: same rows and mask, correction withheld")
 
     fold = args.bin_fold
     ppm_b = bin_rows(ppm, fold)
@@ -182,7 +238,11 @@ def main():
     print(f"fitting at {len(ppm_b)} points ({hz_per_pt:.2f} Hz/point at 600 MHz)")
 
     water = np.zeros(len(ppm), bool)
-    water[WATER_LO:WATER_HI] = True
+    water[max(0, WATER_LO - args.water_pad):WATER_HI + args.water_pad] = True
+    if args.water_pad:
+        print(f"water window padded by {args.water_pad} pts each side "
+              f"-> excluding {max(0, WATER_LO - args.water_pad)}:"
+              f"{WATER_HI + args.water_pad}")
     fitmask = (~bin_rows(water.astype(float), fold).astype(bool)) & \
               (ppm_b >= SIGNAL_LO) & (ppm_b <= SIGNAL_HI)
     print(f"fit region: {int(fitmask.sum())} points "

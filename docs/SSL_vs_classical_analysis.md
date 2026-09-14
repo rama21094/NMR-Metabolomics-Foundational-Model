@@ -1666,6 +1666,15 @@ easy because near-duplicates exist *within* studies, and transfer fails partly b
 the representation was learned over a corpus that is internally inconsistent in the one
 coordinate that carries chemical meaning.
 
+**RETRACTION (2026-09-14).** The paragraph above and §5h of the PI outline both
+claimed this misalignment explains the fit-gate ceiling. It does not. A paired
+test on the same 60 spectra — same mask, correction the only difference — gives
+R² 0.486 → 0.493, p = 0.97, and the spectra that were actually displaced got
+*worse* (−0.042) while the already-aligned ones got better (+0.076). See
+PI_outline §5i. The misalignment is real; its claimed consequence is withdrawn.
+The bearing on §19 below rests on the same reasoning and should therefore be
+treated as an open question rather than a conclusion.
+
 **Status: a defect to fix, not a result to report.** The repair is deterministic —
 re-interpolate onto one ppm grid from the processing parameters, no free parameters. It
 requires re-deriving the corpus from the raw archive, because the row → study mapping
