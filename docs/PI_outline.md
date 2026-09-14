@@ -439,6 +439,63 @@ The same wrong constant also broke the first version of the re-referencing
 script: a 60-point FWHM ceiling rejected 97% of spectra. The guard was wrong,
 not the data.
 
+### 5l. RESULT (2026-09-14): per-metabolite shift fitting nearly clears the gate
+
+Implemented in [`fit_gate.py`](../code/synthesis/fit_gate.py) as `refine_shifts()`:
+coordinate descent alternating concentrations-given-positions with
+positions-given-concentrations. For each metabolite the partial residual is the
+spectrum minus every *other* fitted component, and its position is the lag
+maximising cross-correlation with that residual, searched only within
+`--shift-tol-ppm`. This is what BATMAN, Chenomx and rDolphin all do, and
+§inspect_residual_shifts measured the effect directly in this corpus.
+
+All arms paired on the same 20 spectra, 87-metabolite basis, cleaned corpus:
+
+| arm | R² full | vs no-shift |
+|---|---|---|
+| no shift | 0.417 | — |
+| **random** shift, ±0.03 ppm (NULL) | 0.402 | −0.015 (p = 0.11) |
+| fitted shift, ±0.03 ppm | **0.683** | +0.240 (p = 2e-6, **100% of spectra**) |
+| **random** shift, ±0.05 ppm (NULL) | 0.381 | −0.036 |
+| fitted shift, ±0.05 ppm | **0.758** | **+0.341** |
+
+**The null is the result.** 87 extra free parameters improve any fit somewhat,
+so `--shift-null` hands each metabolite a *random* shift within the same window.
+It gains **nothing** — it is slightly worse than no shift at all, and gets *worse
+still* as the window widens (0.402 → 0.381). Fitted shifts move the opposite way
+(0.683 → 0.758). Flexibility alone is not merely insufficient here, it is
+actively harmful, which is about as clean a separation as this kind of control
+can give.
+
+At ±0.05 ppm the bound is no longer binding: **0.0% of shifts sit at the limit**,
+against 25.9% at ±0.03. Median fitted |shift| is 0.033 ppm, p95 0.050.
+
+**Where this leaves the gate.** 0.758 against a 0.90 bar. Still not passed, but
+the remaining gap is **0.14**, from 0.48 before today's work. Ranked by effect:
+
+| intervention | ΔR² |
+|---|---|
+| per-metabolite shift (±0.05) | **+0.34** |
+| panel 43 → 87 | +0.026 |
+| 0 ppm re-referencing | −0.028 |
+| whole-spectrum lag correction | +0.017 (n.s.) |
+
+This also settles the §5i question properly. Alignment *was* the bottleneck —
+but per-*metabolite* alignment, not per-*spectrum*. The retraction in §5i stands
+exactly as written: rigid translation does nothing, and I was right to withdraw
+the claim that referencing explained the ceiling. What I could not then
+distinguish is now distinguished.
+
+**Two caveats before anyone quotes 0.758.**
+
+- ±0.05 ppm is 30 Hz at 600 MHz. That is at the generous end of what pH and
+  binding plausibly move a resonance, and some of the gain may be absorbing
+  lineshape and phase error rather than chemistry. The null makes over-fitting
+  an unlikely explanation, but "not over-fitting" is not the same as
+  "physically justified per metabolite".
+- n = 20. The earlier arms used n = 60. This needs re-running at full size
+  before it goes in a paper.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the
