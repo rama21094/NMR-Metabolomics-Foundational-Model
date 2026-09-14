@@ -1,10 +1,10 @@
 {
   "src": "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_EDTASuppressed_v4.npy",
-  "out": "data/mtbls563/MTBLS563_EDTASuppressed_v4_ref0ppm.npy",
+  "out": "data/mtbls563/MTBLS563_v4_xcorr.npy",
   "n": 142,
-  "scale_fitted": 1.0,
+  "scale_fitted": 1.0000000000000004,
   "sign": "-lag",
-  "median_corr_before": -0.10773496149396347,
-  "median_corr_after": 0.6077612253479823,
-  "median_shift": 791
+  "median_corr_before": -0.10781058639104298,
+  "median_corr_after": 0.6210306943763932,
+  "median_shift": 790
 }

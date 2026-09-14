@@ -1,6 +1,6 @@
 {
   "src": "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_EDTASuppressed_v4.npy",
-  "out": "data/mtbls326/MTBLS326_v4_xcorr.npy",
+  "out": "data/mtbls326/MTBLS326_EDTASuppressed_v4_xcorr.npy",
   "n": 42,
   "scale_fitted": 1.0300000000000005,
   "sign": "-lag",

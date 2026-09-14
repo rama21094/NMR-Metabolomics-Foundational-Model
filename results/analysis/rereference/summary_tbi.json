@@ -1,8 +1,10 @@
 {
+  "src": "data/tbi_tirupati/aligned_128K_TBI_Tirupati_WS625to680Zero.npy",
+  "out": "data/tbi_tirupati/TBI_v4_xcorr.npy",
   "n": 231,
-  "zero_idx": 97032,
-  "found_pct": 85.71428571428571,
-  "median_height_frac": 0.6285647557114813,
-  "median_fwhm_pts": 28,
-  "n_stretched": 198
+  "scale_fitted": 1.0,
+  "sign": "-lag",
+  "median_corr_before": 0.22255846519538564,
+  "median_corr_after": 0.5313475517022725,
+  "median_shift": -528
 }

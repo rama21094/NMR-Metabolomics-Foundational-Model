@@ -590,6 +590,71 @@ Next, in order: per-block ridge or explicit orthogonalisation of the envelope
 against the metabolite block; then prune the panel on the evidence
 `fit_gate.py` already emits; only then judge whether chemistry is still missing.
 
+### 5n. CORRECTION (2026-09-14): the corpus has no genuine 0 ppm reference standard
+
+Chasing MTBLS326's unexplained fall in the overlap diagnostic exposed an error in
+§5j. I reported "there IS a 0 ppm reference peak — in 97.5% of spectra". **That
+was wrong in its most important respect.** A feature is there; it is not a
+chemical-shift reference.
+
+**The 2×2 that started it.** Overlap of each cohort against the corpus, crossing
+cohort alignment with corpus alignment:
+
+| | corpus UNaligned | corpus ALIGNED |
+|---|---|---|
+| MTBLS326 UNaligned | 0.671 | **0.806** |
+| MTBLS326 ALIGNED | 0.405 | 0.531 |
+| Barth UNaligned | 0.719 | 0.520 |
+| Barth ALIGNED | 0.232 | **0.797** |
+
+Barth behaves as expected — aligning both is best. **MTBLS326 does the opposite:
+it matches the aligned corpus best when left alone.** My +882 point shift moved
+it off an axis it was already on.
+
+**What the near-zero region actually contains**, from median-normalised spectra:
+
+| dataset | feature | height | FWHM |
+|---|---|---|---|
+| corpus | +0.0023 ppm | 0.1129 | **167 pts (15.3 Hz)** |
+| corpus | +0.0000 ppm | 0.1121 | **6.5 pts (0.6 Hz)** |
+| MTBLS326 | +0.1368 ppm | 0.1427 | 30 pts (2.8 Hz) |
+| BrC-T2D | −0.2681 ppm | 0.1339 | 52 pts (4.8 Hz) |
+
+A real serum resonance here is **35 points, 3.2 Hz** (§5k). So:
+
+- MTBLS326 and BrC-T2D have **genuine reference standards** — 2.8 and 4.8 Hz,
+  physical linewidths, sharp and dominant.
+- The corpus has a **15 Hz broad hump** and a **0.6 Hz digital spike**, of nearly
+  equal height (0.1129 vs 0.1121). Neither is a reference resonance: 15 Hz is far
+  too broad and 0.6 Hz is narrower than any real line — it is one or two points.
+- Because the two are within 1% of each other in height, `locate()`'s argmax was
+  effectively **flipping a coin** between them, spectrum by spectrum.
+
+**What this does and does not invalidate.**
+
+- **The internal alignment stands.** The broad feature is real and reproducible
+  within the corpus, so anchoring on it genuinely made the corpus self-consistent
+  — IQR 768 → 35 points, and the heatmap step is gone. That result is unaffected.
+- **The absolute axis does not.** The corpus axis is offset from true 0 ppm by
+  roughly 0.13 ppm (877 points), inferred from MTBLS326, which matches the corpus
+  best when unshifted. §5j's claim that the corpus "can be re-referenced from the
+  spectra themselves" is true for internal consistency and **false for absolute
+  referencing**.
+- **Cohort alignment is unreliable either way.** Cross-correlation to the corpus
+  median is no better: it disagrees with the peak anchor by 3,700 points on
+  BrC-T2D and 2,500 on TBI, and its own median correlation is only 0.23–0.50
+  because the cohorts genuinely differ from the corpus.
+
+**What I am NOT doing.** Picking, per cohort, whichever anchor maximises the
+overlap score. That optimises the metric being reported and would be circular.
+
+**Recommended next step**, for a decision rather than for me to choose: redefine
+the canonical zero using the cohorts that have a genuine standard (MTBLS326,
+BrC-T2D), shift the corpus by the corresponding ~877 points, and re-audit. That
+puts every dataset on one absolute axis rather than on the corpus's arbitrary
+one. Barth and TBI show broad features (134 and similar FWHM) so they may have no
+real standard either, and would still need cross-correlation.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the

@@ -1,8 +1,10 @@
 {
+  "src": "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_EDTASuppressed_v4.npy",
+  "out": "data/BrC_T2D/BrC_T2D_v4_xcorr.npy",
   "n": 78,
-  "zero_idx": 97032,
-  "found_pct": 94.87179487179486,
-  "median_height_frac": 0.2047527623845523,
-  "median_fwhm_pts": 34,
-  "n_stretched": 74
+  "scale_fitted": 1.0,
+  "sign": "-lag",
+  "median_corr_before": -0.006213683375493875,
+  "median_corr_after": 0.5799473083393938,
+  "median_shift": -3696
 }
