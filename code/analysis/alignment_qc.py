@@ -51,7 +51,14 @@ BAND = (72000, 84000)          # aliphatic, clear of the zeroed water window
 PPM_HI, PPM_LO = 14.82, -5.20  # majority axis (MTBLS798)
 NPT = 131_072
 PPM_PER_PT = (PPM_HI - PPM_LO) / NPT
-LINEWIDTH_PTS = 0.002 / PPM_PER_PT      # ~13 points
+# MEASURED, not assumed. An earlier version used an idealised 1.2 Hz line
+# (0.002 ppm, ~13 points). Fitting FWHM to metabolite peaks in the aliphatic
+# region across 300 spectra gives a median of 35 points = 0.0054 ppm = 3.2 Hz at
+# 600 MHz, which is a realistic serum CPMG linewidth. Everything expressed "in
+# linewidths" was therefore overstated by a factor of 2.7; an 800-point
+# displacement is ~23 linewidths, not ~62. Still far more than enough for peaks
+# to miss each other entirely, but the corrected figure is the one to quote.
+LINEWIDTH_PTS = 35.0
 
 INK, ACC, WARN, MUTED = "#1f2933", "#2f6f8f", "#b04a3a", "#6b7480"
 
@@ -151,7 +158,8 @@ def fig_heatmap(X, lag, lo, hi, path):
     b.axvspan(-LINEWIDTH_PTS, LINEWIDTH_PTS, color=INK, alpha=0.20)
     b.set_ylim(n, 0)
     b.set_xlabel("displacement (points)")
-    b.set_title("1 linewidth = 13 pts", fontsize=10, loc="left", color=MUTED)
+    b.set_title(f"1 linewidth = {LINEWIDTH_PTS:.0f} pts (measured)", fontsize=10,
+                loc="left", color=MUTED)
     b.set_yticks([])
     for sp in ("top", "right"):
         b.spines[sp].set_visible(False)
@@ -219,6 +227,9 @@ def fig_overlay(X, lag, path, centre=78000, half=3000, n_per=60, seed=0):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--corpus", default=CORPUS,
+                    help="corpus .npy to audit; point this at the re-referenced "
+                         "file to verify the fix")
     ap.add_argument("--skip-measure", action="store_true")
     ap.add_argument("--flag-beyond", type=float, default=2.0,
                     help="flag spectra beyond this many linewidths for review")
@@ -226,9 +237,11 @@ def main() -> None:
 
     OUT.mkdir(parents=True, exist_ok=True)
     FIGS.mkdir(parents=True, exist_ok=True)
-    X = np.load(ROOT / CORPUS, mmap_mode="r")
+    X = np.load(ROOT / args.corpus, mmap_mode="r")
+    tag = "" if args.corpus == CORPUS else "_" + Path(args.corpus).stem[-12:]
 
-    lag_p, peak_p = OUT / "lag_all.npy", OUT / "corr_all.npy"
+    lag_p = OUT / f"lag_all{tag}.npy"
+    peak_p = OUT / f"corr_all{tag}.npy"
     if args.skip_measure and lag_p.exists():
         lag, peak = np.load(lag_p), np.load(peak_p)
     else:
@@ -240,7 +253,7 @@ def main() -> None:
 
     dev = np.abs(lag - np.median(lag))
     flag = dev > args.flag_beyond * LINEWIDTH_PTS
-    np.save(OUT / "flagged_rows.npy", np.where(flag)[0])
+    np.save(OUT / f"flagged_rows{tag}.npy", np.where(flag)[0])
 
     print(f"\ndisplacement, all {len(lag):,} spectra")
     q = np.percentile(lag, [0, 5, 25, 50, 75, 95, 100])
@@ -253,7 +266,7 @@ def main() -> None:
           f"({100 * flag.mean():.1f}%)")
     print(f"  low-confidence correlations (<0.5): {(peak < 0.5).sum():,}")
 
-    (OUT / "summary.json").write_text(json.dumps({
+    (OUT / f"summary{tag}.json").write_text(json.dumps({
         "n": int(len(lag)), "band": list(BAND),
         "linewidth_pts": float(LINEWIDTH_PTS),
         "median_lag": float(np.median(lag)), "sd_lag": float(lag.std()),
@@ -261,8 +274,8 @@ def main() -> None:
         "n_flagged": int(flag.sum()),
     }, indent=2))
 
-    fig_heatmap(X, lag, *BAND, path=FIGS / "fig_alignment_heatmap.png")
-    fig_overlay(X, lag, FIGS / "fig_alignment_overlay.png")
+    fig_heatmap(X, lag, *BAND, path=FIGS / f"fig_alignment_heatmap{tag}.png")
+    fig_overlay(X, lag, FIGS / f"fig_alignment_overlay{tag}.png")
     print(f"\nper-spectrum lags: {lag_p.relative_to(ROOT)}")
     print("inspect flagged rows with:  streamlit run code/analysis/spectra_viewer_app.py")
 

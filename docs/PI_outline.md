@@ -386,6 +386,59 @@ Caveats, stated rather than buried:
   to be the fit-gate bottleneck. A better alignment method does not change that
   result; it makes the corpus correct, which is worth doing for its own sake.
 
+### 5k. RESULT (2026-09-14): 0 ppm re-referencing built and verified
+
+Script: [`code/preprocessing/rereference_zero_ppm.py`](../code/preprocessing/rereference_zero_ppm.py).
+Output: `data/combined/..._Water_EDTA_Suppressed_ref0ppm.npy`. Verified by
+re-running [`alignment_qc.py`](../code/analysis/alignment_qc.py) with `--corpus`.
+
+Each spectrum is translated so its own 0 ppm singlet lands on one canonical
+index. Nothing else is changed — no rescaling, no smoothing, no regridding. The
+singlet was located in **95.9%** of spectra; the remaining 4.1% fall back to the
+cross-correlation displacement, and the fallback is recorded per row rather than
+hidden.
+
+**Before/after, both scored with the same measured linewidth:**
+
+| | edge-anchored | 0 ppm referenced |
+|---|---|---|
+| **IQR of displacement** | **768 pts** | **35 pts** |
+| sd | 1,675 pts | 1,361 pts |
+| beyond 1 linewidth | 50.6% | **28.3%** |
+| beyond 2 linewidths | 49.6% | **19.8%** |
+| beyond 10 linewidths | 48.9% | **9.6%** |
+| beyond 50 linewidths | 10.0% | 8.3% |
+
+The interquartile range falling from 768 points to 35 — one linewidth — is the
+result. In the heatmap the step that split the corpus in two is gone, and the
+metabolite ridges run continuously through ~92% of rows.
+
+**The stated acceptance criterion was >95% within 2 linewidths. We reached 80.2%.
+It is not met**, and the shortfall decomposes cleanly:
+
+- **~8–10% beyond 10 linewidths** — the stretched studies plus the detection
+  failures. A translation cannot fix a scale difference; these need resampling
+  or exclusion (deferred by decision).
+- **~10% between 2 and 10 linewidths** — this is the interesting remainder, and
+  it is very likely *not* a defect. After correct referencing, what is left is
+  real chemical-shift variation: pH, ionic strength and protein binding move
+  each metabolite by a different amount. That is exactly the effect
+  per-metabolite shift fitting exists to model (§5i), and no rigid translation
+  can remove it.
+
+**A measurement correction that affects earlier claims.** The constant
+`LINEWIDTH_PTS` was an *assumption* — an idealised 1.2 Hz line, 13 points. Fitting
+FWHM to metabolite peaks across 300 spectra gives a median of **35 points
+(0.0054 ppm, 3.2 Hz at 600 MHz)**, a realistic serum CPMG linewidth. Everything
+this project has expressed "in linewidths" was therefore **overstated by 2.7×**:
+the 800-point displacement is **~23 linewidths, not ~62**. The defect is still
+large enough that peaks miss each other entirely, and no conclusion changes, but
+23 is the number to quote from here on.
+
+The same wrong constant also broke the first version of the re-referencing
+script: a 60-point FWHM ceiling rejected 97% of spectra. The guard was wrong,
+not the data.
+
 ## 6. Where our findings and the outline converge
 
 §19 established that masked reconstruction is **nearly free** on this corpus — copying the
