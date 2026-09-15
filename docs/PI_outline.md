@@ -1218,3 +1218,17 @@ is a scientific question, not an alignment one, and it is open.
 **A correction to 5p.** The claim "Barth's -1.28 ppm is far too large to be
 biology -- it is an axis defect" inverted the truth. The large number was an
 artefact of correlating dissimilar chemistry; the real axis defect was 278 points.
+
+**Why the sharp rule stops at the cohorts.** Applying `--max-fwhm 60` to the
+corpus finds a qualifying line in only **24 of 400** sampled spectra (6%), and
+their implied shifts have an IQR of 2,479 points -- i.e. the 24 are not finding a
+common feature. Under the old 18 Hz ceiling the corpus "finds" a peak in 388/400,
+but at a median FWHM of 9.0 Hz: a hump, not a standard. This is 5n confirmed by a
+second route -- **the corpus has no genuine reference standard**, and its zero
+remains internally consistent but arbitrary.
+
+So the setting is a property of the dataset, not a global default: `--max-fwhm 60`
+for cohorts that have a real standard (Barth 2.0 Hz, MTBLS326 1.5 Hz, BrC-T2D
+3.2 Hz), and the permissive ceiling for the corpus, which has none.
+`corpus_v4_ref0ppm_clean.npy` is therefore unchanged and no downstream result is
+invalidated.
