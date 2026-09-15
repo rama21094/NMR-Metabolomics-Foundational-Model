@@ -26,3 +26,6 @@ data/combined/*_ref0ppm.npy
 data/combined/*_ref0ppm_clean.npy
 data/combined/corpus_v4_ref0ppm*.npy
 data/*/*_ref0ppm.npy
+node_modules/
+package-lock.json
+package.json
