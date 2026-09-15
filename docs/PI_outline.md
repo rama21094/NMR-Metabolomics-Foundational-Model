@@ -1326,3 +1326,56 @@ it is a chemistry difference in that region rather than a per-cohort axis fault.
 **BrC-T2D at 1,670 is the open concern** and its submitter metadata should be
 requested next, specifically spectral width, spectrometer frequency, acquired
 points and chemical shift reference compound.
+
+### 5t. MTBLS326 and MTBLS563 metadata: both share the corpus's spectral width
+
+ISA-Tab metadata for both cohorts arrived. Neither has Barth's defect.
+
+| | corpus | MTBLS326 | MTBLS563 | Barth |
+|---|---|---|---|---|
+| spectral width | 20.024 ppm | **20.02 ppm** | **20 ppm** | 12.0308 ppm |
+| spectrometer | 600 MHz | 800.21 MHz | 700 MHz | 950 MHz |
+| acquired points | 128k | 64k | 64 K | 64k |
+| pulse sequence | CPMG (99.7%) | CPMG, 400 ms echo | cpmgpr1d, 9.6 ms echo | cpmgpr1d, 400 us echo |
+| matrix | serum/plasma | serum | plasma (100 ul + buffer) | plasma |
+| shift reference | none (5n) | **TSP, co-axial insert (external)** | **indirect, via anomeric glucose 5.204 ppm** | formate, 8.44 ppm |
+
+**Confirmed empirically before being believed.** Resampling MTBLS326 and MTBLS563
+from a 12 ppm axis onto the corpus's makes them *worse* -- 0.577 -> 0.285 and
+0.591 -> 0.277 -- which is what must happen if they already share the corpus's
+ppm-per-point. Only Barth needed it. The metadata and the data agree in all three
+cases.
+
+**MTBLS326's reference is external.** TSP in a co-axial insert, not in the sample.
+That is exactly consistent with what the anchor measures: 100% detection at 1.5 Hz
+FWHM. Our 0 ppm anchor is valid for this cohort.
+
+**MTBLS563 has no TSP in the sample at all** -- it was "referenced indirectly to
+TSP via the anomeric glucose doublet at 5.204 ppm". This finally explains the 0.7%
+detection rate that forced it onto the cross-correlation route (5o): there is no
+0 ppm signal to find, by design.
+
+**An attempt to use that glucose reference, which FAILED.** 5.204 ppm falls inside
+the zeroed water block (5.276-4.435 ppm), so v4 cannot carry it -- but
+`MTBLS563_aligned_spectra.npy` predates the zeroing and is row-for-row identical
+to v4 (corr 1.0000). A sharp feature was found there at 5.3817 ppm, IQR 0.0055 ppm,
+in 111/142 spectra, implying a +1,163 point shift. It is **not** the anomeric
+doublet: it gives corr +0.164 against the cross-correlation route's +0.591, and
+puts lactate at 1.2975 ppm against a literature 1.33 (the cross-correlation route
+gives 1.3545). The region by the water edge is too crowded for reliable picking.
+**MTBLS563 keeps its cross-correlation alignment of +790.** Recorded because the
+principled route losing to the empirical one is worth knowing.
+
+**A trap: `*_common_ppm_axis.npy` is stale.** Both cohorts carry one, and both say
+10.5 to -1.5 ppm, SW 12.0000 -- which is neither the corpus's axis nor, as the
+resampling test above shows, the axis their own v4 files are on. They predate
+`align_spectra_to_longest()`. **Do not use them.** They very nearly sent this
+analysis in the wrong direction, and only the empirical test caught it.
+
+**Barth's spectral width re-checked against the data.** Scanning SW for the value
+that best aligns resampled Barth to the corpus gives an optimum at 12.045 ppm with
+corr +0.643; the metadata's 12.0308 gives **+0.644**. The metadata value is already
+optimal and the resampling needs no adjustment.
+
+**Remaining gap: BrC-T2D**, the one cohort flagged suspect by
+`check_spectral_width.py` (spread 1,670) and the only one without metadata.
