@@ -15,19 +15,19 @@ const doc=new Document({styles:{default:{document:{run:{font:F,size:19}}}},secti
  properties:{page:{size:{width:12240,height:15840},margin:{top:720,bottom:640,left:900,right:900}}},
  children:[
   new Paragraph({spacing:{after:40},children:[new TextRun({text:"Spectral alignment: what the whole-corpus view showed",font:F,size:26,bold:true,color:"1F3864"})]}),
-  p("Checking all 9,623 pre-training spectra and the five evaluation cohorts — 15 September 2026",{i:true,size:17,color:"595959",after:160}),
+  p("Checking all 9,623 pre-training spectra and the four evaluation cohorts — 15 September 2026",{i:true,size:17,color:"595959",after:160}),
 
   hdr("Your suggestion, implemented"),
   runs([{text:"You asked that we look at all 9,000+ spectra by eye rather than trust summary statistics. We did, but as a single image instead of a scroll: "},
         {text:"each spectrum is one pixel row",bold:true},
-        {text:", so the whole corpus and all five cohorts fit on one page (Figure 1, attached). A vertical stripe is a metabolite peak; where a stripe steps sideways, those spectra are misaligned. This is both feasible at 9,623 spectra and more sensitive than scrolling, because a 30-point shift is invisible in a single trace but obvious as a step across thousands of stacked rows."}]),
+        {text:", so the whole corpus and all four evaluation cohorts fit on one page (Figure 1, attached). A vertical stripe is a metabolite peak; where a stripe steps sideways, those spectra are misaligned. This is both feasible at 9,623 spectra and more sensitive than scrolling, because a 30-point shift is invisible in a single trace but obvious as a step across thousands of stacked rows."}]),
 
   hdr("Finding 1 — the corpus was aligned by data point, not by chemical shift"),
   runs([{text:"The left panel shows a clear horizontal break part-way down the corpus. The spectra had been put on a common "},
         {text:"point count",bold:true},
         {text:" rather than a common ppm axis, so studies acquired with different parameters were silently offset against each other. Anchoring every spectrum on its near-0 ppm feature fixed it: the interquartile range of displacement fell from "},
         {text:"768 points to 35",bold:true},
-        {text:" — about one linewidth. The right panel is the result."}]),
+        {text:" — about one linewidth. The middle panel is the result, and the right-hand strip shows the reference region itself."}]),
 
   hdr("Finding 2 — the cohorts were not misaligned; they were on different axes"),
   runs([{text:"Shifting the cohorts onto the corpus never worked, and the reason was not the size of the shift. Their acquisition metadata, which we obtained this week, shows different "},
@@ -38,11 +38,16 @@ const doc=new Document({styles:{default:{document:{run:{font:F,size:19}}}},secti
     row(["Pre-training corpus","20.024 ppm","600 MHz","0 ppm re-referencing","— (reference)"]),
     row(["Barth","12.0308 ppm","950 MHz","resampled x1.664","-0.11  →  +0.64"],{shade:"F2F2F2"}),
     row(["BrC-T2D","20.1587 ppm","800 MHz","resampled x0.993","+0.13  →  +0.26"]),
-    row(["MTBLS326","20.02 ppm","800 MHz","none needed","+0.16"],{shade:"F2F2F2"}),
-    row(["MTBLS563","20.0 ppm","700 MHz","none needed","+0.59"]),
+    row(["MTBLS326","20.02 ppm","800 MHz","-0.08 ppm offset","+0.16  \u2192  +0.68"],{shade:"F2F2F2"}),
+    row(["MTBLS563","20.0 ppm","700 MHz","none needed","+0.64"]),
     row(["TBI","unknown","unknown","none — excluded","n/a"],{shade:"F2F2F2"}),
   ]),
-  p("Barth was the extreme case: at 950 MHz over a 12 ppm sweep, its peaks are spread 1.66x wider in data points than the corpus's. Resampling turned the worst-agreeing cohort into one of the best.",{size:17,i:true,after:120}),
+  p("Barth was the extreme case: at 950 MHz over a 12 ppm sweep, its peaks are spread 1.66x wider in data points than the corpus's. Resampling turned the worst-agreeing cohort into one of the best. MTBLS326 needed no resampling but sat 0.08 ppm off, because its reference standard is held in a co-axial insert rather than dissolved in the serum; an external standard carries a small susceptibility offset.",{size:17,i:true,after:120}),
+
+  hdr("What the figure still shows as unaligned"),
+  runs([{text:"A band of spectra at the top and bottom of the corpus panel remains misaligned, and this is not noise: "},
+        {text:"383 spectra from three studies were acquired over a 12-13 ppm sweep instead of 20 ppm",bold:true},
+        {text:" (stretch factors 1.54-1.67). They are the same defect as Barth, they are identified, and the correction is the one already validated on Barth. Roughly 4% of the corpus, and fixing them is the next step."}]),
 
   hdr("What this changes, and what is still open"),
   runs([{text:"The corpus is now internally consistent, and four of five cohorts sit on its axis. This removes a confound that would have depressed every transfer result, so the planned experiments should be re-run on the corrected data. "},
