@@ -1446,3 +1446,117 @@ is excluded from evaluation.
 
 Agreement with the corpus median, 2.0-3.8 ppm: Barth -0.112 -> **+0.644**,
 BrC-T2D +0.125 -> **+0.260**, MTBLS326 +0.158, MTBLS563 +0.591.
+
+### 5v. ROOT CAUSE, from the pipeline source
+
+`fromSSD/read1D_align.py` settles what we had been reverse-engineering all week.
+Two distinct defects, both visible in ~20 lines.
+
+**1. Referencing was thrown away.** Line 161 builds a correct per-spectrum axis
+from the Bruker processing parameters:
+
+```python
+ppm_axis = np.linspace(offset, offset - sw/sfo1, si)
+```
+
+and line 232 then discards it, re-referencing every spectrum so that its
+**rightmost detected peak** is declared 0 ppm:
+
+```python
+shift = reference_ppm - rightmost_peak_ppm      # reference_ppm = 0.0
+aligned_ppm_axis = ppm_axis + shift
+```
+
+`find_rightmost_peak` returns whatever peak is furthest right above a prominence
+threshold. That is not TSP, and it is not the same compound from spectrum to
+spectrum. **This is why `procs:OFFSET` does not survive the pipeline** (5u) and why
+the corpus has no usable absolute axis (5n).
+
+**2. Each spectrum was stretched onto its own range.** Line 654 calls
+`resample_to_length(..., target_points=131072)`, whose body is:
+
+```python
+new_x = np.linspace(start, end, target_points)   # start, end = THIS spectrum's limits
+```
+
+So a 12 ppm spectrum and a 20 ppm spectrum both end up with 131,072 points, but
+spanning different ppm. That is the "stretch" exactly: ppm-per-point varies by
+study, and a peak occupies 33 points at 20 ppm against 55 at 12 ppm.
+
+**The common axis was computed and never used.** Line 612 does build one:
+
+```python
+common_ppm_axis = np.linspace(ppm_range[1], ppm_range[0], num_points)
+```
+
+but `grep` shows it is only returned and saved -- never passed to an interpolator.
+Line 798 then saves whatever `ppm_axis` is in scope, which is why
+`common_ppm_axis_Workbench_Barth_Syndrome.npy` holds a real Bruker-derived axis
+(SW 12.0309, confirming the 12.0308 from the submitter sheet to four decimals)
+while the generic `*_common_ppm_axis.npy` files hold the untouched 10.5/-1.5/12.0
+default. **The fix is one line**: interpolate onto `common_ppm_axis` instead of
+`np.linspace(start, end, target_points)`.
+
+The corpus's own stored axis is SW **20.0307**, first point **+14.7042** -- against
+the 20.024 / 14.8237 assumed throughout this document. The width is right to 0.03%
+(43 points across the spectrum, negligible); the offset differs by 0.12 ppm, which
+is immaterial because the rightmost-peak re-referencing above made the absolute
+zero arbitrary anyway.
+
+### 5w. Corpus provenance recovered by content matching
+
+To resample the stretched spectra we need each corpus row's spectral width, which
+means knowing its source row. **A sixth attempt to infer width from the spectra
+failed first**, and is recorded with the other five in `cohort_axes.py`: a
+classifier restricted to only the six widths actually present in the data put
+BrC-T2D at 30.025 ppm in **25 of 25 rows** with a confident margin, when the truth
+is 20.024. Barth, MTBLS326 and MTBLS563 it got right. One confident failure is
+enough -- it was not used.
+
+The corpus was built by *selecting* rows from source arrays, so the spectra are
+their own join key. `code/analysis/map_corpus_rows_to_studies.py` fingerprints 600
+points from 0.5-1.9 ppm (clear of the zeroed water window and the EDTA region),
+unit-normalises, and matches against each source array:
+
+| | rows |
+|---|---|
+| matched at correlation > 0.999 | **9,666 / 9,670** |
+| -> Plasma_NoSuppress (has per-row Bruker parameters) | 6,747 |
+| -> WSNoise (serum) | 2,145 |
+| -> Workbench_CPMG | 778 |
+
+6,747 matches the 6,746 "plasma_unique_EDTASuppressed" and 2,145 the 2,146
+"serum_unique_WS625to680Zero" from the original provenance work, which is an
+independent check that the matching is right.
+
+**Spectral width for the 6,744 rows where it is now known:**
+
+| SW (ppm) | field | SI | n | |
+|---|---|---|---|---|
+| 20.017 / 20.024 / 20.031 | 600 | 131072 | 6,636 | fine, spread 0.07% |
+| 12.981 | 700 | 131072 | 100 | **resample** |
+| 16.699 | 600 | 16384 | 3 | **resample** |
+| 30.025 | 600 | 262144 | 4 | **resample** |
+| 25.744 | 700 | 131072 | 1 | **resample** |
+
+**108 rows (1.6%) need resampling**, and there are more distinct bad widths than
+the three studies 5p named -- 16.699, 30.025 and 25.744 were not on that list.
+
+**Still open: 2,923 rows have no spectral width yet.** The two 11.988 ppm studies
+(MTBLS10958, MTBLS11188, 185 spectra) are serum and sit in this group. What is
+needed:
+
+- **WSNoise (2,145 rows)**: the paths file written alongside
+  `aligned_nmr_spectra_128K_WSNoise.npy`. `spectra_paths.txt` is the serum paths
+  file but has 3,577 lines against 2,148 array rows, so it is pre-deduplication.
+  With the matching paths file, `build_row_mapping.py` joins straight to
+  `bruker_params_SerumNMRData.csv`, which already carries `acqu_SW` per experiment
+  (MTBLS10958 shows 11.9878 there).
+- **Workbench_CPMG (778 rows)**: 80 source studies identified by folder
+  (ST000826 n=229, ST000306 n=111, ST000939 n=90, ST000104 n=68, ST000051 n=56,
+  ST000892, ...). Their `acqus` files were not transferred, so their widths need
+  either the raw folders or `extract_bruker_params.py` run against them.
+
+Matching against `serum_mtbls_aligned_spectra.npy`, which does carry a study map,
+returns **zero** matches at >0.99 -- it is a different processing lineage, not the
+source of these rows.
