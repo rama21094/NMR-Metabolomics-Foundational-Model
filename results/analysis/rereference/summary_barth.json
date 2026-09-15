@@ -1,8 +1,8 @@
 {
   "n": 40,
   "zero_idx": 97032,
-  "found_pct": 95.0,
-  "median_height_frac": 0.3453449166128938,
-  "median_fwhm_pts": 135,
-  "n_stretched": 40
+  "found_pct": 87.5,
+  "median_height_frac": 0.0658786896154389,
+  "median_fwhm_pts": 21,
+  "n_stretched": 0
 }

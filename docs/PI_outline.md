@@ -1155,3 +1155,66 @@ This is the sharpest evidence yet for 5n: anchoring on a real 0 ppm standard doe
 **not** put a cohort onto the corpus axis, because the corpus's own zero is not a
 standard. Barth's -1.28 ppm is far too large to be biology -- it is an axis
 defect, not diversity.
+
+### 5q. Barth's axis is fixed, and the offset was +278 points, not -8,358
+
+5p reported that Barth needed an extra rigid shift of -8,358 points (-1.28 ppm)
+to agree with the corpus, and called it an axis defect. **That figure was wrong**,
+and so was the reasoning that produced it.
+
+**Translation is the wrong model for Barth.** Fitting a shift independently in
+five sub-bands gives +11,621 / +3,021 / -11,896 / -7,213 / -4,291 -- a spread of
+23,517 points (3.59 ppm) -- while each sub-band fits well on its own (0.53-0.90).
+A joint scale+shift search does no better: its optimum sits pinned at the scan
+boundary (scale 0.662, shift +19,820) for a correlation of 0.476 against 0.454
+for a plain rigid shift. Every model tops out below 0.48. When fits disagree that
+badly the fits are the wrong instrument, so we plotted the two medians
+(`results/figures/fig_barth_vs_corpus.png`).
+
+**Barth is a different sample type.** It has no lipid envelope at 0.9/1.3 ppm, no
+glucose envelope at 3.4-4.0 ppm, and sharp lines throughout where the corpus has
+broad serum features. The corpus is serum and plasma; Barth is evidently an
+extract. The low correlation is chemistry, not axis, and no shift can remove it.
+Forcing a -8,358 point shift would have been fitting noise between chemically
+dissimilar spectra.
+
+**Its axis was nevertheless wrong, for a different reason -- a bug in `locate()`.**
+The function took `argmax` of the search window and only *then* rejected the peak
+for being too wide, so a broad hump sitting near the standard hides it entirely.
+Barth's tallest reference-region feature is a **12.6 Hz hump at 0.244 ppm**; the
+anchor locked onto it and shifted the cohort +1,600 points (0.244 ppm exactly).
+
+`locate()` now takes the tallest peak that is **narrow enough**, considering every
+local maximum rather than only the global one. With `--max-fwhm 60` (5.5 Hz) Barth
+anchors on its real standard:
+
+| | 0.244 ppm hump (old pick) | 0.042 ppm line (correct) |
+|---|---|---|
+| FWHM | 12.65 Hz | **2.02 Hz** |
+| present in | -- | **40/40 spectra** |
+| ppm spread across spectra | -- | **IQR 0.0017 ppm (11 pts)** |
+| applied shift | +1,600 | **+278** (p5-p95 266-295) |
+
+A 2 Hz line at a fixed position in every spectrum is a reference standard. Barth's
+internal spread is now the tightest of any dataset here, p5-p95 = **12 points**.
+
+No regression elsewhere: MTBLS326 is unchanged (100% found, 1.5 Hz, +882) and
+BrC-T2D improves slightly (94.9% -> 98.7%, 3.2 Hz, -1,753).
+
+Internal spread, p5-p95 in points:
+
+| cohort | before | after 5o | after 5q |
+|---|---|---|---|
+| Barth | 29 | 15 | **12** |
+| MTBLS326 | 228 | 67 | 67 |
+| MTBLS563 | 233 | 233 | 233 |
+| BrC-T2D | 78 | 52 | **37** |
+
+**What this does not fix.** Barth still correlates -0.112 with the corpus, and
+that is now the expected and correct answer: its axis is right and its chemistry
+differs. Whether a cohort of a different sample type belongs in this evaluation
+is a scientific question, not an alignment one, and it is open.
+
+**A correction to 5p.** The claim "Barth's -1.28 ppm is far too large to be
+biology -- it is an axis defect" inverted the truth. The large number was an
+artefact of correlating dissimilar chemistry; the real axis defect was 278 points.

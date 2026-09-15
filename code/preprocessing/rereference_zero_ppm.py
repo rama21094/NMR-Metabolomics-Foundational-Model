@@ -89,15 +89,24 @@ def fwhm_points(y: np.ndarray, apex: int) -> int:
 def locate(win: np.ndarray, min_height: float, max_fwhm: int):
     """Return (sub-point apex index within win, height, fwhm) or None."""
     y = win - np.median(win)
-    apex = int(np.argmax(y))
-    if apex <= 1 or apex >= len(y) - 2:
+
+    # Take the tallest peak that is NARROW ENOUGH, not the tallest peak full
+    # stop. Picking argmax first and rejecting on width afterwards means a broad
+    # hump sitting over the real standard hides it completely: Barth's tallest
+    # reference-region feature is a 12.6 Hz hump at 0.244 ppm, and under the old
+    # order the anchor locked onto that and shifted the cohort 1,600 points. The
+    # genuine standard is a 2.0 Hz line at 0.042 ppm present in 40/40 spectra
+    # with an 11-point spread, and it is found only by considering candidates
+    # beyond the maximum.
+    cand = []
+    for i in range(2, len(y) - 2):
+        if y[i] > 0 and y[i] >= y[i - 1] and y[i] > y[i + 1]:
+            w = fwhm_points(y, i)
+            if w <= max_fwhm:
+                cand.append((float(y[i]), i, w))
+    if not cand:
         return None
-    h = float(y[apex])
-    if h <= 0:
-        return None
-    w = fwhm_points(y, apex)
-    if w > max_fwhm:
-        return None
+    h, apex, w = max(cand)
     # parabolic refinement on the apex and its two neighbours
     a, b, c = y[apex - 1], y[apex], y[apex + 1]
     denom = a - 2.0 * b + c

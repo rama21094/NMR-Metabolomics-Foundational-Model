@@ -1,0 +1,11 @@
+{
+  "src": "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_v4.npy",
+  "out": "/tmp/claude-303029/-home-nmrbox-0012-shasharma-Desktop-NMR-Metabolomics/c3b6ace1-c28d-46ec-af66-07a121e95987/scratchpad/barth_xcorr.npy",
+  "n": 40,
+  "scale_fitted": 1.0,
+  "sign": "-lag",
+  "median_corr_before": 0.02366854967856694,
+  "median_corr_after": 0.6380529258760456,
+  "rigid": true,
+  "median_shift": -6759
+}
