@@ -1560,3 +1560,38 @@ needed:
 Matching against `serum_mtbls_aligned_spectra.npy`, which does carry a study map,
 returns **zero** matches at >0.99 -- it is a different processing lineage, not the
 source of these rows.
+
+### 5x. The 108 identifiable stretched corpus rows are resampled
+
+`code/preprocessing/resample_stretched_corpus_rows.py` → 
+`data/combined/corpus_v5partial_ref0ppm_clean.npy` (9,623 rows).
+
+| source SW | n | scale applied |
+|---|---|---|
+| 12.981 | 100 | 1.54253 |
+| 30.025 | 4 | 0.66690 |
+| 16.699 | 3 | 1.19909 |
+| 25.744 | 1 | 0.77780 |
+
+Measured against the corpus median over 4.1-0.8 ppm:
+
+| the 108 rows | before | after |
+|---|---|---|
+| median abs displacement | 1,910 pts (0.292 ppm) | **136 pts (0.021 ppm)** |
+| p90 abs displacement | 1,985 | 1,007 |
+| within 200 points | 7.4% | **63.0%** |
+| cross-correlation peak | 0.363 | **0.477** |
+
+The rising cross-correlation peak is the load-bearing number. A translation can
+move a spectrum but cannot improve how well its shape matches; a scale correction
+can, and did. Rows not touched are byte-identical to v4, verified.
+
+**It is called v5partial deliberately.** 2,923 corpus rows still have no recovered
+width and the two 11.988 ppm serum studies (~185 spectra) are among them, so a
+known population of stretched rows remains. 37% of the corrected rows are still
+more than 200 points out, which is expected: these studies' absolute referencing
+was destroyed by the rightmost-peak step (5v) exactly like every other row, and
+re-anchoring can only put them on the corpus's own arbitrary zero.
+
+**Do not treat v5partial as a corrected corpus.** It is strictly better than v4 and
+it is not finished.
