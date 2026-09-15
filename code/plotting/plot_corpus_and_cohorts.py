@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Corpus and all five evaluation cohorts on one image, before and after alignment.
+"""Corpus and the four evaluation cohorts on one image, before and after alignment.
 
 The whole-corpus heatmap (code/analysis/alignment_qc.py) made the corpus's
 internal split visible at a glance. The same view across datasets answers the
@@ -55,8 +55,9 @@ DATASETS = [
      "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_EDTASuppressed_v4.npy", None),
     ("BrC-T2D (78)", "data/BrC_T2D/BC_T2D_newlabels_EDTASuppressed_v4_ref0ppm.npy",
      "data/BrC_T2D/BC_T2D_corpusaxis_v4.npy", None),
-    ("TBI (231)", "data/tbi_tirupati/TBI_Tirupati_ref0ppm.npy",
-     "data/tbi_tirupati/aligned_128K_TBI_Tirupati_WS625to680Zero.npy", None),
+    # TBI is excluded from the evaluation (no acquisition metadata, so its
+    # spectral width is unknown and it cannot be put on the corpus axis). It was
+    # also the largest cohort at 231 rows, crowding the bands that matter.
 ]
 
 
@@ -128,10 +129,10 @@ def main() -> None:
         ax.set_title(which, fontsize=12, loc="left",
                      color=INK if which == "as stored" else WARN)
         ax.set_yticks([])
-    axes[0].set_ylabel("corpus and the five evaluation cohorts, "
+    axes[0].set_ylabel("corpus and the four evaluation cohorts, "
                        "one row per spectrum", labelpad=10)
 
-    fig.suptitle("Corpus and all five evaluation cohorts on one axis — "
+    fig.suptitle("Corpus and the four evaluation cohorts on one axis — "
                  "a sideways step between bands is a misalignment between datasets",
                  fontsize=13, y=0.995)
     fig.tight_layout()
