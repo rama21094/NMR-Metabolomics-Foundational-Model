@@ -54,7 +54,7 @@ DATASETS = [
     ("MTBLS563 (142)", "data/mtbls563/MTBLS563_EDTASuppressed_v4_ref0ppm.npy",
      "data/mtbls563/MTBLS563_aligned_spectra_WS625to680Zero_EDTASuppressed_v4.npy", None),
     ("BrC-T2D (78)", "data/BrC_T2D/BC_T2D_newlabels_EDTASuppressed_v4_ref0ppm.npy",
-     "data/BrC_T2D/BC_T2D_newlabels_WS625to680Zero_EDTASuppressed_v4.npy", None),
+     "data/BrC_T2D/BC_T2D_corpusaxis_v4.npy", None),
     ("TBI (231)", "data/tbi_tirupati/TBI_Tirupati_ref0ppm.npy",
      "data/tbi_tirupati/aligned_128K_TBI_Tirupati_WS625to680Zero.npy", None),
 ]

@@ -1379,3 +1379,70 @@ optimal and the resampling needs no adjustment.
 
 **Remaining gap: BrC-T2D**, the one cohort flagged suspect by
 `check_spectral_width.py` (spread 1,670) and the only one without metadata.
+
+### 5u. BrC-T2D: its spectral width differs too, and 5s is retracted
+
+BrC-T2D Bruker parameters, n=364 experiments:
+
+| field | value |
+|---|---|
+| SW | **20.1587 ppm** (constant) |
+| SW_h | 16129.0323 Hz (constant) |
+| SFO1 / BF1 | 800.1037 / 800.1 MHz -- **800 MHz** |
+| TD / SI | 64516 / 65536 |
+| PULPROG | cpmgpr1d (240), zgpr (122), cpmgpr1d_zpurge (2) |
+| OFFSET | 14.7425-14.7596 ppm, **varying per sample** |
+
+`SW_h / SFO1` = 16129.0323 / 800.1037 = 20.1587, internally consistent. That is
+**not** the corpus's 20.024: a 0.67% difference, small but real. Resampling by
+0.99332 raises agreement with the corpus median from **+0.125 to +0.260**.
+
+**`OFFSET` does not give us the absolute axis after all.** It is the ppm of the
+first processed point and would have fixed what 5n calls unrecoverable. But the
+stored `.npy` files were put through a rightmost-peak alignment that re-referenced
+every spectrum, so OFFSET describes the original data and not the arrays we hold:
+after resampling from OFFSET the data still wants a -2,290 point shift. The risk
+flagged when the parameters were requested has materialised. **SW survives the
+pipeline; OFFSET does not.** The absolute axis remains open per 5n.
+
+Worth noting for a later batch audit: OFFSET varies by 0.0171 ppm (111 points)
+across samples. That is per-sample referencing spread, and the per-sample values
+in `bruker_params_BC_T2D.csv` could correct it -- the cohort-level fix here uses
+the midpoint.
+
+#### RETRACTION of 5s
+
+5s claimed `check_spectral_width.py` "tests for this defect without metadata". It
+does not, and the script has been removed. Four approaches were tried and all four
+fail on a case whose answer we know:
+
+1. **Sub-band shift spread.** Any window wide enough to see the drift lets the
+   dense sugar region lock onto the wrong glucose peak; any window narrow enough
+   to prevent that clips the drift into a ceiling. Tightened to +/-800 points it
+   scored Barth-as-stored **790, "suspect"**, when Barth-as-stored is wrong by a
+   factor of 0.6. The version in 5s ranked BrC-T2D (0.67% error) as worse than
+   Barth (40% error), so it was never measuring spectral width.
+2. **Joint scale+shift search.** Pinned at its scan boundary.
+3. **Direct scale fit.** Returned **0.977 for Barth-as-stored (truth 0.601)** and
+   **0.545 for BrC-T2D-as-stored (truth 0.993)**.
+4. **Landmark separations.** The corpus's own lactate-to-creatine separation comes
+   out 3.6% from theory, and MTBLS563's lactate-to-alanine pick is a different
+   peak entirely (472 points against 1058).
+
+Replaced by `code/analysis/cohort_axes.py`, a registry of what the metadata says.
+No detector is needed now: four of five cohorts have metadata, and the fifth (TBI)
+is excluded from evaluation.
+
+#### Final axis state
+
+| dataset | SW | field | resample by | reference compound |
+|---|---|---|---|---|
+| corpus | 20.024 | 600 | -- | none (5n) |
+| Barth | 12.0308 | 950 | **1.66439** | formate 8.44 |
+| MTBLS326 | 20.02 | 800 | no | TSP, external insert |
+| MTBLS563 | 20.0 | 700 | no | indirect, glucose 5.204 |
+| BrC-T2D | 20.1587 | 800 | **0.99332** | not stated |
+| TBI | unknown | -- | unknown | unknown -- excluded |
+
+Agreement with the corpus median, 2.0-3.8 ppm: Barth -0.112 -> **+0.644**,
+BrC-T2D +0.125 -> **+0.260**, MTBLS326 +0.158, MTBLS563 +0.591.
