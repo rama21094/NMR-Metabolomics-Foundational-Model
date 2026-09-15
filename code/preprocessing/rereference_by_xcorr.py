@@ -84,6 +84,17 @@ def main() -> None:
     ap.add_argument("--corpus", default=CORPUS)
     ap.add_argument("--max-shift", type=int, default=4000)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--rigid", action="store_true",
+                    help="apply ONE shift, the cohort median, to every spectrum "
+                         "instead of a per-spectrum lag. Use when the cohort is "
+                         "already internally consistent and only its offset "
+                         "against the corpus is wrong. Per-spectrum lags on a "
+                         "weak correlation (MTBLS563's median xcorr peak is "
+                         "0.499) scatter rows that were tight: it widened "
+                         "MTBLS563's p5-p95 spread from 233 to 2764 points "
+                         "while the bulk IQR improved, i.e. it threw a tail of "
+                         "rows onto neighbouring peaks. A rigid shift cannot do "
+                         "that. It is only valid when the fitted scale is ~1.")
     args = ap.parse_args()
 
     REPORT.mkdir(parents=True, exist_ok=True)
@@ -155,18 +166,37 @@ def main() -> None:
                          "corpus.")
     print(f"\nusing {name}: {base:+.3f} -> {val:+.3f}")
 
-    Y = np.stack([shift_row(B[k], int(sgn * lag[k])) for k in range(n)])
+    if args.rigid:
+        # Scan the cohort median directly rather than taking the median of the
+        # per-row lags. Those lags are multimodal -- rows lock onto different
+        # neighbouring peaks -- so their median is not the cohort's offset. For
+        # MTBLS563 the median of lags was +786 (corr -0.046) while a direct scan
+        # found -4017 (corr +0.499).
+        grid = range(-args.max_shift, args.max_shift + 1, 25)
+        coarse = max(grid, key=lambda t: band_corr(shift_row(med, t), ref, lo, hi))
+        s_one = max(range(coarse - 30, coarse + 31),
+                    key=lambda t: band_corr(shift_row(med, t), ref, lo, hi))
+        print(f"rigid scan: best single shift {s_one:+d} pts, corr "
+              f"{band_corr(shift_row(med, s_one), ref, lo, hi):+.3f} "
+              f"(median-of-lags would have given {int(np.median(sgn * lag)):+d} at "
+              f"{band_corr(shift_row(med, int(np.median(sgn * lag))), ref, lo, hi):+.3f})")
+        applied = np.full(n, s_one, dtype=np.int64)
+        print(f"rigid: applying the cohort median shift {s_one:+d} to all {n} rows")
+    else:
+        applied = (sgn * lag).astype(np.int64)
+    Y = np.stack([shift_row(B[k], int(applied[k])) for k in range(n)])
     np.save(ROOT / args.out, Y)
-    pd.DataFrame({"row": np.arange(n), "shift": sgn * lag, "xcorr_peak": peak,
+    pd.DataFrame({"row": np.arange(n), "shift": applied, "xcorr_peak": peak,
                   "method": f"xcorr_to_corpus_median({name})"}).to_csv(
         REPORT / f"rereference_per_spectrum_{args.tag}.csv", index=False)
     (REPORT / f"summary_{args.tag}.json").write_text(json.dumps({
         "src": args.src, "out": args.out, "n": int(n),
         "scale_fitted": float(best_scale), "sign": name,
         "median_corr_before": base, "median_corr_after": val,
-        "median_shift": int(np.median(sgn * lag))}, indent=2))
+        "rigid": bool(args.rigid),
+        "median_shift": int(np.median(applied))}, indent=2))
     print(f"wrote {args.out}")
-    print(f"  median shift {int(np.median(sgn * lag)):+d} pts, "
+    print(f"  median shift {int(np.median(applied)):+d} pts, "
           f"per-spectrum xcorr peak median {np.median(peak):.3f}")
 
 

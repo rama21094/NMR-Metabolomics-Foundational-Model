@@ -141,6 +141,18 @@ def main() -> None:
     ap.add_argument("--tag", default="",
                     help="label for the report files, so cohorts do not overwrite "
                          "each other")
+    ap.add_argument("--consensus-tol", type=int, default=0,
+                    help="points. If >0, run a second pass: rows whose located "
+                         "apex sits further than this from the dataset's median "
+                         "are re-searched in a narrow window around that median, "
+                         "and if nothing is found there they take the median "
+                         "shift. A 0.4 ppm search window is wide enough to "
+                         "contain neighbouring peaks, and locate() has no "
+                         "cross-row consistency check, so a third of MTBLS563 "
+                         "locked onto the wrong peak (offsets clustered at "
+                         "discrete values -1970, -1770, +2000). Rows of one "
+                         "study share an axis; requiring them to agree removes "
+                         "that failure without assuming what the shift is.")
     ap.add_argument("--out", default=OUT_NPY)
     args = ap.parse_args()
 
@@ -186,6 +198,43 @@ def main() -> None:
     print()
 
     ok = method == "zero_peak"
+
+    if args.consensus_tol > 0 and ok.sum() >= 5:
+        tol = args.consensus_tol
+        cons = int(round(np.median(shift[ok])))
+        stray = ok & (np.abs(shift - cons) > tol)
+        print(f"\n  consensus pass: dataset median shift {cons:+d} pts; "
+              f"{stray.sum():,} of {ok.sum():,} located rows sit >{tol} pts away")
+        clo, chi = ZERO_IDX - cons - tol, ZERO_IDX - cons + tol + 1
+        recovered = forced = 0
+        for row in np.where(stray)[0]:
+            y = np.array(X[row], dtype=np.float64)
+            y[WATER[0]:WATER[1]] = 0.0
+            g = np.abs(y).max() + 1e-30
+            r = locate(y[clo:chi], args.min_height, args.max_fwhm)
+            if r is not None and r[1] / g >= args.min_height:
+                shift[row] = int(round(ZERO_IDX - (clo + r[0])))
+                height[row], width[row] = r[1] / g, r[2]
+                recovered += 1
+            else:
+                shift[row] = cons
+                method[row] = "consensus_median"
+                forced += 1
+        print(f"    re-located in the narrow window: {recovered:,}")
+        print(f"    no peak there, took the median shift: {forced:,}")
+        # Rows where no peak was found at all are the other source of a thrown
+        # tail: with --no-fallback they stay put while every other row moves, so
+        # a cohort that was internally tight acquires a handful of rows a full
+        # shift away. They belong at the dataset consensus.
+        if args.no_fallback:
+            undetected = method == "unshifted"
+            if undetected.any():
+                shift[undetected] = cons
+                method[undetected] = "consensus_median"
+                print(f"    undetected rows moved to the median shift: "
+                      f"{int(undetected.sum()):,}")
+        ok = method == "zero_peak"
+
     print(f"\n  reference singlet found: {ok.sum():,}/{n:,} ({100 * ok.mean():.1f}%)")
     print(f"  no singlet found: {(~ok).sum():,} ({100 * (~ok).mean():.1f}%)"
           f"  [{'left unshifted' if args.no_fallback else 'xcorr fallback'}]")

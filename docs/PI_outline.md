@@ -1085,3 +1085,73 @@ linewidths: **41.1%**. Figure: `results/figures/fig_axis_misalignment.png`.
 
 Master analysis document: [`SSL_vs_classical_analysis.md`](SSL_vs_classical_analysis.md).
 Group-meeting deck: [`Group_Meeting_2026-08-10.pptx`](Group_Meeting_2026-08-10.pptx).
+
+### 5o. The anchor was throwing a tail of rows, and it is now fixed
+
+Raised from the corpus+cohorts figure: MTBLS563 looked *better* aligned before
+the 0 ppm anchor than after, especially in the last rows of its band. That was
+correct, and it was two separate defects.
+
+**Defect 1 -- `locate()` had no cross-row consistency check.** The search window
+is +/-0.4 ppm (+/-2,618 points), wide enough to contain neighbouring peaks. Rows
+of one study share an axis, so their anchor peaks must agree; nothing enforced
+that. A second pass now re-searches any row further than `--consensus-tol` from
+the dataset median in a narrow window around that median, and gives it the
+median shift if nothing is found there. On the three cohorts with genuine
+reference peaks (Barth 95%, MTBLS326 100%, BrC-T2D 95%) **zero rows** were
+mis-locked, so the anchor itself was sound there.
+
+**Defect 2 -- undetected rows were left where they lay.** With `--no-fallback` a
+row with no detectable peak stays put while every other row moves a full shift.
+That, not mis-locking, was the thrown tail: 2 rows in Barth, 4 in BrC-T2D. They
+now take the dataset consensus shift.
+
+**MTBLS563 was a third case.** It has no reference peak (0.7%) and is aligned by
+cross-correlation to the corpus, *per spectrum*, on a median peak correlation of
+only 0.499. Per-row correction on a weak correlation scatters a cohort that was
+already internally tight (IQR 23, p5-p95 233). A `--rigid` mode now applies one
+shift to the whole cohort, which is valid because the fitted scale is 1.000.
+
+Internal spread, p5-p95 in points, before and after anchoring:
+
+| cohort | before | after (was) | after (now) |
+|---|---|---|---|
+| Barth | 29 | 96 | **15** |
+| MTBLS326 | 228 | 67 | **67** |
+| MTBLS563 | 233 | 2,764 | **233** (preserved exactly) |
+| BrC-T2D | 78 | 513 | **52** |
+
+Every cohort now improves or is preserved. TBI is excluded -- not used for
+evaluation.
+
+**Two corrections to my own working.** A diagnostic I wrote passed `min_height`
+to `locate()`, which ignores that argument, so it applied no height check and
+reported 135/142 MTBLS563 rows anchored where the true figure is 1. And a scan
+that appeared to show MTBLS563 needed -4,017 points built its corpus reference
+from the **first 400 rows**; the corpus is ordered by study, so that was one
+study's median. Against a random 400-row reference the correct shift is +790.
+Neither error reached a committed result, but both would have if unchecked.
+
+### 5p. Barth does not match a corpus subgroup
+
+Also raised from the figure: Barth appeared to align with the last rows of the
+corpus band, possibly genuine diversity. It does not. Correlating the Barth
+median against corpus rows grouped into deciles of their own displacement gives
+-0.088 to -0.192 across **every** decile, against -0.167 for the corpus as a
+whole. There is no subgroup it matches; the visual impression was coincidental.
+
+More usefully, the residual rigid offset each cohort still needs *after* being
+anchored on its own genuine reference peak:
+
+| cohort | corr after anchoring | extra rigid shift | corr then |
+|---|---|---|---|
+| Barth | **-0.168** | -8,358 pts (-1.28 ppm) | +0.444 |
+| MTBLS326 | +0.158 | -874 pts (-0.13 ppm) | +0.578 |
+| BrC-T2D | +0.125 | -2,237 pts (-0.34 ppm) | +0.411 |
+| MTBLS563 | +0.591 | 0 | +0.591 |
+
+The three required corrections disagree with each other by up to 7,500 points.
+This is the sharpest evidence yet for 5n: anchoring on a real 0 ppm standard does
+**not** put a cohort onto the corpus axis, because the corpus's own zero is not a
+standard. Barth's -1.28 ppm is far too large to be biology -- it is an axis
+defect, not diversity.
