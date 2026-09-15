@@ -47,7 +47,7 @@ INK, ACC, WARN, MUTED = "#1f2933", "#2f6f8f", "#b04a3a", "#6b7480"
 DATASETS = [
     ("corpus (9,623)", "data/combined/corpus_v4_ref0ppm_clean.npy",
      "data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v4.npy", 900),
-    ("Barth (40)", "data/Barth/Barth_EDTASuppressed_v4_ref0ppm.npy",
+    ("Barth (40)", "data/Barth/Barth_EDTASuppressed_v4_corpusaxis.npy",
      "data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_v4.npy", None),
     ("MTBLS326 (42)", "data/mtbls326/MTBLS326_EDTASuppressed_v4_ref0ppm.npy",
      "data/mtbls326/MTBLS326_aligned_spectra_WS625to680Zero_EDTASuppressed_v4.npy", None),

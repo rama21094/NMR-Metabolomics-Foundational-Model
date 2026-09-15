@@ -30,24 +30,27 @@ def norm(y):
 
 C = norm(med("data/combined/corpus_v4_ref0ppm_clean.npy"))
 B = norm(med("data/Barth/aligned_128K_Workbench_Barth_Syndrome_WS625to680Zero_EDTASuppressed_v4.npy"))
+R = norm(med("data/Barth/Barth_EDTASuppressed_v4_corpusaxis.npy"))
 
 WIN = [("aliphatic  0.5-2.2 ppm", 2.2, 0.5),
        ("mid  2.2-3.3 ppm", 3.3, 2.2),
        ("sugar  3.3-4.3 ppm", 4.3, 3.3),
-       ("reference region  -0.4-0.4 ppm", 0.4, -0.4)]
+       ("formate reference  8.2-8.7 ppm", 8.7, 8.2)]
 
 fig, axes = plt.subplots(len(WIN), 1, figsize=(11, 12))
 for ax, (lab, hi_ppm, lo_ppm) in zip(axes, WIN):
     a, b = int((PPM_HI - hi_ppm) / PPT), int((PPM_HI - lo_ppm) / PPT)
     x = ppm(np.arange(a, b))
     ax.plot(x, C[a:b], lw=0.8, color=ACC, label="corpus median")
-    ax.plot(x, B[a:b], lw=0.8, color=WARN, label="Barth median (as stored)")
+    ax.plot(x, B[a:b], lw=0.7, color="#c9a227", alpha=0.75,
+            label="Barth, as stored (wrong axis)")
+    ax.plot(x, R[a:b], lw=0.9, color=WARN, label="Barth, resampled to corpus axis")
     ax.set_xlim(hi_ppm, lo_ppm); ax.set_title(lab, fontsize=10, color=INK)
     ax.set_ylabel("norm. intensity", fontsize=8)
     for s in ("top", "right"): ax.spines[s].set_visible(False)
 axes[0].legend(frameon=False, fontsize=9)
 axes[-1].set_xlabel("ppm")
-fig.suptitle("Barth vs corpus, as stored: do they contain the same peaks?",
+fig.suptitle("Barth on the corpus axis: SW 12.0308 ppm resampled to 20.024 ppm",
              fontsize=12, color=INK)
 fig.tight_layout()
 out = ROOT / "results/figures/fig_barth_vs_corpus.png"

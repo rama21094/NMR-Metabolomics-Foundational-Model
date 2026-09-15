@@ -1232,3 +1232,97 @@ for cohorts that have a real standard (Barth 2.0 Hz, MTBLS326 1.5 Hz, BrC-T2D
 3.2 Hz), and the permissive ceiling for the corpus, which has none.
 `corpus_v4_ref0ppm_clean.npy` is therefore unchanged and no downstream result is
 invalidated.
+
+### 5r. RETRACTION of 5p and 5q: Barth has a different spectral width
+
+The submitter metadata for Barth arrived and it invalidates most of 5p and 5q.
+The headline: **Barth was never misaligned by a shift. It is on a different ppm
+axis**, and no amount of shifting could ever have fixed it.
+
+| | corpus | Barth |
+|---|---|---|
+| spectral width | 20.024 ppm | **12.0308 ppm** |
+| ppm per stored point | 1.5277e-4 | **9.1788e-5** |
+| spectrometer | 600 MHz (97.8%) | **950 MHz** |
+| acquired points | 128k | **64k** |
+| chemical shift reference | none (5n) | **formate, 8.44 ppm** |
+
+A feature occupies **1.664x as many points** in Barth as in the corpus. That single
+fact explains every anomaly we could not account for: why independent sub-band
+shift fits spanned 3.59 ppm, why the joint scale search pinned at its boundary,
+why no model ever exceeded corr 0.48.
+
+**Confirmed against the data, not taken on trust.** The formate singlet sits at
+stored index 25,520. Taking it as 8.44 ppm and the metadata's ppm-per-point, the
+tallest peak in the spectrum -- the lactate CH3 doublet -- lands at 1.310 ppm
+against a literature 1.33, and the formate-to-lactate separation implies
+9.1521e-5 ppm/point against the metadata's 9.1788e-5, **agreeing to 0.29%**. The
+implied full range is +10.782 to -1.248 ppm, reproducing the stated 12.0308 ppm
+spectral width to four decimals.
+
+**The fix is resampling** (`code/preprocessing/resample_barth_to_corpus_axis.py`),
+which maps Barth's ppm axis onto the corpus's. Barth's narrower sweep covers 60.1%
+of the corpus grid; the remainder is zero-filled.
+
+| | corr vs corpus median | sub-band shift spread |
+|---|---|---|
+| 0 ppm anchored (5q) | -0.112 | 23,517 pts (3.59 ppm) |
+| **resampled** | **+0.644** | **695 pts (0.106 ppm)** |
+
+Three of four sub-bands independently agree on the same residual shift, and the
+aliphatic bands reach corr 0.94-0.96. An independent check: the corpus has its own
+small formate peak at the same position the resampled Barth formate lands on.
+
+#### What was wrong in 5p and 5q
+
+1. **"Barth is evidently an extract" / "a different sample type" -- WRONG.** Barth
+   is heparinised **plasma**, 125 uL diluted 1:1 with D2O. The corpus is serum and
+   plasma. Same sample type.
+2. **"No lipid envelope, no glucose envelope" -- WRONG.** Both are present. I was
+   reading Barth on the corpus's ppm axis, so I looked for them in the wrong place.
+   After resampling they overlay the corpus envelopes closely.
+3. **"A genuine reference standard, a 2.02 Hz line at 0.042 ppm in 40/40
+   spectra" -- WRONG.** On Barth's real axis that feature is at **1.902 ppm**: it is
+   acetate. Barth carries no TSP or DSS at all. Its reference is formate at
+   8.44 ppm, so the 0 ppm anchor was never applicable to this cohort, and the
+   +278 point shift 5q reported as the fix was meaningless.
+4. **"The offset was +278 points" -- WRONG.** There is no single offset; there is a
+   scale factor of 0.60082 plus a small residual.
+5. The `locate()` sharpness fix in 5q is **kept** -- taking the tallest
+   sufficiently narrow peak rather than the global maximum is correct on its own
+   merits, and it improved BrC-T2D detection 94.9% -> 98.7% with MTBLS326
+   unchanged. But it did not fix Barth, and 5q's claim that it did was wrong.
+
+**The lesson.** Three successive attempts to fix Barth by fitting the spectra
+against the corpus produced three different confident answers (-8,358, then +278,
+now a scale factor). Each was internally consistent and each was wrong, because
+the model -- translation -- was wrong. Fifty-five characters of submitter metadata
+settled in one line what no amount of curve fitting could. **Acquisition metadata
+is not optional for this corpus.**
+
+### 5s. The other cohorts need their metadata too
+
+`code/analysis/check_spectral_width.py` tests for this defect without metadata: if
+a cohort shares the corpus's ppm-per-point one shift fits everywhere, and if its
+spectral width differs the required shift drifts across the spectrum.
+
+Spread of independent sub-band shifts, searched within +/-1500 points (0.23 ppm, a
+generous referencing error -- a wider search is not more thorough, because the
+dense sugar region locks onto the wrong glucose peak):
+
+| cohort | sub-band shifts (pts) | spread | verdict |
+|---|---|---|---|
+| Barth, as stored | 590, -425, 1020, 50 | 1,445 | the defect, before the fix |
+| **Barth, resampled** | 0, 700, 5, 0 | **700** | consistent |
+| MTBLS326 | -895, -175, -635, -505 | 720 | consistent |
+| MTBLS563 | -5, 690, -5, -20 | 710 | consistent |
+| BrC-T2D | -175, -1450, 220, -175 | **1,670** | suspect |
+| TBI | 950, 455, 1500, -1380 | **2,880** | suspect (already excluded) |
+
+Barth now sits with the acceptable cohorts. Note that the ~700 point residual is
+the *same band* (2.30-3.21 ppm, choline/TMAO) in Barth, MTBLS326 and MTBLS563, so
+it is a chemistry difference in that region rather than a per-cohort axis fault.
+
+**BrC-T2D at 1,670 is the open concern** and its submitter metadata should be
+requested next, specifically spectral width, spectrometer frequency, acquired
+points and chemical shift reference compound.
