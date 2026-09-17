@@ -1595,3 +1595,44 @@ re-anchoring can only put them on the corpus's own arbitrary zero.
 
 **Do not treat v5partial as a corrected corpus.** It is strictly better than v4 and
 it is not finished.
+
+### 5y. Workbench widths: 554 of 778 rows are stretched, not 0
+
+`bruker_params_Workbench.csv` (950 experiments) joined to the corpus through
+`Workbench_CPMG_serum_plasma_metadata.csv`, which carries `experiment_path` per
+array row 1:1. **All 778 Workbench-sourced corpus rows matched, none unmatched.**
+
+| SW (ppm) | field | n | |
+|---|---|---|---|
+| 11.988 | 600 | 229 | **resample, x1.6703** |
+| 12.023 | 700 | 201 | **resample, x1.6654** |
+| 20.136 | 700 | 68 | **resample, x0.9944** |
+| 20.553 | 950 | 56 | **resample, x0.9742** |
+| 20.028 / 20.031 / 20.048 | 600/500 | 224 | fine |
+
+**554 of 778 (71%) need resampling.** This is five times the 108 found from the
+plasma parameters and it changes the scale of the problem: the corpus is far more
+heterogeneous in acquisition than the 383-spectra figure in 5p implied. Note also
+a 500 MHz and a 950 MHz study, where 5h's field audit reported 97.8% at 600 MHz --
+that audit covered only the plasma and serum parameter files, not Workbench.
+
+Combined with the plasma rows, **619 corpus rows are now resampled** (some of the
+662 identified did not survive the earlier clean step):
+
+| SW | n | scale |
+|---|---|---|
+| 11.988 | 215 | 1.67030 |
+| 12.023 | 172 | 1.66544 |
+| 12.981 | 100 | 1.54253 |
+| 20.136 | 68 | 0.99442 |
+| 20.553 | 56 | 0.97424 |
+| 30.025 | 4 | 0.66690 |
+| 16.699 | 3 | 1.19909 |
+| 25.744 | 1 | 0.77780 |
+
+**2,145 serum rows still have no width.** Given that 71% of Workbench rows turned
+out to be stretched, assuming the serum portion is clean would be unwise.
+`docs/PROMPT_serum_row_mapping.md` specifies that work: the deduplication in
+`read1D_align.py` keeps first occurrences **in order**, so the 2,148 array rows are
+an ordered subsequence of the 3,577 paths, and that constraint makes the mapping
+recoverable reliably.

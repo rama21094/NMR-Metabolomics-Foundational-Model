@@ -76,12 +76,25 @@ def main() -> None:
     ap.add_argument("--out", default="data/combined/corpus_v5partial_ref0ppm_clean.npy")
     ap.add_argument("--map", default="results/analysis/corpus_row_study_map.csv")
     ap.add_argument("--rowmap", default="results/analysis/atypical/row_map_clean.csv")
+    ap.add_argument("--extra-sw", default="results/analysis/corpus_row_sw_workbench.csv",
+                    help="additional corpus_row,acqu_SW pairs. The Workbench "
+                         "rows' widths come from a separate parameter extraction "
+                         "joined through Workbench_CPMG_serum_plasma_metadata.csv, "
+                         "so they are not in the main map.")
     args = ap.parse_args()
 
     sw_by_v4 = {}
     for r in csv.DictReader(open(ROOT / args.map)):
         if r["acqu_SW"]:
             sw_by_v4[int(r["corpus_row"])] = float(r["acqu_SW"])
+    ex = ROOT / args.extra_sw
+    if ex.exists():
+        n0 = len(sw_by_v4)
+        for r in csv.DictReader(open(ex)):
+            sw_by_v4[int(r["corpus_row"])] = float(r["acqu_SW"])
+        print(f"extra widths merged from {args.extra_sw}: "
+              f"{len(sw_by_v4) - n0:,} new rows")
+
     new_of_old = {int(r["old_row"]): int(r["new_row"])
                   for r in csv.DictReader(open(ROOT / args.rowmap))}
 
