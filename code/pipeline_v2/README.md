@@ -22,12 +22,29 @@ only sound route.
 ## Running it
 
 ```bash
-python build_corpus.py /path/to/PlasmaNMRData --out-prefix plasma --procno 1 --dry-run
-python build_corpus.py /path/to/PlasmaNMRData --out-prefix plasma --procno 1
-python build_corpus.py /path/to/SerumNMRData  --out-prefix serum  --procno 1
-python build_corpus.py /path/to/MetabolomicsWorkBench_SingleFolder \
-                       --out-prefix workbench --procno 1
+python build_corpus.py /path/to/PlasmaNMRData --out-prefix plasma --dry-run
+python build_corpus.py /path/to/PlasmaNMRData --out-prefix plasma
+python build_corpus.py /path/to/SerumNMRData  --out-prefix serum
+python build_corpus.py /path/to/MetabolomicsWorkBench_SingleFolder --out-prefix workbench
 ```
+
+### Use exactly these three roots
+
+Confirmed against the directory tree; the pdata counts match the parameter CSVs
+exactly, which is what identifies them as the trees the `.npy` files came from:
+
+| root | experiments | pdata |
+|---|---|---|
+| `PlasmaNMRData` | 7,051 | 7,116 |
+| `SerumNMRData` | 1,961 | 1,961 |
+| `MetabolomicsWorkBench_SingleFolder` | 82 studies | 950 |
+
+**Do not use** `MetabolightsCPMGSingleFolder` (16,384 dirs — a superset that still
+contains what was later discarded), `MetabolightsData` (raw download, all pulse
+programmes), `SerumNMRData_discarded` or
+`MetabolomicsWorkBench_SingleFolder_NonSelected` (both are rejects). The
+serum/plasma split and the discards are hand curation that cannot be re-derived
+from parameters.
 
 Start with `--dry-run`: it reads only parameters and prints the spectral widths
 present. That table is the thing the old pipeline got wrong, so look at it.
@@ -48,9 +65,13 @@ CPMG -- 225 are `noesypr1d`, 117 `zgpr`, 1 `zgesgp`. `PlasmaNMRData` holds 14
 a 1D spectrum at all. The default regex is `cpmg`; pass `--pulprog .` to accept
 everything, and read the exclusion table the dry run prints.
 
-`--procno 1` matters: the old pipeline read every `pdata/<n>`, which is why its
-serum path list had 3,577 entries for 1,962 experiments and why deduplication had
-so much to remove.
+**`--procno` defaults to `auto`, and leave it there.** An experiment often holds
+several `pdata/<n>`; the old pipeline read them all, which is why its serum path
+list had 3,577 entries for 1,962 experiments and why deduplication had so much to
+remove. But pinning `--procno 1` is also wrong: MTBLS10958 is processed in
+`pdata/700`, so that rule would silently drop the whole study — 370 corpus rows.
+`auto` takes one per experiment, preferring `pdata/1` and otherwise the lowest
+present, and prints every experiment where it had to choose something else.
 
 Then, always:
 

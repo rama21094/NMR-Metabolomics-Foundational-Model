@@ -179,15 +179,50 @@ def read_processed_spectrum(pdata_dir: Path):
 
 
 def find_pdata_dirs(root: Path, procno: str | None):
-    """Every pdata directory holding a 1r, deepest-first deterministic order."""
-    out = []
-    for dirpath, dirnames, filenames in os.walk(root):
+    """One processed dataset per EXPERIMENT, deterministic order.
+
+    An experiment is the directory holding `acqus`; under it sits `pdata/<n>`,
+    often several. Taking them all inflates the set -- the old serum path list had
+    3,577 entries for 1,962 experiments, and deduplication then had to clean up
+    after it.
+
+    But pinning `--procno 1` is wrong too: MTBLS10958's processed data lives in
+    `pdata/700`, so that rule would silently drop the entire study (370 corpus
+    rows). The default 'auto' therefore takes ONE per experiment, preferring
+    procno 1 when it exists and otherwise the numerically smallest present, and
+    reports every experiment where it had to choose something else.
+    """
+    by_exp: dict[Path, list[Path]] = {}
+    for dirpath, _dirnames, filenames in os.walk(root):
         if "1r" in filenames and "procs" in filenames:
             p = Path(dirpath)
-            if procno and p.name != procno:
+            exp = p.parent.parent              # .../<exp>/pdata/<n> -> <exp>
+            by_exp.setdefault(exp, []).append(p)
+
+    def key(p):
+        try:
+            return (0, int(p.name))
+        except ValueError:
+            return (1, 0)
+
+    out, nonstandard = [], []
+    for exp in sorted(by_exp):
+        cands = sorted(by_exp[exp], key=key)
+        if procno and procno != "auto":
+            pick = [c for c in cands if c.name == procno]
+            if not pick:
                 continue
-            out.append(p)
-    out.sort()
+            out.append(pick[0])
+            continue
+        chosen = next((c for c in cands if c.name == "1"), cands[0])
+        if chosen.name != "1":
+            nonstandard.append(chosen)
+        out.append(chosen)
+    if nonstandard:
+        print(f"  note: {len(nonstandard):,} experiments have no pdata/1; used "
+              f"the lowest present instead, e.g.")
+        for c in nonstandard[:4]:
+            print(f"    procno {c.name:<8} {c}")
     return out
 
 
@@ -263,10 +298,14 @@ def main() -> None:
     ap.add_argument("--ppm-high", type=float, default=PPM_HIGH_DEFAULT)
     ap.add_argument("--ppm-low", type=float, default=PPM_LOW_DEFAULT)
     ap.add_argument("--points", type=int, default=POINTS_DEFAULT)
-    ap.add_argument("--procno", default=None,
-                    help="only this processing number (e.g. 1). The old pipeline "
-                         "read every pdata/<n>, which is why its serum path list "
-                         "had 3,577 entries for 1,962 experiments.")
+    ap.add_argument("--procno", default="auto",
+                    help="'auto' (default) takes ONE processed dataset per "
+                         "experiment, preferring pdata/1 and otherwise the lowest "
+                         "procno present. A fixed number restricts to exactly that "
+                         "one, which is usually WRONG: MTBLS10958 is processed in "
+                         "pdata/700, so --procno 1 would drop that study entirely. "
+                         "The old pipeline took every pdata/<n>, giving 3,577 "
+                         "entries for 1,962 serum experiments.")
     ap.add_argument("--pulprog", default="cpmg",
                     help="case-insensitive regex the acqus PULPROG must match. "
                          "Default 'cpmg'. THIS MATTERS: the corpus was built from "
