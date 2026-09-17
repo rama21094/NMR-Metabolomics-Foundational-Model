@@ -1696,3 +1696,84 @@ face the same gate.
 Both improvements move together for the applied group, which is what a real
 correction looks like: the shape agrees better *and* the position follows. For the
 skipped rows nothing was touched, so the gate cannot have silently degraded them.
+
+### 6a. Why the 519 do not respond -- and why the 100 must be retracted too
+
+The question was why 519 rows with a known non-20 ppm width do not improve when
+scaled by that width. The answer also invalidates the 100 rows that appeared to.
+
+**The test that settles it.** Scan the scale freely and look at the SHAPE of the
+correlation-vs-scale curve, not just its value at the nominal scale:
+
+| group | truth | best scale found | best peak | runner-up |
+|---|---|---|---|---|
+| **SW 20.024 (control)** | 1.00 | **1.00** | **0.844** | 0.507 |
+| SW 12.981 (the "fixed" group) | 1.5425 | 1.90 | 0.527 | 0.482 |
+| SW 11.988 | 1.6703 | 0.70 | 0.544 | -- |
+| SW 12.023 | 1.6654 | 0.65 | 0.508 | -- |
+| SW 20.553 | 0.9742 | 0.70 | 0.513 | -- |
+
+When the answer is right the curve has a **sharp, dominant peak**: the control
+lands exactly on 1.00 at 0.844, with the runner-up 0.34 below. Every other group
+gives a **broad plateau topping out near 0.5**, and its maximum is nowhere near
+the nominal scale -- 1.90 where the truth is 1.5425, 0.70 where it is 1.6703.
+
+So the 519 do not respond because **the scale is not identifiable for them**: they
+do not resemble the corpus median under any scale, and the correlation surface has
+a spurious optimum at compressive scales where a smeared spectrum overlaps the
+dense metabolite region by chance.
+
+**RETRACTION of 5x and 5z's positive result.** The same test applied to SW 12.981,
+the one group my gate approved: its nominal scale scores 0.455 while the free
+optimum is 0.527 at scale 1.90. It sits on the plateau, not on a peak. The
+measured 0.365 -> 0.485 was movement along a flat surface, not arrival at a
+correct answer. **The 100-row correction is not validated and has been withdrawn.**
+`corpus_v4_ref0ppm_clean.npy` remains the operative corpus;
+`NOT_VALIDATED_corpus_v5partial_ref0ppm_clean.npy` is kept only so the work is
+inspectable and can be deleted (10 GB).
+
+**My gate was necessary but not sufficient.** It compared nominal against
+unchanged, which catches a correction that makes things worse but cannot catch one
+that moves along a plateau. The sufficient test is the one above: the free optimum
+must coincide with the nominal scale AND stand clearly above its runner-up. That
+is now the standard any future correction has to meet.
+
+This is the seventh distinct attempt to recover or verify spectral geometry from
+the spectra themselves, and the seventh failure. The pattern is consistent and the
+conclusion should now be treated as settled: **this corpus's acquisition geometry
+cannot be repaired post hoc by fitting against itself.**
+
+### 6b. The complete spectral-width census, and the only sound way forward
+
+`row_mapping_serum_WSNoise.csv` closed the last gap, matching all 2,148 serum rows
+at correlation 1.000000 and carrying `proc_OFFSET` as well as `acqu_SW`.
+`results/analysis/corpus_row_spectral_width.csv` now gives a width for
+**9,665 of 9,670 corpus rows** -- 5 unknown.
+
+| SW (ppm) | n | |
+|---|---|---|
+| 20.017 / 20.024 / 20.028 / 20.031 / 20.048 | 8,535 | consistent |
+| 11.988 | 599 | non-20 |
+| 12.023 | 201 | non-20 |
+| 12.981 | 189 | non-20 |
+| 20.136 / 20.553 / 25.744 / 30.025 / 16.699 | 141 | non-20 |
+
+**1,130 rows, 11.7%, are on a non-20 ppm axis** -- three times the 383 estimated in
+5p, and none of them correctable post hoc.
+
+**The fix is to reprocess from raw, not to patch the arrays.** Everything needed is
+now in hand:
+
+1. The defect is one line in each of two scripts (5v): interpolate onto
+   `common_ppm_axis` instead of `np.linspace(start, end, target_points)`. Both
+   scripts already compute that axis and discard it.
+2. The rightmost-peak re-referencing (`align_spectrum_to_reference`) should be
+   dropped in favour of `procs:OFFSET`, which every row now has in the census file
+   and which is correct before the pipeline destroys it.
+3. Row provenance is established for 9,665 of 9,670 rows, so the rebuilt corpus can
+   be checked against the current one row by row.
+4. The raw trees are identified: `PlasmaNMRData`, `SerumNMRData`,
+   `MetabolomicsWorkBench_SingleFolder`.
+
+Reprocessing also makes the -0.5 to 10 ppm crop trivial, since the common axis is
+chosen rather than inherited, and every dataset covers that window.
