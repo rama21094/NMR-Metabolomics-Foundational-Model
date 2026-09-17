@@ -6,6 +6,8 @@
 /models/
 /logs/
 /pyragify/
+/fromSSD/
+/rebuild/
 /.lgraph/
 /.claude/
 /.agents/

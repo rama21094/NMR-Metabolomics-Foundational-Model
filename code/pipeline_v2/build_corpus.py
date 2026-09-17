@@ -94,7 +94,7 @@ POINTS_DEFAULT = 131_072
 
 # Solvent window, in ppm. The old pipeline used point indices 62500-68000, which
 # corresponded to 4.435-5.276 ppm only under the axis it assumed.
-WATER_PPM = (4.40, 5.30)
+WATER_PPM = (4.50, 5.10)
 
 
 # ============================ Bruker reading ==============================
@@ -186,11 +186,12 @@ def find_pdata_dirs(root: Path, procno: str | None):
     3,577 entries for 1,962 experiments, and deduplication then had to clean up
     after it.
 
-    But pinning `--procno 1` is wrong too: MTBLS10958's processed data lives in
-    `pdata/700`, so that rule would silently drop the entire study (370 corpus
-    rows). The default 'auto' therefore takes ONE per experiment, preferring
-    procno 1 when it exists and otherwise the numerically smallest present, and
-    reports every experiment where it had to choose something else.
+    But pinning `--procno 1` is wrong too: in MTBLS540 eleven experiments under
+    Sample132/1321 are processed into `pdata/2` with no `pdata/1` at all, so that
+    rule would drop them silently. The default 'auto' therefore takes ONE per
+    experiment, preferring procno 1 when it exists and otherwise the numerically
+    smallest present, and reports every experiment where it had to choose
+    something else -- the dry run over PlasmaNMRData reports exactly 12.
     """
     by_exp: dict[Path, list[Path]] = {}
     for dirpath, _dirnames, filenames in os.walk(root):
@@ -261,30 +262,45 @@ def suppress_window_ppm(y, ppm_axis, lo_ppm, hi_ppm, mode="zero", rng=None):
     return out
 
 
-def fingerprint(M, cols):
-    F = M[:, cols].astype(np.float32, copy=True)
+def fingerprint(M, lo, hi, nbins=600):
+    """Mean-pool a contiguous band into `nbins`, then mean-centre and unit-norm.
+
+    An earlier version sampled 600 points on an even comb across the band. At
+    0.013 ppm spacing that comb steps over most linewidths, so it compared an
+    aliased handful of points rather than the spectrum, and two genuinely
+    different samples from one study could clear r>0.999 on it. Pooling uses
+    every point in the band instead, so a high correlation means the spectra
+    really do agree.
+    """
+    w = (hi - lo) // nbins
+    if w < 1:
+        w, nbins = 1, hi - lo
+    B = M[:, lo:lo + w * nbins].astype(np.float32, copy=True)
+    F = B.reshape(B.shape[0], nbins, w).mean(axis=2)
     F -= F.mean(axis=1, keepdims=True)
     F /= np.linalg.norm(F, axis=1, keepdims=True) + 1e-12
     return F
 
 
-def dedupe(M, cols, threshold):
+def dedupe(M, lo, hi, threshold):
     """Drop later near-duplicates, keeping the first occurrence, order preserved.
 
     The old implementation correlated full 131,072-point rows pairwise, which is
     O(n^2) over the whole array. This uses a fingerprint over a clean band, which
     is the same decision far more cheaply.
     """
-    F = fingerprint(M, cols)
-    keep, kept_F = [], []
+    F = fingerprint(M, lo, hi)
+    keep, kept_F, drops = [], [], []
     for i in range(F.shape[0]):
         if kept_F:
             sims = np.asarray(kept_F) @ F[i]
-            if sims.max() > threshold:
+            j = int(np.argmax(sims))
+            if sims[j] > threshold:
+                drops.append((i, keep[j], float(sims[j])))
                 continue
         keep.append(i)
         kept_F.append(F[i])
-    return np.asarray(keep, dtype=np.int64)
+    return np.asarray(keep, dtype=np.int64), drops
 
 
 # ============================== Main ======================================
@@ -435,11 +451,20 @@ def main() -> None:
         idx = idx[~bad]
 
     if args.dedupe > 0:
-        band = np.linspace(int(0.15 * args.points), int(0.85 * args.points),
-                           600).astype(int)
+        lo, hi = int(0.15 * args.points), int(0.85 * args.points)
         sub = np.array(spec[idx])
-        k = dedupe(sub, band, args.dedupe)
+        k, drops = dedupe(sub, lo, hi, args.dedupe)
         print(f"  dedupe at r>{args.dedupe}: keeping {len(k):,} of {len(idx):,}")
+        if drops:
+            dpath = outdir / f"{args.out_prefix}_dropped.csv"
+            with open(dpath, "w", newline="") as fh:
+                w = csv.writer(fh)
+                w.writerow(["dropped_pdata_path", "duplicate_of_pdata_path", "r"])
+                for i, j, r in drops:
+                    w.writerow([str(keep_dirs[idx[i]]), str(keep_dirs[idx[j]]),
+                                f"{r:.6f}"])
+            print(f"  wrote {dpath}  ({len(drops):,} rows) -- check these before"
+                  f" trusting the dedupe")
         idx = idx[k]
 
     final = outdir / f"{args.out_prefix}_spectra.npy"

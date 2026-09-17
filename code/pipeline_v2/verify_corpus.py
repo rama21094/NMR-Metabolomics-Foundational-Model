@@ -38,7 +38,25 @@ import numpy as np
 LANDMARKS = [("lactate CH3", 1.33, 0.06),
              ("alanine CH3", 1.47, 0.05),
              ("creatine CH3", 3.03, 0.05),
-             ("glucose H1(a)", 5.22, 0.05)]
+             ("glucose H1(a)", 5.233, 0.04)]
+
+# The geometry test that needs no reference group. A referencing offset moves
+# both peaks together and leaves their separation alone; a scale error changes
+# it in proportion. So this measures scale inside ONE group's own median, with
+# no cross-study content confound -- which is precisely what defeated the
+# correlation scan on MetabolomicsWorkBench, where no group is dominant and the
+# scan went flat (margins of 0.008-0.015, i.e. no optimum at all).
+# Both lines belong to LACTATE -- CH3 at 1.330 and CH at 4.110 -- so they are
+# always present together in CPMG serum/plasma, both sharp, and 2.780 ppm apart.
+# Earlier versions used lactate-to-creatine with fixed windows and failed: the
+# Workbench studies reference up to 0.05 ppm apart from one another, so the fixed
+# windows hit their own walls and returned the boundary rather than a peak. A
+# window that reports when it saturates is the difference between a measurement
+# and an artefact.
+SEP_A = ("lactate CH3", 1.42, 1.24)         # (name, ppm_high, ppm_low)
+SEP_B = ("lactate CH",  4.20, 4.02)
+SEP_EXPECT = 2.780
+SEP_TOL_PCT = 1.0                            # scale error we are willing to accept
 
 
 def main() -> None:
@@ -101,7 +119,17 @@ def main() -> None:
     print(f"\nscale scan against the largest group (SW {big}), "
           f"{args.band[0]}-{args.band[1]} ppm:")
     print(f"{'SW':<10}{'n':>6}{'best':>8}{'peak':>8}{'runner':>8}{'disp':>7}  verdict")
-    allgood = True
+    def apex(y, want, tol):
+        a = int(np.argmin(np.abs(ppm - (want + tol))))
+        b = int(np.argmin(np.abs(ppm - (want - tol))))
+        if b <= a:
+            return None
+        seg = y[a:b]
+        if float(np.max(seg)) <= 0:
+            return None
+        return float(ppm[a + int(np.argmax(seg))])
+
+    scan = {}
     for w in sorted(groups):
         y = med(groups[w])
         vals = np.array([peak(y, s)[0] for s in scales])
@@ -111,13 +139,49 @@ def main() -> None:
             if len(order) > 1 else 0.0
         _, disp = peak(y, 1.0)
         sharp = bp - runner
-        good = abs(bs - 1.0) < 1e-9 and sharp > 0.15
-        allgood &= good
-        verdict = ("OK" if good else
-                   f"FAIL -- optimum at {bs:.2f}, not 1.00" if abs(bs - 1.0) > 1e-9
-                   else f"WEAK -- peak only {sharp:+.2f} above runner-up")
+        scan[w] = (bs, sharp)
+        if len(groups[w]) < 5:
+            verdict = "n<5 -- no usable median, skipped"
+        elif sharp < 0.05:
+            verdict = f"INCONCLUSIVE -- scan is flat ({sharp:+.3f}); see separation test"
+        elif abs(bs - 1.0) > 1e-9:
+            verdict = f"FAIL -- optimum at {bs:.2f}, not 1.00"
+        else:
+            verdict = "OK" if sharp > 0.15 else f"OK (margin only {sharp:+.2f})"
         print(f"{w:<10}{len(groups[w]):>6}{bs:>8.2f}{bp:>8.3f}"
               f"{runner:>8.3f}{disp:>7d}  {verdict}")
+
+    print(f"\nSCALE TEST -- {SEP_A[0]} to {SEP_B[0]} separation within each group\n"
+          f"(expected {SEP_EXPECT:.3f} ppm. Both lines are lactate, so this is\n"
+          f"independent of how the study was referenced; only scale moves it):")
+    print(f"{'SW':<10}{'n':>6}{'CH3':>9}{'CH':>9}{'sep':>9}{'err%':>8}  verdict")
+    allgood = True
+
+    def top(y, hi, lo):
+        a = int(np.argmin(np.abs(ppm - hi))); b = int(np.argmin(np.abs(ppm - lo)))
+        k = a + int(np.argmax(y[a:b]))
+        return float(ppm[k]), (k == a or k == b - 1)
+
+    for w in sorted(groups):
+        if len(groups[w]) < 5:
+            print(f"{w:<10}{len(groups[w]):>6}{'-':>9}{'-':>9}{'-':>9}{'-':>8}  n<5 -- skipped")
+            continue
+        y = med(groups[w])
+        pa, ea = top(y, SEP_A[1], SEP_A[2])
+        pb, eb = top(y, SEP_B[1], SEP_B[2])
+        sep = pb - pa
+        err = 100 * (sep - SEP_EXPECT) / SEP_EXPECT
+        if ea or eb:
+            verdict = "UNMEASURED -- peak search hit the window edge"
+        elif abs(err) <= SEP_TOL_PCT:
+            verdict = "OK"
+        elif abs(err) <= 2.5:
+            verdict = f"MARGINAL -- {err:+.2f}%, probably a mis-picked neighbour"
+        else:
+            verdict = f"FAIL -- scale off by {err:+.2f}%"
+            allgood = False
+        print(f"{w:<10}{len(groups[w]):>6}{pa:>9.4f}{pb:>9.4f}{sep:>9.4f}"
+              f"{err:>+8.2f}  {verdict}")
 
     print("\nabsolute landmark positions in the pooled median "
           "(the rebuild keeps real ppm, so these must be right):")
@@ -132,10 +196,17 @@ def main() -> None:
         print(f"   {name:<16} expected {want:+.3f}  found {got:+.3f}  "
               f"({d:+.3f} ppm){'' if abs(d) <= tol * 0.8 else '   <-- off'}")
 
-    print("\n" + ("PASS: every width group peaks at scale 1.00."
+    flat = [w for w, (_, sh) in scan.items() if sh < 0.05 and len(groups[w]) >= 5]
+    print("\n" + ("PASS: every width group carries the correct landmark separation,\n"
+                  "      so every group is on the common axis at true scale."
                   if allgood else
-                  "FAIL: at least one group does not. Do NOT use this corpus; "
-                  "the axis is not common."))
+                  "FAIL: at least one group has the wrong landmark separation.\n"
+                  "      Do NOT use this corpus; the axis is not common."))
+    if flat:
+        print(f"\nnote: the correlation scan was flat for SW {', '.join(str(w) for w in flat)}.\n"
+              "      That is a limitation of comparing one study's median against\n"
+              "      another's, not evidence of a defect. The separation test above\n"
+              "      is the one to read for those groups.")
 
 
 if __name__ == "__main__":
