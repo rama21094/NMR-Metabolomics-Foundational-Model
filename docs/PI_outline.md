@@ -1636,3 +1636,51 @@ out to be stretched, assuming the serum portion is clean would be unwise.
 `read1D_align.py` keeps first occurrences **in order**, so the 2,148 array rows are
 an ordered subsequence of the 3,577 paths, and that constraint makes the mapping
 recoverable reliably.
+
+### 5z. Knowing a spectrum's spectral width is NOT enough to correct it
+
+5y proposed resampling all 619 corpus rows whose acquisition width differs from
+20.024. That was run, and **it made most of them worse**. The per-group result,
+median cross-correlation peak against the corpus median, before -> after applying
+the nominal scale `20.0236 / SW`:
+
+| SW | n | before | after | |
+|---|---|---|---|---|
+| 12.981 | 100 | 0.365 | **0.485** | **+0.119, genuinely fixed** |
+| 11.988 | 215 | 0.295 | 0.328 | +0.033, marginal |
+| 12.023 | 172 | 0.425 | 0.402 | **-0.023, worse** |
+| 20.553 | 56 | 0.423 | 0.372 | **-0.050, worse** |
+| 16.699 | 3 | 0.429 | 0.418 | worse |
+| 20.136 | 68 | 0.436 | 0.434 | flat |
+| 25.744 | 1 | 0.398 | 0.301 | **-0.096, worse** |
+| 30.025 | 4 | 0.282 | 0.283 | flat |
+
+**Only the 12.981 group responds.** The 108-row result reported in 5x was carried
+entirely by it; the other 8 rows in that batch were degraded and the aggregate hid
+it.
+
+**Why displacement was the wrong metric.** 5x reported "within 200 points" rising
+from 7.4% to 63.0%. On a group whose shape genuinely matches, that is meaningful.
+On one whose shape does not, the cross-correlation peak is broad and low and its
+argmax is arbitrary, so rows can appear well placed by luck: the 12.023 group read
+33.7% "within 200 points" *before* any correction, while its peak height was 0.395
+against 0.77 for aligned rows. **Peak height is the honest test; displacement is
+not.** The script now gates on it (`--min-gain`, default 0.05) and skips any group
+that does not improve.
+
+Final state: **100 rows resampled, 519 skipped.**
+
+**The open question this raises.** For 519 rows the nominal acquisition width does
+not describe the stored geometry, so scaling by it is wrong. Possible causes, none
+yet tested: the Workbench arrays were built by a different script
+(`create_workbench_cpmg_serum_plasma_npy.py`) which has the same per-spectrum
+resampling defect but derives its axis from `data.size` rather than `procs:SI`
+(its line 160 against `read1D_align.py` line 161); or those spectra passed through
+an earlier resampling, so the stored array is no longer at the acquisition
+geometry and applying the scale double-corrects.
+
+**Consequence for the plan.** "Recover every width, then resample everything" is
+not viable as stated -- 5y assumed the width alone determines the correction and
+that is now disproved. Getting the serum mapping is still worth doing, but it
+should be expected to identify rows rather than to fix them, and each group must
+face the same gate.

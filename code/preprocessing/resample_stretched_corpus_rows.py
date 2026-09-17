@@ -74,6 +74,18 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", default="data/combined/corpus_v4_ref0ppm_clean.npy")
     ap.add_argument("--out", default="data/combined/corpus_v5partial_ref0ppm_clean.npy")
+    ap.add_argument("--min-gain", type=float, default=0.05,
+                    help="a spectral-width group is only resampled if doing so "
+                         "raises the median cross-correlation peak against the "
+                         "corpus median by at least this much. NOT optional "
+                         "bookkeeping: applying the nominal scale to every group "
+                         "with a non-20 ppm width made most of them WORSE "
+                         "(12.023 ppm 0.395 -> 0.372, 20.553 ppm 0.423 -> 0.376), "
+                         "while 12.981 ppm went 0.363 -> 0.479. Displacement is "
+                         "not a usable test on its own: a badly matching spectrum "
+                         "has a broad, low correlation peak whose argmax is "
+                         "arbitrary, so it can appear well placed by luck. The "
+                         "peak HEIGHT is what says the shape agrees.")
     ap.add_argument("--map", default="results/analysis/corpus_row_study_map.csv")
     ap.add_argument("--rowmap", default="results/analysis/atypical/row_map_clean.csv")
     ap.add_argument("--extra-sw", default="results/analysis/corpus_row_sw_workbench.csv",
@@ -110,6 +122,51 @@ def main() -> None:
 
     X = np.load(ROOT / args.src, mmap_mode="r")
     n = X.shape[0]
+
+    # ---- per-group gate: does resampling this width actually help? ----------
+    BAND = np.arange(70_000, 92_000)
+    rngv = np.random.default_rng(0)
+    samp = np.sort(rngv.choice(n, 1200, replace=False))
+    Mref = np.array(X[samp][:, BAND], dtype=np.float32)
+    ref = np.median(Mref, axis=0)
+    rr = ref - ref.mean(); rr /= np.linalg.norm(rr) + 1e-12
+    mband = len(BAND); nfft_b = 1 << (2 * mband - 1).bit_length()
+    Rf = np.conj(np.fft.rfft(rr, nfft_b))
+
+    def peak_median(rows, scale=None):
+        vals = []
+        g = np.arange(NPT, dtype=np.float64)
+        for rw in rows:
+            y = np.array(X[rw], dtype=np.float64)
+            if scale is not None:
+                y = np.interp(PIVOT + (g - PIVOT) / scale, g, y, left=0.0, right=0.0)
+            z = y[BAND] - y[BAND].mean()
+            nz = np.linalg.norm(z)
+            if nz < 1e-12:
+                continue
+            cc = np.fft.irfft(np.fft.rfft(z / nz, nfft_b) * Rf, nfft_b)
+            vals.append(float(max(cc.max(), 0.0)))
+        return float(np.median(vals)) if vals else -1.0
+
+    by_sw = {}
+    for row, sw in todo.items():
+        by_sw.setdefault(round(sw, 3), []).append(row)
+    print("\nper-group gate (median cross-correlation peak vs the corpus median):")
+    keep = {}
+    for sw, rows in sorted(by_sw.items()):
+        probe = rows[:60]
+        b = peak_median(probe)
+        a = peak_median(probe, REF_SW / sw)
+        verdict = "APPLY" if a - b >= args.min_gain else "SKIP -- does not help"
+        print(f"    SW {sw:<9} n={len(rows):<5} {b:.3f} -> {a:.3f} "
+              f"({a - b:+.3f})  {verdict}")
+        if a - b >= args.min_gain:
+            for rw in rows:
+                keep[rw] = sw
+    skipped = len(todo) - len(keep)
+    todo = keep
+    print(f"  resampling {len(todo):,} rows; skipping {skipped:,} whose width "
+          f"differs but whose agreement does not improve")
     out = np.lib.format.open_memmap(ROOT / args.out, mode="w+",
                                     dtype=X.dtype, shape=X.shape)
     grid = np.arange(NPT, dtype=np.float64)
