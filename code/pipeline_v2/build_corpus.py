@@ -94,7 +94,7 @@ POINTS_DEFAULT = 131_072
 
 # Solvent window, in ppm. The old pipeline used point indices 62500-68000, which
 # corresponded to 4.435-5.276 ppm only under the axis it assumed.
-WATER_PPM = (4.50, 5.10)
+WATER_PPM = (4.45, 5.10)
 
 
 # ============================ Bruker reading ==============================
@@ -194,7 +194,9 @@ def find_pdata_dirs(root: Path, procno: str | None):
     something else -- the dry run over PlasmaNMRData reports exactly 12.
     """
     by_exp: dict[Path, list[Path]] = {}
-    for dirpath, _dirnames, filenames in os.walk(root):
+    # followlinks: staging a subset of a shared tree as a directory of symlinks is
+    # the natural way to build one cohort out of a folder holding several studies.
+    for dirpath, _dirnames, filenames in os.walk(root, followlinks=True):
         if "1r" in filenames and "procs" in filenames:
             p = Path(dirpath)
             exp = p.parent.parent              # .../<exp>/pdata/<n> -> <exp>
