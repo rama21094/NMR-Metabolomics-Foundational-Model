@@ -1684,3 +1684,15 @@ not viable as stated -- 5y assumed the width alone determines the correction and
 that is now disproved. Getting the serum mapping is still worth doing, but it
 should be expected to identify rows rather than to fix them, and each group must
 face the same gate.
+
+**Verified final state of `corpus_v5partial_ref0ppm_clean.npy`** (9,623 rows):
+
+| | xcorr peak | within 200 pts |
+|---|---|---|
+| the 100 applied rows (SW 12.981) | 0.363 -> **0.479** | 3.0% -> **67.0%** |
+| the 519 skipped rows | 0.352 -> 0.352 (unchanged, as required) | -- |
+| every other row | byte-identical to v4, verified | -- |
+
+Both improvements move together for the applied group, which is what a real
+correction looks like: the shape agrees better *and* the position follows. For the
+skipped rows nothing was touched, so the gate cannot have silently degraded them.
