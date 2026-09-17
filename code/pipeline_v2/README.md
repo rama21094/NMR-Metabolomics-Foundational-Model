@@ -36,6 +36,18 @@ present. That table is the thing the old pipeline got wrong, so look at it.
 +10.0 to -0.5 ppm over 131,072 points. Then the three arrays share an axis and
 `np.concatenate` is meaningful — which was never true before.
 
+**`--pulprog` matters as much as the axis fix.** The corpus is CPMG-only by
+design: the T2 filter suppresses the broad protein and lipid envelope. The
+original pipeline enforced that upstream, by copying only CPMG folders
+(`CPMGtoOneFolder.py`) before any spectrum was read. A reader that walks the raw
+tree must re-apply the filter or it silently changes what the corpus is.
+
+How much this matters, measured: of 520 TBI `pdata` directories only **177** are
+CPMG -- 225 are `noesypr1d`, 117 `zgpr`, 1 `zgesgp`. `PlasmaNMRData` holds 14
+`noesygppr1d` and 11 `jresgpprqf` among 7,116, and a J-resolved experiment is not
+a 1D spectrum at all. The default regex is `cpmg`; pass `--pulprog .` to accept
+everything, and read the exclusion table the dry run prints.
+
 `--procno 1` matters: the old pipeline read every `pdata/<n>`, which is why its
 serum path list had 3,577 entries for 1,962 experiments and why deduplication had
 so much to remove.
@@ -63,9 +75,10 @@ A high correlation alone proves nothing; seven false positives came from reading
 one. The script prints `PASS` only when every group peaks at 1.00 with a margin
 above 0.15.
 
-Smoke test on 520 real TBI spectra: the lone SW 13.016 spectrum, sitting among 519
-at SW 16.02, peaks at **scale 1.00, 0.872 against runner-up 0.541** — a different
-acquisition width landing correctly on the common axis.
+Smoke test on real TBI Bruker data: with the CPMG filter off, the lone SW 13.016
+spectrum sitting among 519 at SW 16.02 peaks at **scale 1.00, 0.872 against
+runner-up 0.541** — a different acquisition width landing correctly on the common
+axis. With the filter on, 177 of those 520 experiments remain.
 
 ## Landmark output
 

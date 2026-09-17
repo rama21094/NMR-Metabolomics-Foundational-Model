@@ -1777,3 +1777,45 @@ now in hand:
 
 Reprocessing also makes the -0.5 to 10 ppm crop trivial, since the common axis is
 chosen rather than inherited, and every dataset covers that window.
+
+### 6c. How the corpus was assembled (from the author, 17 Sep 2026)
+
+Recorded because none of it is recoverable from the code or the git history, and
+two of today's open questions turn on it.
+
+1. **MetaboLights first.** Downloaded into `MetabolightsData`. It holds serum and
+   plasma, acquired with both CPMG and NOESY. CPMG was the larger set, so **CPMG
+   only** was carried forward -- the T2 filter suppresses the broad protein and
+   lipid envelope, which is why the corpus looks the way it does.
+2. The CPMG experiments were copied into `MetabolightsCPMG` and
+   `MetabolightsCPMGSingleFolder`, read with nmrglue into `.npy`, and deduplicated.
+3. **Metabolomics Workbench second**, found later, mostly plasma, processed the
+   same way: CPMG only, deduplicated.
+4. The two were combined -- which is the `combine_unique_MetaboLights_Workbench_*`
+   lineage, and why the Workbench rows came through a second script
+   (`create_workbench_cpmg_serum_plasma_npy.py`) carrying the same defects.
+5. Work began on **serum alone**, hence the serum-only `.npy` files. Serum and
+   plasma were later pooled because the dataset was small and the matrices are
+   similar. Hence `PlasmaNMRData` and `SerumNMRData` as separate trees.
+6. `SerumNMRData_discarded` holds spectra dropped for not looking like serum, not
+   being CPMG, or other quality problems.
+
+**Consequence for the rebuild, and it is not cosmetic.** The CPMG restriction was
+enforced *upstream*, by copying only CPMG folders before any spectrum was read.
+Nothing in the reader enforced it. A rebuild that walks the raw trees directly --
+which is exactly what `code/pipeline_v2/build_corpus.py` does -- would therefore
+have silently changed the corpus's definition.
+
+Measured: of 520 TBI `pdata` directories only **177** are CPMG; 225 are
+`noesypr1d`, 117 `zgpr`, 1 `zgesgp`. The smoke-test build reported earlier
+included all 343. `PlasmaNMRData` holds 14 `noesygppr1d` and 11 `jresgpprqf` among
+7,116, and a J-resolved experiment is not a 1D spectrum at all.
+
+`build_corpus.py` now takes `--pulprog` (default `cpmg`) and `--nuc1` (default
+`1H`), and the dry run prints what it excluded and why. Without that, the rebuilt
+corpus would have been a different dataset from the one every published result
+used, and nothing in the axis verification would have caught it.
+
+Also worth noting for the audit trail: `SerumNMRData_discarded` is a curation
+decision made by hand and not reproducible from parameters, so a rebuild must keep
+reading `SerumNMRData` rather than the parent of both.

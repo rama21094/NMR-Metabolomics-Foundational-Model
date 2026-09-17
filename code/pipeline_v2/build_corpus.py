@@ -68,6 +68,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import collections
 import os
 import re
 import sys
@@ -168,6 +169,7 @@ def read_processed_spectrum(pdata_dir: Path):
         "acqu_SW": _num(acqus, "SW", ""), "acqu_TD": _num(acqus, "TD", ""),
         "acqu_NS": _num(acqus, "NS", ""), "acqu_RG": _num(acqus, "RG", ""),
         "acqu_PULPROG": (acqus.get("PULPROG", "") or "").strip("<>"),
+        "acqu_NUC1": (acqus.get("NUC1", "") or "").strip("<>"),
         "acqu_SOLVENT": (acqus.get("SOLVENT", "") or "").strip("<>"),
         "acqu_DATE": _num(acqus, "DATE", ""),
         "acqu_TE": _num(acqus, "TE", ""),
@@ -265,6 +267,20 @@ def main() -> None:
                     help="only this processing number (e.g. 1). The old pipeline "
                          "read every pdata/<n>, which is why its serum path list "
                          "had 3,577 entries for 1,962 experiments.")
+    ap.add_argument("--pulprog", default="cpmg",
+                    help="case-insensitive regex the acqus PULPROG must match. "
+                         "Default 'cpmg'. THIS MATTERS: the corpus was built from "
+                         "CPMG spectra only, because CPMG's T2 filter suppresses "
+                         "the broad protein and lipid envelope. The raw trees still "
+                         "contain other experiments -- PlasmaNMRData holds 14 "
+                         "noesygppr1d and 11 jresgpprqf among 7,116 -- and a "
+                         "J-resolved experiment is not a 1D spectrum at all. The "
+                         "old pipeline excluded these upstream by copying only "
+                         "CPMG folders, so a reader that walks the raw tree must "
+                         "re-apply the filter or it silently changes the corpus. "
+                         "Use '.' to accept everything.")
+    ap.add_argument("--nuc1", default="1H",
+                    help="required acqus NUC1; empty string to disable")
     ap.add_argument("--water", default="zero", choices=["zero", "noise", "keep"])
     ap.add_argument("--water-ppm", type=float, nargs=2, default=WATER_PPM)
     ap.add_argument("--normalise", default="maxabs", choices=["maxabs", "none"])
@@ -294,20 +310,36 @@ def main() -> None:
         sys.exit("nothing to do")
 
     # ---- pass 1: parameters only -----------------------------------------
+    pul_re = re.compile(args.pulprog, re.I) if args.pulprog else None
     rows, widths = [], {}
+    rejected = collections.Counter()
     for i, d in enumerate(dirs):
         r = read_processed_spectrum(d)
         if r is None:
             rows.append((d, None))
+            rejected["unreadable"] += 1
             continue
         _, ppm, p = r
+        pp = str(p.get("acqu_PULPROG", ""))
+        if pul_re and not pul_re.search(pp):
+            rows.append((d, None))
+            rejected[f"PULPROG={pp or '(blank)'}"] += 1
+            continue
+        if args.nuc1 and str(p.get("acqu_NUC1", "") or "").strip() not in ("", args.nuc1):
+            rows.append((d, None))
+            rejected[f"NUC1={p.get('acqu_NUC1')}"] += 1
+            continue
         rows.append((d, p))
         widths[round(p["sw_ppm"], 3)] = widths.get(round(p["sw_ppm"], 3), 0) + 1
         if (i + 1) % 500 == 0:
             print(f"\r  scanned {i + 1}/{len(dirs)}", end="", flush=True)
     print(f"\r  scanned {len(dirs)}/{len(dirs)}")
     ok = [r for r in rows if r[1] is not None]
-    print(f"  readable: {len(ok):,}   unreadable: {len(rows) - len(ok):,}")
+    print(f"  accepted: {len(ok):,}   excluded: {len(rows) - len(ok):,}")
+    if rejected:
+        print("  excluded by reason:")
+        for k, v in rejected.most_common():
+            print(f"    {k:<40} {v:,}")
     print("\n  spectral widths present (ppm -> n):")
     for w in sorted(widths):
         print(f"    {w:<10} {widths[w]:,}")
@@ -390,7 +422,7 @@ def main() -> None:
     cols = ["row", "pdata_path", "axis_coverage", "sw_ppm", "ppm_high", "ppm_low",
             "proc_OFFSET", "proc_SF", "proc_SW_p", "proc_SI", "field_mhz",
             "acqu_SFO1", "acqu_BF1", "acqu_SW", "acqu_TD", "acqu_NS", "acqu_RG",
-            "acqu_PULPROG", "acqu_SOLVENT", "acqu_DATE", "acqu_TE"]
+            "acqu_PULPROG", "acqu_NUC1", "acqu_SOLVENT", "acqu_DATE", "acqu_TE"]
     with open(prov, "w", newline="") as fh:
         w = csv.writer(fh); w.writerow(cols)
         for newrow, i in enumerate(idx):
