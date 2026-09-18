@@ -86,30 +86,20 @@ txt(s,0.85,5.86,11.6,0.76,[("940 of 9,480 spectra (9.9%) ",{"bold":True}),
 # ---------------------------------------------------------------- slide 4 ---
 s=slide(); head(s,"Gate G1: classical ML still wins",
                 "And the axis defect was not the reason - this reproduces on correct data")
-data=[["k per class","classical","masking","jigsaw","joint"],
-      ["5","0.597","0.549","0.498","0.516"],["10","0.653","0.593","0.531","0.548"],
-      ["20","0.705","0.633","0.561","0.580"],["40","0.738","0.672","0.587","0.611"],
-      ["all","0.729","0.657","0.573","0.607"]]
-tb=s.shapes.add_table(len(data),5,I(0.55),I(1.6),I(6.1),I(2.1)).table
-for w,cw in zip(tb.columns,[1.35,1.25,1.25,1.15,1.1]): w.width=I(cw)
-for ri,row in enumerate(data):
-    for ci,val in enumerate(row):
-        cell=tb.cell(ri,ci); cell.text=""
-        pa=cell.text_frame.paragraphs[0]; pa.alignment=PP_ALIGN.CENTER
-        r=pa.add_run(); r.text=val; r.font.name=F; r.font.size=Pt(11.5)
-        r.font.bold=(ri==0); r.font.color.rgb=INK if ri==0 else (BLUE if ci==1 else BODY)
-        cell.fill.solid(); cell.fill.fore_color.rgb=C(0xFF,0xFF,0xFF) if ri else CARD_N
-        cell.vertical_anchor=MSO_ANCHOR.MIDDLE
-txt(s,0.55,3.80,6.1,0.3,"Mean balanced accuracy, 6 targets x 5 seeds x 50 paired episodes",size=10,color=GREY,italic=True)
-card(s,7.0,1.6,5.75,2.2,CARD_G)
-txt(s,7.28,1.74,5.2,0.32,"Pretraining does work",size=15,color=GREEN,bold=True)
-txt(s,7.28,2.14,5.2,1.55,"Against a random-init backbone of identical architecture on identical episodes, masking gains +0.081 to +0.121 balanced accuracy - consistent across all six targets, far above the 0.045 noise floor. The pretext task teaches the encoder something real. It is worth less than what a shrinkage LDA extracts from 500 spectral bins.",size=11.5)
-card(s,0.55,4.28,12.2,0.98,CARD_R)
-txt(s,0.85,4.42,11.6,0.74,[("0 SSL wins / 24 classical wins / 5 ties.  ",{"bold":True,"color":RED}),
- ("Classical leads at every label budget including k=5, so there is no few-shot crossover. Reproducing this on correctly aligned data closes off 'the data was broken' as the explanation.",{})],size=11.5)
-card(s,0.55,5.44,12.2,1.16,CARD_N)
-txt(s,0.85,5.58,11.6,0.94,[("Two claims withdrawn this week.  ",{"bold":True}),
- ("(1) Effective rank does not predict transfer - I predicted joint would win on that basis, and masking won at every budget. (2) An apparent Barth win was selection bias from reporting the best of 15 checkpoints; every objective's seed mean is below classical. That same error was retracted once before, so the summary now reports seed means and marks best-of-15 as an upper bound.",{})],size=11)
+s.shapes.add_picture(D+"fig7_G1_per_cohort_slim.png",I(0.55),I(1.46),width=I(12.2))
+txt(s,0.55,5.98,12.2,0.3,"Balanced accuracy vs labelled examples per class. Error bars: sd across 5 pretraining seeds. "
+    "Red band: +/- episode sd for classical. 50 paired episodes per point.",size=9.5,color=GREY,italic=True)
+card(s,0.55,6.30,6.0,1.06,CARD_R)
+txt(s,0.8,6.42,5.5,0.86,[("0 SSL wins / 24 classical wins / 5 ties.  ",{"bold":True,"color":RED}),
+ ("Classical leads in every cohort at every label budget, including k=5, so there is no few-shot crossover. The gap ranges +0.051 to +0.101.",{})],size=10.5)
+card(s,6.75,6.30,6.0,1.06,CARD_G)
+txt(s,7.0,6.42,5.5,0.86,[("Pretraining does work.  ",{"bold":True,"color":GREEN}),
+ ("Masking beats a random-init backbone by +0.081 to +0.121 on identical episodes - far above the 0.045 noise floor. Still less than a shrinkage LDA on 500 bins.",{})],size=10.5)
+s.notes_slide.notes_text_frame.text=("Two claims withdrawn this week. (1) Effective rank does not predict transfer - "
+ "I predicted joint would win on that basis, and masking won at every budget. "
+ "(2) An apparent Barth win was selection bias from reporting the best of 15 checkpoints; "
+ "every objective seed mean is below classical. The summary now reports seed means and "
+ "marks best-of-15 as an upper bound.")
 
 # ---------------------------------------------------------------- slide 5 ---
 s=slide(); head(s,"Gate G2: data quantity is not the constraint",
@@ -126,7 +116,7 @@ txt(s,0.55,6.75,12.2,0.34,"A generator trained here would be sound and still rep
 
 # ---------------------------------------------------------------- slide 6 ---
 s=slide(); head(s,"Does more data, or more diverse data, transfer better?","The scaling sweep - 33 pretraining runs across three machines")
-tbl2=[["pretraining corpus","k=10","k=all"],
+tbl2=[["pretraining corpus","10 labels\n/class","all\nlabels"],
       ["2,000 rows from 2 studies","0.541","0.600"],
       ["2,000 rows from 4 studies","0.565","0.633"],
       ["2,000 rows from 8 studies","0.565","0.629"],
@@ -148,7 +138,7 @@ for ri,row in enumerate(tbl2):
         cell.fill.solid()
         cell.fill.fore_color.rgb=CARD_N if (ri==0 or last) else C(0xFF,0xFF,0xFF)
         cell.vertical_anchor=MSO_ANCHOR.MIDDLE
-txt(s,0.55,4.42,6.0,0.3,"Masking, mean over 6 targets; seed sd 0.002-0.021",size=10,color=GREY,italic=True)
+txt(s,0.55,4.36,6.2,0.3,"Masking, mean over 6 targets; seed sd 0.002-0.021. Columns = label budget.",size=9.5,color=GREY,italic=True)
 card(s,6.85,1.58,5.9,2.75,CARD_N)
 txt(s,7.13,1.72,5.35,0.3,"Diversity beats quantity, but both are small",size=14,color=INK,bold=True)
 txt(s,7.13,2.10,5.35,2.1,[("At a fixed 2,000-row budget, going from 2 studies to 12 gains ",{}),
