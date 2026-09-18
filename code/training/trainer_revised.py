@@ -1071,6 +1071,10 @@ def main():
     # numpy, and torch (CPU + all CUDA devices) before any dataset or model is
     # built. Default is None (unseeded, exactly the old behaviour) so every
     # existing command line keeps behaving as it always did.
+    parser.add_argument('--num-workers', type=int, default=None,
+                        help='DataLoader workers per run. Default scales with the '
+                             'machine; set it explicitly when running several '
+                             'trainings concurrently on a shared host.')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed python/numpy/torch RNGs for a reproducible run. Default: '
                              'unseeded (legacy behaviour). Two runs with the same --seed and '
@@ -1296,7 +1300,12 @@ def main():
         test_dataset = None
     # Tune number of workers dynamically (avoid oversubscribing CPU). Use persistent workers and prefetch to keep GPU fed.
     cpu_count = os.cpu_count() or 4
-    suggested_workers = max(2, min(16, cpu_count // 2))
+    # os.cpu_count() reports the whole machine, so on a shared 128-core host the
+    # default asks for 16 workers per run. That is fine for one run and ruinous
+    # for ten concurrent ones, which is exactly what the Phase 4 scaling sweep
+    # does -- hence the explicit override.
+    suggested_workers = (args.num_workers if getattr(args, "num_workers", None) is not None
+                         else max(2, min(16, cpu_count // 2)))
 
     # With num_workers>0, forked worker processes inherit the parent's python
     # `random`/numpy global RNG state identically -- DataLoader's default
