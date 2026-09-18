@@ -28,10 +28,26 @@ independently in each, and measure the Wasserstein-1 distance between them.
 The distance is reported RELATIVE to the distribution's own interquartile range,
 so it is comparable across ppm regions with wildly different intensity scales.
 
-Halves are split BY STUDY wherever possible: two halves drawn at random from the
-same studies are not independent samples of the underlying population, because
-within-study nearest-neighbour correlation is 0.989. A row-wise split would
-report convergence that is really just duplication.
+TWO SPLITS, because they answer different questions and only reporting one is
+misleading:
+
+  --split row     both halves drawn from the same studies. Measures SAMPLING
+                  error: is p(y|x) pinned down for the population we sampled?
+                  This must fall as 1/sqrt(N) if the estimator is working.
+
+  --split study   the halves come from disjoint sets of studies. Measures
+                  BETWEEN-STUDY variation: does p(y|x) estimated on one set of
+                  labs transfer to another? This does NOT fall with N -- adding
+                  spectra from the same 12 studies cannot reduce a systematic
+                  difference between studies.
+
+The first run of this analysis used the study split alone and reported that
+p(y|x) is undefined in 98.5% of bins. That number is real but it was the wrong
+inference: a study-split distance that stays flat as N grows (0.91, 0.81, 0.96,
+0.77, 1.04 at N = 100..2000) is not evidence of an unconverged estimate, it is
+evidence of irreducible between-study variation. Running both splits separates
+"we have too few spectra" from "we have too few studies", which is exactly the
+distinction gate G2 turns on.
 """
 from __future__ import annotations
 
@@ -101,6 +117,9 @@ def main() -> None:
     ap.add_argument("--sizes", type=int, nargs="+",
                     default=[100, 250, 500, 1000, 2000, 4000])
     ap.add_argument("--repeats", type=int, default=5)
+    ap.add_argument("--split", choices=["row", "study"], default="row",
+                    help="row = sampling error within the same studies; "
+                         "study = between-study variation")
     ap.add_argument("--out", default="results/phase4/intensity_distributions.json")
     args = ap.parse_args()
 
@@ -117,21 +136,26 @@ def main() -> None:
 
     uniq = sorted(set(studies))
     rng = np.random.default_rng(0)
-    out = {"bin_ppm": args.bin_ppm, "centres": centres.tolist(),
+    out = {"bin_ppm": args.bin_ppm, "split": args.split, "centres": centres.tolist(),
            "n_spectra": int(X.shape[0]), "convergence": [], "per_bin_at_max": None}
 
-    print("4.2  does p(y|x) stop moving as data is added?")
-    print("     (Wasserstein between two DISJOINT study-split samples, "
-          "relative to pooled IQR)")
+    kind = ("sampling error, same studies both sides" if args.split == "row"
+            else "between-study variation, disjoint studies")
+    print(f"4.2  split = {args.split}  ({kind})")
+    print("     Wasserstein between two disjoint samples, relative to pooled IQR")
     print(f"{'N per half':>11}{'median rel.':>13}{'p90 rel.':>10}{'bins<0.10':>11}"
           f"{'bins<0.25':>11}")
     for N in args.sizes:
         rels = []
         for rep in range(args.repeats):
-            perm = list(rng.permutation(uniq))
-            halfA = set(perm[:len(perm) // 2]); halfB = set(perm[len(perm) // 2:])
-            poolA = np.where(np.isin(studies, list(halfA)))[0]
-            poolB = np.where(np.isin(studies, list(halfB)))[0]
+            if args.split == "study":
+                perm = list(rng.permutation(uniq))
+                halfA = set(perm[:len(perm) // 2]); halfB = set(perm[len(perm) // 2:])
+                poolA = np.where(np.isin(studies, list(halfA)))[0]
+                poolB = np.where(np.isin(studies, list(halfB)))[0]
+            else:
+                shuffled = rng.permutation(len(studies))
+                poolA, poolB = shuffled[::2], shuffled[1::2]
             if len(poolA) < N or len(poolB) < N:
                 continue
             ia = rng.choice(poolA, size=N, replace=False)
