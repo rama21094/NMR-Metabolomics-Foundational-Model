@@ -144,6 +144,8 @@ def main() -> None:
     ap.add_argument("--budgets", type=int, nargs="+", default=BUDGETS)
     ap.add_argument("--objectives", nargs="+", default=["masking", "jigsaw", "joint"])
     ap.add_argument("--random-init", action="store_true")
+    ap.add_argument("--targets", nargs="+", default=None,
+                    help="subset of target ids, so the run can be split across hosts")
     ap.add_argument("--out", default="results/phase3/transfer.json")
     args = ap.parse_args()
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -152,11 +154,12 @@ def main() -> None:
     EMB = {"masking": embed_masking, "jigsaw": embed_jigsaw, "joint": embed_joint}
 
     ckpts = [c for c in find_ckpts() if c[0] in args.objectives]
-    print(f"{len(ckpts)} checkpoints, {len(target_defs())} targets, "
+    tdefs = [t for t in target_defs() if args.targets is None or t[0] in args.targets]
+    print(f"{len(ckpts)} checkpoints, {len(tdefs)} targets, "
           f"budgets {args.budgets}, {args.episodes} episodes each\n")
 
     rows = []
-    for tid, cohort, labfn in target_defs():
+    for tid, cohort, labfn in tdefs:
         M, ppm, y = load_cohort(cohort, labfn)
         reps = {"classical_binned0.02": binned(M, ppm, 0.02)}
 
