@@ -17,12 +17,20 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import PowerNorm
 
 OUT = Path("docs/figures")
 OUT.mkdir(parents=True, exist_ok=True)
 OLD = Path("data/combined")
 NEW = Path("rebuild")
 RNG = np.random.default_rng(0)
+# Palette: the one that reads best on a projector -- a pale wheat ground with
+# red and blue traces. magma_r puts low intensity at cream and peaks at deep red,
+# which keeps the spectra dark-on-light instead of the reverse.
+GROUND = "#FBF6E9"     # pale wheat plot ground
+TRACE = "#2E5E9E"      # blue: individual spectra
+MEDIAN = "#C0272D"     # red: the median trace
+CMAP = "magma_r"
 NROW = 300
 # The aliphatic window: lactate 1.33, alanine 1.47. Sharp, always present,
 # and close enough together that misalignment is unmistakable.
@@ -47,9 +55,10 @@ def panel(ax, M, x, title, xlabel, zoom=None):
         sel = (x <= zoom[1]) & (x >= zoom[0])
         M, x = M[:, sel], x[sel]
     M = norm(M)
+    ax.set_facecolor(GROUND)
     for row in M:
-        ax.plot(x, row, lw=0.25, alpha=0.30, color="#1f4e79")
-    ax.plot(x, np.median(M, axis=0), lw=1.3, color="#c00000", label="median")
+        ax.plot(x, row, lw=0.25, alpha=0.30, color=TRACE)
+    ax.plot(x, np.median(M, axis=0), lw=1.4, color=MEDIAN, label="median")
     ax.set_title(title, fontsize=9)
     ax.set_xlabel(xlabel, fontsize=8)
     ax.tick_params(labelsize=7)
@@ -64,8 +73,11 @@ def heat(ax, M, x, title, zoom=None):
         sel = (x <= zoom[1]) & (x >= zoom[0])
         M, x = M[:, sel], x[sel]
     M = norm(M)
-    ax.imshow(M, aspect="auto", origin="lower", cmap="magma", vmin=0,
-              vmax=float(np.percentile(M, 99.0)) or 1.0,
+    # Anchor the pale end at the baseline (median intensity) rather than zero,
+    # or the whole ground saturates and the peaks stop standing out.
+    lo = float(np.percentile(M, 60)); hi = float(np.percentile(M, 99.5))
+    ax.imshow(M, aspect="auto", origin="lower", cmap=CMAP,
+              norm=PowerNorm(0.6, vmin=lo, vmax=hi if hi > lo else lo + 1e-6),
               extent=[x[0], x[-1], 0, M.shape[0]])
     ax.set_title(title, fontsize=9)
     ax.set_xlabel("ppm", fontsize=8)
@@ -84,11 +96,11 @@ def fig1():
     fig.suptitle("FIGURE 1   Where we started: the corpus as the original pipeline stored it",
                  fontsize=11, weight="bold")
     fig.text(0.5, 0.005,
-             "The tallest line in the lactate window falls anywhere across a 0.41 ppm range "
-             "(95% of spectra), and its median sits at 1.62 rather than lactate's 1.33. "
-             "Nothing here is on a shared, correct chemical-shift scale.",
+             "The tallest line in the lactate window falls anywhere across a 0.55 ppm range (95% of\n"
+             "spectra), and its median sits at 1.62 rather than lactate's 1.33. Nothing here is on a\n"
+             "shared, correct chemical-shift scale.",
              ha="center", fontsize=8, style="italic")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.93])
+    fig.tight_layout(rect=[0, 0.10, 1, 0.93])
     fig.savefig(OUT / "fig1_as_stored.png", dpi=150)
     plt.close(fig)
     print("fig1 done", shp)
@@ -105,11 +117,11 @@ def fig2():
     fig.suptitle("FIGURE 2   The first fix: anchoring every spectrum at 0 ppm",
                  fontsize=11, weight="bold")
     fig.text(0.5, 0.005,
-             "The spread collapses to zero -- every spectrum now agrees exactly. But they agree "
-             "at 1.62 ppm, not lactate's 1.33, and agreeing says nothing about whether one ppm "
-             "step means the same thing in every row. It does not. See Figure 3.",
+             "The spread collapses to zero -- every spectrum now agrees exactly. But they agree at\n"
+             "1.62 ppm, not lactate's 1.33, and agreement says nothing about whether one ppm step\n"
+             "means the same thing in every row. It does not. See Figure 3.",
              ha="center", fontsize=8, style="italic")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.93])
+    fig.tight_layout(rect=[0, 0.10, 1, 0.93])
     fig.savefig(OUT / "fig2_after_anchor.png", dpi=150)
     plt.close(fig)
     print("fig2 done", shp)
@@ -139,7 +151,7 @@ def fig3():
     # "different" means different enough to matter: >0.5% from the dominant sweep.
     # 20.017 and 20.031 are the same acquisition as 20.024 to within 0.03%.
     diff = {w: abs(w - dom) / dom > 0.005 for w in ws}
-    col = ["#c00000" if diff[w] else "#1f4e79" for w in ws]
+    col = [MEDIAN if diff[w] else TRACE for w in ws]
     ax.barh([f"{w:.3f}" for w in ws], n, color=col)
     for i, v in enumerate(n):
         ax.text(v, i, f" {v:,}", va="center", fontsize=7)
@@ -154,8 +166,8 @@ def fig3():
     # what that does to a peak, under the old pipeline
     ax = fig.add_subplot(gs[0, 1])
     pts = 131072
-    for w, lab, cl in [(dom, f"{dom:.1f} ppm sweep", "#1f4e79"),
-                       (11.988, "11.99 ppm sweep", "#c00000")]:
+    for w, lab, cl in [(dom, f"{dom:.1f} ppm sweep", TRACE),
+                       (11.988, "11.99 ppm sweep", MEDIAN)]:
         ppm_per_pt = w / pts
         width_ppm = 0.0025                       # a typical 1.5 Hz line at 600 MHz
         npts = width_ppm / ppm_per_pt
@@ -211,21 +223,19 @@ def fig4():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.2))
     panel(axes[0], M, ppm, f"{M.shape[0]} spectra sampled across all three sources "
           f"({total:,} rows)", "ppm (real, from the Bruker parameters)", WIDE)
-    for v, lab in [(1.330, "lactate"), (1.470, "alanine")]:
+    for v, lab, ha in [(1.330, "lactate", "right"), (1.470, "alanine", "left")]:
         axes[0].axvline(v, color="k", lw=0.6, ls="--", alpha=0.6)
-        axes[0].text(v, 1.02, lab, fontsize=6.5, ha="center")
+        axes[0].text(v, 1.03, f" {lab} ", fontsize=6.5, ha=ha)
     heat(axes[1], M, ppm, "lines now have one width and one spacing; the remaining\n"
          "horizontal spread is each study's own referencing", ZOOM)
     fig.suptitle("FIGURE 4   The rebuild: every spectrum reprocessed from raw onto one ppm axis",
                  fontsize=11, weight="bold")
     fig.text(0.5, 0.005,
-             "Verified: every spectral-width group peaks at scale 1.00 and carries the correct "
-             "2.780 ppm lactate CH3-to-CH separation -- the geometry is now right. The residual "
-             "+/-0.05 ppm spread is how the source studies referenced themselves (TSP, DSS, or "
-             "nothing); it is real, quantified, and deliberately left in for the model to learn "
-             "invariance to rather than corrected by inventing a reference the data lacks.",
+             "Verified: every spectral-width group peaks at scale 1.00 and carries the correct 2.780 ppm\n"
+             "lactate CH3-to-CH separation. The residual +/-0.05 ppm spread is how the source studies\n"
+             "referenced themselves (TSP, DSS, or nothing) -- real, quantified, deliberately retained.",
              ha="center", fontsize=8, style="italic")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.93])
+    fig.tight_layout(rect=[0, 0.10, 1, 0.93])
     fig.savefig(OUT / "fig4_rebuilt.png", dpi=150)
     plt.close(fig)
     print("fig4 done", M.shape, total)
@@ -258,9 +268,10 @@ def fig5():
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.0), sharey=True)
     bins = np.linspace(1.15, 1.75, 160)
     for ax, (nm, v, col) in zip(axes, [
-            ("1. as stored", old, "#808080"),
-            ("2. after 0 ppm anchoring", anc, "#c00000"),
-            ("3. after the rebuild", new, "#1f4e79")]):
+            ("1. as stored", old, "#8C8C8C"),
+            ("2. after 0 ppm anchoring", anc, MEDIAN),
+            ("3. after the rebuild", new, TRACE)]):
+        ax.set_facecolor(GROUND)
         ax.hist(v, bins=bins, color=col)
         ax.axvline(1.330, color="k", lw=1.2, ls="--")
         ax.text(1.330, ax.get_ylim()[1] * 0.97, " true lactate 1.330", fontsize=7.5, va="top")
