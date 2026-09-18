@@ -1,0 +1,172 @@
+[
+ {
+  "objective": "masking",
+  "seed": 0,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_165356_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+  "dim": 192,
+  "effective_rank": 1.3091675956794644,
+  "eff_rank_frac": 0.00681858122749721,
+  "study_probe_balacc": 0.9797797187307946,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": 0,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_165613_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+  "dim": 192,
+  "effective_rank": 3.4002004429322157,
+  "eff_rank_frac": 0.017709377306938622,
+  "study_probe_balacc": 0.9841972463910326,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": 1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_173155_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+  "dim": 192,
+  "effective_rank": 3.2813055718273723,
+  "eff_rank_frac": 0.0170901331866009,
+  "study_probe_balacc": 0.9829662824754897,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": 2,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_185941_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+  "dim": 192,
+  "effective_rank": 3.5487470368132326,
+  "eff_rank_frac": 0.018483057483402253,
+  "study_probe_balacc": 0.98193964735924,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": 3,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_202500_bs32_mr0.20-0.60_ps1024_seed3_best.pth",
+  "dim": 192,
+  "effective_rank": 3.867521383779003,
+  "eff_rank_frac": 0.02014334054051564,
+  "study_probe_balacc": 0.9839717821888289,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": 4,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_213546_bs32_mr0.20-0.60_ps1024_seed4_best.pth",
+  "dim": 192,
+  "effective_rank": 3.3408447280089937,
+  "eff_rank_frac": 0.017400232958380175,
+  "study_probe_balacc": 0.9811250497704488,
+  "random_init": false
+ },
+ {
+  "objective": "jigsaw",
+  "seed": 0,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/jigsaw_seed0/bin_1024/20260917_165541/bin_1024_20260917_165541_best.pth",
+  "dim": 192,
+  "effective_rank": 5.548474761973066,
+  "eff_rank_frac": 0.02889830605194305,
+  "study_probe_balacc": 0.9824133560284086,
+  "random_init": false
+ },
+ {
+  "objective": "jigsaw",
+  "seed": 1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/jigsaw_seed1/bin_1024/20260917_180248/bin_1024_20260917_180248_best.pth",
+  "dim": 192,
+  "effective_rank": 5.10216608791298,
+  "eff_rank_frac": 0.026573781707880106,
+  "study_probe_balacc": 0.9749546501217884,
+  "random_init": false
+ },
+ {
+  "objective": "jigsaw",
+  "seed": 2,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/jigsaw_seed2/bin_1024/20260917_195008/bin_1024_20260917_195008_best.pth",
+  "dim": 192,
+  "effective_rank": 3.7135155639071744,
+  "eff_rank_frac": 0.019341226895349867,
+  "study_probe_balacc": 0.9834579358340501,
+  "random_init": false
+ },
+ {
+  "objective": "jigsaw",
+  "seed": 3,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/jigsaw_seed3/bin_1024/20260917_205349/bin_1024_20260917_205349_best.pth",
+  "dim": 192,
+  "effective_rank": 4.029910185954482,
+  "eff_rank_frac": 0.020989115551846262,
+  "study_probe_balacc": 0.9881341307626995,
+  "random_init": false
+ },
+ {
+  "objective": "joint",
+  "seed": 0,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/joint_seed0/joint_ssl_20260917_173033/joint_ssl_20260917_173033_best.pth",
+  "dim": 960,
+  "effective_rank": 11.716743940133242,
+  "eff_rank_frac": 0.01220494160430546,
+  "study_probe_balacc": 0.9802891819248369,
+  "random_init": false
+ },
+ {
+  "objective": "joint",
+  "seed": 1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/joint_seed1/joint_ssl_20260917_183351/joint_ssl_20260917_183351_best.pth",
+  "dim": 960,
+  "effective_rank": 17.857098116091393,
+  "eff_rank_frac": 0.018601143870928535,
+  "study_probe_balacc": 0.9849308702972406,
+  "random_init": false
+ },
+ {
+  "objective": "joint",
+  "seed": 2,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/joint_seed2/joint_ssl_20260917_200232/joint_ssl_20260917_200232_best.pth",
+  "dim": 960,
+  "effective_rank": 15.621787190728273,
+  "eff_rank_frac": 0.01627269499034195,
+  "study_probe_balacc": 0.9874126300411987,
+  "random_init": false
+ },
+ {
+  "objective": "joint",
+  "seed": 3,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/joint_seed3/joint_ssl_20260917_212633/joint_ssl_20260917_212633_best.pth",
+  "dim": 960,
+  "effective_rank": 15.375500147728046,
+  "eff_rank_frac": 0.016016145987216714,
+  "study_probe_balacc": 0.9849475670180047,
+  "random_init": false
+ },
+ {
+  "objective": "masking",
+  "seed": -1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/masked_ssl/corpus_train_20260917_165356_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+  "dim": 192,
+  "effective_rank": 1.1868388766435936,
+  "eff_rank_frac": 0.006181452482518716,
+  "study_probe_balacc": 0.9837641833435169,
+  "random_init": true
+ },
+ {
+  "objective": "jigsaw",
+  "seed": -1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/jigsaw_seed0/bin_1024/20260917_165541/bin_1024_20260917_165541_best.pth",
+  "dim": 192,
+  "effective_rank": 2.2202967351826497,
+  "eff_rank_frac": 0.011564045495742968,
+  "study_probe_balacc": 0.9728292280495887,
+  "random_init": true
+ },
+ {
+  "objective": "joint",
+  "seed": -1,
+  "checkpoint": "/home/nmrbox/0012/shasharma/Desktop/NMR_Metabolomics/models/phase2/joint_seed0/joint_ssl_20260917_173033/joint_ssl_20260917_173033_best.pth",
+  "dim": 960,
+  "effective_rank": 1.0559471784437764,
+  "eff_rank_frac": 0.0010999449775456005,
+  "study_probe_balacc": 0.9879266667712978,
+  "random_init": true
+ }
+]
