@@ -29,6 +29,7 @@ happens downstream and nothing is baked in.
 from __future__ import annotations
 
 import argparse
+import zlib
 import csv
 import json
 import sys
@@ -178,7 +179,7 @@ def main() -> None:
                         EMB[obj](str(ck), M, args.device, random_init=True), dtype=np.float32)
 
         for k in args.budgets:
-            eps = episodes(y, k, args.episodes, seed=hash(tid) % 2**31)
+            eps = episodes(y, k, args.episodes, seed=zlib.crc32(tid.encode()) % 2**31)
             if not eps:
                 continue
             for rname, F in reps.items():

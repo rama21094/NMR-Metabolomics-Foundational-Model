@@ -7,6 +7,7 @@ them by scaling axis. The fixed-budget axis is the one that matters: 2,000 rows
 every time, drawn from k studies, so a difference across k is diversity alone.
 """
 import argparse, csv, json, re, sys
+import zlib
 from collections import defaultdict
 from pathlib import Path
 
@@ -79,7 +80,7 @@ def main() -> None:
             except Exception as e:
                 print(f"  embed fail {sub} s{seed}: {type(e).__name__}", flush=True)
         for k in args.budgets:
-            eps = episodes(y, k, args.episodes, seed=hash(tid) % 2**31)
+            eps = episodes(y, k, args.episodes, seed=zlib.crc32(tid.encode()) % 2**31)
             if not eps:
                 continue
             cls = float(np.mean([probe(base, y, s, q) for s, q in eps]))
