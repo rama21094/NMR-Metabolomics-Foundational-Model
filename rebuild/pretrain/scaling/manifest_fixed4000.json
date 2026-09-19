@@ -1,0 +1,200 @@
+[
+ {
+  "subset": "fixed4000_k02_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 2,
+  "eff_studies": 1.74,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "fixed4000_k02_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 2,
+  "eff_studies": 1.74,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "fixed4000_k02_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 2,
+  "eff_studies": 1.74,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "fixed4000_k04_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 4,
+  "eff_studies": 3.91,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "fixed4000_k04_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 4,
+  "eff_studies": 3.91,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "fixed4000_k04_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 4,
+  "eff_studies": 3.91,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "fixed4000_k08_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 8,
+  "eff_studies": 5.37,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "fixed4000_k08_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 8,
+  "eff_studies": 5.4,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "fixed4000_k08_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 4000,
+  "n_studies": 8,
+  "eff_studies": 5.39,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "fixed4000_k12_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 3996,
+  "n_studies": 12,
+  "eff_studies": 5.49,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "fixed4000_k12_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 3996,
+  "n_studies": 12,
+  "eff_studies": 5.57,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "fixed4000_k12_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 3996,
+  "n_studies": 12,
+  "eff_studies": 5.57,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2
+ }
+]

@@ -1,0 +1,3170 @@
+[
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6315371569534383,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6040086339808819,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6428846746839345,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6748072772124575,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6656336725254395,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6731575701510946,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6879432624113474,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6968239284613013,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6516342892383595,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6967853839037927,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6727181621954981,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.667013567684243,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6493832870798643,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.667368177613321,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6610391612704286,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.700385445575085,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.7063135985198891,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6947733580018502,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7061054579093432,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.7114708603145237,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6922139993832871,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6964693185322233,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.692445266728338,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.704918285538082,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6289315448658651,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6541319765649088,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.632377428307123,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.67150015417823,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7066527906259634,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6955982115325317,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.7030604378661732,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7157570151094667,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6885214307739747,
+  "classical": 0.7527443724946038
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7106060606060607,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7545454545454545,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.753030303030303,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7575757575757575,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7742424242424242,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7393939393939394,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7803030303030302,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7484848484848485,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7515151515151516,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7712121212121211,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7333333333333333,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.753030303030303,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7742424242424242,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7575757575757576,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7636363636363638,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.787878787878788,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7954545454545454,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7803030303030304,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7681818181818182,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7590909090909091,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7530303030303033,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7757575757575759,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7787878787878789,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7681818181818182,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6909090909090909,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.743939393939394,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7348484848484848,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7803030303030304,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.790909090909091,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.743939393939394,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.8015151515151514,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.818181818181818,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_binary",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7515151515151515,
+  "classical": 0.8439393939393939
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4713149873475961,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4603634690591213,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4824376006441223,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5124237980216241,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4943955601564297,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5024787209569819,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.519614101679319,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4983925695882218,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5090939153439153,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4981898435702784,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4859371405567058,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4780380147227973,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5057352772026685,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4941554520358868,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5037655279503105,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5283960202438462,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5201705198987807,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5173970554405337,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5256685645272602,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5119665861513688,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5292529330572809,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5000790775247297,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5029028640441684,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5242926155969634,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4556130664826317,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5074893604784909,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.47009288014722794,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.48065763745111567,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5083606510236945,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.536321025994939,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5011128364389233,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.559114044168392,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4976176098458707,
+  "classical": 0.5801199102829536
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5634006734006733,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5995622895622895,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6049831649831651,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6293265993265993,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5820538720538718,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5919528619528619,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6250168350168349,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5962962962962964,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.614949494949495,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5987205387205388,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5836026936026936,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5818855218855218,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6541077441077442,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6047474747474746,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6463973063973062,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6337037037037037,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6005050505050505,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6466666666666665,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6687878787878787,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6645454545454546,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6013468013468014,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6240740740740741,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6033670033670033,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6255555555555556,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5366329966329967,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6043434343434342,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5867676767676767,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6114141414141414,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6379124579124579,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6160269360269361,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6017845117845118,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6815824915824916,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "mtbls563_3class",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6370033670033669,
+  "classical": 0.7126599326599327
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6217777777777778,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6127777777777776,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6229259259259261,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6502592592592592,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6494814814814815,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6640370370370372,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6317407407407407,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6400000000000001,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6293703703703705,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.650814814814815,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6364074074074075,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6351111111111112,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6237777777777777,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6552592592592592,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6137037037037038,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6479999999999999,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6484444444444445,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6444444444444443,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6712962962962963,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6495555555555556,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6724074074074076,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6550370370370369,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.666888888888889,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6609999999999999,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6287407407407407,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6391111111111112,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6358888888888891,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6365555555555555,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6561851851851852,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6594074074074076,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6649629629629632,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6769259259259262,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.655851851851852,
+  "classical": 0.7242962962962961
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6540404040404041,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6823232323232322,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6945707070707071,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7566919191919192,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7811868686868686,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7781565656565657,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7323232323232322,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7388888888888887,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7305555555555554,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7172979797979798,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7036616161616163,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7200757575757578,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7275252525252524,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7981060606060605,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7213383838383839,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7847222222222221,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7125000000000001,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7637626262626263,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7627525252525253,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7511363636363636,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7398989898989898,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7213383838383839,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7256313131313132,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7287878787878788,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7021464646464645,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7248737373737375,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6969696969696969,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6823232323232324,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7166666666666667,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7391414141414142,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7702020202020201,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7992424242424242,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_cancer",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.759469696969697,
+  "classical": 0.8367424242424242
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5083703703703705,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5188888888888888,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5134074074074074,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4984444444444444,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5210740740740741,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5247407407407407,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5436666666666666,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5422962962962962,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4891481481481481,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.551888888888889,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5335185185185184,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5355185185185185,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5108888888888888,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5227777777777777,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.528074074074074,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5363333333333332,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5380370370370371,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5265555555555556,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.518074074074074,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5304074074074073,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5376296296296296,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5246666666666667,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5235185185185185,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5337037037037038,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5207407407407406,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4878148148148148,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5050370370370371,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5611111111111112,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5563703703703704,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5262962962962963,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.5632962962962964,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5694814814814815,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.5615925925925926,
+  "classical": 0.6369259259259259
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5291666666666667,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5335858585858586,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5151515151515151,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5431818181818181,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5626262626262626,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.594570707070707,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5996212121212121,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6318181818181817,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.557070707070707,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6392676767676767,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6142676767676768,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6117424242424242,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5704545454545455,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6138888888888889,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5737373737373738,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6137626262626262,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5897727272727273,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6008838383838383,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6196969696969697,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5862373737373737,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6458333333333334,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5959595959595957,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6138888888888888,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.640909090909091,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.634469696969697,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.561489898989899,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5513888888888888,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6249999999999998,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6558080808080808,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5941919191919193,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6672979797979798,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.619570707070707,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_diabetes",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6002525252525253,
+  "classical": 0.726010101010101
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.38442460317460314,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.3750992063492064,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.3788690476190475,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.3927579365079365,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.396329365079365,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.40138888888888885,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.41200396825396823,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.41478174603174595,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.40952380952380957,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4192460317460317,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.385218253968254,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.38611111111111107,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4160714285714285,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.4114087301587302,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.39107142857142857,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4225198412698413,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.410515873015873,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.39712301587301585,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.3974206349206349,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.41289682539682543,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.40813492063492063,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.3883928571428571,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.37807539682539687,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4191468253968254,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.3767857142857142,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.372718253968254,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.3802579365079365,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.41597222222222213,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.4506944444444445,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.3921626984126984,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.4459325396825396,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.45912698412698416,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.41597222222222213,
+  "classical": 0.48571428571428565
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.4559027777777778,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.43020833333333325,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4482638888888888,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.4572916666666667,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.4545138888888889,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4809027777777778,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.47986111111111107,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.4715277777777777,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4854166666666667,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.49027777777777776,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.44930555555555557,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4364583333333334,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.47708333333333336,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5083333333333333,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.44166666666666665,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.45173611111111106,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.4329861111111111,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4503472222222222,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.45694444444444454,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.4513888888888888,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4555555555555556,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.4555555555555555,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.44722222222222224,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5038194444444445,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.4513888888888888,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.42013888888888895,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.38333333333333336,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.45729166666666665,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5045138888888888,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.41145833333333337,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.553125,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5284722222222221,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "brc_t2d_4class",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.4975694444444444,
+  "classical": 0.5368055555555556
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6544871794871795,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6419871794871794,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.676602564102564,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6701923076923074,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6682692307692306,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6871794871794871,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6419871794871794,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.7259615384615383,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6006410256410256,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.664423076923077,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6525641025641025,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6785256410256408,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6310897435897437,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6102564102564102,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6391025641025639,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6621794871794872,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6560897435897437,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6544871794871795,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.660576923076923,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.7099358974358975,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6884615384615383,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.675,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6512820512820513,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6535256410256411,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.7153846153846152,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6948717948717947,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6650641025641024,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6589743589743591,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.5945512820512818,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6589743589743589,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 10,
+  "mean": 0.6698717948717946,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.6955128205128204,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 10,
+  "mean": 0.6506410256410254,
+  "classical": 0.7782051282051281
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6277777777777778,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6433333333333333,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k02",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6366666666666666,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7288888888888889,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7988888888888889,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k04",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6699999999999999,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6322222222222222,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.7211111111111113,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k08",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.5411111111111111,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6211111111111111,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.64,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "fixed2000_k12",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6644444444444443,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.64,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5888888888888889,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows010",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6011111111111112,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6466666666666666,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6766666666666665,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows025",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6799999999999999,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6655555555555553,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6833333333333332,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows050",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6122222222222222,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.7288888888888887,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6644444444444443,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "rows075",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6233333333333333,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.7622222222222221,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.6822222222222222,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies3",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6822222222222222,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.6811111111111111,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.5977777777777777,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies6",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.5888888888888888,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 2,
+  "k_per_class": 0,
+  "mean": 0.678888888888889,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 0,
+  "k_per_class": 0,
+  "mean": 0.66,
+  "classical": 0.7599999999999999
+ },
+ {
+  "target": "barth_case_control",
+  "subset": "studies9",
+  "seed": 1,
+  "k_per_class": 0,
+  "mean": 0.6622222222222224,
+  "classical": 0.7599999999999999
+ }
+]

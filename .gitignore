@@ -7,7 +7,17 @@
 /logs/
 /pyragify/
 /fromSSD/
-/rebuild/
+# /rebuild/ is bulk data, EXCEPT the scaling manifests: they record how each
+# subset was drawn (studies, row count, effective study count) and the diversity
+# analysis reads them. A few KB each.
+# git never descends into an excluded directory, so a bare "!" exception under
+# "/rebuild/" is unreachable -- the whole path chain has to be re-included.
+/rebuild/*
+!/rebuild/pretrain/
+/rebuild/pretrain/*
+!/rebuild/pretrain/scaling/
+/rebuild/pretrain/scaling/*
+!/rebuild/pretrain/scaling/manifest*.json
 /.lgraph/
 /.claude/
 /.agents/
@@ -31,3 +41,11 @@ data/*/*_ref0ppm.npy
 node_modules/
 package-lock.json
 package.json
+
+# ---- run outputs -------------------------------------------------------
+# Results JSON is tracked: it is small and it backs every number in the docs
+# and decks. The rest of a run is reproducible noise and is not.
+results/**/*.log
+results/**/*.done
+# per-seed frozen-embedding dumps (results/phase2/<objective>_seed<N>/bin_1024/)
+results/phase2/*_seed*/

@@ -1,0 +1,497 @@
+[
+ {
+  "subset": "studies3",
+  "axis": "study",
+  "n_rows": 5846,
+  "n_studies": 3,
+  "studies": [
+   "MTBLS147",
+   "MTBLS46",
+   "MTBLS798"
+  ],
+  "seed": null
+ },
+ {
+  "subset": "studies6",
+  "axis": "study",
+  "n_rows": 6868,
+  "n_studies": 6,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS46",
+   "MTBLS798",
+   "MTBLS974",
+   "UNKNOWN"
+  ],
+  "seed": null
+ },
+ {
+  "subset": "studies9",
+  "axis": "study",
+  "n_rows": 8339,
+  "n_studies": 9,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "UNKNOWN"
+  ],
+  "seed": null
+ },
+ {
+  "subset": "rows010_seed0",
+  "axis": "row",
+  "n_rows": 858,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "rows010_seed1",
+  "axis": "row",
+  "n_rows": 858,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "rows010_seed2",
+  "axis": "row",
+  "n_rows": 858,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "rows025_seed0",
+  "axis": "row",
+  "n_rows": 2137,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "rows025_seed1",
+  "axis": "row",
+  "n_rows": 2137,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "rows025_seed2",
+  "axis": "row",
+  "n_rows": 2137,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "rows050_seed0",
+  "axis": "row",
+  "n_rows": 4274,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "rows050_seed1",
+  "axis": "row",
+  "n_rows": 4274,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "rows050_seed2",
+  "axis": "row",
+  "n_rows": 4274,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "rows075_seed0",
+  "axis": "row",
+  "n_rows": 6410,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0
+ },
+ {
+  "subset": "rows075_seed1",
+  "axis": "row",
+  "n_rows": 6410,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1
+ },
+ {
+  "subset": "rows075_seed2",
+  "axis": "row",
+  "n_rows": 6410,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2
+ },
+ {
+  "subset": "fixed2000_k02_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 2,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 0,
+  "eff_studies": 2.0
+ },
+ {
+  "subset": "fixed2000_k02_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 2,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 1,
+  "eff_studies": 2.0
+ },
+ {
+  "subset": "fixed2000_k02_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 2,
+  "studies": [
+   "MTBLS147",
+   "MTBLS798"
+  ],
+  "seed": 2,
+  "eff_studies": 2.0
+ },
+ {
+  "subset": "fixed2000_k04_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 4,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 0,
+  "eff_studies": 4.0
+ },
+ {
+  "subset": "fixed2000_k04_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 4,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 1,
+  "eff_studies": 4.0
+ },
+ {
+  "subset": "fixed2000_k04_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 4,
+  "studies": [
+   "MTBLS147",
+   "MTBLS395",
+   "MTBLS540",
+   "MTBLS798"
+  ],
+  "seed": 2,
+  "eff_studies": 4.0
+ },
+ {
+  "subset": "fixed2000_k08_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 8,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 0,
+  "eff_studies": 6.2
+ },
+ {
+  "subset": "fixed2000_k08_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 8,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 1,
+  "eff_studies": 6.2
+ },
+ {
+  "subset": "fixed2000_k08_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 2000,
+  "n_studies": 8,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS540",
+   "MTBLS798",
+   "ST000051",
+   "ST001054"
+  ],
+  "seed": 2,
+  "eff_studies": 6.19
+ },
+ {
+  "subset": "fixed2000_k12_seed0",
+  "axis": "fixed_budget",
+  "n_rows": 1992,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 0,
+  "eff_studies": 6.88
+ },
+ {
+  "subset": "fixed2000_k12_seed1",
+  "axis": "fixed_budget",
+  "n_rows": 1992,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 1,
+  "eff_studies": 6.9
+ },
+ {
+  "subset": "fixed2000_k12_seed2",
+  "axis": "fixed_budget",
+  "n_rows": 1992,
+  "n_studies": 12,
+  "studies": [
+   "MTBLS147",
+   "MTBLS2336",
+   "MTBLS395",
+   "MTBLS424",
+   "MTBLS46",
+   "MTBLS540",
+   "MTBLS798",
+   "MTBLS974",
+   "ST000051",
+   "ST000104",
+   "ST001054",
+   "UNKNOWN"
+  ],
+  "seed": 2,
+  "eff_studies": 6.9
+ }
+]
