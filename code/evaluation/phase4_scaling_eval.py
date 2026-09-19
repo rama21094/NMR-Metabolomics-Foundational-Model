@@ -19,11 +19,37 @@ from phase3_transfer import target_defs, load_cohort, binned, episodes, probe  #
 
 
 def ckpts():
+    """Every scaling checkpoint, as (subset, replicate, path).
+
+    Two naming conventions, because the replicate lives in different places:
+
+      rows075_seed1_<ts>_..._seed0_best.pth   row and fixed-budget subsets carry
+                                              their replicate in the SUBSET file
+                                              name; the trailing seed is the
+                                              training seed and is always 0.
+      studies6_<ts>_..._seed1_best.pth        study subsets have no per-replicate
+                                              file, so the replicate IS the
+                                              trailing training seed.
+
+    The first version of this matched only `(subset)_seed(N)_` and so silently
+    dropped all nine study-axis checkpoints -- the evaluation ran and reported a
+    table with the study axis simply absent. Parse both forms, and assert the
+    expected count rather than trusting a glob.
+    """
     out = []
     for p in sorted((ROOT / "models/masked_ssl").glob("*_best.pth")):
-        m = re.match(r"(fixed2000_k\d+|rows\d+|studies\d+)_seed(\d+)_", p.name)
-        if m:
-            out.append((m.group(1), int(m.group(2)), p))
+        m = re.match(r"(fixed2000_k\d+|rows\d+|studies\d+)(_seed(\d+))?_\d{8}_", p.name)
+        if not m:
+            continue
+        sub = m.group(1)
+        if m.group(3) is not None:            # replicate in the subset name
+            rep = int(m.group(3))
+        else:                                 # replicate is the training seed
+            t = re.search(r"_seed(\d+)_best\.pth$", p.name)
+            if not t:
+                continue
+            rep = int(t.group(1))
+        out.append((sub, rep, p))
     return out
 
 
@@ -37,6 +63,9 @@ def main() -> None:
     from linear_probe_frozen_embeddings import embed_masking
 
     C = ckpts()
+    seen = {(a, b) for a, b, _ in C}
+    if len(seen) != len(C):
+        raise SystemExit(f"duplicate (subset, replicate): {len(C)} paths, {len(seen)} tags")
     print(f"{len(C)} scaling checkpoints, {len(target_defs())} targets\n")
     rows = []
     for tid, cohort, labfn in target_defs():
