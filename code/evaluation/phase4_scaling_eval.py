@@ -3,8 +3,9 @@
 
 Probes every scaling checkpoint exactly as Phase 3 did (frozen embeddings, linear
 probe, stratified episodes) so the numbers are directly comparable, then groups
-them by scaling axis. The fixed-budget axis is the one that matters: 2,000 rows
-every time, drawn from k studies, so a difference across k is diversity alone.
+them by scaling axis. The fixed-budget axis is the one that matters: a constant row
+budget every time, drawn from k studies, so a difference across k is diversity
+alone. Two budgets were run, 2,000 and 4,000.
 """
 import argparse, csv, json, re, sys
 import zlib
@@ -39,7 +40,7 @@ def ckpts():
     """
     out = []
     for p in sorted((ROOT / "models/masked_ssl").glob("*_best.pth")):
-        m = re.match(r"(fixed2000_k\d+|rows\d+|studies\d+)(_seed(\d+))?_\d{8}_", p.name)
+        m = re.match(r"(fixed\d+_k\d+|rows\d+|studies\d+)(_seed(\d+))?_\d{8}_", p.name)
         if not m:
             continue
         sub = m.group(1)
