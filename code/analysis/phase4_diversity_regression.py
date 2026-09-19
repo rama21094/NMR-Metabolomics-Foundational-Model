@@ -26,7 +26,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def load_eff():
-    """subset -> (eff_studies, n_rows), from both fixed-budget manifests."""
+    """manifest subset name -> (eff_studies, n_rows), both fixed-budget manifests.
+
+    The manifest keys a subset as `fixed2000_k02_seed0`; the evaluation records it
+    as subset=`fixed2000_k02` with the replicate in a separate `seed` field. The
+    join therefore has to rebuild the manifest name from both, not match on
+    `subset` alone -- doing that silently yields zero points rather than an error.
+    """
     eff = {}
     for mf in ("manifest.json", "manifest_fixed4000.json"):
         p = ROOT / "rebuild/pretrain/scaling" / mf
@@ -73,12 +79,18 @@ def main() -> None:
     for kb in sorted({k for k, _, _ in agg}):
         pts = []
         for (k, sub, seed), v in agg.items():
-            if k != kb or sub not in eff or eff[sub][0] is None:
+            key = f"{sub}_seed{seed}"
+            if k != kb or key not in eff or eff[key][0] is None:
                 continue
-            e, n = eff[sub]
+            e, n = eff[key]
             pts.append((e, n, float(np.mean(v)), sub, seed))
+        if len(pts) == 0:
+            raise SystemExit(
+                f"k={kb}: no eval row joined to a manifest entry. Checked keys "
+                f"like {next(iter(agg))[1]}_seed{next(iter(agg))[2]}; manifest has "
+                f"{sorted(eff)[:3]}...")
         if len(pts) < 8:
-            print(f"k={kb}: only {len(pts)} points, skipping")
+            print(f"k={kb}: only {len(pts)} points, too few to regress -- skipping")
             continue
         E = np.array([p[0] for p in pts]); N = np.array([p[1] for p in pts])
         Y = np.array([p[2] for p in pts])
