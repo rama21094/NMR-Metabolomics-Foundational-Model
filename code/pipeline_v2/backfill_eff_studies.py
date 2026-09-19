@@ -64,6 +64,37 @@ def compositions(budget, ks=(2, 4, 8, 12), seeds=(0, 1, 2)):
     return out
 
 
+def analytic_eff(counts, subsets):
+    """Effective studies for the row and study axes, which need no rng.
+
+    Row subsets take round(frac * n_s) from EVERY study, so the proportions are
+    preserved and effective diversity is pinned near the full corpus value.
+    Study subsets keep whole studies. Both are exact from the counts alone.
+    """
+    def eff(c):
+        p = np.array(list(c), float)
+        p = p / p.sum()
+        return float(np.exp(-(p[p > 0] * np.log(p[p > 0])).sum()))
+
+    ordered = [s for s, _ in counts.most_common()]
+    big, small = ordered[:len(ordered) // 2], ordered[len(ordered) // 2:][::-1]
+    woven = [x for pair in zip(big, small) for x in pair]
+    woven += [s for s in ordered if s not in woven]
+
+    out = {}
+    for name in subsets:
+        if name.startswith("rows"):
+            frac = int(name[4:7]) / 100
+            c = [max(1, int(round(frac * n))) for n in counts.values()]
+        elif name.startswith("studies"):
+            k = int(name[7:].split("_")[0])
+            c = [counts[s] for s in woven[:k]]
+        else:
+            continue
+        out[name] = (round(eff(c), 2), int(sum(c)))
+    return out
+
+
 def main() -> None:
     mf = OUT / (sys.argv[1] if len(sys.argv) > 1 else "manifest.json")
     man = json.load(open(mf))
@@ -73,9 +104,14 @@ def main() -> None:
     for b in budgets:
         comp.update(compositions(b))
 
+    names = [r["subset"] for r in man if r.get("axis") in ("row", "study")]
+    split = [x for x in csv.DictReader(open(ROOT / "rebuild/pretrain/corpus_split.csv"))
+             if x["split"] == "train"]
+    comp.update(analytic_eff(Counter(x["study"] for x in split), names))
+
     bad, n = [], 0
     for r in man:
-        if r.get("axis") != "fixed_budget" or r["subset"] not in comp:
+        if r["subset"] not in comp:
             continue
         eff, rows = comp[r["subset"]]
         if rows != r["n_rows"]:

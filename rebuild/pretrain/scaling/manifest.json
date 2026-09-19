@@ -9,7 +9,8 @@
    "MTBLS46",
    "MTBLS798"
   ],
-  "seed": null
+  "seed": null,
+  "eff_studies": 1.57
  },
  {
   "subset": "studies6",
@@ -24,7 +25,8 @@
    "MTBLS974",
    "UNKNOWN"
   ],
-  "seed": null
+  "seed": null,
+  "eff_studies": 2.3
  },
  {
   "subset": "studies9",
@@ -42,7 +44,8 @@
    "ST000051",
    "UNKNOWN"
   ],
-  "seed": null
+  "seed": null,
+  "eff_studies": 3.67
  },
  {
   "subset": "rows010_seed0",
@@ -63,7 +66,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 0
+  "seed": 0,
+  "eff_studies": 4.15
  },
  {
   "subset": "rows010_seed1",
@@ -84,7 +88,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 1
+  "seed": 1,
+  "eff_studies": 4.15
  },
  {
   "subset": "rows010_seed2",
@@ -105,7 +110,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 2
+  "seed": 2,
+  "eff_studies": 4.15
  },
  {
   "subset": "rows025_seed0",
@@ -126,7 +132,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 0
+  "seed": 0,
+  "eff_studies": 4.1
  },
  {
   "subset": "rows025_seed1",
@@ -147,7 +154,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 1
+  "seed": 1,
+  "eff_studies": 4.1
  },
  {
   "subset": "rows025_seed2",
@@ -168,7 +176,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 2
+  "seed": 2,
+  "eff_studies": 4.1
  },
  {
   "subset": "rows050_seed0",
@@ -189,7 +198,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 0
+  "seed": 0,
+  "eff_studies": 4.09
  },
  {
   "subset": "rows050_seed1",
@@ -210,7 +220,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 1
+  "seed": 1,
+  "eff_studies": 4.09
  },
  {
   "subset": "rows050_seed2",
@@ -231,7 +242,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 2
+  "seed": 2,
+  "eff_studies": 4.09
  },
  {
   "subset": "rows075_seed0",
@@ -252,7 +264,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 0
+  "seed": 0,
+  "eff_studies": 4.09
  },
  {
   "subset": "rows075_seed1",
@@ -273,7 +286,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 1
+  "seed": 1,
+  "eff_studies": 4.09
  },
  {
   "subset": "rows075_seed2",
@@ -294,7 +308,8 @@
    "ST001054",
    "UNKNOWN"
   ],
-  "seed": 2
+  "seed": 2,
+  "eff_studies": 4.09
  },
  {
   "subset": "fixed2000_k02_seed0",

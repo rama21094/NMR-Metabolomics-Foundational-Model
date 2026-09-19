@@ -39,8 +39,6 @@ def load_eff():
         if not p.exists():
             continue
         for r in json.load(open(p)):
-            if r.get("axis") != "fixed_budget":
-                continue
             eff[r["subset"]] = (r.get("eff_studies"), r["n_rows"])
     return eff
 
@@ -59,6 +57,13 @@ def main() -> None:
                     default=["results/phase4/scaling_eval_full.json",
                              "results/phase4/scaling_eval_4000.json"])
     ap.add_argument("--perm", type=int, default=20000)
+    ap.add_argument("--axes", default="fixed",
+                    help="'fixed' = the fixed-budget axis only; 'all' also folds "
+                         "in the row and study subsets. The row axis is what "
+                         "identifies the row coefficient: it holds effective "
+                         "diversity at ~4.1 across a 7.5x row range, which the "
+                         "fixed-budget axis alone cannot do (its rows vary only "
+                         "2x, and inversely with diversity).")
     args = ap.parse_args()
 
     rows = []
@@ -71,7 +76,7 @@ def main() -> None:
     # subset x seed x budget -> mean over the 6 targets, per label budget
     agg = defaultdict(list)
     for r in rows:
-        if not r["subset"].startswith("fixed"):
+        if args.axes == "fixed" and not r["subset"].startswith("fixed"):
             continue
         agg[(r["k_per_class"], r["subset"], r["seed"])].append(r["mean"])
 
@@ -79,7 +84,9 @@ def main() -> None:
     for kb in sorted({k for k, _, _ in agg}):
         pts = []
         for (k, sub, seed), v in agg.items():
-            key = f"{sub}_seed{seed}"
+            # study subsets carry no per-replicate file, so they appear in the
+            # manifest under their bare name
+            key = f"{sub}_seed{seed}" if f"{sub}_seed{seed}" in eff else sub
             if k != kb or key not in eff or eff[key][0] is None:
                 continue
             e, n = eff[key]
