@@ -29,6 +29,7 @@ Study subsets are nested (3 in 6 in 9 in 12) and chosen to span the size range
 rather than taking the largest, so the 3-study subset is not simply MTBLS798
 plus scraps.
 """
+import argparse
 import csv
 import json
 from collections import Counter, defaultdict
@@ -43,6 +44,15 @@ SEEDS = [0, 1, 2]
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--budget", type=int, default=2000,
+                    help="rows per fixed-budget subset")
+    ap.add_argument("--only", choices=["all", "fixed"], default="all",
+                    help="'fixed' rebuilds only the fixed-budget axis, leaving "
+                         "the row and study subsets (and their 24 trained "
+                         "checkpoints) untouched")
+    ap.add_argument("--manifest", default="manifest.json")
+    args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     X = np.load("rebuild/pretrain/corpus_train.npy", mmap_mode="r")
     split = [r for r in csv.DictReader(open("rebuild/pretrain/corpus_split.csv"))
@@ -65,7 +75,7 @@ def main() -> None:
     woven += [s for s in ordered if s not in woven]
 
     manifest = []
-    for k in STUDY_COUNTS:
+    for k in (STUDY_COUNTS if args.only == "all" else []):
         keep = set(woven[:k])
         idx = np.array(sorted(i for s in keep for i in by_study[s]))
         name = f"studies{k}"
@@ -75,7 +85,7 @@ def main() -> None:
         print(f"{name:<12}{len(idx):>7,} rows  {k} studies")
 
     rng_base = 12345
-    for frac in ROW_FRACS:
+    for frac in (ROW_FRACS if args.only == "all" else []):
         for seed in SEEDS:
             rng = np.random.default_rng(rng_base + int(frac * 1000) + seed)
             idx = []
@@ -92,8 +102,19 @@ def main() -> None:
               f"{len(by_study)} studies  x{len(SEEDS)} seeds")
 
     # ---- fixed-budget diversity axis -------------------------------------
-    # 2,000 rows every time; only the number of contributing studies changes.
-    BUDGET = 2000
+    # A constant row budget every time; only the number of contributing studies
+    # changes, so any difference across k is diversity alone.
+    #
+    # CAVEAT, and it grows with the budget: this corpus is 57% MTBLS798, and its
+    # tail studies hold 1-76 rows. The per-study quota is BUDGET//k, which the
+    # small studies cannot fill, so their shortfall is redistributed to the large
+    # ones. Nominal k therefore overstates diversity, and it overstates it MORE
+    # at a larger budget -- at k=12 the seven smallest studies contribute ~15% of
+    # a 2,000-row subset but only ~8% of a 4,000-row one. Raising the budget
+    # dilutes diversity rather than holding it fixed. The manifest records
+    # `eff_studies` = exp(entropy of the study composition), which is the number
+    # that should be plotted against transfer, not nominal k.
+    BUDGET = args.budget
     usable = [s for s, n in counts.most_common() if n >= 50]
     for k in (2, 4, 8, 12):
         pool = [s for s in (woven if k >= len(usable) else
@@ -118,12 +139,18 @@ def main() -> None:
             idx = np.array(sorted(set(idx)))
             name = f"fixed{BUDGET}_k{k:02d}_seed{seed}"
             np.save(OUT / f"{name}.npy", np.array(X[idx], dtype=np.float32))
+            comp = np.array([sum(1 for i in idx if i in set(by_study[s2]))
+                             for s2 in pool], dtype=float)
+            pr = comp / comp.sum()
+            eff = float(np.exp(-(pr[pr > 0] * np.log(pr[pr > 0])).sum()))
             manifest.append({"subset": name, "axis": "fixed_budget",
                              "n_rows": int(len(idx)), "n_studies": len(pool),
+                             "eff_studies": round(eff, 2),
                              "studies": sorted(pool), "seed": seed})
-        print(f"fixed{BUDGET}_k{k:02d}  {len(idx):>6,} rows  {len(pool)} studies  x{len(SEEDS)} seeds")
+        print(f"fixed{BUDGET}_k{k:02d}  {len(idx):>6,} rows  {len(pool)} studies "
+              f"(effective {eff:.2f})  x{len(SEEDS)} seeds")
 
-    json.dump(manifest, open(OUT / "manifest.json", "w"), indent=1)
+    json.dump(manifest, open(OUT / args.manifest, "w"), indent=1)
     print(f"\nwrote {len(manifest)} subsets to {OUT}")
 
 
