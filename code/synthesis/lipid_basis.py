@@ -51,7 +51,8 @@ _cn.loader.exec_module(cn)
 
 CORPUS = ("data/combined/combine_unique_MetaboLights_Workbench_"
           "WaterFixed_EDTAMagnitude_v4.npy")
-PPM_AXIS = "data/mtbls326/MTBLS326_common_ppm_axis.npy"
+PPM_AXIS = "rebuild/pretrain/ppm_axis.npy"  # rebuilt corpus axis; the old
+# common-axis files span -1.5..10.5 and misplace every peak by up to 1.0 ppm
 WATER_LO, WATER_HI = 62500, 68000
 SIGNAL_LO, SIGNAL_HI = 0.5, 9.5
 
