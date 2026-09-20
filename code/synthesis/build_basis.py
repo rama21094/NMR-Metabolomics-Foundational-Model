@@ -48,7 +48,11 @@ _sp = importlib.util.spec_from_file_location("sp", ROOT / "code/synthesis/serum_
 sp = importlib.util.module_from_spec(_sp)
 _sp.loader.exec_module(sp)
 
-PPM_AXIS = "data/mtbls326/MTBLS326_common_ppm_axis.npy"
+# The pre-rebuild "common axis" files are WRONG for the rebuilt corpus: same
+# 131,072 length, but spanning -1.5..10.5 instead of -0.5..10.0, so a basis built
+# on one and used with the other misplaces every peak by up to 1.0 ppm. Default
+# to the rebuilt corpus axis; --ppm-axis overrides.
+PPM_AXIS = "rebuild/pretrain/ppm_axis.npy"
 WATER_LO, WATER_HI = 62500, 68000          # zeroed by build_clean_datasets.py
 
 
@@ -75,12 +79,15 @@ def main():
     ap.add_argument("--extra-broadening-hz", type=float, default=0.0)
     ap.add_argument("--ph-tolerance", type=float, default=1.0,
                     help="warn if an entry's pH is further than this from 7.4")
+    ap.add_argument("--ppm-axis", default=PPM_AXIS,
+                    help="ppm axis the basis is interpolated onto; must be the "
+                         "axis of the corpus the basis will be mixed against")
     ap.add_argument("--out-dir", default="results/synthesis")
     args = ap.parse_args()
 
     out_dir = ROOT / args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
-    ppm = np.load(ROOT / PPM_AXIS)
+    ppm = np.load(ROOT / args.ppm_axis)
     length = len(ppm)
     cat = pd.read_csv(ROOT / args.catalogue).drop_duplicates("bmse_id").set_index("bmse_id")
 
