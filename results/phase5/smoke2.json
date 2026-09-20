@@ -1,0 +1,38 @@
+[
+ {
+  "target": "barth_case_control",
+  "mode": "head",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7836538461538461,
+  "sd": 0.0758641049906707,
+  "classical": 0.7548076923076924,
+  "random_init": false,
+  "n_episodes": 6,
+  "trainable_params": 770
+ },
+ {
+  "target": "barth_case_control",
+  "mode": "last_block",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7580128205128206,
+  "sd": 0.12881465682120888,
+  "classical": 0.7548076923076924,
+  "random_init": false,
+  "n_episodes": 6,
+  "trainable_params": 445634
+ },
+ {
+  "target": "barth_case_control",
+  "mode": "full",
+  "seed": 0,
+  "k_per_class": 10,
+  "mean": 0.7788461538461539,
+  "sd": 0.09774327360241604,
+  "classical": 0.7548076923076924,
+  "random_init": false,
+  "n_episodes": 6,
+  "trainable_params": 3962882
+ }
+]
