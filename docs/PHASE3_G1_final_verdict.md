@@ -40,7 +40,7 @@ Against the frozen probe, across all 24 target x budget cells:
 Both are negative on average and lose more often than they win. The largest gain
 anywhere is +0.019, below the project's 0.045 noise floor; the largest loss is
 −0.076. Deeper adaptation is worse than shallower, which is the signature of
-overfitting, and expected: the cohorts hold 40–142 samples against ~1.7 M encoder
+overfitting, and expected: the cohorts hold 40–142 samples against ~4.0 M encoder
 parameters.
 
 ## Result 2 — G1 stands, and is now a statement about the architecture

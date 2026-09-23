@@ -103,7 +103,7 @@ This is a limit of the public basis, not a proof about synthetic data in general
 ## Why Phase 6 (more parameters) was not run
 
 The tree's remaining branch after a G3 "no". Not run, for a reason the evidence
-already supplies: a 1.7 M-parameter encoder **already overfits** these cohorts —
+already supplies: a 4.0 M-parameter encoder **already overfits** these cohorts —
 that is precisely what result 1 showed, with full fine-tuning worse than
 last-block and last-block worse than frozen. Adding capacity moves along the axis
 that is already hurting. The cohorts are 40–142 samples.
