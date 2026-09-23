@@ -126,9 +126,24 @@ def probe(F, y, sup, qry):
     return balanced_accuracy_score(y[qry], m.predict(Z.transform(F[qry])))
 
 
+BASELINE_D_MODEL, BASELINE_LAYERS = 192, 4
+
+
 def find_ckpts():
+    """Baseline masking checkpoints, plus jigsaw and joint.
+
+    The Phase 6 capacity sweep writes its checkpoints under the SAME
+    corpus_train_<ts>_..._seed<N>_best.pth pattern with no capacity in the
+    filename, so this glob matches 17 files of which only 5 are the baseline.
+    Architecture is therefore read from each checkpoint and non-baseline
+    capacities are skipped -- otherwise a Phase 3 re-run would silently average
+    the baseline together with 1.8M and 23.5M parameter models.
+    """
     out = []
     for p in sorted((ROOT / "models/masked_ssl").glob("corpus_train_*_seed*_best.pth")):
+        hp = torch.load(p, map_location="cpu", weights_only=False).get("hyperparameters", {})
+        if (hp.get("d_model"), hp.get("num_layers")) != (BASELINE_D_MODEL, BASELINE_LAYERS):
+            continue
         out.append(("masking", int(p.name.split("_seed")[-1].split("_")[0]), p))
     for obj in ("jigsaw", "joint"):
         for d in sorted((ROOT / "models/phase2").glob(f"{obj}_seed*")):
