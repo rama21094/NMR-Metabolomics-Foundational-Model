@@ -53,7 +53,10 @@ G3  does synthetic data help?
   |   -> TOOK: "no"                                           [G3 answered]
   v
 Phase 6  more parameters
-      NOT RUN. Justified below.
+  |   MEASURED: 1.82M -> 23.52M, 12 runs. Capacity helps
+  |             (+0.012 at best) but plateaus by ~10M and
+  |             loses every cell to classical by 0.046.
+  |   -> TOOK: "does not help enough"
   v
 "we hit a limit on these tasks"  <- THE PROJECT'S TERMINAL NODE
 ```
@@ -100,18 +103,29 @@ This is a limit of the public basis, not a proof about synthetic data in general
 
 ---
 
-## Why Phase 6 (more parameters) was not run
+## Phase 6: capacity was measured, and helps too little
 
-The tree's remaining branch after a G3 "no". Not run, for a reason the evidence
-already supplies: a 4.0 M-parameter encoder **already overfits** these cohorts —
-that is precisely what result 1 showed, with full fine-tuning worse than
-last-block and last-block worse than frozen. Adding capacity moves along the axis
-that is already hurting. The cohorts are 40–142 samples.
+Run as a two-sided sweep, 1.82 M to 23.52 M parameters around the 4.0 M baseline,
+12 runs. See [PHASE6_capacity_verdict.md](PHASE6_capacity_verdict.md).
 
-This is a judgement, not a measurement, and should be stated that way in the
-paper. A capacity sweep would cost little and would close the branch formally.
+| params | k=10 | k=all |
+|---|---|---|
+| 1.82 M | 0.574 | 0.644 |
+| 3.99 M (baseline) | 0.590 | 0.666 |
+| **10.54 M** | **0.603** | **0.678** |
+| 23.52 M | 0.598 | 0.675 |
+| **classical ML** | **0.654** | **0.721** |
 
----
+Capacity helps — largest beats smallest in 6 of 6 targets — but at +0.008 to
++0.009 per doubling, and the curve is flat from ~10 M onward. The best
+architecture still loses every cell, by 0.046 at k=all.
+
+**This section previously argued the sweep did not need running**, on the grounds
+that the encoder already overfits so more capacity would hurt. That was wrong:
+smaller models are *worse*, not better. Fine-tuning overfits because it adapts
+4 M parameters on 10–40 labelled spectra; pretraining fits them on 8,545
+unlabelled ones, and those are different regimes. The conclusion survives, but it
+now rests on measurement rather than on a mistaken inference.
 
 ## Limitations, stated plainly
 
