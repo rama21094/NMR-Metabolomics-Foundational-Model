@@ -70,8 +70,8 @@ Phase 6  more parameters
 
 ### 1. Classical ML wins, and it is not an artefact
 
-24 of 24 cohort x label-budget cells, mean gap +0.055, at every budget including
-k=5. Established across all four transfer modes the plan specified, so it is a
+Standard ML is better in 22 of 24 cells and statistically level in the other 2
+(see the re-evaluation below); the pretrained model is better in none. Established across all four transfer modes the plan specified, so it is a
 statement about the architecture, not only about frozen representations.
 
 The result is *not* explained by:
@@ -82,6 +82,29 @@ The result is *not* explained by:
   the frozen probe; deeper adaptation is *worse*, the signature of overfitting
 - **a weak pretext task** — pretraining beats random init by +0.057 in 64 of 72
   cells
+
+
+### Re-evaluation with exact budgets and matched protocols (2026-09-25)
+
+The Phase 3 few-shot design capped each class at (size - 1), so for the small
+cohorts the budget labels were wrong -- Barth "40" trained on 35 of 37 patients
+and tested on 2, and on three cohorts "40" used more patients than "all". The
+pretrained models were also never evaluated with the LOOCV / repeated-CV
+protocol that set the classical bar. Re-run with exact budgets (dropped where any
+class would keep < 5 test patients), LOOCV for Barth and 10x5-fold CV elsewhere
+for both arms, and paired 95% intervals (`code/evaluation/phase3_fixed_eval.py`):
+
+| pretraining | standard ML significantly better | ours better | too close to call |
+|---|---|---|---|
+| masking | 22 / 24 | 0 | 2 |
+| joint | 23 / 24 | 0 | 1 |
+| jigsaw | 23 / 24 | 0 | 1 |
+
+The two masking cells that cannot be separated: BrC-T2D cancer at 5 patients per
+group (−0.002, [−0.025, +0.021]) and Barth under LOOCV (−0.057,
+[−0.237, +0.115]). Barth's 37 patients cannot resolve a 0.06 difference. The
+correct statement is therefore **"standard ML is better or statistically level
+everywhere, and the pretrained model is never better"** -- not "wins 24 of 24".
 
 ### 2. Diversity, not volume, is the binding constraint
 
