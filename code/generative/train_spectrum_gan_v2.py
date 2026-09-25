@@ -70,22 +70,34 @@ class Gen(nn.Module):
     def forward(self, z, e=None):
         h = torch.cat([z, e], 1) if e is not None else z
         h = self.fc(h).view(z.size(0), self.ch, 64)
-        return self.out(self.net(h)).squeeze(1)
+        # Bounded output. v2's first launch had an unbounded linear output and
+        # diverged within 60 epochs: a 1-Lipschitz critic's score grows with its
+        # input's magnitude, so the generator "won" by inflating amplitude
+        # (critic loss -3,950, generator loss +4.6M, every selection AUC 1.000).
+        # Real spectra, max-scaled, span [-0.085, 1.0]; tanh covers that range.
+        return torch.tanh(self.out(self.net(h)).squeeze(1))
 
 
 class Disc(nn.Module):
-    def __init__(self, ch=32, n_class=0):
+    def __init__(self, ch=32, n_class=0, sn=False):
         super().__init__()
+        # Spectral norm is OFF by default. It was enabled in the first v2 launch
+        # and the critic still diverged (generator loss +15,303 by epoch 3):
+        # torch's spectral_norm normalises each conv weight reshaped to a matrix,
+        # which bounds that matrix, not the convolution operator, so nine stacked
+        # layers are not held to Lipschitz 1. The gradient penalty alone is what
+        # kept v1 stable to epoch ~210.
+        SNf = SN if sn else (lambda m: m)
         layers, c = [], 1
         for _ in range(9):
             nxt = min(512, ch if c == 1 else c * 2)
-            layers += [SN(nn.Conv1d(c, nxt, 9, stride=2, padding=4)),
+            layers += [SNf(nn.Conv1d(c, nxt, 9, stride=2, padding=4)),
                        nn.LeakyReLU(0.2, inplace=True)]
             c = nxt
         self.net = nn.Sequential(*layers)
-        self.fc = SN(nn.Linear(c * 64, 1))
+        self.fc = SNf(nn.Linear(c * 64, 1))
         # projection discriminator for the conditional arm
-        self.proj = SN(nn.Embedding(n_class, c * 64)) if n_class else None
+        self.proj = SNf(nn.Embedding(n_class, c * 64)) if n_class else None
 
     def forward(self, x, y=None):
         h = self.net(x.unsqueeze(1)).flatten(1)
@@ -140,7 +152,8 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--zdim", type=int, default=128)
     ap.add_argument("--lr-g", type=float, default=1e-4)
-    ap.add_argument("--lr-d", type=float, default=2e-4)
+    ap.add_argument("--lr-d", type=float, default=1e-4)
+    ap.add_argument("--spectral-norm", action="store_true")
     ap.add_argument("--n-critic", type=int, default=5)
     ap.add_argument("--gp", type=float, default=10.0)
     ap.add_argument("--ema", type=float, default=0.999)
@@ -174,10 +187,10 @@ def main() -> None:
 
     T = torch.from_numpy(R); Y = torch.from_numpy(sid)
     G = Gen(args.zdim, n_class=n_class).to(dev)
-    D = Disc(n_class=n_class).to(dev)
+    D = Disc(n_class=n_class, sn=args.spectral_norm).to(dev)
     G_ema = copy.deepcopy(G).eval()
-    og = torch.optim.Adam(G.parameters(), lr=args.lr_g, betas=(0.0, 0.9))
-    od = torch.optim.Adam(D.parameters(), lr=args.lr_d, betas=(0.0, 0.9))
+    og = torch.optim.Adam(G.parameters(), lr=args.lr_g, betas=(0.5, 0.9))
+    od = torch.optim.Adam(D.parameters(), lr=args.lr_d, betas=(0.5, 0.9))
     out_dir = ROOT / "models/gan"; out_dir.mkdir(parents=True, exist_ok=True)
     log = {"args": vars(args), "evals": []}
     best = (1.1, -1)
@@ -217,6 +230,11 @@ def main() -> None:
             dl += loss_d.item(); gl += loss_g.item(); nb += 1
 
         msg = f"epoch {ep:>4}  D {dl/max(nb,1):+.4f}  G {gl/max(nb,1):+.4f}"
+        # divergence guard: v1 stayed within |G| < 300 even when unstable
+        if abs(gl / max(nb, 1)) > 1e4 or not np.isfinite(gl):
+            print(msg + "   DIVERGED - stopping", flush=True)
+            json.dump(log, open(ROOT / f"results/phase5/{args.tag}_log.json", "w"), indent=1)
+            raise SystemExit(2)
         if (ep + 1) % args.eval_every == 0 or ep == args.epochs - 1:
             auc = realism_auc(sel_f, bin_feat(generate(G_ema, 400)))
             log["evals"].append({"epoch": ep, "auc": auc})
