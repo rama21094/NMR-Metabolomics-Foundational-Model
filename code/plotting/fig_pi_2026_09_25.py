@@ -109,12 +109,21 @@ plt.close(fig)
 
 # ---- D: what synthetic spectra look like ---------------------------------
 ppm = np.load(ROOT / "rebuild/pretrain/ppm_axis.npy")
+# show the MEDIAN signal-to-noise sample of each set, not an arbitrary index,
+# so neither route is shown at its best or worst
+_m, _q = (ppm <= 4.4) & (ppm >= 0.7), ppm > 9.5
+def median_snr(path):
+    S = np.load(path, mmap_mode="r")[:200]
+    snr = [np.abs(v[_m]).max() / (v[_q].std() + 1e-12) for v in S]
+    return int(np.argsort(snr)[len(snr) // 2])
+pick_g = median_snr(ROOT / "rebuild/pretrain/synthetic/gissmo_joint_fixed.npy")
+pick_n = median_snr(ROOT / "rebuild/pretrain/synthetic/gan.npy")
 X = np.load(ROOT / "rebuild/pretrain/corpus_train.npy", mmap_mode="r")
 sets = [("Real spectrum", np.asarray(X[4321], dtype=np.float32), INK),
         ("GISSMO (built from 87 known metabolites)",
-         np.load(ROOT / "rebuild/pretrain/synthetic/probe_lip.npy")[3], GREY),
+         np.load(ROOT / "rebuild/pretrain/synthetic/gissmo_joint_fixed.npy")[pick_g], GREY),
         ("GAN (learned from the real spectra)",
-         np.load(ROOT / "rebuild/pretrain/synthetic/gan.npy")[7], BLUE)]
+         np.load(ROOT / "rebuild/pretrain/synthetic/gan.npy")[pick_n], BLUE)]
 m = (ppm <= 4.4) & (ppm >= 0.7)
 fig, axs = plt.subplots(3, 1, figsize=(12, 5.6), sharex=True)
 for ax, (t, y, c) in zip(axs, sets):

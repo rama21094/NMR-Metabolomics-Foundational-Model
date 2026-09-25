@@ -1,5 +1,17 @@
 # Gate G3, generative route: a GAN gets far closer, and still fails the gate
 
+
+> **Correction (2026-09-25).** The synthetic spectra first reported for GISSMO were
+> pure noise. `shift()` in `generate_synthetic_corpus.py` called `np.interp` on
+> the project's descending ppm axis, which `np.interp` silently mishandles, and
+> returned all zeros; each spectrum was then the added noise rescaled to full
+> height. The fix was verified (a +0.02 ppm shift now moves a peak by exactly
+> +0.02 ppm with height preserved) and the set regenerated. The corrected numbers
+> are below. **The verdict is unchanged** — the corrected set still fails 5.2 —
+> but the earlier figures (Wasserstein 9.72, "landmarks exact") were measurements
+> of noise and are withdrawn. The coverage result, R² = 0.25, came from a direct
+> NNLS fit that never calls `shift()` and stands.
+
 ## Result
 
 WGAN-GP, 300 epochs on the 8,545-spectrum training corpus, 4,000 spectra
@@ -8,14 +20,14 @@ generated. Put through the **same** Phase 5.2 gate as the GISSMO set.
 | test | GISSMO basis | **GAN** | real / target |
 |---|---|---|---|
 | discriminator AUC, real vs synthetic | 1.000 | **0.945** (±0.067) | 0.5 |
-| median per-bin Wasserstein / IQR | 9.72 | **1.19** | 0.053 floor |
-| bins below 0.25 | 0.0% | **11.1%** | — |
+| median per-bin Wasserstein / IQR | 4.28 | **1.19** | 0.053 floor |
+| bins below 0.25 | 0.6% | **11.1%** | — |
 | bins within the 0.053 floor | 0.0% | 0.0% | — |
-| lactate CH₃→CH separation | 2.781 | **2.788** | 2.788 real |
-| effective studies | (8.73, invalid) | **4.71** | 4.09 corpus |
+| lactate CH₃→CH separation | 2.845 | **2.788** | 2.788 real |
+| effective studies | (7.10, invalid) | **4.71** | 4.09 corpus |
 
 **The GAN solves the problem GISSMO had.** Landmarks match the real corpus
-exactly, and the distributional distance is 8× smaller than the metabolite basis
+exactly, and the distributional distance is 3.6× smaller than the metabolite basis
 managed. Learning the whole signal rather than a 25%-coverage basis was the right
 fix for the realism failure.
 
@@ -32,7 +44,7 @@ Its composition mirrors the corpus: MTBLS798 takes 51% of generated spectra
 against 57% of real ones.
 
 This measurement is valid here in a way it was not for GISSMO. The GISSMO set's
-8.73 was high because those spectra resembled no study. The GAN set is close
+7.10 is high because those spectra resembled no study. The GAN set is close
 enough to real (AUC 0.945, not 1.000; landmarks exact) that nearest-centroid
 assignment means something.
 

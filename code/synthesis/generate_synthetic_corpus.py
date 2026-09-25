@@ -71,7 +71,18 @@ def fit_coefficients(X, B, n_fit, rng, factor=32):
 
 
 def shift(y, d_ppm, ppm):
-    """Shift a spectrum by d_ppm, by interpolation on the ppm axis."""
+    """Shift a spectrum by d_ppm, by interpolation on the ppm axis.
+
+    np.interp REQUIRES an increasing xp and does not check: on this project's
+    descending axis (10.0 -> -0.5) it silently returned all zeros, even for a
+    zero shift. Every synthetic spectrum generated before this fix was therefore
+    pure added noise rescaled to full height, and the GISSMO 5.2 results computed
+    from them (AUC 1.000, Wasserstein 9.72) measured noise, not metabolite
+    mixtures. Interpolate on the reversed, ascending axis instead.
+    """
+    if ppm[0] > ppm[-1]:
+        return np.interp(ppm[::-1], (ppm + d_ppm)[::-1], y[::-1],
+                         left=0.0, right=0.0)[::-1]
     return np.interp(ppm, ppm + d_ppm, y, left=0.0, right=0.0)
 
 

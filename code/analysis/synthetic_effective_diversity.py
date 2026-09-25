@@ -19,9 +19,10 @@ an even spread over the twelve it knows. So a high value is necessary, not
 sufficient, evidence of added diversity; a LOW value is conclusive evidence of
 mode collapse. It is reported as a falsifier, not a certificate.
 
-WORKED EXAMPLE OF THE TRAP. The GISSMO linear-combination set scores 8.73 here --
-apparently twice the corpus's 4.09 -- while failing the 5.2 realism gate at
-discriminator AUC 1.000. It resembles no real study, so nearest-centroid
+WORKED EXAMPLE OF THE TRAP. The GISSMO linear-combination set scores 7.10 here --
+apparently far above the corpus's 4.09 -- while failing the 5.2 realism gate at
+discriminator AUC 1.000. (An earlier run scored 8.73 on spectra that were pure
+noise, from a since-fixed np.interp bug; the trap holds either way.) It resembles no real study, so nearest-centroid
 assignment is close to arbitrary and the entropy is high for the worst possible
 reason. THIS NUMBER IS ONLY MEANINGFUL FOR A SET THAT HAS ALREADY PASSED 5.2.
 Run validate_synthetic.py first; if the discriminator separates the set, stop.

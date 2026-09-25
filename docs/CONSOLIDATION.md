@@ -51,7 +51,7 @@ G3  does synthetic data help?
   |             validation gate (discriminator AUC 1.000).
   |             Per plan 5.2, not trained on.
   |             A WGAN-GP gets far closer (AUC 0.945, Wasserstein
-  |             8x smaller, landmarks exact) but still fails 5.2,
+  |             3.6x smaller, landmarks exact) but still fails 5.2,
   |             and resamples the corpus: effective 4.71 vs 4.09.
   |   -> TOOK: "no", by both routes                           [G3 answered]
   v
@@ -105,7 +105,7 @@ sparse where real ones are dense and a discriminator separates them perfectly.
 This is a limit of the public basis, not a proof about synthetic data in general.
 
 A WGAN-GP, the whiteboard's other route, fixes the realism problem the basis had —
-landmarks exact, distributional distance 8× smaller — but is still detected at
+landmarks exact, distributional distance 3.6× smaller — but is still detected at
 discriminator AUC 0.945. And it resamples rather than extends the corpus: the
 generated set has an effective study count of 4.71 against the corpus's 4.09.
 Even a GAN that passed validation would add rows, which G2 showed saturate below

@@ -6,6 +6,18 @@ Research plan §5.2: *"Synthetic data that fails these should not be trained on,
 whatever it does to the metric."* It failed. No augmented pretraining was run, and
 that is the finding, not an omission.
 
+
+> **Correction (2026-09-25).** The synthetic spectra first reported here were
+> pure noise. `shift()` in `generate_synthetic_corpus.py` called `np.interp` on
+> the project's descending ppm axis, which `np.interp` silently mishandles, and
+> returned all zeros; each spectrum was then the added noise rescaled to full
+> height. The fix was verified (a +0.02 ppm shift now moves a peak by exactly
+> +0.02 ppm with height preserved) and the set regenerated. The corrected numbers
+> are below. **The verdict is unchanged** — the corrected set still fails 5.2 —
+> but the earlier figures (Wasserstein 9.72, "landmarks exact") were measurements
+> of noise and are withdrawn. The coverage result, R² = 0.25, came from a direct
+> NNLS fit that never calls `shift()` and stands.
+
 ## What was built
 
 GISSMO metabolite basis, rebuilt on the corpus ppm axis (the existing basis was
@@ -26,12 +38,14 @@ study contained -- the property a trained generator cannot have).
 | test | synthetic | reference |
 |---|---|---|
 | discriminator AUC, real vs synthetic | **1.000** | 0.5 = indistinguishable |
-| median per-bin Wasserstein / IQR | **9.72** | 0.053 within-corpus floor |
+| median per-bin Wasserstein / IQR | **4.28** | 0.053 within-corpus floor |
 | bins within that floor | **0.0%** | — |
-| lactate CH₃→CH separation | 2.781 | 2.780 expected |
+| lactate CH₃→CH separation | 2.845 | 2.788 real |
 
-The chemistry is right and the realism is not. Landmark positions are essentially
-exact in `joint` mode, so the basis is correctly built and correctly placed.
+Neither the realism nor the landmark positions match. (The basis itself is
+correctly placed -- its individual metabolites sit within 0.006 ppm of literature,
+commit 553c2b9 -- so the mixture's landmark drift comes from how 94 overlapping
+components combine, not from a misplaced axis.)
 (`marginal` mode shifted landmarks by ~0.1 ppm -- independent sampling produces
 chemically impossible mixtures -- which is itself a limit on the one advantage
 this route had over a generator.)
