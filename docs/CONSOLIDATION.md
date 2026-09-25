@@ -50,7 +50,10 @@ G3  does synthetic data help?
   |             spectrum, so synthetic spectra fail the
   |             validation gate (discriminator AUC 1.000).
   |             Per plan 5.2, not trained on.
-  |   -> TOOK: "no"                                           [G3 answered]
+  |             A WGAN-GP gets far closer (AUC 0.945, Wasserstein
+  |             8x smaller, landmarks exact) but still fails 5.2,
+  |             and resamples the corpus: effective 4.71 vs 4.09.
+  |   -> TOOK: "no", by both routes                           [G3 answered]
   v
 Phase 6  more parameters
   |   MEASURED: 1.82M -> 23.52M, 12 runs. Capacity helps
@@ -94,12 +97,20 @@ A corollary worth reporting: balanced subsampling *raises* effective diversity
 above the full corpus (`fixed2000_k12` reaches 6.88 on a quarter of the rows). More
 data is not automatically more diverse.
 
-### 3. Synthetic data cannot currently be validated
+### 3. Synthetic data cannot currently be validated, by either route
 
 Median R² = 0.25 for a 94-component GISSMO + lipid basis against real serum CPMG
 spectra. Three quarters of the signal is unmodelled, so synthetic spectra are
 sparse where real ones are dense and a discriminator separates them perfectly.
 This is a limit of the public basis, not a proof about synthetic data in general.
+
+A WGAN-GP, the whiteboard's other route, fixes the realism problem the basis had —
+landmarks exact, distributional distance 8× smaller — but is still detected at
+discriminator AUC 0.945. And it resamples rather than extends the corpus: the
+generated set has an effective study count of 4.71 against the corpus's 4.09.
+Even a GAN that passed validation would add rows, which G2 showed saturate below
+2,000. Late training instability (from epoch ~240) means a better GAN is
+plausible; a GAN that raises effective diversity is not, by construction.
 
 ---
 
@@ -141,9 +152,10 @@ now rests on measurement rather than on a mistaken inference.
    size and pooling were swept; depth and width were not.
 5. **Absolute referencing spread.** ~0.05 ppm between studies remains after the
    rebuild. Judged acceptable natural variation, not corrected.
-6. **G3 is route-limited.** The generative route was argued against rather than
-   tested; the argument (a generator cannot raise effective study count) is sound
-   but is reasoning, not measurement.
+6. **G3 tested one model per route.** One metabolite basis (GISSMO + lipids) and one
+   GAN (WGAN-GP, which destabilised late in training). A better generator could
+   plausibly pass validation; the diversity result, which is about the training
+   data, would still apply to it.
 
 ---
 
