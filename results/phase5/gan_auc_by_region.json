@@ -1,0 +1,10 @@
+{
+ "GAN v2 | all windows": 0.7756639376218324,
+ "GAN v2 | edges removed (0.2-9.4 ppm)": 0.5886463937621832,
+ "GAN v2 | edges + aromatic removed (0.2-8.0 ppm)": 0.6000197530864197,
+ "GAN v2 | edges only (<0.2 or >9.4 ppm)": 0.9404870695256661,
+ "GAN v2 study-mixing | all windows": 0.9233536062378166,
+ "GAN v2 study-mixing | edges removed (0.2-9.4 ppm)": 0.8833502274204029,
+ "GAN v2 study-mixing | edges + aromatic removed (0.2-8.0 ppm)": 0.886783820662768,
+ "GAN v2 study-mixing | edges only (<0.2 or >9.4 ppm)": 0.8515942820012995
+}
