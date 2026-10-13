@@ -48,6 +48,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--synth", required=True)
     ap.add_argument("--n-real", type=int, default=1500)
+    ap.add_argument("--blank-edges", action="store_true",
+                    help="zero ppm<-0.2 and ppm>9.4 in BOTH sets first (see edges.py)")
     args = ap.parse_args()
     rng = np.random.default_rng(0)
 
@@ -59,7 +61,11 @@ def main() -> None:
     S = np.load(ROOT / args.synth)
     ri = np.sort(rng.choice(X.shape[0], min(args.n_real, X.shape[0]), replace=False))
     R = np.asarray(X[ri], dtype=np.float32)
-    print(f"real {R.shape}, synthetic {S.shape}\n")
+    if args.blank_edges:
+        from edges import blank
+        R, S = blank(R, ppm), blank(S, ppm)
+    print(f"real {R.shape}, synthetic {S.shape}"
+          + ("  [edges blanked]" if args.blank_edges else "") + "\n")
 
     Rb, centres = binned(R, ppm)
     Sb, _ = binned(S, ppm)

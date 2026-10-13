@@ -1,0 +1,14 @@
+real (1500, 131072), synthetic (4000, 131072)
+
+1. discriminator real-vs-synthetic AUC = 0.832 (+/- 0.046)   0.5 = indistinguishable
+
+2. landmarks (ppm)
+   lactate CH3    real +1.345   synthetic +1.345
+   lactate CH     real +4.132   synthetic +4.133
+   creatine CH3   real +3.063   synthetic +3.062
+   CH3->CH separation  real 2.788   synthetic 2.787   expected 2.780
+
+3. intensity distributions, 468 bins
+   median rel. Wasserstein 1.026   p90 2.788
+   bins within the 0.053 within-corpus floor: 0.0%
+   bins below 0.25: 12.8%
