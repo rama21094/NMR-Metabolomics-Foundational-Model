@@ -66,7 +66,7 @@ from sklearn.metrics import balanced_accuracy_score
 ROOT = Path(__file__).resolve().parents[2]
 for p in ("code/training", "code/evaluation", "code/analysis"):
     sys.path.insert(0, str(ROOT / p))
-from phase3_transfer import target_defs, load_cohort, binned, episodes, probe  # noqa: E402
+from phase3_transfer import target_defs, load_cohort, binned, episodes, probe, find_ckpts  # noqa: E402
 
 MODES = ("head", "last_block", "full")
 
@@ -196,8 +196,10 @@ def main() -> None:
     args = ap.parse_args()
     (ROOT / args.out).parent.mkdir(parents=True, exist_ok=True)
 
-    cks = sorted((ROOT / "models/masked_ssl").glob("corpus_train_*_seed*_best.pth"))
-    ck_by_seed = {int(p.name.split("_seed")[-1].split("_")[0]): p for p in cks}
+    # find_ckpts() keeps only the baseline architecture: the Phase 6 capacity
+    # checkpoints share this filename pattern and would otherwise overwrite
+    # baseline seeds 0-2 in this dict (the original G1 run predates them).
+    ck_by_seed = {s: p for o, s, p in find_ckpts() if o == "masking"}
     use = [(s, ck_by_seed[s]) for s in args.seeds if s in ck_by_seed]
     if not use:
         raise SystemExit(f"no masking checkpoints for seeds {args.seeds}")

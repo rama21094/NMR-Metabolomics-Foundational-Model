@@ -9,12 +9,24 @@
 | corpus workbench | 780 | 780 | pretraining |
 | **corpus total** | **9,480** | | |
 | MTBLS563 | 142 | 113 (excl. 29 "unknown") | evaluation |
-| BrC-T2D | 115 | 115 | evaluation |
+| BrC-T2D | 115 | 78 (corrected labels, 2026-10-15) | evaluation |
 | MTBLS326 | 43 | 41 | **excluded from claims** (see below) |
 | Barth | 40 | 37 (excl. 3 pooled QC) | evaluation |
 
-Class balances: MTBLS563 control 56 / viral 31 / bacterial 26; BrC-T2D BC-ND 38,
-NC-D 38, NC-ND 22, BC-D 17; Barth case 23 / control 14.
+Class balances: MTBLS563 control 56 / viral 31 / bacterial 26; BrC-T2D BC-ND 28,
+NC-D 20, NC-ND 20, BC-D 10; Barth case 23 / control 14.
+
+**BrC-T2D relabel (2026-10-15).** The corrected label file
+(data/BrC_T2D/BrC-T2D-newlabels_latest_corrected.csv) lists 78 patients and is
+now the authority. Eight patients changed class against the old mapping (KM70,
+SM23, SM35, SM44, SM50, SM58, SM63, SM66); the 34 patients it does not list were
+dropped; the three "repeat" acquisitions (SM19, SM23, SM31) were removed so each
+patient contributes one spectrum (both copies of a patient could previously fall
+on opposite sides of a split). Built by code/pipeline_v2/apply_brc_t2d_corrected_labels.py.
+The 115-spectrum cohort and all results computed on it are archived in
+rebuild/cohorts/archive_brc_t2d_115/ and results/archive_brc115/. With n=78 the
+cohort now gets LOOCV rather than 10x5-fold CV, and budgets that leave a class
+with fewer than 5 test patients are dropped (4-class: k=5 only).
 
 **Leakage:** MTBLS326, MTBLS563 and ST000223 appear zero times in the corpus,
 checked by study accession across all 9,480 provenance rows.
