@@ -686,8 +686,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.6245925925925928,
-  "classical": 0.7163703703703704
+  "mean": 0.6836111111111111,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -696,8 +696,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6615555555555556,
-  "classical": 0.7163703703703704
+  "mean": 0.7363095238095237,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -706,8 +706,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.6766296296296297,
-  "classical": 0.7163703703703704
+  "mean": 0.7384126984126983,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -716,8 +716,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 10,
-  "mean": 0.6671111111111112,
-  "classical": 0.7163703703703704
+  "mean": 0.7322222222222222,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -726,8 +726,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 10,
-  "mean": 0.6692592592592594,
-  "classical": 0.7163703703703704
+  "mean": 0.7151984126984128,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -736,8 +736,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6645925925925925,
-  "classical": 0.7163703703703704
+  "mean": 0.7234920634920636,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -746,8 +746,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.6524444444444445,
-  "classical": 0.7163703703703704
+  "mean": 0.7329761904761904,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -756,8 +756,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.6383333333333333,
-  "classical": 0.7163703703703704
+  "mean": 0.6704761904761903,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -766,8 +766,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.648074074074074,
-  "classical": 0.7163703703703704
+  "mean": 0.7130555555555554,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -776,8 +776,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6668148148148147,
-  "classical": 0.7163703703703704
+  "mean": 0.7194444444444446,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -786,8 +786,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.6152222222222222,
-  "classical": 0.7163703703703704
+  "mean": 0.7026190476190475,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -796,8 +796,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.673148148148148,
-  "classical": 0.7163703703703704
+  "mean": 0.7266269841269842,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -806,8 +806,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6593703703703703,
-  "classical": 0.7163703703703704
+  "mean": 0.754920634920635,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -816,8 +816,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.658925925925926,
-  "classical": 0.7163703703703704
+  "mean": 0.7072222222222224,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -826,8 +826,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.6619629629629631,
-  "classical": 0.7163703703703704
+  "mean": 0.6981746031746032,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -836,8 +836,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6657777777777777,
-  "classical": 0.7163703703703704
+  "mean": 0.7642857142857141,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -846,8 +846,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.6617037037037039,
-  "classical": 0.7163703703703704
+  "mean": 0.7665079365079365,
+  "classical": 0.8433730158730159
  },
  {
   "target": "brc_t2d_cancer",
@@ -856,8 +856,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.7535353535353536,
-  "classical": 0.8539141414141415
+  "mean": 0.8229166666666666,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -866,8 +866,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.7938131313131312,
-  "classical": 0.8539141414141415
+  "mean": 0.8729166666666667,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -876,8 +876,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.7717171717171716,
-  "classical": 0.8539141414141415
+  "mean": 0.85,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -886,8 +886,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 0,
-  "mean": 0.790530303030303,
-  "classical": 0.8539141414141415
+  "mean": 0.8520833333333333,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -896,8 +896,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 0,
-  "mean": 0.7768939393939394,
-  "classical": 0.8539141414141415
+  "mean": 0.8375,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -906,8 +906,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.7433080808080808,
-  "classical": 0.8539141414141415
+  "mean": 0.85625,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -916,8 +916,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.7755050505050504,
-  "classical": 0.8539141414141415
+  "mean": 0.84375,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -926,8 +926,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.7598484848484848,
-  "classical": 0.8539141414141415
+  "mean": 0.78125,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -936,8 +936,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.7678030303030303,
-  "classical": 0.8539141414141415
+  "mean": 0.8104166666666667,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -946,8 +946,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.7767676767676767,
-  "classical": 0.8539141414141415
+  "mean": 0.83125,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -956,8 +956,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.7400252525252525,
-  "classical": 0.8539141414141415
+  "mean": 0.76875,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -966,8 +966,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.7916666666666667,
-  "classical": 0.8539141414141415
+  "mean": 0.89375,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -976,8 +976,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.7874999999999999,
-  "classical": 0.8539141414141415
+  "mean": 0.85625,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -986,8 +986,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.7978535353535352,
-  "classical": 0.8539141414141415
+  "mean": 0.875,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -996,8 +996,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.7753787878787878,
-  "classical": 0.8539141414141415
+  "mean": 0.8395833333333333,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -1006,8 +1006,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.7765151515151516,
-  "classical": 0.8539141414141415
+  "mean": 0.89375,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_cancer",
@@ -1016,8 +1016,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.8017676767676766,
-  "classical": 0.8539141414141415
+  "mean": 0.8708333333333333,
+  "classical": 0.9145833333333333
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1026,8 +1026,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.5497777777777777,
-  "classical": 0.6415185185185186
+  "mean": 0.5769736842105264,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1036,8 +1036,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.6174074074074074,
-  "classical": 0.6415185185185186
+  "mean": 0.6227192982456141,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1046,8 +1046,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.5728148148148148,
-  "classical": 0.6415185185185186
+  "mean": 0.5820175438596492,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1056,8 +1056,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 10,
-  "mean": 0.5967407407407409,
-  "classical": 0.6415185185185186
+  "mean": 0.6447368421052632,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1066,8 +1066,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 10,
-  "mean": 0.5757777777777778,
-  "classical": 0.6415185185185186
+  "mean": 0.6092105263157894,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1076,8 +1076,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.5513333333333333,
-  "classical": 0.6415185185185186
+  "mean": 0.5590350877192982,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1086,8 +1086,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.5423333333333333,
-  "classical": 0.6415185185185186
+  "mean": 0.5649122807017544,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1096,8 +1096,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.5731111111111111,
-  "classical": 0.6415185185185186
+  "mean": 0.6042105263157895,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1106,8 +1106,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.5648518518518518,
-  "classical": 0.6415185185185186
+  "mean": 0.5569736842105263,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1116,8 +1116,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.5761111111111111,
-  "classical": 0.6415185185185186
+  "mean": 0.6164035087719297,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1126,8 +1126,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.5312962962962963,
-  "classical": 0.6415185185185186
+  "mean": 0.5658771929824561,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1136,8 +1136,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.5894444444444444,
-  "classical": 0.6415185185185186
+  "mean": 0.6163157894736843,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1146,8 +1146,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.5583703703703704,
-  "classical": 0.6415185185185186
+  "mean": 0.6155263157894738,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1156,8 +1156,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.5893333333333334,
-  "classical": 0.6415185185185186
+  "mean": 0.6355701754385964,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1166,8 +1166,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.5428518518518518,
-  "classical": 0.6415185185185186
+  "mean": 0.587061403508772,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1176,8 +1176,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.5681851851851852,
-  "classical": 0.6415185185185186
+  "mean": 0.6072368421052633,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1186,8 +1186,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.5732962962962963,
-  "classical": 0.6415185185185186
+  "mean": 0.6081140350877193,
+  "classical": 0.6901315789473685
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1196,8 +1196,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.6541666666666667,
-  "classical": 0.7453282828282828
+  "mean": 0.6033333333333334,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1206,8 +1206,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.6723484848484848,
-  "classical": 0.7453282828282828
+  "mean": 0.6666666666666666,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1216,8 +1216,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.6771464646464646,
-  "classical": 0.7453282828282828
+  "mean": 0.6416666666666667,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1226,8 +1226,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 0,
-  "mean": 0.6700757575757575,
-  "classical": 0.7453282828282828
+  "mean": 0.6761111111111109,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1236,8 +1236,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 0,
-  "mean": 0.6702020202020204,
-  "classical": 0.7453282828282828
+  "mean": 0.6688888888888889,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1246,8 +1246,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.6262626262626262,
-  "classical": 0.7453282828282828
+  "mean": 0.6255555555555556,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1256,8 +1256,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.631818181818182,
-  "classical": 0.7453282828282828
+  "mean": 0.6372222222222224,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1266,8 +1266,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.6065656565656565,
-  "classical": 0.7453282828282828
+  "mean": 0.6138888888888888,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1276,8 +1276,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.6512626262626262,
-  "classical": 0.7453282828282828
+  "mean": 0.6627777777777779,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1286,8 +1286,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.6919191919191919,
-  "classical": 0.7453282828282828
+  "mean": 0.7122222222222222,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1296,8 +1296,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.6305555555555556,
-  "classical": 0.7453282828282828
+  "mean": 0.6549999999999999,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1306,8 +1306,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.6921717171717172,
-  "classical": 0.7453282828282828
+  "mean": 0.6827777777777777,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1316,8 +1316,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.6420454545454546,
-  "classical": 0.7453282828282828
+  "mean": 0.691111111111111,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1326,8 +1326,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.7060606060606059,
-  "classical": 0.7453282828282828
+  "mean": 0.7033333333333335,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1336,8 +1336,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.651010101010101,
-  "classical": 0.7453282828282828
+  "mean": 0.6799999999999999,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1346,8 +1346,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.6907828282828281,
-  "classical": 0.7453282828282828
+  "mean": 0.6733333333333333,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_diabetes",
@@ -1356,8 +1356,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.6472222222222223,
-  "classical": 0.7453282828282828
+  "mean": 0.668888888888889,
+  "classical": 0.7533333333333335
  },
  {
   "target": "brc_t2d_4class",
@@ -1366,8 +1366,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.3993055555555556,
-  "classical": 0.48690476190476184
+  "mean": 0.5006481481481483,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1376,8 +1376,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.464186507936508,
-  "classical": 0.48690476190476184
+  "mean": 0.5017592592592592,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1386,8 +1386,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.4566468253968254,
-  "classical": 0.48690476190476184
+  "mean": 0.5199999999999999,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1396,8 +1396,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 10,
-  "mean": 0.4507936507936508,
-  "classical": 0.48690476190476184
+  "mean": 0.5921296296296298,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1406,8 +1406,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 10,
-  "mean": 0.4396825396825396,
-  "classical": 0.48690476190476184
+  "mean": 0.49,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1416,8 +1416,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.4287698412698413,
-  "classical": 0.48690476190476184
+  "mean": 0.4520370370370371,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1426,8 +1426,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.43303571428571425,
-  "classical": 0.48690476190476184
+  "mean": 0.47083333333333327,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1436,8 +1436,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.41835317460317456,
-  "classical": 0.48690476190476184
+  "mean": 0.4515740740740741,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1446,8 +1446,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.46031746031746024,
-  "classical": 0.48690476190476184
+  "mean": 0.4893518518518519,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1456,8 +1456,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.4171626984126985,
-  "classical": 0.48690476190476184
+  "mean": 0.47407407407407404,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1466,8 +1466,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.3961309523809524,
-  "classical": 0.48690476190476184
+  "mean": 0.460462962962963,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1476,8 +1476,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.45515873015873015,
-  "classical": 0.48690476190476184
+  "mean": 0.5466666666666666,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1486,8 +1486,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.4462301587301587,
-  "classical": 0.48690476190476184
+  "mean": 0.5338888888888889,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1496,8 +1496,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.462202380952381,
-  "classical": 0.48690476190476184
+  "mean": 0.5033333333333334,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1506,8 +1506,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 10,
-  "mean": 0.4359126984126984,
-  "classical": 0.48690476190476184
+  "mean": 0.4903703703703703,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1516,8 +1516,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 10,
-  "mean": 0.43650793650793646,
-  "classical": 0.48690476190476184
+  "mean": 0.5900925925925925,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1526,8 +1526,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 10,
-  "mean": 0.4245039682539683,
-  "classical": 0.48690476190476184
+  "mean": 0.5314814814814814,
+  "classical": 0.6614814814814817
  },
  {
   "target": "brc_t2d_4class",
@@ -1536,8 +1536,8 @@
   "params_m": 3.99,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.4569444444444445,
-  "classical": 0.5208333333333334
+  "mean": 0.5444444444444444,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1546,8 +1546,8 @@
   "params_m": 3.99,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.5263888888888889,
-  "classical": 0.5208333333333334
+  "mean": 0.58125,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1556,8 +1556,8 @@
   "params_m": 3.99,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.5190972222222222,
-  "classical": 0.5208333333333334
+  "mean": 0.5479166666666667,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1566,8 +1566,8 @@
   "params_m": 3.99,
   "seed": 3,
   "k_per_class": 0,
-  "mean": 0.49201388888888886,
-  "classical": 0.5208333333333334
+  "mean": 0.6305555555555554,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1576,8 +1576,8 @@
   "params_m": 3.99,
   "seed": 4,
   "k_per_class": 0,
-  "mean": 0.5006944444444444,
-  "classical": 0.5208333333333334
+  "mean": 0.5215277777777778,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1586,8 +1586,8 @@
   "params_m": 1.82,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.45902777777777776,
-  "classical": 0.5208333333333334
+  "mean": 0.5368055555555556,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1596,8 +1596,8 @@
   "params_m": 1.82,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.48090277777777773,
-  "classical": 0.5208333333333334
+  "mean": 0.4993055555555556,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1606,8 +1606,8 @@
   "params_m": 1.82,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.42326388888888894,
-  "classical": 0.5208333333333334
+  "mean": 0.49097222222222214,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1616,8 +1616,8 @@
   "params_m": 2.38,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.4951388888888888,
-  "classical": 0.5208333333333334
+  "mean": 0.5680555555555556,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1626,8 +1626,8 @@
   "params_m": 2.38,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.4888888888888889,
-  "classical": 0.5208333333333334
+  "mean": 0.5430555555555555,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1636,8 +1636,8 @@
   "params_m": 2.38,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.4496527777777778,
-  "classical": 0.5208333333333334
+  "mean": 0.4833333333333333,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1646,8 +1646,8 @@
   "params_m": 10.54,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.5104166666666667,
-  "classical": 0.5208333333333334
+  "mean": 0.5791666666666667,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1656,8 +1656,8 @@
   "params_m": 10.54,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.4746527777777778,
-  "classical": 0.5208333333333334
+  "mean": 0.5881944444444444,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1666,8 +1666,8 @@
   "params_m": 10.54,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.5131944444444444,
-  "classical": 0.5208333333333334
+  "mean": 0.5472222222222222,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1676,8 +1676,8 @@
   "params_m": 23.52,
   "seed": 0,
   "k_per_class": 0,
-  "mean": 0.4979166666666667,
-  "classical": 0.5208333333333334
+  "mean": 0.5395833333333333,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1686,8 +1686,8 @@
   "params_m": 23.52,
   "seed": 1,
   "k_per_class": 0,
-  "mean": 0.5024305555555555,
-  "classical": 0.5208333333333334
+  "mean": 0.5777777777777776,
+  "classical": 0.6090277777777777
  },
  {
   "target": "brc_t2d_4class",
@@ -1696,8 +1696,8 @@
   "params_m": 23.52,
   "seed": 2,
   "k_per_class": 0,
-  "mean": 0.48298611111111106,
-  "classical": 0.5208333333333334
+  "mean": 0.5236111111111111,
+  "classical": 0.6090277777777777
  },
  {
   "target": "barth_case_control",
