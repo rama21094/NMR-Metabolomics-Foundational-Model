@@ -1,0 +1,6 @@
+{
+ "whole spectrum": 0.8247157759445242,
+ "far edges only (<-0.2 or >9.4)": 0.955099175035868,
+ "TSP area only (-0.2 to 0.2)": 0.8262259385461502,
+ "metabolite region only (0.2 to 9.4)": 0.6686458632233382
+}

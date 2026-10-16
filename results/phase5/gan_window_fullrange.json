@@ -1,0 +1,18 @@
+{
+ "null_99": 0.029242359999999887,
+ "upfield edge (< -0.2 ppm)": {
+  "windows": 15,
+  "median_abs_delta": 0.14841950000000004,
+  "share_beyond_null99": 0.8
+ },
+ "downfield edge (> 9.4 ppm)": {
+  "windows": 30,
+  "median_abs_delta": 0.08724975000000001,
+  "share_beyond_null99": 0.9666666666666667
+ },
+ "middle (-0.2 to 9.4 ppm)": {
+  "windows": 448,
+  "median_abs_delta": 0.11618099999999998,
+  "share_beyond_null99": 0.8928571428571429
+ }
+}
