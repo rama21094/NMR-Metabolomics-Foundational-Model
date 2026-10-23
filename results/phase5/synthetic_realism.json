@@ -1,0 +1,36 @@
+{
+ "GISSMO + lipids": {
+  "auc": 1.0,
+  "auc_sd": 0.0,
+  "ch3_ch_separation": 2.845,
+  "median_rel_wasserstein": 4.275,
+  "eff_studies": 7.1,
+  "corpus_eff_studies": 4.09
+ },
+ "GAN v1": {
+  "auc": 0.945,
+  "auc_sd": 0.067,
+  "ch3_ch_separation": 2.788,
+  "median_rel_wasserstein": 1.186,
+  "eff_studies": 4.71,
+  "corpus_eff_studies": 4.09
+ },
+ "GAN v2": {
+  "auc": 0.832,
+  "auc_sd": 0.046,
+  "ch3_ch_separation": 2.787,
+  "median_rel_wasserstein": 1.026,
+  "eff_studies": 4.38,
+  "corpus_eff_studies": 4.09,
+  "auc_edges_blanked": 0.74
+ },
+ "GAN v2 study-mixing": {
+  "auc": 0.922,
+  "auc_sd": 0.068,
+  "ch3_ch_separation": 2.795,
+  "median_rel_wasserstein": 1.147,
+  "eff_studies": 8.38,
+  "corpus_eff_studies": 4.09,
+  "auc_edges_blanked": 0.896
+ }
+}
