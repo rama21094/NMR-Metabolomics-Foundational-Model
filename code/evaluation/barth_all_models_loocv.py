@@ -272,6 +272,8 @@ def infer_mae_config(state, nhead: int, dropout: float):
         "dim_feedforward": int(ff_weight.shape[0]),
         "dropout": float(dropout),
     }
+    if "encoder.cls_token" in state:          # CLS-token checkpoints (2026-10-23)
+        config["cls_token"] = True
     if config["d_model"] % config["nhead"]:
         raise ValueError(f"d_model={config['d_model']} is not divisible by nhead={config['nhead']}")
     return config
