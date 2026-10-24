@@ -806,6 +806,11 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                     arm_tag += f"_blk{mask_block_patches}"
                 if peak_top_fraction < 1.0:
                     arm_tag += f"_pk{peak_top_fraction:.2f}"
+                # Without this, a CLS run and a no-CLS run launched in the same
+                # second on the same data wrote ONE file (2026-10-23: the
+                # fullcls seed-1 checkpoint was overwritten by the full seed-1 run).
+                if getattr(getattr(model, 'encoder', model), 'cls_token', None) is not None:
+                    arm_tag += "_cls"
                 if seed is not None:
                     arm_tag += f"_seed{seed}"
 

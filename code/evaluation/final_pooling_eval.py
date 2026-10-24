@@ -58,11 +58,18 @@ def attn_fit_predict(T, y, tr, te, steps=300, lr=1e-2, wd=1e-2, seed=0):
         return classes[clf((a.unsqueeze(-1) * Xte).sum(1)).argmax(1).numpy()]
 
 
-def ckpt_list(pattern):
+def has_cls(p):
+    return "encoder.cls_token" in torch.load(p, map_location="cpu", weights_only=False)["model_state_dict"]
+
+
+def ckpt_list(pattern, cls=None):
+    """cls=True/False keeps only checkpoints with/without a CLS token. Needed
+    because CLS and no-CLS runs of 2026-10-23 share a filename pattern."""
     if pattern is None:
         return [(s, p) for o, s, p in find_ckpts() if o == "masking"]
     out = [(int(re.search(r"_seed(\d+)_", Path(p).name).group(1)), Path(p))
-           for p in sorted(glob.glob(str(ROOT / pattern)))]
+           for p in sorted(glob.glob(str(ROOT / pattern)))
+           if cls is None or has_cls(p) == cls]
     seeds = [s for s, _ in out]
     assert out and len(seeds) == len(set(seeds)), f"bad checkpoint set for {pattern}: {seeds}"
     return out
@@ -73,11 +80,12 @@ def main():
     ap.add_argument("--device", default="cuda:2")
     ap.add_argument("--episodes", type=int, default=50)
     ap.add_argument("--ckpts", default=None, help="glob under ROOT; default = Phase 2 baseline masking")
+    ap.add_argument("--cls", choices=["with", "without"], default=None)
     ap.add_argument("--readouts", nargs="+", default=["mean", "regional16", "attention"])
     ap.add_argument("--out", default="results/final/pooling_eval_baseline.json")
     a = ap.parse_args()
     (ROOT / a.out).parent.mkdir(parents=True, exist_ok=True)
-    C = ckpt_list(a.ckpts)
+    C = ckpt_list(a.ckpts, None if a.cls is None else a.cls == "with")
     print("checkpoints:", [(s, p.name) for s, p in C], flush=True)
     results = []
     for tid, cohort, labfn in target_defs():
