@@ -5,7 +5,8 @@
   "ch3_ch_separation": 2.845,
   "median_rel_wasserstein": 4.275,
   "eff_studies": 7.1,
-  "corpus_eff_studies": 4.09
+  "corpus_eff_studies": 4.09,
+  "auc_stratified": 1.0
  },
  "GAN v1": {
   "auc": 0.945,
@@ -13,7 +14,8 @@
   "ch3_ch_separation": 2.788,
   "median_rel_wasserstein": 1.186,
   "eff_studies": 4.71,
-  "corpus_eff_studies": 4.09
+  "corpus_eff_studies": 4.09,
+  "auc_stratified": 0.9975466666666668
  },
  "GAN v2": {
   "auc": 0.832,
@@ -22,6 +24,7 @@
   "median_rel_wasserstein": 1.026,
   "eff_studies": 4.38,
   "corpus_eff_studies": 4.09,
+  "auc_stratified": 0.992151111111111,
   "auc_edges_blanked": 0.74
  },
  "GAN v2 study-mixing": {
@@ -31,6 +34,34 @@
   "median_rel_wasserstein": 1.147,
   "eff_studies": 8.38,
   "corpus_eff_studies": 4.09,
+  "auc_stratified": 0.9941644444444446,
   "auc_edges_blanked": 0.896
+ },
+ "VAE prior samples": {
+  "auc": 1.0,
+  "auc_sd": 0.0,
+  "ch3_ch_separation": 2.731,
+  "median_rel_wasserstein": 14.034,
+  "eff_studies": null,
+  "corpus_eff_studies": 4.09,
+  "auc_stratified": 1.0
+ },
+ "Latent diffusion, corpus mix": {
+  "auc": 0.243,
+  "auc_sd": 0.093,
+  "ch3_ch_separation": 2.787,
+  "median_rel_wasserstein": 0.168,
+  "eff_studies": 4.34,
+  "corpus_eff_studies": 4.09,
+  "auc_stratified": 0.8033822222222223
+ },
+ "Latent diffusion, even mix": {
+  "auc": 0.457,
+  "auc_sd": 0.097,
+  "ch3_ch_separation": 2.797,
+  "median_rel_wasserstein": 1.21,
+  "eff_studies": 9.79,
+  "corpus_eff_studies": 4.09,
+  "auc_stratified": 0.8781955555555557
  }
 }

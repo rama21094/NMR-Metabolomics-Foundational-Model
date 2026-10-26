@@ -28,9 +28,11 @@ with position-preserving pooling). Fine-tuning did not help, and models from
 pretraining runs, neither more spectra nor a more even mix of studies closed the
 gap, and the number of studies needed to reach parity could not be extrapolated.
 The public corpus, although drawn from 12 studies, has an effective study count
-of 4.1. Synthetic spectra from a metabolite basis or from generative adversarial
-networks failed a realism test, and adding 4,000 GAN spectra to pretraining made
-transfer slightly worse. We also report several silent failure modes, including
+of 4.1. Synthetic spectra from a metabolite basis, generative adversarial networks or a
+variational autoencoder were detected almost perfectly by a realism test. A
+latent diffusion model came much closer, did not copy its training data, and,
+steered to an even mix of studies, carried 9.8 effective studies; adding up to
+16,000 of its spectra to pretraining left transfer unchanged. We also report several silent failure modes, including
 a chemical-shift axis defect and a batch-confounded public cohort, that produced
 plausible but wrong results. With current public data, standard machine learning
 remains the appropriate baseline for small NMR metabolomics cohorts.
@@ -238,15 +240,29 @@ million parameters), 3 seeds each, patch size fixed.
   selection by the realism test on a separate real set. A study-conditional
   variant used a projection critic and generated from random blends of two study
   embeddings, weighting studies equally.
+- **VAE and latent diffusion.** A KL-regularised 1D convolutional autoencoder
+  (residual blocks, GroupNorm, reflect padding, self-attention at the bottleneck;
+  32,768 points to 16 channels × 512) trained with L1 and first-difference L1 on
+  asinh-compressed intensities, u = asinh(x/0.001)/asinh(1000). With KL weight
+  0.01 its prior was sampled directly (VAE); with 10⁻⁶ it served as the latent
+  space for a diffusion transformer [REF DiT] (patch 2, width 384, 12 blocks,
+  adaLN-Zero, 32.6M parameters) trained with v-prediction on a cosine schedule,
+  Min-SNR-5 weighting [REF], EMA weights and classifier-free guidance on study
+  [REF]; sampling used 100 DDIM steps at guidance 1.5, with studies drawn either
+  in corpus proportions or uniformly.
 - **Realism test.** Logistic regression trained to separate synthetic from real
-  binned spectra, with cross-validation grouped by study; AUC 0.5 means
-  indistinguishable. Also reported: landmark positions (lactate CH₃–CH
+  binned spectra under stratified 5-fold cross-validation, with real spectra
+  drawn disjoint from any used for checkpoint selection; AUC 0.5 means
+  indistinguishable. **Memorisation:** each generated spectrum's highest
+  correlation with any training spectrum, against the same statistic for real
+  training spectra (nearest other spectrum). Also reported: landmark positions (lactate CH₃–CH
   separation, expected 2.780 ppm), per-window Wasserstein distance divided by the
   real interquartile range (real-vs-real floor 0.053), PCA fitted on real spectra
   only, and per-region classifiers.
-- **Augmentation test.** Masking pretraining on the real corpus versus the real
-  corpus plus 4,000 GAN v2 spectra, both with spectrum ends (below −0.2 and above
-  9.4 ppm) set to zero, 3 seeds each, evaluated as in 3.4.
+- **Augmentation tests.** Masking pretraining on the real corpus versus the real
+  corpus plus 4,000 GAN v2 spectra (both with spectrum ends set to zero), and
+  versus the real corpus plus 1,000, 4,000 or 16,000 even-mix diffusion spectra;
+  3 seeds per arm, evaluated as in 3.4.
 
 ---
 
@@ -329,40 +345,53 @@ The gap at full data was −0.082 (1.82M), −0.081 (2.38M), −0.062 (3.99M), �
 over-parameterised for the pretraining data; larger models did not continue to
 improve.
 
-### 4.4 Synthetic spectra fail the realism test (G3)
+### 4.4 Synthetic spectra: only latent diffusion comes close (G3)
 
-| set | AUC | AUC, ends blanked | CH₃–CH (ppm) | distance | effective studies |
-|---|---|---|---|---|---|
-| GISSMO + lipids | 1.000 | — | 2.845 | 4.28 | — |
-| GAN v1 | 0.945 | — | 2.788 | 1.19 | 4.71 |
-| GAN v2 | 0.832 | 0.740 | 2.787 | 1.03 | 4.38 |
-| GAN v2, study-conditional | 0.922 | 0.896 | 2.795 | 1.15 | 8.38 |
+The realism test separates real from synthetic spectra with logistic regression
+under stratified cross-validation (Section 3.8). A version with folds grouped by
+study, used in earlier drafts, is unreliable: it flatters generators far from
+the data and returns AUC below 0.5 for generators that reproduce each study
+closely (0.24 for the diffusion model), because synthetic copies of a study in the
+training folds teach the classifier to call that study's real spectra synthetic.
 
-The metabolite basis explains a median R² of 0.25 of a real spectrum; the broad
-protein and lipid background and unassigned peaks are not modelled. GANs place
-peaks correctly and come much closer, but none passes. The study-conditional GAN
-is the only generator that spreads beyond the corpus's 4.1 effective studies,
-at the cost of realism and training stability.
+| set | AUC | CH₃–CH (ppm) | distance | effective studies |
+|---|---|---|---|---|
+| GISSMO + lipids | 1.000 | 2.845 | 4.28 | — |
+| GAN v1 | 0.998 | 2.788 | 1.19 | 4.71 |
+| GAN v2 | 0.992 | 2.787 | 1.03 | 4.38 |
+| GAN v2, study-conditional | 0.994 | 2.795 | 1.15 | 8.38 |
+| VAE, prior samples | 1.000 | 2.731 | 14.0 | — |
+| **Latent diffusion, corpus study mix** | **0.803** | 2.787 | 0.17 | 4.34 |
+| Latent diffusion, even study mix | 0.878 | 2.797 | 1.21 | **9.79** |
 
-**What distinguishes GAN spectra.** [Figure 4: PCA and per-region separability,
-`docs/figures/pi16_gan_pca.png`, `docs/figures/pi16_gan_region_auc.png`.] On the
-first principal components of real spectra, GAN v2 spectra fall inside the real
-distribution (3.5% outside the real 95% boundary, against 4.9% for held-out real
-spectra) but concentrate in its dense centre and miss the outer groups. 81% of a
-GAN spectrum's variation lies outside the 20 leading real components (12% for
-real spectra). By region, the far ends of the spectrum, which carry no signal in
-real data, separate GAN from real at 0.955; the area around the TSP reference at
-0.826; and the metabolite region at 0.669. GAN baselines drift at the ends, and
-around TSP they dip below zero more often than real spectra (16% of points
-against 7%).
+The metabolite basis explains a median R² of 0.25 of a real spectrum. GANs place
+peaks correctly but are detected almost perfectly, as are samples from a VAE
+prior. Latent diffusion is far more realistic and does not memorise: a generated
+spectrum's closest training spectrum is as close as a real training spectrum's
+nearest other (median correlation 0.9969 against 0.9971). Generated with an even
+study mix, it is the only synthetic set that more than doubles the corpus's
+effective study count while remaining reasonably realistic.
 
-### 4.5 Adding GAN spectra to pretraining makes transfer slightly worse
+GAN spectra, examined with PCA on real spectra, fall inside the real distribution
+but concentrate in its dense centre and miss the outer groups; 81% of their
+variation lies outside the 20 leading real components (12% for real spectra).
+[Figure 4: `docs/figures/pi16_gan_pca.png`.]
 
-Against pretraining on real spectra alone, adding 4,000 GAN v2 spectra was better
-in 3 comparisons, worse in 10 and level in 8 (mean −0.016). The three gains were
-all at 5 patients per class. The augmented runs trained for about twice as many
-epochs, because synthetic spectra in the early-stopping set kept the validation
-loss falling; this would be expected to favour them.
+### 4.5 Synthetic spectra in pretraining do not help
+
+| pretraining data | better | worse | level | mean vs real-only |
+|---|---|---|---|---|
+| + 4,000 GAN v2 | 3 | 10 | 8 | −0.016 |
+| + 1,000 diffusion (even mix) | 0 | 7 | 14 | −0.005 |
+| + 4,000 diffusion (even mix) | 6 | 3 | 12 | +0.002 |
+| + 16,000 diffusion (even mix) | 3 | 3 | 15 | +0.002 |
+
+(GAN arm: mean pooling, edge-blanked control; diffusion arms: 16-region pooling,
+against the original real-only model.) The few gains were at small budgets and
+at most 0.018. All augmented models remained behind standard ML in 15–17 of 21
+comparisons. Augmented runs trained two to three times longer than the real-only
+model, because synthetic spectra in the early-stopping set kept the validation
+loss falling, which would be expected to favour them.
 
 ---
 
@@ -400,13 +429,13 @@ answer that, and the parity extrapolation is unbounded. Public NMR metabolomics
 would need many more independent studies with raw data deposited before the
 question can be settled.
 
-**Synthetic data cannot stand in for studies.** A generator trained on the
-corpus reproduces its composition (4.4 effective studies for GAN v2), so even a
-realistic one would add spectra, not studies. Conditioning on study can spread
-generation more widely, but at the cost of realism. The specific artefacts, at
-the spectrum ends and around the reference peak, suggest that border handling in
-the convolutional generator (zero padding) is a first target; we have not tested
-this.
+**Synthetic data cannot stand in for studies.** The strongest test we could
+construct, a latent diffusion model that is reasonably realistic, does not copy
+its training data, and when steered to an even study mix carries 9.8 effective
+studies, left transfer unchanged at up to 16,000 added spectra. Synthetic
+"studies" generated from the same 12 real ones are recombinations, not new
+biology or new acquisition conditions; consistent with this, adding seven real
+held-out studies (4.1 to 5.9 effective studies) did not help either.
 
 **Fragile results.** Several intermediate conclusions in this project changed
 when data or code were corrected, and we report them because they are general
@@ -443,7 +472,8 @@ risks (Section 6). In particular, the diversity effect in G2 was significant
 - Cohort sizes of 37–113 patients; several "level" results are "cannot tell".
 - One encoder family; other families were not tried.
 - The pretraining corpus spans only 1.6–6.9 effective studies.
-- One metabolite basis and one GAN family for synthetic data.
+- Synthetic data: one metabolite basis, one GAN family, one VAE and one latent
+  diffusion model; the best generator is still detectable (AUC 0.80).
 - Most experiments used mean pooling; their absolute gaps are probably about
   0.02 pessimistic, though their comparisons are like for like.
 

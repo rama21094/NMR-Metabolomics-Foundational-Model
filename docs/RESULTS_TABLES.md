@@ -133,14 +133,19 @@ Masking, mean pool, balanced accuracy averaged over 6 tasks and 3 seeds.
 
 ## Table 6 — Gate G3: is the synthetic data realistic?
 
-AUC: logistic regression real-vs-synthetic, study-grouped CV (0.5 = indistinguishable). Distance: median per-bin Wasserstein / IQR (real-vs-real floor 0.053). Real corpus effective studies: 4.09.
+AUC (fair): logistic regression real-vs-synthetic, stratified 5-fold CV, real spectra drawn fresh (0.5 = indistinguishable). AUC (grouped): the same with folds grouped by study, the original test; it drops BELOW 0.5 for generators that reproduce each study closely and flatters distant ones, so the fair column is the one to quote. Distance: median per-bin Wasserstein / IQR (real-vs-real floor 0.053). Real corpus effective studies: 4.09.
 
-| set | AUC | AUC, edges blanked | CH3-CH separation (2.780) | distance | effective studies |
+| set | AUC (fair) | AUC (grouped) | CH3-CH separation (2.780) | distance | effective studies |
 |---|---|---|---|---|---|
-| GISSMO + lipids | 1.000 | — | 2.845 | 4.275 | 7.10 |
-| GAN v1 | 0.945 | — | 2.788 | 1.186 | 4.71 |
-| GAN v2 | 0.832 | 0.740 | 2.787 | 1.026 | 4.38 |
-| GAN v2 study-mixing | 0.922 | 0.896 | 2.795 | 1.147 | 8.38 |
+| GISSMO + lipids | **1.000** | 1.000 | 2.845 | 4.275 | 7.10 |
+| GAN v1 | **0.998** | 0.945 | 2.788 | 1.186 | 4.71 |
+| GAN v2 | **0.992** | 0.832 | 2.787 | 1.026 | 4.38 |
+| GAN v2 study-mixing | **0.994** | 0.922 | 2.795 | 1.147 | 8.38 |
+| VAE prior samples | **1.000** | 1.000 | 2.731 | 14.034 | — |
+| Latent diffusion, corpus mix | **0.803** | 0.243 | 2.787 | 0.168 | 4.34 |
+| Latent diffusion, even mix | **0.878** | 0.457 | 2.797 | 1.210 | 9.79 |
+
+Memorisation (each spectrum's highest correlation with any training spectrum, median / share above 0.999): real held-out (reference) 0.9165 / 0.1%; real train, nearest other (ref.) 0.9971 / 7.0%; ldm_v2_proportional 0.9969 / 4.6%; ldm_v2_uniform 0.9888 / 0.8%; gan_v2 0.9871 / 0.0%.
 
 GAN v2 separability by region: whole spectrum 0.825; far edges only (<-0.2 or >9.4) 0.955; TSP area only (-0.2 to 0.2) 0.826; metabolite region only (0.2 to 9.4) 0.669.
 
@@ -154,3 +159,17 @@ realblank = real corpus, edges blanked; realgan = the same + 4,000 GAN v2 spectr
 | realgan vs classical | 0 | 16 | 5 | -0.076 |
 | realblank vs classical | 0 | 17 | 4 | -0.060 |
 | baseline vs classical | 0 | 17 | 4 | -0.066 |
+
+## Table 8 — Gate G3: pretraining with 1k / 4k / 16k even-mix diffusion spectra
+
+Real corpus (8,545) + N latent-diffusion spectra generated with an even study mix (9.79 effective studies), 3 seeds per N; baseline = Phase 2 masking, 5 seeds. 16-region pooling, same protocol as Table 2. Augmented runs trained 2-3x longer (synthetic spectra in the early-stopping set), which favours them.
+
+| comparison | first better | second better | too close to call | mean difference |
+|---|---|---|---|---|
+| aug1k vs baseline | 0 | 7 | 14 | -0.005 |
+| aug4k vs baseline | 6 | 3 | 12 | +0.002 |
+| aug16k vs baseline | 3 | 3 | 15 | +0.002 |
+| baseline vs classical | 0 | 17 | 4 | -0.048 |
+| aug1k vs classical | 0 | 17 | 4 | -0.053 |
+| aug4k vs classical | 0 | 15 | 6 | -0.046 |
+| aug16k vs classical | 0 | 16 | 5 | -0.045 |

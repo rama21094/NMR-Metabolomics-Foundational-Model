@@ -53,11 +53,12 @@ G2  is data limiting?
   |   -> TOOK: "more of the same data will not close the gap" [G2 answered]
   v
 G3  does synthetic data help?
-  |   MEASURED: GISSMO basis explains median R2 0.25; AUC 1.000.
-  |             GAN v2 is closest (AUC 0.832; 0.740 with the
-  |             spectrum ends blanked) but fails the gate.
-  |             Pretraining on real + 4,000 GAN v2 spectra vs
-  |             real alone: better 3, worse 10, level 8.
+  |   MEASURED: GISSMO, GANs and a VAE are detected almost
+  |             perfectly (fair AUC 0.99-1.00). Latent diffusion
+  |             is far closer (0.80), not copied, and with an even
+  |             study mix reaches 9.8 effective studies.
+  |             Pretraining with 1k/4k/16k diffusion spectra:
+  |             mean change -0.005 / +0.002 / +0.002.
   |   -> TOOK: "no", by both routes                           [G3 answered]
   v
 "we hit a limit on these tasks"  <- THE PROJECT'S TERMINAL NODE
@@ -132,30 +133,57 @@ spectra and seven hold 1-76 each. Balanced subsampling can raise effective
 diversity above the full corpus (`fixed2000_k12` reaches 6.88 on a quarter of the
 rows), which is why "more data" and "more diverse data" are different requests.
 
-### 3. Synthetic data is not realistic enough, and does not help
+### 3. Synthetic data does not help, even when it is realistic and diverse
 
-Table 6 and Table 7.
+Tables 6, 7 and 8.
 
-- **GISSMO** (94-component metabolite + lipid basis, NNLS fit): median R2 0.25
-  against real CPMG blood spectra; AUC 1.000. Three quarters of the signal
-  (protein and lipid background, unassigned peaks) is unmodelled. Its 7.10
-  effective studies are meaningless for a set that fails realism.
-- **GANs** (1D WGAN-GP). v1: AUC 0.945. v2, with a bounded output, an averaged
-  generator and checkpoint selection by realism: AUC 0.832, peaks in place. A
-  study-conditional v2 spreads to 8.38 effective studies but is less realistic
-  (0.922) and diverged at epoch 175.
-- **What gives the GAN away** (PCA on real spectra, per-window tests, per-region
-  classifiers): GAN spectra sit inside the real cloud but in its dense centre,
-  missing the outer groups; 81% of a GAN spectrum's variation lies outside the 20
-  main real components (12% for real spectra). Region by region, the far ends of
-  the spectrum (below -0.2 and above 9.4 ppm, where real spectra are flat)
-  separate at 0.955, the TSP area at 0.826 and the metabolite region at 0.669.
-  Blanking the ends lowers whole-spectrum AUC only to 0.740.
-- **The direct test.** Pretraining on the real corpus plus 4,000 GAN v2 spectra,
-  against the real corpus alone (both edge-blanked, 3 seeds each): better in 3,
-  worse in 10, level in 8; mean -0.016. The GAN arm trained about twice as long
-  (synthetic spectra in its early-stopping set kept the loss falling), which
-  should have favoured it.
+**The realism test was corrected on 2026-10-26** (`code/analysis/realism_stratified.py`).
+The original test grouped its folds by study. That flatters generators far from
+the data and breaks for close ones: synthetic copies of a study sit in the
+training folds labelled "synthetic" while the study's real spectra are tested,
+so the AUC falls *below* 0.5 (0.24 for the diffusion model, 0.12 for autoencoder
+reconstructions). With stratified folds, 0.5 again means indistinguishable. All
+realism numbers below are from the fair test; the grouped values are kept in
+Table 6 for traceability.
+
+| generator | realism AUC (fair) | effective studies |
+|---|---|---|
+| GISSMO + lipids | 1.000 | — |
+| GAN v1 / v2 / v2 study-mixing | 0.998 / 0.992 / 0.994 | 4.71 / 4.38 / 8.38 |
+| VAE, prior samples | 1.000 | — |
+| **Latent diffusion, corpus study mix** | **0.803** | 4.34 |
+| **Latent diffusion, even study mix** | 0.878 | **9.79** |
+
+- **GISSMO** (94-component basis, NNLS): median R2 0.25; three quarters of the
+  signal is unmodelled.
+- **GANs** (1D WGAN-GP). Detectable almost perfectly on the fair test. The
+  2026-10-13 statement that GAN v2 reached 0.832 and that "the spectrum ends give
+  it away" came from the grouped test: on the fair test, blanking the ends only
+  moves 0.992 to 0.986, so the GAN is detectable throughout. The per-region and
+  PCA findings (dense-centre coverage, 81% off-manifold variation) stand as
+  descriptions, but the edges are not the main giveaway.
+- **VAE** (KL-regularised 1D conv autoencoder, beta 0.01): prior samples are
+  detectable perfectly; the prior does not match the encoded data.
+- **Latent diffusion** (`code/generative/ldm_v2.py`): KL autoencoder (8.5M
+  parameters, reflect padding, asinh intensity compression, L1 + first-difference
+  loss; 32,768 points to 16 x 512) and a diffusion transformer on the latents
+  (32.6M parameters, adaLN-Zero, v-prediction, Min-SNR-5, EMA, classifier-free
+  guidance on study, DDIM). The most realistic generator by a wide margin (0.803),
+  and with an even study mix the first synthetic set that more than doubles the
+  corpus's effective study count (9.79) while staying reasonably realistic (0.878).
+  **No memorisation:** a sample's closest training spectrum is as close as a real
+  training spectrum's nearest other (median correlation 0.9969 vs 0.9971; share
+  above 0.999: 4.6% vs 7.0%).
+- **The direct tests.** Pretraining with 4,000 GAN v2 spectra: better 3, worse 10,
+  level 8 (mean -0.016, Table 7). Pretraining with 1k / 4k / 16k even-mix
+  diffusion spectra against the real-only baseline (16-region pooling, Table 8):
+  mean -0.005 / +0.002 / +0.002; at most 6 of 21 comparisons better, each by
+  0.009-0.018, all at small budgets; still behind standard ML in 15-17 of 21.
+  Augmented runs trained 2-3x longer than the baseline, which favours them.
+
+So synthetic data fails G3 even in its best form: realistic, not copied, and
+carrying 2.4x the corpus's study diversity, it leaves transfer unchanged. This
+agrees with G2, where real study diversity (4.1 to 5.9) did not help either.
 
 ---
 
