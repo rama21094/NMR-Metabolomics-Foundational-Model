@@ -40,6 +40,12 @@ def main():
         print(f"{name:<34} median {out[name]['median']:.4f}  p95 {out[name]['p95']:.4f}  "
               f">0.999: {out[name]['share_above_0.999']:.1%}", flush=True)
     summ("real held-out (reference)", nn_corr(H, Tz))
+    # Fairer reference: a real TRAINING spectrum's nearest OTHER training
+    # spectrum. Held-out spectra come from unseen studies and so sit further away
+    # than a new spectrum from a seen study would.
+    q = np.random.default_rng(0).choice(len(Tz), 2000, replace=False)
+    C = Tz[q] @ Tz.T; C[np.arange(len(q)), q] = -1
+    summ("real train, nearest other (ref.)", C.max(1))
     for s in a.synth:
         S = np.load(ROOT / s, mmap_mode="r")
         B = np.vstack([binned(np.asarray(S[i:i + 500], dtype=np.float32), ppm)[0] for i in range(0, len(S), 500)])

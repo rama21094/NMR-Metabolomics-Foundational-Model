@@ -30,6 +30,18 @@ from edges import blank  # noqa: E402
 
 PAIRS = [("realgan", "realblank"), ("realgan", "classical"),
          ("realblank", "classical"), ("baseline", "classical")]
+SYNAUG_PAIRS = [(f"aug{v}", "baseline") for v in ("1k", "4k", "16k")] + \
+               [(a, "classical") for a in ("baseline", "aug1k", "aug4k", "aug16k")]
+
+
+def synaug_ckpts():
+    out = {}
+    for v in ("1k", "4k", "16k"):
+        out[f"aug{v}"] = [(int(re.search(r"_seed(\d+)_", p.name).group(1)), p) for p in
+                          sorted((ROOT / "models/masked_ssl").glob(f"synaug{v}_real_merged2_*_seed*_best.pth"))]
+        assert len({s for s, _ in out[f"aug{v}"]}) == len(out[f"aug{v}"]) > 0, (v, out[f"aug{v}"])
+    out["baseline"] = [(s, p) for o, s, p in find_ckpts() if o == "masking"]
+    return out
 
 
 def g3_ckpts():
@@ -49,10 +61,14 @@ def main() -> None:
     ap.add_argument("--device", default="cuda:1")
     ap.add_argument("--episodes", type=int, default=50)
     ap.add_argument("--out", default="results/g3_augment/g3_augment_eval.json")
+    ap.add_argument("--experiment", choices=["gan", "synaug"], default="gan")
+    ap.add_argument("--pooling", default="mean_pool")
     args = ap.parse_args()
     from linear_probe_frozen_embeddings import embed_masking
 
-    C = g3_ckpts()
+    C = g3_ckpts() if args.experiment == "gan" else synaug_ckpts()
+    pairs = PAIRS if args.experiment == "gan" else SYNAUG_PAIRS
+    blanked = args.experiment == "gan"   # GAN arms were pretrained on edge-blanked data
     print({a: [s for s, _ in v] for a, v in C.items()}, flush=True)
     results = []
     for tid, cohort, labfn in target_defs():
@@ -62,12 +78,13 @@ def main() -> None:
         feats = {"classical": [binned(M, ppm, 0.02)]}
         Mb = blank(M, ppm)
         for arm, v in C.items():
-            feats[arm] = [np.asarray(embed_masking(str(p), Mb if arm != "baseline" else M,
-                                                   args.device), dtype=np.float32) for _, p in v]
+            feats[arm] = [np.asarray(embed_masking(str(p), Mb if (blanked and arm != "baseline") else M,
+                                                   args.device, pooling=args.pooling), dtype=np.float32)
+                          for _, p in v]
         print(f"\n{tid}  n={len(y)}", flush=True)
 
         def emit(design, k, nspl, scores, cis):
-            for a, b in PAIRS:
+            for a, b in pairs:
                 d, lo, hi = cis(a, b)
                 results.append({"target": tid, "design": design, "k_per_class": k,
                                 "n_splits": nspl, "a": a, "b": b,
