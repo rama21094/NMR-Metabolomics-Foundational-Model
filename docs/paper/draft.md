@@ -154,6 +154,21 @@ within 16 contiguous groups of 8 tokens and concatenating (16-region pooling,
 3,072 features), which keeps coarse chemical-shift position. Features are
 standardised and classified with class-balanced logistic regression.
 
+Two learned readouts were also tested. **Attention pooling:** a query vector
+scores each standardised token, and the softmax-weighted average feeds a linear
+softmax classifier; query and classifier are trained together on the training
+patients only (class-balanced cross-entropy, L2 penalty), starting from zero so
+that the readout begins at mean pooling. **CLS token:** a learnable token
+prepended after positional encoding during pretraining, with no loss of its own
+(as in masked autoencoders [REF]), whose final state is read out with the same
+logistic regression.
+
+### 3.2b A linear, label-free baseline
+
+To separate "pretraining on this corpus" from "this encoder", PCA was fitted on
+the binned pretraining spectra (no labels) and the top k = 5 to 100 components
+used as features for the same classifier.
+
 ### 3.3 Standard machine learning
 
 Spectra are binned into 0.02 ppm windows over −0.5 to 9.5 ppm, with the water
@@ -259,6 +274,30 @@ Pretraining is not useless: masking improved on the same encoder left untrained
 by 0.046. Fine-tuning did not add to it: adapting the last block changed the
 frozen result by −0.008, and adapting the whole encoder by 0.000.
 
+**Readouts and corpus.** No readout change closed the gap (Table X). Learned
+attention pooling overfitted the small training sets (mean −0.084, worse than
+averaging). A CLS token was the weakest readout (−0.095): without a loss of its
+own it does not become a useful summary. Pretraining on the full 9,480-spectrum
+corpus, which raises the effective study count from 4.1 to 5.9 by adding seven
+unseen studies, changed the gap by −0.010 (mean pooling; 3 seeds), within seed
+noise. The best readout remains the fixed 16-region pooling of the original
+model (−0.048).
+
+| model | corpus (effective studies) | mean pool | 16-region | other |
+|---|---|---|---|---|
+| masking | 8,545 (4.1) | −0.067 | −0.048 | attention −0.084 |
+| masking | 9,480 (5.9) | −0.077 | −0.057 | — |
+| masking + CLS | 9,480 (5.9) | −0.071 | −0.051 | CLS −0.095 |
+
+**A linear baseline does better.** PCA fitted on the same unlabelled corpus,
+followed by the same classifier, came within −0.018 of binned spectra using 40
+components (99.7% of the variance), −0.040 with 10 and −0.073 with 5; 100
+components matched binning (+0.004). The 192-dimensional transformer embedding
+(−0.067) is therefore worse than a 40-component linear compression of the same
+data. Different pretraining seeds learned very similar representations (linear
+CKA on standardised embeddings 0.970 between seeds, against 0.870 to an untrained
+encoder), so the shortfall is not seed instability.
+
 For reference, the best tuned classical models reached 0.838 (MTBLS563 binary),
 0.698 (3-class), 0.930 (BrC-T2D cancer), 0.840 (diabetes), 0.662 (4-class) and
 0.825 (Barth).
@@ -329,7 +368,19 @@ loss falling; this would be expected to favour them.
 
 ## 5. Discussion
 
-**Why pretraining does not help here.** Three observations point the same way.
+**Why pretraining does not help here.** The clearest evidence is that a linear
+PCA of the same unlabelled corpus transfers better than the pretrained
+transformer. The spectra are highly redundant (five components explain 90.5% of
+the variance of the binned corpus), and most, but not all, of the diagnostic
+signal lies in the leading components: 40 components holding 99.7% of the
+variance still lose 0.018, which is only recovered by components 50 to 100,
+holding 0.15% of the variance. This reconciles two statements that look
+contradictory, that the data are "too simple" and that there are "too few"
+samples: the unlabelled spectra are simple, so reconstruction is easy and
+dominated by high-variance structure, while part of the disease signal sits in
+low-variance directions that such an objective has little reason to preserve and
+that a few dozen labelled patients cannot recover from a compressed
+representation. Three further observations point the same way.
 First, the masked-reconstruction task is easy for a reason unrelated to disease:
 in preliminary experiments on the pre-rebuild corpus, copying the most similar
 training spectrum reconstructed masked regions almost as well as the network
