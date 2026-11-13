@@ -329,8 +329,14 @@ class NMRTransformerEncoder(nn.Module):
     """Simplified Transformer encoder for NMR spectra"""
     
     def __init__(self, spectrum_length, patch_size=512, d_model=256, nhead=8, 
-                 num_layers=4, dim_feedforward=512, dropout=0.15):
+                 num_layers=4, dim_feedforward=512, dropout=0.15, cls_token=False):
         super().__init__()
+        # Optional CLS token (added 2026-10-23, final experiment 4). Prepended
+        # AFTER positional encoding so patch positions are unchanged; it carries
+        # no loss of its own (as in MAE) and is dropped before reconstruction.
+        # Its final state is exposed as self.last_cls for the "cls" pooling.
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, d_model)) if cls_token else None
+        self.last_cls = None
         
         self.patch_size = patch_size
         self.d_model = d_model
@@ -452,7 +458,12 @@ class NMRTransformerEncoder(nn.Module):
         embeddings = embeddings.transpose(0, 1)
         embeddings = self.pos_encoding(embeddings)
         embeddings = embeddings.transpose(0, 1)
-        encoded = self.transformer(embeddings)
+        if self.cls_token is not None:
+            embeddings = torch.cat([self.cls_token.expand(batch_size, -1, -1), embeddings], dim=1)
+            encoded = self.transformer(embeddings)
+            self.last_cls, encoded = encoded[:, 0], encoded[:, 1:]
+        else:
+            encoded = self.transformer(embeddings)
         
         # Reconstruct patches
         reconstructed_patches = self.reconstruction_head(encoded)  # [B, n_patches, patch_size]
@@ -795,6 +806,11 @@ def train_ssl_model(model, train_dataloader, timestamp, val_dataloader=None, num
                     arm_tag += f"_blk{mask_block_patches}"
                 if peak_top_fraction < 1.0:
                     arm_tag += f"_pk{peak_top_fraction:.2f}"
+                # Without this, a CLS run and a no-CLS run launched in the same
+                # second on the same data wrote ONE file (2026-10-23: the
+                # fullcls seed-1 checkpoint was overwritten by the full seed-1 run).
+                if getattr(getattr(model, 'encoder', model), 'cls_token', None) is not None:
+                    arm_tag += "_cls"
                 if seed is not None:
                     arm_tag += f"_seed{seed}"
 
@@ -1075,6 +1091,8 @@ def main():
                         help='DataLoader workers per run. Default scales with the '
                              'machine; set it explicitly when running several '
                              'trainings concurrently on a shared host.')
+    parser.add_argument('--cls-token', action='store_true',
+                        help='prepend a learnable CLS token (no loss of its own); evaluate with pooling "cls"')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed python/numpy/torch RNGs for a reproducible run. Default: '
                              'unseeded (legacy behaviour). Two runs with the same --seed and '
@@ -1117,6 +1135,7 @@ def main():
         'mask_strategy': args.mask_strategy,
         'mask_block_patches': args.mask_block_patches,
         'peak_top_fraction': args.peak_top_fraction,
+        'cls_token': args.cls_token,
         'seed': args.seed,
         'train_split': 0.80,
         'val_split': 0.20,
@@ -1372,7 +1391,8 @@ def main():
         nhead=CONFIG['nhead'],              # Reduced attention heads
         num_layers=CONFIG['num_layers'],         # Fewer layers to prevent overfitting
         dim_feedforward=CONFIG['dim_feedforward'],  # Smaller feedforward
-        dropout=CONFIG['dropout']           # More dropout for regularization
+        dropout=CONFIG['dropout'],          # More dropout for regularization
+        cls_token=CONFIG['cls_token'],
     )
     
     print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")

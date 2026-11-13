@@ -104,12 +104,18 @@ def main() -> None:
     ap.add_argument("--device", default="cuda:1")
     ap.add_argument("--episodes", type=int, default=50)
     ap.add_argument("--out", default="results/phase3_fixed/g1_fixed.json")
+    ap.add_argument("--objectives", nargs="+", default=["masking", "jigsaw", "joint"])
+    ap.add_argument("--pooling", default=None,
+                    help="token pooling passed to the embedders, e.g. 'regional:16'. "
+                         "Default None keeps each embedder's own default (masking: "
+                         "mean_pool), which is what every evaluation up to 2026-10-23 used.")
     args = ap.parse_args()
     (ROOT / args.out).parent.mkdir(parents=True, exist_ok=True)
     from linear_probe_frozen_embeddings import embed_masking, embed_jigsaw, embed_joint
     EMB = {"masking": embed_masking, "jigsaw": embed_jigsaw, "joint": embed_joint}
 
-    C = find_ckpts()
+    C = [c for c in find_ckpts() if c[0] in args.objectives]
+    pool_kw = {"pooling": args.pooling} if args.pooling else {}
     print(f"{len(C)} checkpoints: " + ", ".join(sorted({o for o, _, _ in C})), flush=True)
     results = []
     for tid, cohort, labfn in target_defs():
@@ -120,7 +126,7 @@ def main() -> None:
         embs = defaultdict(list)
         for obj, s, ck in C:
             try:
-                embs[obj].append(np.asarray(EMB[obj](str(ck), M, args.device), dtype=np.float32))
+                embs[obj].append(np.asarray(EMB[obj](str(ck), M, args.device, **pool_kw), dtype=np.float32))
             except Exception as e:
                 print(f"  embed fail {obj} s{s}: {type(e).__name__}: {e}", flush=True)
         classes, counts = np.unique(y, return_counts=True)

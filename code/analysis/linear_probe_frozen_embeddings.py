@@ -208,7 +208,12 @@ def embed_masking(ckpt_path, spectra, device, batch_size=8, random_init=False, s
         for s in range(0, len(spectra), batch_size):
             x = torch.from_numpy(np.asarray(spectra[s:s + batch_size], dtype=np.float32)).to(device)
             _, enc = model(x, mask=None)
-            out.append(pool_tokens(enc, pooling).cpu().numpy())
+            if pooling == "cls":
+                if model.encoder.last_cls is None:
+                    raise ValueError(f"pooling='cls' but {ckpt_path} has no CLS token")
+                out.append(model.encoder.last_cls.cpu().numpy())
+            else:
+                out.append(pool_tokens(enc, pooling).cpu().numpy())
     del model
     return np.vstack(out).astype(np.float32)
 
