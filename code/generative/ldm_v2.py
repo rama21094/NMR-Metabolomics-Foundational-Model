@@ -176,6 +176,7 @@ def train_ae(a):
     dev = torch.device(a.device); torch.manual_seed(a.seed)
     U, _, sid, uniq = load_corpus()
     rng = np.random.default_rng(0); val = rng.choice(len(U), 400, replace=False)
+    order_rng = np.random.default_rng(a.seed)       # batch order follows --seed
     tr = np.setdiff1d(np.arange(len(U)), val)
     model = AE().to(dev)
     print(f"AE {sum(p.numel() for p in model.parameters())/1e6:.1f}M params, beta {a.beta}, "
@@ -185,7 +186,7 @@ def train_ae(a):
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=total, pct_start=0.03)
     Ut = torch.from_numpy(U); best = 1e9; log = []
     for ep in range(a.epochs):
-        model.train(); perm = np.random.permutation(tr); t0 = time.time(); acc = []
+        model.train(); perm = order_rng.permutation(tr); t0 = time.time(); acc = []
         for i in range(0, len(perm) - a.batch + 1, a.batch):
             x = Ut[perm[i:i + a.batch]].to(dev, non_blocking=True)
             with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -382,6 +383,7 @@ def finish(xs, n_out):
 
 def sample(a):
     dev = torch.device(a.device)
+    torch.manual_seed(a.seed)        # initial diffusion noise; NumPy below seeds the study draw
     ck = torch.load(MODELS / f"{a.ldm}.pth", map_location=dev, weights_only=False)
     ae, _ = load_ae(ck["ae"], dev); n_class = len(ck["classes"])
     model = DiT1D(n_class=n_class).to(dev); model.load_state_dict(ck["ema"]); model.eval()
@@ -393,6 +395,9 @@ def sample(a):
             xs.append(from_u(ae.decode(z / ck["scale"]).float().cpu().numpy()))
     out = finish(np.vstack(xs), a.n)
     p = ROOT / f"rebuild/pretrain/synthetic/{a.tag}.npy"; np.save(p, out)
+    json.dump({"cmd": "sample", "ldm": a.ldm, "ldm_step": int(ck["step"]), "ae": str(ck["ae"]), "n": a.n,
+               "seed": a.seed, "study_mix": a.study_mix, "guidance": a.guidance, "steps": a.steps},
+              open(p.with_suffix(".settings.json"), "w"), indent=1)
     print(f"wrote {p.relative_to(ROOT)} {out.shape} (ldm {a.ldm} step {ck['step']}, "
           f"{a.study_mix}, guidance {a.guidance})", flush=True)
 
@@ -406,6 +411,8 @@ def vae_sample(a):
             xs.append(from_u(ae.decode(z).float().cpu().numpy()))
     out = finish(np.vstack(xs), a.n)
     p = ROOT / f"rebuild/pretrain/synthetic/{a.tag}.npy"; np.save(p, out)
+    json.dump({"cmd": "vae-sample", "ae": a.ae, "n": a.n, "seed": a.seed},
+              open(p.with_suffix(".settings.json"), "w"), indent=1)
     print(f"wrote {p.relative_to(ROOT)} {out.shape} (prior samples of {a.ae}, beta {ck['beta']})", flush=True)
 
 

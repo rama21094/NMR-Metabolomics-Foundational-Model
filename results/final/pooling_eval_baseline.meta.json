@@ -1,0 +1,35 @@
+{
+ "checkpoints": [
+  {
+   "seed": 0,
+   "path": "models/masked_ssl/corpus_train_20260917_165613_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+   "finished": true
+  },
+  {
+   "seed": 1,
+   "path": "models/masked_ssl/corpus_train_20260917_173155_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+   "finished": true
+  },
+  {
+   "seed": 2,
+   "path": "models/masked_ssl/corpus_train_20260917_185941_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+   "finished": true
+  },
+  {
+   "seed": 3,
+   "path": "models/masked_ssl/corpus_train_20260917_202500_bs32_mr0.20-0.60_ps1024_seed3_best.pth",
+   "finished": true
+  },
+  {
+   "seed": 4,
+   "path": "models/masked_ssl/corpus_train_20260917_213546_bs32_mr0.20-0.60_ps1024_seed4_best.pth",
+   "finished": true
+  }
+ ],
+ "loocv_estimator": "seed mean of balanced accuracy; paired bootstrap over patients (diff/lo/hi). *_vote fields: majority vote over seeds, ties to the label that sorts first.",
+ "readouts": [
+  "mean",
+  "regional16",
+  "attention"
+ ]
+}

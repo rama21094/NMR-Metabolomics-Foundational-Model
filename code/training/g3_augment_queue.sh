@@ -8,8 +8,11 @@
 # The existing unblanked Phase 2 baseline is NOT the control: it differs in two
 # ways (edges and GAN), so a difference against it would be uninterpretable.
 #
-# Caveat: trainer_revised takes a random 80/20 split for early stopping, so in
-# the realgan arm about 800 of the validation spectra are synthetic.
+# GAN spectra go in with --train-only-path, so both arms share one real
+# train/validation split and a real-only validation set. (The realgan runs of
+# October 2026 pooled real and GAN spectra before the split: checkpoints
+# *_merged2_*, markers g3_realgan_seed<S>.done. The corrected runs write
+# *_trainonly1_* and g3_realganfix_seed<S>.done. realblank is unchanged.)
 #
 # Usage: g3_augment_queue.sh <gpu-list> <slots-per-gpu>
 set -u
@@ -25,9 +28,10 @@ for arm in realblank realgan; do for s in 0 1 2; do JOBS+=("$arm|$s"); done; don
 
 run_one () {
   local arm=$1 seed=$2 gpu=$3 tag="g3_${1}_seed${2}"
+  [ "$arm" = realgan ] && tag="g3_realganfix_seed${2}"
   [ -f "$ROOT/results/g3_augment/${tag}.done" ] && return
   local data=("$D/g3real_blank.npy")
-  [ "$arm" = realgan ] && data+=("$D/g3gan_v2_blank.npy")
+  [ "$arm" = realgan ] && data+=(--train-only-path "$D/g3gan_v2_blank.npy")
   echo "$(date +%F' '%H:%M:%S) start $tag on cuda:$gpu" >> $ROOT/results/g3_augment/queue.log
   $PY $ROOT/code/training/trainer_revised.py \
       --data-path "${data[@]}" --seed $seed --device cuda:$gpu \

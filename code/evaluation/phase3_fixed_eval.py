@@ -99,8 +99,86 @@ def bootstrap_ci(y, pa, pb, n=2000, seed=0):
     return float(base), float(lo), float(hi)
 
 
+def majority_vote(preds):
+    """Per-patient majority label over seeds. A tie goes to the label that sorts
+    first, so the result never depends on set order (PYTHONHASHSEED)."""
+    st = np.stack(preds)
+    out = []
+    for col in st.T:
+        lab, cnt = np.unique(col, return_counts=True)     # labels sorted
+        out.append(lab[int(np.argmax(cnt))])              # first maximum = smallest label
+    return np.array(out, dtype=st.dtype)
+
+
+def seed_mean_ci(y, pas, pbs, n=2000, seed=0):
+    """LOOCV estimator used everywhere: mean over seeds of balanced accuracy.
+
+    pas, pbs: lists of per-seed prediction arrays for arms a and b (a one-item
+    list for standard ML). Returns (acc_a, acc_b, diff, lo, hi) where
+    diff == acc_a - acc_b exactly, and the interval is a paired bootstrap over
+    patients of that same difference. This matches the few-shot and repeated-CV
+    designs, which also average accuracy over seeds."""
+    def acc(ps, i=None):
+        return float(np.mean([balanced_accuracy_score(y if i is None else y[i], p if i is None else p[i])
+                              for p in ps]))
+    a, b = acc(pas), acc(pbs)
+    rng = np.random.default_rng(seed)
+    ncls = len(np.unique(y)); ds = []
+    for _ in range(n):
+        i = rng.integers(0, len(y), len(y))
+        if len(np.unique(y[i])) < ncls:
+            continue
+        ds.append(acc(pas, i) - acc(pbs, i))
+    lo, hi = np.percentile(ds, [2.5, 97.5])
+    return a, b, a - b, float(lo), float(hi)
+
+
+def loocv_fields(y, pas, pbs):
+    """Result fields for one LOOCV comparison. Primary estimator: seed mean.
+    The seed-ensemble (majority vote) version is kept under *_vote names."""
+    a, b, d, lo, hi = seed_mean_ci(y, pas, pbs)
+    va = majority_vote(pas); vb = majority_vote(pbs)
+    dv, lov, hiv = bootstrap_ci(y, va, vb)
+    return {"acc_a": a, "acc_b": b, "diff": d, "lo": lo, "hi": hi, "estimator": "seed_mean",
+            "acc_a_vote": float(balanced_accuracy_score(y, va)),
+            "acc_b_vote": float(balanced_accuracy_score(y, vb)),
+            "diff_vote": dv, "lo_vote": lov, "hi_vote": hiv}
+
+
+def check_ckpts(ckpts, expect_seeds, name):
+    """Refuse an incomplete experiment set before any evaluation runs.
+
+    ckpts: list of (seed, path). Fails if the seed set is not exactly
+    range(expect_seeds), or if any checkpoint carries finished=False (an
+    interrupted run). A checkpoint without the key predates the flag and is
+    reported as unknown, not refused. Returns a record for the results sidecar."""
+    import torch
+    seeds = sorted(s for s, _ in ckpts)
+    if seeds != list(range(expect_seeds)):
+        raise SystemExit(f"{name}: expected seeds {list(range(expect_seeds))}, found {seeds}")
+    rec = []
+    for s, p in sorted(ckpts, key=lambda c: c[0]):
+        fin = torch.load(p, map_location="cpu", weights_only=False).get("finished")
+        if fin is False:
+            raise SystemExit(f"{name}: unfinished checkpoint (finished=False): {p}")
+        if fin is None:
+            print(f"  note: {Path(p).name} has no finished flag (written before the flag existed)", flush=True)
+        rec.append({"seed": int(s), "path": str(Path(p).relative_to(ROOT)), "finished": fin})
+    return rec
+
+
+def write_meta(out, ckpt_records, **extra):
+    meta = {"checkpoints": ckpt_records,
+            "loocv_estimator": "seed mean of balanced accuracy; paired bootstrap over patients "
+                               "(diff/lo/hi). *_vote fields: majority vote over seeds, ties to "
+                               "the label that sorts first.", **extra}
+    p = (ROOT / out).with_suffix(".meta.json")
+    json.dump(meta, open(p, "w"), indent=1)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--expect-seeds", type=int, default=5)
     ap.add_argument("--device", default="cuda:1")
     ap.add_argument("--episodes", type=int, default=50)
     ap.add_argument("--out", default="results/phase3_fixed/g1_fixed.json")
@@ -115,6 +193,9 @@ def main() -> None:
     EMB = {"masking": embed_masking, "jigsaw": embed_jigsaw, "joint": embed_joint}
 
     C = [c for c in find_ckpts() if c[0] in args.objectives]
+    ckrec = {o: check_ckpts([(s, q) for oo, s, q in C if oo == o], args.expect_seeds, o)
+             for o in args.objectives}
+    write_meta(args.out, ckrec, pooling=args.pooling)
     pool_kw = {"pooling": args.pooling} if args.pooling else {}
     print(f"{len(C)} checkpoints: " + ", ".join(sorted({o for o, _, _ in C})), flush=True)
     results = []
@@ -125,10 +206,9 @@ def main() -> None:
         base = binned(M, ppm, 0.02)
         embs = defaultdict(list)
         for obj, s, ck in C:
-            try:
-                embs[obj].append(np.asarray(EMB[obj](str(ck), M, args.device, **pool_kw), dtype=np.float32))
-            except Exception as e:
-                print(f"  embed fail {obj} s{s}: {type(e).__name__}: {e}", flush=True)
+            # no try/except: a checkpoint that fails to embed must stop the run,
+            # not silently shrink the seed set
+            embs[obj].append(np.asarray(EMB[obj](str(ck), M, args.device, **pool_kw), dtype=np.float32))
         classes, counts = np.unique(y, return_counts=True)
         print(f"\n{tid}  n={len(y)}  classes {dict(zip(classes, counts))}", flush=True)
 
@@ -163,14 +243,13 @@ def main() -> None:
         cls_p = run(base)
         for obj, Fs in embs.items():
             per_seed = [run(F) for F in Fs]
+            extra = {}
             if design == "loocv":
-                # seed-average by majority vote per patient, then paired bootstrap
-                stack = np.stack([ps[0] for ps in per_seed])
-                vote = np.array([max(set(col), key=list(col).count) for col in stack.T])
-                d, lo, hi = bootstrap_ci(y, vote, cls_p[0])
-                ssl_v = float(np.mean([balanced_accuracy_score(y, ps[0]) for ps in per_seed]))
-                cls_v = float(balanced_accuracy_score(y, cls_p[0]))
-                nspl = len(y)
+                # one estimator for accuracy, difference and interval: seed mean
+                f = loocv_fields(y, [ps[0] for ps in per_seed], [cls_p[0]])
+                ssl_v, cls_v, d, lo, hi, nspl = f["acc_a"], f["acc_b"], f["diff"], f["lo"], f["hi"], len(y)
+                extra = {"estimator": f["estimator"], "ssl_vote": f["acc_a_vote"],
+                         "diff_vote": f["diff_vote"], "lo_vote": f["lo_vote"], "hi_vote": f["hi_vote"]}
             else:
                 ssl_r = [np.mean([balanced_accuracy_score(y, ps[r]) for ps in per_seed])
                          for r in range(len(reps))]
@@ -179,7 +258,7 @@ def main() -> None:
                 ssl_v, cls_v, nspl = float(np.mean(ssl_r)), float(np.mean(cls_r)), len(reps)
             results.append({"target": tid, "objective": obj, "design": design,
                             "k_per_class": None, "n_splits": nspl, "n_seeds": len(Fs),
-                            "ssl": ssl_v, "classical": cls_v, "diff": d, "lo": lo, "hi": hi})
+                            "ssl": ssl_v, "classical": cls_v, "diff": d, "lo": lo, "hi": hi, **extra})
             print(f"  {design:<7} {obj:<8} ssl {ssl_v:.3f}  classical {cls_v:.3f}"
                   f"  diff {d:+.3f} [{lo:+.3f}, {hi:+.3f}]", flush=True)
         json.dump(results, open(ROOT / args.out, "w"), indent=1)

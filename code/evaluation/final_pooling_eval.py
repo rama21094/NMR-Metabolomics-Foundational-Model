@@ -32,7 +32,7 @@ for p in ("code/training", "code/evaluation", "code/analysis"):
     sys.path.insert(0, str(ROOT / p))
 from phase3_transfer import target_defs, load_cohort, binned, find_ckpts  # noqa: E402
 from phase3_fixed_eval import (BUDGETS, fit_predict, exact_episodes, cv_splits,  # noqa: E402
-                               paired_ci, bootstrap_ci)
+                               paired_ci, loocv_fields, check_ckpts, write_meta)
 from linear_probe_frozen_embeddings import embed_masking  # noqa: E402
 
 N_TOK, D = 128, 192
@@ -83,9 +83,13 @@ def main():
     ap.add_argument("--cls", choices=["with", "without"], default=None)
     ap.add_argument("--readouts", nargs="+", default=["mean", "regional16", "attention"])
     ap.add_argument("--out", default="results/final/pooling_eval_baseline.json")
+    ap.add_argument("--expect-seeds", type=int, default=None,
+                    help="required seed count; default 5 for the baseline, 3 for --ckpts runs")
     a = ap.parse_args()
     (ROOT / a.out).parent.mkdir(parents=True, exist_ok=True)
     C = ckpt_list(a.ckpts, None if a.cls is None else a.cls == "with")
+    n_expect = a.expect_seeds or (5 if a.ckpts is None else 3)
+    write_meta(a.out, check_ckpts(C, n_expect, a.ckpts or "baseline masking"), readouts=a.readouts)
     print("checkpoints:", [(s, p.name) for s, p in C], flush=True)
     results = []
     for tid, cohort, labfn in target_defs():
@@ -102,12 +106,12 @@ def main():
         fit = {r: (attn_fit_predict if r == "attention" else fit_predict) for r in F}
         print(f"\n{tid} n={len(y)}", flush=True)
 
-        def emit(design, k, nspl, cis, sc):
+        def emit(design, k, nspl, cis, sc, extra=None):
             for r in F:
                 d, lo, hi = cis(r)
                 results.append({"target": tid, "design": design, "k_per_class": k, "n_splits": nspl,
                                 "readout": r, "ssl": sc[r], "classical": sc["classical"],
-                                "diff": d, "lo": lo, "hi": hi})
+                                "diff": d, "lo": lo, "hi": hi, **(extra[r] if extra else {})})
                 print(f"  {design:<8} {str(k):<4} {r:<10} {sc[r]:.3f} vs {sc['classical']:.3f}"
                       f"  {d:+.3f} [{lo:+.3f}, {hi:+.3f}]", flush=True)
 
@@ -135,12 +139,14 @@ def main():
         cls_p = run(fit_predict, base)
         preds = {r: [run(fit[r], X) for X in Fs] for r, Fs in F.items()}
         if design == "loocv":
-            def vote(ps):
-                st = np.stack([p[0] for p in ps]); return np.array([max(set(c), key=list(c).count) for c in st.T])
-            V = {r: vote(ps) for r, ps in preds.items()}
-            sc = {r: float(np.mean([balanced_accuracy_score(y, p[0]) for p in ps])) for r, ps in preds.items()}
+            # one estimator for accuracy, difference and interval: seed mean
+            f = {r: loocv_fields(y, [p[0] for p in ps], [cls_p[0]]) for r, ps in preds.items()}
+            sc = {r: f[r]["acc_a"] for r in f}
             sc["classical"] = float(balanced_accuracy_score(y, cls_p[0]))
-            emit(design, None, len(y), lambda r: bootstrap_ci(y, V[r], cls_p[0]), sc)
+            emit(design, None, len(y), lambda r: (f[r]["diff"], f[r]["lo"], f[r]["hi"]), sc,
+                 {r: {"estimator": f[r]["estimator"], "ssl_vote": f[r]["acc_a_vote"],
+                      "diff_vote": f[r]["diff_vote"], "lo_vote": f[r]["lo_vote"],
+                      "hi_vote": f[r]["hi_vote"]} for r in f})
         else:
             per = {r: [np.mean([balanced_accuracy_score(y, p[i]) for p in ps]) for i in range(len(reps))]
                    for r, ps in preds.items()}

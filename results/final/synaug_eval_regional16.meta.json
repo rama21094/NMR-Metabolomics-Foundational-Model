@@ -1,0 +1,85 @@
+{
+ "checkpoints": {
+  "aug1k": [
+   {
+    "seed": 0,
+    "path": "models/masked_ssl/synaug1k_real_merged2_20261026_060729_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 1,
+    "path": "models/masked_ssl/synaug1k_real_merged2_20261026_060802_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 2,
+    "path": "models/masked_ssl/synaug1k_real_merged2_20261026_060730_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+    "finished": true
+   }
+  ],
+  "aug4k": [
+   {
+    "seed": 0,
+    "path": "models/masked_ssl/synaug4k_real_merged2_20261026_060805_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 1,
+    "path": "models/masked_ssl/synaug4k_real_merged2_20261026_060805_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 2,
+    "path": "models/masked_ssl/synaug4k_real_merged2_20261026_060804_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+    "finished": true
+   }
+  ],
+  "aug16k": [
+   {
+    "seed": 0,
+    "path": "models/masked_ssl/synaug16k_real_merged2_20261026_085345_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 1,
+    "path": "models/masked_ssl/synaug16k_real_merged2_20261026_094958_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 2,
+    "path": "models/masked_ssl/synaug16k_real_merged2_20261026_102847_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+    "finished": true
+   }
+  ],
+  "baseline": [
+   {
+    "seed": 0,
+    "path": "models/masked_ssl/corpus_train_20260917_165613_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 1,
+    "path": "models/masked_ssl/corpus_train_20260917_173155_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 2,
+    "path": "models/masked_ssl/corpus_train_20260917_185941_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 3,
+    "path": "models/masked_ssl/corpus_train_20260917_202500_bs32_mr0.20-0.60_ps1024_seed3_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 4,
+    "path": "models/masked_ssl/corpus_train_20260917_213546_bs32_mr0.20-0.60_ps1024_seed4_best.pth",
+    "finished": true
+   }
+  ]
+ },
+ "loocv_estimator": "seed mean of balanced accuracy; paired bootstrap over patients (diff/lo/hi). *_vote fields: majority vote over seeds, ties to the label that sorts first.",
+ "pooling": "regional:16",
+ "ckpt_tag": "merged2"
+}

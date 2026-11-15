@@ -1043,6 +1043,13 @@ def main():
         default=['data/combined/combine_unique_MetaboLights_Workbench_Water_EDTA_Suppressed_rowMinMax_v3.npy'],
         help='Path(s) to NMR spectra .npy file(s). Multiple files can be passed separated by space.'
     )
+    parser.add_argument(
+        '--train-only-path', nargs='+', default=[],
+        help='Extra .npy file(s), e.g. synthetic spectra, appended to the TRAINING set only, '
+             'after the train/validation split of --data-path. The split and the validation set '
+             '(hence early stopping and checkpoint selection) are then identical to a run on '
+             '--data-path alone, so arms that differ only in this option are comparable.'
+    )
     parser.add_argument('--mask-ratio-min', type=float, default=0.20, help='Lower bound of per-sample random masking ratio')
     parser.add_argument('--mask-ratio-max', type=float, default=0.60, help='Upper bound of per-sample random masking ratio')
     parser.add_argument('--device', default='auto', help="'auto', or an explicit device string like 'cuda:0' / 'cpu'")
@@ -1119,6 +1126,7 @@ def main():
     # CONFIG: All configurable parameters
     CONFIG = {
         'data_path': args.data_path,
+        'train_only_path': list(args.train_only_path),
         'num_epochs': args.num_epochs,
         'batch_size': args.batch_size,
         'mask_ratio_min': args.mask_ratio_min,
@@ -1255,6 +1263,23 @@ def main():
         del train_val_spectra
     del spectra
     gc.collect()
+
+    # Train-only extras (synthetic augmentation). Added AFTER the split, so the
+    # real train/validation partition above does not depend on them and no extra
+    # spectrum can reach the validation set that drives early stopping.
+    n_real_train = len(train_spectra)
+    for extra_path in CONFIG.get('train_only_path', []):
+        extra = np.load(extra_path)
+        if extra.ndim != 2 or extra.shape[1] != train_spectra.shape[1]:
+            raise ValueError(f"{extra_path}: shape {extra.shape} does not match {train_spectra.shape[1]} points")
+        ok = np.isfinite(extra).all(axis=1) & (np.std(extra, axis=1) >= 1e-10)
+        print(f"Train-only {extra_path}: {extra.shape}, keeping {int(ok.sum())}")
+        train_spectra = np.concatenate([train_spectra, extra[ok].astype(train_spectra.dtype)], axis=0)
+        del extra
+        gc.collect()
+    if len(train_spectra) != n_real_train:
+        print(f"Training set = {n_real_train} real + {len(train_spectra) - n_real_train} train-only; "
+              f"validation set is real only")
 
     print(f"Training set: {train_spectra.shape}")
     print(f"Validation set: {val_spectra.shape}")
@@ -1410,6 +1435,8 @@ def main():
     dataset_name = os.path.splitext(os.path.basename(data_paths[0]))[0]
     if len(data_paths) > 1:
         dataset_name = f"{dataset_name}_merged{len(data_paths)}"
+    if CONFIG.get('train_only_path'):
+        dataset_name = f"{dataset_name}_trainonly{len(CONFIG['train_only_path'])}"
     model_name_prefix = f"./models/masked_ssl/{dataset_name}_{timestamp}"
     
     print("\n" + "="*60)

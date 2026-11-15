@@ -33,9 +33,9 @@ Comparing foundational models with ML for healthcare applications
   v
 G1  can pretraining beat the bar?
   |   MEASURED: 21 paired comparisons over 6 tasks. Masking is
-  |             never better, worse in 17, level in 4; mean gap
-  |             -0.067 (-0.048 with position-keeping pooling).
-  |             Jigsaw and joint: worse in 19 each.
+  |             never better, worse in 18, level in 3; mean gap
+  |             -0.069 (-0.048, 17/4 with position-keeping pooling).
+  |             Jigsaw worse in 20, joint in 19.
   |             Pretraining is real (+0.046 over random init)
   |             but worth less than a linear model on bins.
   |             Fine-tuning: last block -0.008, full 0.000.
@@ -55,10 +55,11 @@ G2  is data limiting?
 G3  does synthetic data help?
   |   MEASURED: GISSMO, GANs and a VAE are detected almost
   |             perfectly (fair AUC 0.99-1.00). Latent diffusion
-  |             is far closer (0.80), not copied, and with an even
+  |             is far closer (0.80), no excess near-copies, and with an even
   |             study mix reaches 9.8 effective studies.
   |             Pretraining with 1k/4k/16k diffusion spectra:
-  |             mean change -0.005 / +0.002 / +0.002.
+  |             mean change -0.008 / 0.000 / 0.000 (provisional:
+  |             confounded split, corrected runs queued).
   |   -> TOOK: "no", by both routes                           [G3 answered]
   v
 "we hit a limit on these tasks"  <- THE PROJECT'S TERMINAL NODE
@@ -78,14 +79,25 @@ otherwise; intervals are paired 95% CIs (episodes) or a paired bootstrap (LOOCV)
 
 | pretraining | ours better | standard ML better | level | mean difference |
 |---|---|---|---|---|
-| masking, mean pool | 0 | 17 | 4 | -0.067 |
+| masking, mean pool | 0 | 18 | 3 | -0.069 |
 | masking, 16-region pool | 0 | 17 | 4 | -0.048 |
-| jigsaw | 0 | 19 | 2 | -0.124 |
+| jigsaw | 0 | 20 | 1 | -0.126 |
 | joint | 0 | 19 | 2 | -0.108 |
 
-The four level cells for masking are all full-data cells with small n (BrC-T2D
-cancer, diabetes and 4-class under LOOCV, and Barth). The closest is BrC-T2D
-cancer: +0.012 [-0.030, +0.053] with 16-region pooling. The correct statement is
+The level cells for masking are all full-data cells with small n (BrC-T2D
+cancer and 4-class under LOOCV, and Barth; also BrC-T2D diabetes with 16-region
+pooling). The closest is BrC-T2D cancer: +0.012 [-0.031, +0.056] with 16-region
+pooling.
+
+**Estimator corrected 2026-11-13.** Under LOOCV the evaluators had reported
+accuracy as a mean over seeds but the difference and interval from a majority
+vote over seeds, so a row's difference did not equal its two accuracies. All
+three now use the seed mean, as the few-shot and repeated-CV designs always did;
+the vote version is kept in `*_vote` fields. Effect: masking mean pooling 0/17/4
+-> 0/18/3 (-0.067 -> -0.069), jigsaw 0/19/2 -> 0/20/1, attention pooling -0.084
+-> -0.097, CLS -0.095 -> -0.099. No verdict moved in pretraining's favour.
+
+The correct statement is
 **"standard ML is better or statistically level everywhere, and the pretrained
 model is never better."**
 
@@ -93,8 +105,8 @@ The result is *not* explained by:
 - **a broken corpus**: it holds on the rebuilt, verified corpus (lactate CH3 at
   1.325 against a true 1.330, span 0.117 ppm).
 - **the readout**: averaging the 128 tokens discards chemical-shift position;
-  keeping it (16-region pooling) narrows the gap by 0.019 but changes no cell's
-  verdict.
+  keeping it (16-region pooling) narrows the gap by 0.021 and moves one cell (BrC-T2D diabetes) from worse to
+  level; no cell becomes a win.
 - **freezing the backbone**: fine-tuning the last block changes the frozen probe
   by -0.008 and full fine-tuning by -0.000 (Table 3). **[revised]** The
   2026-09-25 version said deeper adaptation was *worse* (-0.010); with the
@@ -171,17 +183,23 @@ Table 6 for traceability.
   guidance on study, DDIM). The most realistic generator by a wide margin (0.803),
   and with an even study mix the first synthetic set that more than doubles the
   corpus's effective study count (9.79) while staying reasonably realistic (0.878).
-  **No memorisation:** a sample's closest training spectrum is as close as a real
+  **No excess of near-duplicates on a nearest-neighbour test** (this does not rule
+  out perturbed copies, or memorisation of a small subset): a sample's closest training spectrum is as close as a real
   training spectrum's nearest other (median correlation 0.9969 vs 0.9971; share
   above 0.999: 4.6% vs 7.0%).
-- **The direct tests.** Pretraining with 4,000 GAN v2 spectra: better 3, worse 10,
-  level 8 (mean -0.016, Table 7). Pretraining with 1k / 4k / 16k even-mix
+- **The direct tests.** Pretraining with 4,000 GAN v2 spectra: better 3, worse 11,
+  level 7 (mean -0.018, Table 7). Pretraining with 1k / 4k / 16k even-mix
   diffusion spectra against the real-only baseline (16-region pooling, Table 8):
-  mean -0.005 / +0.002 / +0.002; at most 6 of 21 comparisons better, each by
+  mean -0.008 / 0.000 / 0.000; at most 6 of 21 comparisons better, each by
   0.009-0.018, all at small budgets; still behind standard ML in 15-17 of 21.
   Augmented runs trained 2-3x longer than the baseline, which favours them.
+  **Provisional (2026-11-13):** these runs pooled real and synthetic spectra
+  before the train/validation split, so the real split differs between arms and
+  synthetic spectra sit in the early-stopping set. Corrected runs (fixed real
+  split, synthetic in training only; `trainer_revised.py --train-only-path`) are
+  queued via `code/training/augfix_chain.sh` and will replace these numbers.
 
-So synthetic data fails G3 even in its best form: realistic, not copied, and
+So synthetic data fails G3 even in its best form: realistic, with no excess of near-copies, and
 carrying 2.4x the corpus's study diversity, it leaves transfer unchanged. This
 agrees with G2, where real study diversity (4.1 to 5.9) did not help either.
 

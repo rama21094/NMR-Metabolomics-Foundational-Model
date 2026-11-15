@@ -34,21 +34,21 @@ Same splits and the same readout (scaled features + balanced logistic regression
 | BrC-T2D cancer | 5 | -0.052 [-0.076, -0.027] | -0.030 [-0.052, -0.008] | -0.125 [-0.152, -0.099] | -0.088 [-0.115, -0.061] |
 | BrC-T2D cancer | 10 | -0.096 [-0.116, -0.076] | -0.064 [-0.084, -0.044] | -0.205 [-0.227, -0.184] | -0.160 [-0.184, -0.136] |
 | BrC-T2D cancer | 20 | -0.108 [-0.125, -0.091] | -0.055 [-0.072, -0.038] | -0.230 [-0.248, -0.212] | -0.170 [-0.187, -0.152] |
-| BrC-T2D cancer | all (LOOCV) | +0.000 [-0.060, +0.060] | +0.012 [-0.030, +0.053] | -0.115 [-0.207, -0.026] | -0.064 [-0.126, -0.013] |
+| BrC-T2D cancer | all (LOOCV) | -0.028 [-0.089, +0.032] | +0.012 [-0.031, +0.056] | -0.154 [-0.221, -0.084] | -0.090 [-0.140, -0.045] |
 | BrC-T2D diabetes | 5 | -0.059 [-0.076, -0.042] | -0.054 [-0.071, -0.037] | -0.096 [-0.115, -0.076] | -0.082 [-0.101, -0.062] |
 | BrC-T2D diabetes | 10 | -0.071 [-0.090, -0.053] | -0.069 [-0.089, -0.049] | -0.122 [-0.142, -0.102] | -0.109 [-0.130, -0.089] |
 | BrC-T2D diabetes | 20 | -0.094 [-0.113, -0.076] | -0.087 [-0.107, -0.067] | -0.148 [-0.169, -0.127] | -0.113 [-0.134, -0.093] |
-| BrC-T2D diabetes | all (LOOCV) | -0.088 [-0.192, +0.009] | -0.050 [-0.148, +0.042] | -0.183 [-0.306, -0.063] | -0.129 [-0.251, -0.003] |
+| BrC-T2D diabetes | all (LOOCV) | -0.100 [-0.185, -0.019] | -0.054 [-0.150, +0.036] | -0.157 [-0.263, -0.049] | -0.101 [-0.205, +0.000] |
 | BrC-T2D 4-class | 5 | -0.057 [-0.079, -0.036] | -0.023 [-0.045, -0.001] | -0.128 [-0.149, -0.107] | -0.130 [-0.154, -0.106] |
-| BrC-T2D 4-class | all (LOOCV) | -0.068 [-0.209, +0.070] | +0.007 [-0.127, +0.147] | -0.082 [-0.232, +0.083] | -0.123 [-0.257, +0.006] |
+| BrC-T2D 4-class | all (LOOCV) | -0.069 [-0.196, +0.054] | -0.008 [-0.135, +0.123] | -0.144 [-0.271, -0.001] | -0.132 [-0.255, +0.001] |
 | Barth case/control | 5 | -0.103 [-0.128, -0.079] | -0.037 [-0.063, -0.010] | -0.110 [-0.137, -0.082] | -0.105 [-0.133, -0.076] |
-| Barth case/control | all (LOOCV) | -0.057 [-0.237, +0.115] | -0.036 [-0.175, +0.093] | -0.143 [-0.312, +0.019] | -0.157 [-0.344, +0.021] |
+| Barth case/control | all (LOOCV) | -0.057 [-0.203, +0.078] | -0.036 [-0.173, +0.095] | -0.124 [-0.287, +0.042] | -0.159 [-0.328, -0.001] |
 
 | arm | pretrained better | standard ML better | too close to call | mean difference |
 |---|---|---|---|---|
-| masking (mean pool) | 0 | 17 | 4 | -0.067 |
+| masking (mean pool) | 0 | 18 | 3 | -0.069 |
 | masking (16-region pool) | 0 | 17 | 4 | -0.048 |
-| jigsaw | 0 | 19 | 2 | -0.124 |
+| jigsaw | 0 | 20 | 1 | -0.126 |
 | joint | 0 | 19 | 2 | -0.108 |
 
 ## Table 3 — Gate G1 completed: adaptation depth
@@ -155,10 +155,10 @@ realblank = real corpus, edges blanked; realgan = the same + 4,000 GAN v2 spectr
 
 | comparison | first better | second better | too close to call | mean difference |
 |---|---|---|---|---|
-| realgan vs realblank | 3 | 10 | 8 | -0.016 |
-| realgan vs classical | 0 | 16 | 5 | -0.076 |
-| realblank vs classical | 0 | 17 | 4 | -0.060 |
-| baseline vs classical | 0 | 17 | 4 | -0.066 |
+| realgan vs realblank | 3 | 11 | 7 | -0.018 |
+| realgan vs classical | 0 | 18 | 3 | -0.082 |
+| realblank vs classical | 0 | 17 | 4 | -0.064 |
+| baseline vs classical | 0 | 18 | 3 | -0.069 |
 
 ## Table 8 — Gate G3: pretraining with 1k / 4k / 16k even-mix diffusion spectra
 
@@ -166,10 +166,10 @@ Real corpus (8,545) + N latent-diffusion spectra generated with an even study mi
 
 | comparison | first better | second better | too close to call | mean difference |
 |---|---|---|---|---|
-| aug1k vs baseline | 0 | 7 | 14 | -0.005 |
-| aug4k vs baseline | 6 | 3 | 12 | +0.002 |
-| aug16k vs baseline | 3 | 3 | 15 | +0.002 |
+| aug1k vs baseline | 0 | 8 | 13 | -0.008 |
+| aug4k vs baseline | 6 | 4 | 11 | -0.000 |
+| aug16k vs baseline | 3 | 3 | 15 | +0.000 |
 | baseline vs classical | 0 | 17 | 4 | -0.048 |
-| aug1k vs classical | 0 | 17 | 4 | -0.053 |
-| aug4k vs classical | 0 | 15 | 6 | -0.046 |
-| aug16k vs classical | 0 | 16 | 5 | -0.045 |
+| aug1k vs classical | 0 | 17 | 4 | -0.057 |
+| aug4k vs classical | 0 | 15 | 6 | -0.049 |
+| aug16k vs classical | 0 | 16 | 5 | -0.048 |

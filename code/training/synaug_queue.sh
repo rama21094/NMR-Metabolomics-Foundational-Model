@@ -3,6 +3,12 @@
 # generated with an EVEN study mix (ldm_v2, uniform; 9.8 effective studies,
 # stratified realism AUC 0.88). Baseline architecture, 3 seeds per volume.
 # Control = Phase 2 masking baseline (same real corpus, same architecture).
+# Synthetic spectra go in with --train-only-path: the real train/validation split
+# and the real-only validation set are then the baseline's own, so the arms
+# differ only in the added training spectra. (The runs up to 2026-11-10 pooled
+# real and synthetic before the split; their checkpoints are *_merged2_* and
+# their markers synaug<N>_seed<S>.done. These runs write *_trainonly1_* and
+# synaugfix<N>_seed<S>.done.)
 # Each arm has its own first data file (synaug<N>_real.npy, a symlink to the
 # real corpus) so checkpoint names cannot collide across arms.
 set -u
@@ -12,11 +18,11 @@ GPUS_CSV=${1:-0,1,2}; SLOTS=${2:-2}; IFS=, read -ra GPUS <<< "$GPUS_CSV"
 mkdir -p $ROOT/results/final/synaug_logs
 JOBS=(); for v in 1k 4k 16k; do for s in 0 1 2; do JOBS+=("$v|$s"); done; done
 run_one () {
-  local v=$1 seed=$2 gpu=$3 tag="synaug${1}_seed${2}"
+  local v=$1 seed=$2 gpu=$3 tag="synaugfix${1}_seed${2}"
   [ -f "$ROOT/results/final/${tag}.done" ] && return
   echo "$(date +%F' '%T) start $tag on cuda:$gpu" >> $ROOT/results/final/synaug_queue.log
   $PY -u $ROOT/code/training/trainer_revised.py \
-      --data-path "$D/synaug${v}_real.npy" "$D/synaug${v}_synth.npy" --seed $seed --device cuda:$gpu \
+      --data-path "$D/synaug${v}_real.npy" --train-only-path "$D/synaug${v}_synth.npy" --seed $seed --device cuda:$gpu \
       --patch-size 1024 --batch-size 32 --num-epochs 400 --patience 50 \
       --d-model 192 --nhead 6 --num-layers 4 --dim-feedforward 768 --num-workers 3 \
       > "$ROOT/results/final/synaug_logs/${tag}.log" 2>&1 \

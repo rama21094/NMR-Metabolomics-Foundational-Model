@@ -1,0 +1,87 @@
+{
+ "checkpoints": {
+  "masking": [
+   {
+    "seed": 0,
+    "path": "models/masked_ssl/corpus_train_20260917_165613_bs32_mr0.20-0.60_ps1024_seed0_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 1,
+    "path": "models/masked_ssl/corpus_train_20260917_173155_bs32_mr0.20-0.60_ps1024_seed1_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 2,
+    "path": "models/masked_ssl/corpus_train_20260917_185941_bs32_mr0.20-0.60_ps1024_seed2_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 3,
+    "path": "models/masked_ssl/corpus_train_20260917_202500_bs32_mr0.20-0.60_ps1024_seed3_best.pth",
+    "finished": true
+   },
+   {
+    "seed": 4,
+    "path": "models/masked_ssl/corpus_train_20260917_213546_bs32_mr0.20-0.60_ps1024_seed4_best.pth",
+    "finished": true
+   }
+  ],
+  "jigsaw": [
+   {
+    "seed": 0,
+    "path": "models/phase2/jigsaw_seed0/bin_1024/20260917_165541/bin_1024_20260917_165541_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 1,
+    "path": "models/phase2/jigsaw_seed1/bin_1024/20260917_180248/bin_1024_20260917_180248_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 2,
+    "path": "models/phase2/jigsaw_seed2/bin_1024/20260917_195008/bin_1024_20260917_195008_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 3,
+    "path": "models/phase2/jigsaw_seed3/bin_1024/20260917_205349/bin_1024_20260917_205349_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 4,
+    "path": "models/phase2/jigsaw_seed4/bin_1024/20260917_222848/bin_1024_20260917_222848_best.pth",
+    "finished": null
+   }
+  ],
+  "joint": [
+   {
+    "seed": 0,
+    "path": "models/phase2/joint_seed0/joint_ssl_20260917_173033/joint_ssl_20260917_173033_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 1,
+    "path": "models/phase2/joint_seed1/joint_ssl_20260917_183351/joint_ssl_20260917_183351_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 2,
+    "path": "models/phase2/joint_seed2/joint_ssl_20260917_200232/joint_ssl_20260917_200232_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 3,
+    "path": "models/phase2/joint_seed3/joint_ssl_20260917_212633/joint_ssl_20260917_212633_best.pth",
+    "finished": null
+   },
+   {
+    "seed": 4,
+    "path": "models/phase2/joint_seed4/joint_ssl_20260917_225957/joint_ssl_20260917_225957_best.pth",
+    "finished": null
+   }
+  ]
+ },
+ "loocv_estimator": "seed mean of balanced accuracy; paired bootstrap over patients (diff/lo/hi). *_vote fields: majority vote over seeds, ties to the label that sorts first.",
+ "pooling": null
+}

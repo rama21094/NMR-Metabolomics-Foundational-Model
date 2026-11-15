@@ -21,16 +21,17 @@ cohorts that were never seen in pretraining (37 to 113 patients). Both arms used
 the same classifier and identical splits, at exact few-shot budgets and with
 full-data leave-one-out or repeated cross-validation, and every comparison is
 reported as a paired difference with a 95% interval. Across 21 comparisons the
-best pretrained model was never better than standard ML, was worse in 17 and
-statistically level in 4 (mean difference −0.067 in balanced accuracy; −0.048
-with position-preserving pooling). Fine-tuning did not help, and models from
+best pretrained model was never better than standard ML, was worse in 18 and
+statistically level in 3 (mean difference −0.069 in balanced accuracy; worse in
+17, level in 4 and −0.048 with position-preserving pooling). Fine-tuning did not help, and models from
 1.8 to 23.5 million parameters were behind at every size. In 45 controlled
 pretraining runs, neither more spectra nor a more even mix of studies closed the
 gap, and the number of studies needed to reach parity could not be extrapolated.
 The public corpus, although drawn from 12 studies, has an effective study count
 of 4.1. Synthetic spectra from a metabolite basis, generative adversarial networks or a
 variational autoencoder were detected almost perfectly by a realism test. A
-latent diffusion model came much closer, did not copy its training data, and,
+latent diffusion model came much closer, showed no excess of near-copies of its
+training data, and,
 steered to an even mix of studies, carried 9.8 effective studies; adding up to
 16,000 of its spectra to pretraining left transfer unchanged. We also report several silent failure modes, including
 a chemical-shift axis defect and a batch-confounded public cohort, that produced
@@ -192,7 +193,10 @@ results tables).
 - **Metric.** Balanced accuracy (mean per-class recall), so chance is 1/number
   of classes regardless of imbalance.
 - **Pairing and intervals.** Both arms see identical splits. Pretrained
-  predictions are averaged over seeds per split (majority vote under LOOCV).
+  accuracy is averaged over seeds in every design. Under LOOCV the reported
+  accuracy, difference and interval all use that seed mean; a seed-ensemble
+  (majority vote, ties to the label that sorts first) is kept as a secondary
+  column in the result files.
   Differences are reported with 95% intervals: ±1.96 standard errors over
   episodes or repeats, or a paired bootstrap over patients (2,000 resamples) for
   LOOCV. A comparison is "better" or "worse" when the interval excludes zero, and
@@ -274,42 +278,43 @@ million parameters), 3 seeds each, patch size fixed.
 
 | pretraining | better | worse | level | mean difference |
 |---|---|---|---|---|
-| masking, mean pooling | 0 | 17 | 4 | −0.067 |
+| masking, mean pooling | 0 | 18 | 3 | −0.069 |
 | masking, 16-region pooling | 0 | 17 | 4 | −0.048 |
-| jigsaw | 0 | 19 | 2 | −0.124 |
+| jigsaw | 0 | 20 | 1 | −0.126 |
 | joint | 0 | 19 | 2 | −0.108 |
 
 Masking was the best objective, and in no comparison was any pretrained model
 better than standard ML. The level comparisons were all full-data comparisons on
 the smaller cohorts, where leave-one-out intervals are wide (0.06 to 0.17 either
-side); the closest was BrC-T2D cancer, +0.012 [−0.030, +0.053] with 16-region
-pooling. Keeping coarse position in the readout narrowed the mean gap by 0.019,
-most at 5 patients per class and on BrC-T2D, but changed no verdict.
+side); the closest was BrC-T2D cancer, +0.012 [−0.031, +0.056] with 16-region
+pooling. Keeping coarse position in the readout narrowed the mean gap by 0.021,
+most at 5 patients per class and on BrC-T2D; it moved one comparison (BrC-T2D
+diabetes, full data) from worse to level.
 
 Pretraining is not useless: masking improved on the same encoder left untrained
 by 0.046. Fine-tuning did not add to it: adapting the last block changed the
 frozen result by −0.008, and adapting the whole encoder by 0.000.
 
 **Readouts and corpus.** No readout change closed the gap (Table X). Learned
-attention pooling overfitted the small training sets (mean −0.084, worse than
-averaging). A CLS token was the weakest readout (−0.095): without a loss of its
+attention pooling overfitted the small training sets (mean −0.097, worse than
+averaging). A CLS token was the weakest readout (−0.099): without a loss of its
 own it does not become a useful summary. Pretraining on the full 9,480-spectrum
 corpus, which raises the effective study count from 4.1 to 5.9 by adding seven
-unseen studies, changed the gap by −0.010 (mean pooling; 3 seeds), within seed
+unseen studies, changed the gap by −0.013 (mean pooling; 3 seeds), within seed
 noise. The best readout remains the fixed 16-region pooling of the original
 model (−0.048).
 
 | model | corpus (effective studies) | mean pool | 16-region | other |
 |---|---|---|---|---|
-| masking | 8,545 (4.1) | −0.067 | −0.048 | attention −0.084 |
-| masking | 9,480 (5.9) | −0.077 | −0.057 | — |
-| masking + CLS | 9,480 (5.9) | −0.071 | −0.051 | CLS −0.095 |
+| masking | 8,545 (4.1) | −0.069 | −0.048 | attention −0.097 |
+| masking | 9,480 (5.9) | −0.082 | −0.060 | — |
+| masking + CLS | 9,480 (5.9) | −0.076 | −0.051 | CLS −0.099 |
 
 **A linear baseline does better.** PCA fitted on the same unlabelled corpus,
 followed by the same classifier, came within −0.018 of binned spectra using 40
 components (99.7% of the variance), −0.040 with 10 and −0.073 with 5; 100
 components matched binning (+0.004). The 192-dimensional transformer embedding
-(−0.067) is therefore worse than a 40-component linear compression of the same
+(−0.069) is therefore worse than a 40-component linear compression of the same
 data. Different pretraining seeds learned very similar representations (linear
 CKA on standardised embeddings 0.970 between seeds, against 0.870 to an untrained
 encoder), so the shortfall is not seed instability.
@@ -366,7 +371,8 @@ training folds teach the classifier to call that study's real spectra synthetic.
 
 The metabolite basis explains a median R² of 0.25 of a real spectrum. GANs place
 peaks correctly but are detected almost perfectly, as are samples from a VAE
-prior. Latent diffusion is far more realistic and does not memorise: a generated
+prior. Latent diffusion is far more realistic, and a nearest-neighbour test finds
+no excess of near-duplicates of the training data: a generated
 spectrum's closest training spectrum is as close as a real training spectrum's
 nearest other (median correlation 0.9969 against 0.9971). Generated with an even
 study mix, it is the only synthetic set that more than doubles the corpus's
@@ -379,12 +385,18 @@ variation lies outside the 20 leading real components (12% for real spectra).
 
 ### 4.5 Synthetic spectra in pretraining do not help
 
+**Provisional (2026-11-13).** These runs pooled real and synthetic spectra before the
+train/validation split, so the real split differed between arms and synthetic spectra
+sat in the early-stopping set. Corrected runs (one fixed real split, synthetic spectra in
+training only, real-only validation) are queued; the numbers below are the confounded
+runs and will be replaced.
+
 | pretraining data | better | worse | level | mean vs real-only |
 |---|---|---|---|---|
-| + 4,000 GAN v2 | 3 | 10 | 8 | −0.016 |
-| + 1,000 diffusion (even mix) | 0 | 7 | 14 | −0.005 |
-| + 4,000 diffusion (even mix) | 6 | 3 | 12 | +0.002 |
-| + 16,000 diffusion (even mix) | 3 | 3 | 15 | +0.002 |
+| + 4,000 GAN v2 | 3 | 11 | 7 | −0.018 |
+| + 1,000 diffusion (even mix) | 0 | 8 | 13 | −0.008 |
+| + 4,000 diffusion (even mix) | 6 | 4 | 11 | 0.000 |
+| + 16,000 diffusion (even mix) | 3 | 3 | 15 | 0.000 |
 
 (GAN arm: mean pooling, edge-blanked control; diffusion arms: 16-region pooling,
 against the original real-only model.) The few gains were at small budgets and
@@ -430,7 +442,7 @@ would need many more independent studies with raw data deposited before the
 question can be settled.
 
 **Synthetic data cannot stand in for studies.** The strongest test we could
-construct, a latent diffusion model that is reasonably realistic, does not copy
+construct, a latent diffusion model that is reasonably realistic, shows no excess of near-copies of
 its training data, and when steered to an even study mix carries 9.8 effective
 studies, left transfer unchanged at up to 16,000 added spectra. Synthetic
 "studies" generated from the same 12 real ones are recombinations, not new
